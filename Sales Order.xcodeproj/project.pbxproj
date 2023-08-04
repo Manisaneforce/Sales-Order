@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
+		38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */; };
 		38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */; };
 		38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC5C2A7A255F00AEF032 /* ContentView.swift */; };
 		38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBC5E2A7A256000AEF032 /* Assets.xcassets */; };
@@ -15,7 +17,6 @@
 		38EEBC762A7A256000AEF032 /* Sales_OrderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */; };
 		38EEBC782A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */; };
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
-		38EEBCC92A7A858500AEF032 /* Loginpg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBCC82A7A858500AEF032 /* Loginpg.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
+		38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerify.swift; sourceTree = "<group>"; };
 		38EEBC572A7A255F00AEF032 /* Sales Order.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sales Order.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderApp.swift; sourceTree = "<group>"; };
 		38EEBC5C2A7A255F00AEF032 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -47,7 +50,6 @@
 		38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITests.swift; sourceTree = "<group>"; };
 		38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		38EEBCC82A7A858500AEF032 /* Loginpg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loginpg.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,8 @@
 				38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */,
 				38EEBC5E2A7A256000AEF032 /* Assets.xcassets */,
 				38EEBC602A7A256000AEF032 /* Preview Content */,
+				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
+				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
 			);
 			path = "Sales Order";
 			sourceTree = "<group>";
@@ -136,7 +140,6 @@
 		38EEBC862A7A634200AEF032 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				38EEBCC82A7A858500AEF032 /* Loginpg.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -276,7 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
-				38EEBCC92A7A858500AEF032 /* Loginpg.swift in Sources */,
+				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
+				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

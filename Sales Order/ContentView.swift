@@ -6,16 +6,31 @@
 //
 
 import SwiftUI
-//import Alamofire
 
+@available(iOS 15.0, *)
 struct ContentView: View {
     @State private var phoneNumber: String = ""
     @State private var phoneNumber2: String = ""
     @State private var storedValue: String = ""
     @State private var isTextFieldHidden: Bool = false
     @State private var isTextFieldHidden2: Bool = true
+    @State private var OTPtext: Bool = true
+    @State private var Mobilnumber:Bool = false
+    @State private var Verybutton:Bool = true
+    @FocusState private var fieldFocus: Int?
+    @State private var oldValue = ""
+    @State private var VerifyBt: Bool = true
+    @State private var SubmitBt: Bool = false
+    let numberOffFields: Int
+    @State var enterValue: [String]
+    @State private var Value = ""
+    init(numberOffFields: Int){
+        self.numberOffFields = numberOffFields
+        self.enterValue = Array(repeating: "", count: numberOffFields)
+    }
     var body: some View {
         //ScrollView {
+        NavigationView {
         ZStack {
             Image("logo_new")
                 .resizable()
@@ -45,12 +60,14 @@ struct ContentView: View {
                 .offset(y: -60)
             
             // Show the text field conditionally based on the state variable
-            Text("Enter your registered mobile number")
-                .font(.system(size: 17))
-                .font(.title)
-                .foregroundColor(Color.gray)
-                .frame(width: 400, height: 120)
-                .offset(y: 50)
+            if  !Mobilnumber{
+                Text("Enter your registered mobile number")
+                    .font(.system(size: 17))
+                    .font(.title)
+                    .foregroundColor(Color.gray)
+                    .frame(width: 400, height: 120)
+                    .offset(y: 50)
+            }
             if !isTextFieldHidden {
                 TextField("Mobile Number", text: $phoneNumber)
                     .border(Color.blue, width: 2)
@@ -60,54 +77,69 @@ struct ContentView: View {
                     .offset(y: 100)
             }
             
-            HStack{
-                if !isTextFieldHidden2{
-                    ForEach(0..<6, id: \.self) {index in
-                        TextField("", text: $phoneNumber2)
-                            .frame(width: 42,height: 42)
-                            .background(Color.blue.opacity(0.1))
-                            //.background(Color.blue)
-                            .cornerRadius(5)
-                            .multilineTextAlignment(.center)
-                            .offset(y: 95)
-                        
-                    }
-                    
-                }
-            }
-                
-                GeometryReader { geometry in
-                    Button(action: {
-                        
-                        
-                        print("Button tapped!")
-                        
-                        
-                        isTextFieldHidden = true
-                        isTextFieldHidden2 = false
-                    }) {
-                        Text("Submit")
-                            .frame(width: 300, height: 12)
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                            .offset(y: 20)
-                    }
-                    .frame(width: geometry.size.width * 0.8)
-                    
-                    .frame(width: 300, height: 12)
-                    .offset(x: 50, y: 500)
-                }
-            }
+            NavigationLink(destination: OTPVerify(numberOffFields: 6)) {
+                           Text("Submit")
+                              .frame(width: 300, height: 12)
+                               .font(.title)
+                              .foregroundColor(.white)
+                               .padding()
+                               .background(Color.blue)
+                              .cornerRadius(10)
+                              
+                       }
+            .offset(y:145)
+            
+//            GeometryReader { geometry in
+//                NavigationLink(destination: OTPVerify(numberOffFields: 6)) {
+//                    Text("Submit")
+//                        .frame(width: 300, height: 12)
+//                        .font(.title)
+//                        .foregroundColor(.white)
+//                        .padding()
+//                        .background(Color.blue)
+//                        .cornerRadius(10)
+//                        .offset(y: 20)
+//                }
+//                Button(action: {
+//
+//                    print("Button tapped!")
+//
+//                })
+//                {
+//                    Text("Submit")
+//                        .frame(width: 300, height: 12)
+//                        .font(.title)
+//                        .foregroundColor(.white)
+//                        .padding()
+//                        .background(Color.blue)
+//                        .cornerRadius(10)
+//                        .offset(y: 20)
+//                }
+//                .frame(width: geometry.size.width * 0.8)
+//
+//                .frame(width: 300, height: 12)
+//                .offset(x: 62, y: 500)
+//            }
+            
+            
+            
             
         }
     }
+        
+            }
+            
+        }
+
+    
     
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
-            ContentView()
+            if #available(iOS 15.0, *) {
+                ContentView(numberOffFields: 6)
+            } else {
+                
+            }
         }
     }
 

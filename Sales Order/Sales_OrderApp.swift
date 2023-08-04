@@ -12,7 +12,11 @@ import SwiftUI
 struct Sales_OrderApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if #available(iOS 15.0, *) {
+                ContentView(numberOffFields: 6)
+            } else {
+                // Fallback on earlier versions
+            }
         }
     }
 }
