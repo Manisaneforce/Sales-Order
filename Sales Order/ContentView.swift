@@ -89,43 +89,10 @@ struct ContentView: View {
                        }
             .offset(y:145)
             
-//            GeometryReader { geometry in
-//                NavigationLink(destination: OTPVerify(numberOffFields: 6)) {
-//                    Text("Submit")
-//                        .frame(width: 300, height: 12)
-//                        .font(.title)
-//                        .foregroundColor(.white)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .cornerRadius(10)
-//                        .offset(y: 20)
-//                }
-//                Button(action: {
-//
-//                    print("Button tapped!")
-//
-//                })
-//                {
-//                    Text("Submit")
-//                        .frame(width: 300, height: 12)
-//                        .font(.title)
-//                        .foregroundColor(.white)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .cornerRadius(10)
-//                        .offset(y: 20)
-//                }
-//                .frame(width: geometry.size.width * 0.8)
-//
-//                .frame(width: 300, height: 12)
-//                .offset(x: 62, y: 500)
-//            }
-            
-            
-            
-            
+
         }
     }
+        .navigationBarHidden(true)
         
             }
             

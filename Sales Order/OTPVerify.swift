@@ -25,6 +25,7 @@ struct OTPVerify: View {
     var body: some View {
         NavigationView {
         ZStack {
+         
             Image("logo_new")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -51,11 +52,7 @@ struct OTPVerify: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 100, height: 100)
                 .offset(y: -60)
-            
-            // Show the text field conditionally based on the state variable
-            
-            
-            
+
             
             Text("Enter your OTP")
                 .font(.system(size: 17))
@@ -124,7 +121,9 @@ struct OTPVerify: View {
 
             
         }
+        
     }
+        .navigationBarHidden(true)
     }
 }
 
