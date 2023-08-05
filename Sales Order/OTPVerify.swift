@@ -123,7 +123,7 @@ struct OTPVerify: View {
         }
         
     }
-        .navigationBarHidden(true)
+      .navigationBarHidden(true)
     }
 }
 

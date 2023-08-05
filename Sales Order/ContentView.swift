@@ -84,7 +84,8 @@ struct ContentView: View {
                               .foregroundColor(.white)
                                .padding()
                                .background(Color.blue)
-                              .cornerRadius(10)
+                              
+                
                               
                        }
             .offset(y:145)
