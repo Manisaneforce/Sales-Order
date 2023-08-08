@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
+
 struct ContentView: View {
     @State private var phoneNumber: String = ""
     @State private var phoneNumber2: String = ""
@@ -17,17 +17,17 @@ struct ContentView: View {
     @State private var OTPtext: Bool = true
     @State private var Mobilnumber:Bool = false
     @State private var Verybutton:Bool = true
-    @FocusState private var fieldFocus: Int?
+    //@FocusState private var fieldFocus: Int?
     @State private var oldValue = ""
     @State private var VerifyBt: Bool = true
     @State private var SubmitBt: Bool = false
-    let numberOffFields: Int
-    @State var enterValue: [String]
+  //  let numberOffFields: Int
+   // @State var enterValue: [String]
     @State private var Value = ""
-    init(numberOffFields: Int){
-        self.numberOffFields = numberOffFields
-        self.enterValue = Array(repeating: "", count: numberOffFields)
-    }
+//    init(numberOffFields: Int){
+//        self.numberOffFields = numberOffFields
+//        self.enterValue = Array(repeating: "", count: numberOffFields)
+//    }
     var body: some View {
         //ScrollView {
         NavigationView {
@@ -77,18 +77,22 @@ struct ContentView: View {
                     .offset(y: 100)
             }
             
-            NavigationLink(destination: OTPVerify(numberOffFields: 6)) {
-                           Text("Submit")
-                              .frame(width: 300, height: 12)
-                               .font(.title)
-                              .foregroundColor(.white)
-                               .padding()
-                               .background(Color.blue)
-                              
-                
-                              
-                       }
-            .offset(y:145)
+            if #available(iOS 15.0, *) {
+                NavigationLink(destination: OTPVerify(numberOffFields: 6)) {
+                    Text("Submit")
+                        .frame(width: 300, height: 12)
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                    
+                    
+                    
+                }
+                .offset(y:145)
+            } else {
+                // Fallback on earlier versions
+            }
             
 
         }
@@ -104,7 +108,7 @@ struct ContentView: View {
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             if #available(iOS 15.0, *) {
-                ContentView(numberOffFields: 6)
+                ContentView()
             } else {
                 
             }
