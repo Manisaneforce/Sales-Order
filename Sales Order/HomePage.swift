@@ -19,7 +19,7 @@ struct HomePage: View {
                 Color(red: 0.87, green: 0.90, blue: 0.91)
                     .edgesIgnoringSafeArea(.all)
                 
-                VStack(spacing: -50) { // Use VStack to organize your layout
+                VStack(spacing: -50) { 
                     
                     ZStack(){
                         Rectangle()
