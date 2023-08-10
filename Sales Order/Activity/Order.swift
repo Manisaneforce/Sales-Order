@@ -10,6 +10,10 @@ import SwiftUI
 struct Order: View {
     @State private var number = 0
     @State private var inputNumberString = ""
+    @State private var Arry = ["FIPOREL_ S DOG 0.67 ML","gjehfu","ndhbhbf","FIPOREL_ S DOG 0.67 ML"]
+    @State private var nubers = [15,555,554,54]
+    @State private var isPopupVisible = false
+    @State private var selectedItem: String = "Pipette"
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -65,7 +69,7 @@ struct Order: View {
                                 .background(Color.gray)
                                 .frame(height:25)
                                 .cornerRadius(10)
-                                
+                            
                             Text("Dewormer")
                                 .foregroundColor(.white)
                                 .padding()
@@ -95,93 +99,108 @@ struct Order: View {
                     }
                 }
                 .padding(.bottom, 20)
-                
-                List(0 ..< 5) { item in
+                NavigationView {
+                List(0 ..< Arry.count, id: \.self) { index in
+                    HStack {
+                        Image("logo_new")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 70)
+                            .cornerRadius(4)
+                        
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(Arry[index])
+                                .fontWeight(.semibold)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.5)
+                            Text("RLVT001")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                             HStack {
-                                Image("logo_new")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100, height: 70)
-                                    .cornerRadius(4)
-                                
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("FIPOREL_ S DOG 0.67 ML")
-                                        .fontWeight(.semibold)
-                                        .lineLimit(2)
-                                        .minimumScaleFactor(0.5)
-                                    Text("RLVT001")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                    HStack {
-                                        Text("MRP ₹0")
-                                        Spacer()
-                                        Text("Price ₹197.00")
-                                    }
-                                    HStack {
-                                        Text("Pipette")
-                                        Spacer()
-                                        HStack {
-                                            Button(action: {
-                                                self.number -= 1
-                                                
-                                            }) {
-                                                Text("-")
-                                                    .font(.headline)
-                                                    .fontWeight(.bold)
-                                                    
-                                                    .multilineTextAlignment(.leading)
-                                                    
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-                                            Text("\(number)")
-                                                
-                                                .fontWeight(.bold)
-                                                .foregroundColor(Color.black)
-                                                
-                                            Button(action: {
-                                                self.number += 1
-                                            }) {
-                                                Text("+")
-                                                    
-                                                    .font(.headline)
-                                                    .fontWeight(.bold)
-                                                    .multilineTextAlignment(.trailing)
-                                                    
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-                                        }
-                                        .padding(.vertical, 6)
-                                        .padding(.horizontal, 20)
-                                        .background(Color.gray.opacity(0.2))
-                                        .cornerRadius(10)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(Color.gray, lineWidth: 2)
-                                        )
-                                        .foregroundColor(Color.blue)
+                                Text("MRP ₹\(nubers[index])")
+                                Spacer()
+                                Text("Price ₹197.00")
+                            }
+                            HStack {
+                                NavigationLink(destination: ExtractedView()) {
+                                   
+                                    
+                                    Button(action: {
                                         
-                                    }
-                                    HStack {
-                                        Text("Free : 0")
-                                        Spacer()
-                                        Text("₹0.00")
-                                    }
-                                    Divider()
-                                    HStack {
-                                        Text("Total Qty: 0")
-                                        Spacer()
-                                        Text("₹0.00")
+                                    }) {
+                                        Text("Mani")
+                                            .padding(.vertical, 6)
+                                            .padding(.horizontal, 20)
+                                            .background(Color.gray.opacity(0.2))
+                                            .cornerRadius(10)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.gray, lineWidth: 2)
+                                            )
                                     }
                                 }
-                                .padding(.vertical, 5)
+                                
+                                Spacer()
+                                HStack {
+                                    Button(action: {
+                                        self.number -= 1
+                                        
+                                    }) {
+                                        Text("-")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                            .multilineTextAlignment(.leading)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    Text("\(number)")
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color.black)
+                                    Button(action: {
+                                        self.number += 1
+                                    }) {
+                                        Text("+")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                            .multilineTextAlignment(.trailing)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 20)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray, lineWidth: 2)
+                                )
+                                .foregroundColor(Color.blue)
                             }
-                            .background(Color.white)
+                            
+                            HStack {
+                                Text("Free : 0")
+                                Spacer()
+                                Text("₹0.00")
+                            }
+                            Divider()
+                            HStack {
+                                Text("Total Qty: \(number)")
+                                Spacer()
+                                let totalvalue = nubers[0]
+                                Text("₹\(totalvalue).00")
+                            }
                         }
+                        .padding(.vertical, 5)
+                    }
+                    .background(Color.white)
+                }
                 .listStyle(PlainListStyle())
+            }
+                
             }
             .padding(.top, 10)
             .navigationBarHidden(true)
         }
+        
     }
 }
 
@@ -190,4 +209,109 @@ struct Order_Previews: PreviewProvider {
         Order()
     }
 }
+struct SearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            TextField("Search", text: $text)
+                .padding(10)
+                .background(Color.white)
+                .cornerRadius(5)
+                .padding(.trailing, 10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
+            
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+        }
+    }
+}
 
+
+struct ExtractedView: View {
+    @State private var isPopupVisible = false
+    @State private var selectedItem: String = "Pipette"
+    var body: some View {
+        
+        ZStack{
+            VStack{
+                Text(selectedItem)
+                    .padding(.vertical, 3)
+                    .padding(.horizontal, 15)
+                    .background(Color.white.opacity(0.2))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 2)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
+                    .foregroundColor(Color.black)
+                    .onTapGesture {
+                        isPopupVisible.toggle()
+                    }
+            }
+            
+            
+            if isPopupVisible {
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        isPopupVisible.toggle()
+                    }
+                VStack {
+                    HStack {
+                        Text("Select Item")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                            .padding(.top, 10)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            isPopupVisible.toggle()
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.top, 10)
+                    }
+                    .padding(.horizontal, 20)
+                    SearchBar(text: $selectedItem) // Assuming you have a SearchBar view
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
+                    
+                    VStack {
+                        Button(action: {
+                            selectedItem = "Pipette"
+                            isPopupVisible.toggle()
+                        }) {
+                            VStack {
+                                Text("Pipette")
+                                Text("1x1=1")
+                            }
+                        }
+                        Divider()
+                        Button(action: {
+                            selectedItem = "Box"
+                            isPopupVisible.toggle()
+                        }) {
+                            VStack {
+                                Text("Box")
+                                Text("10x1=10")
+                            }
+                        }
+                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(20)
+                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(20)
+            }
+        }
+    
+      
+    }
+}

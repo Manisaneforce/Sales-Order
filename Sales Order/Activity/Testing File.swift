@@ -8,25 +8,34 @@
 import SwiftUI
 
 struct Testing_File: View {
-    @State private var number = 0
+    @State private var isPopupVisible = false
+    @State private var selectedItem: String = "Pipette"
     var body: some View {
-        VStack {
-                    
-                    
-                    HStack {
-                        Button(action: {
-                            self.number -= 1
-                        }) {
-                            Text("-")
-                        }
-                        Text("\(number)")
-                        Button(action: {
-                            self.number += 1
-                        }) {
-                            Text("+")
-                        }
-                    }
+        NavigationView {
+            List {
+                ForEach(1..<6) { index in
+                    Text("Item \(index)")
                 }
+            }
+            .navigationBarTitle("ListView with Popup")
+            .navigationBarItems(trailing:
+                Button(action: {
+                    isPopupVisible = true
+                }) {
+                    Image(systemName: "plus.circle")
+                }
+            )
+            .alert(isPresented: $isPopupVisible) {
+                Alert(
+                    title: Text("Popup Content"),
+                    message: nil,
+                    primaryButton: .default(Text("Close Popup")) {
+                        isPopupVisible = false
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+        }
     }
 }
 
@@ -36,83 +45,26 @@ struct Testing_File_Previews: PreviewProvider {
     }
 }
 
-//struct ContentView: View {
-//    @State private var viewModels: [ItemViewModel] = (0 ..< 5).map { _ in ItemViewModel() }
-//    
-//    var body: some View {
-//        List(0 ..< 5) { index in
-//            HStack {
-//                Image("logo_new")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 100, height: 70)
-//                    .cornerRadius(4)
-//                
-//                VStack(alignment: .leading, spacing: 5) {
-//                    Text("FIPOREL_ S DOG 0.67 ML")
-//                        .fontWeight(.semibold)
-//                        .lineLimit(2)
-//                        .minimumScaleFactor(0.5)
-//                    
-//                    // ... other view components ...
-//                    
-//                    HStack {
-//                        Text("Pipette")
-//                        Spacer()
-//                        HStack {
-//                            Button(action: {
-//                                self.viewModels[index].decreaseNumber()
-//                            }) {
-//                                Text("-")
-//                                    .font(.headline)
-//                                    .fontWeight(.bold)
-//                                    .multilineTextAlignment(.leading)
-//                            }
-//                            .buttonStyle(PlainButtonStyle())
-//                            Text("\(viewModels[index].number)")
-//                                .fontWeight(.bold)
-//                                .foregroundColor(Color.black)
-//                            Button(action: {
-//                                self.viewModels[index].increaseNumber()
-//                            }) {
-//                                Text("+")
-//                                    .font(.headline)
-//                                    .fontWeight(.bold)
-//                                    .multilineTextAlignment(.leading)
-//                            }
-//                            .buttonStyle(PlainButtonStyle())
-//                        }
-//                        .padding(.vertical, 6)
-//                        .padding(.horizontal, 20)
-//                        .background(Color.gray.opacity(0.2))
-//                        .cornerRadius(10)
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .stroke(Color.gray, lineWidth: 2)
-//                        )
-//                        .foregroundColor(Color.blue)
-//                    }
-//                    
-//                    // ... other view components ...
-//                    
-//                }
-//                .padding(.vertical, 5)
-//            }
-//            .background(Color.white)
-//        }
-//    }
-//}
-//
-//class ItemViewModel: ObservableObject {
-//    @Published var number: Int = 0
-//    
-//    func increaseNumber() {
-//        number += 1
-//    }
-//    
-//    func decreaseNumber() {
-//        if number > 0 {
-//            number -= 1
-//        }
-//    }
-//}
+
+struct PopupContent: View {
+    @Binding var isPopupVisible: Bool
+
+    var body: some View {
+        VStack {
+            Text("Popup Content")
+                .font(.headline)
+            Button("Close Popup") {
+                isPopupVisible = false
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(20)
+    }
+}
+
+

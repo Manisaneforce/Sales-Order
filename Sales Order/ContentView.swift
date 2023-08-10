@@ -17,17 +17,12 @@ struct ContentView: View {
     @State private var OTPtext: Bool = true
     @State private var Mobilnumber:Bool = false
     @State private var Verybutton:Bool = true
-    //@FocusState private var fieldFocus: Int?
     @State private var oldValue = ""
     @State private var VerifyBt: Bool = true
     @State private var SubmitBt: Bool = false
-  //  let numberOffFields: Int
-   // @State var enterValue: [String]
+
     @State private var Value = ""
-//    init(numberOffFields: Int){
-//        self.numberOffFields = numberOffFields
-//        self.enterValue = Array(repeating: "", count: numberOffFields)
-//    }
+
     var body: some View {
         //ScrollView {
         NavigationView {
