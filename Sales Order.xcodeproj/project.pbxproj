@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
+		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
+		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
 		38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C0994A2A8399F4003A7290 /* Testing File.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
 		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
@@ -40,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		38C0994A2A8399F4003A7290 /* Testing File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Testing File.swift"; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
@@ -62,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */,
 				387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,6 +87,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		387E0E7F2A85F62A00FEACBA /* common file */ = {
+			isa = PBXGroup;
+			children = (
+				387E0E842A85F7A600FEACBA /* Showtoast.swift */,
+			);
+			path = "common file";
+			sourceTree = "<group>";
+		};
 		38CADF342A810D8400842DC9 /* Activity */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +127,7 @@
 		38EEBC592A7A255F00AEF032 /* Sales Order */ = {
 			isa = PBXGroup;
 			children = (
+				387E0E7F2A85F62A00FEACBA /* common file */,
 				38CADF342A810D8400842DC9 /* Activity */,
 				38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */,
 				38EEBC5C2A7A255F00AEF032 /* ContentView.swift */,
@@ -170,6 +183,7 @@
 			name = "Sales Order";
 			packageProductDependencies = (
 				387E0E7A2A84F7C000FEACBA /* Alamofire */,
+				387E0E7D2A85F5CF00FEACBA /* SimpleToast */,
 			);
 			productName = "Sales Order";
 			productReference = 38EEBC572A7A255F00AEF032 /* Sales Order.app */;
@@ -246,6 +260,7 @@
 			packageReferences = (
 				38CFA2772A7BA49400FE5F51 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */,
+				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
 			projectDirPath = "";
@@ -296,6 +311,7 @@
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
+				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +652,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sanzaru/SimpleToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.2;
+			};
+		};
 		38CFA2772A7BA49400FE5F51 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
@@ -651,6 +675,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		387E0E7D2A85F5CF00FEACBA /* SimpleToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */;
+			productName = SimpleToast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

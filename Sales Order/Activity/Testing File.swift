@@ -8,34 +8,21 @@
 import SwiftUI
 
 struct Testing_File: View {
-    @State private var isPopupVisible = false
-    @State private var selectedItem: String = "Pipette"
+    @State private var showToast = false
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(1..<6) { index in
-                    Text("Item \(index)")
-                }
-            }
-            .navigationBarTitle("ListView with Popup")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    isPopupVisible = true
-                }) {
-                    Image(systemName: "plus.circle")
-                }
-            )
-            .alert(isPresented: $isPopupVisible) {
-                Alert(
-                    title: Text("Popup Content"),
-                    message: nil,
-                    primaryButton: .default(Text("Close Popup")) {
-                        isPopupVisible = false
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
-        }
+        VStack {
+             Button("Show Toast on Another Screen") {
+                 showToast = true
+                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                     showToast = false
+                 }
+             }
+             .padding()
+             
+             Spacer()
+         }
+         .toast(isPresented: $showToast, message: "This is a toast message on another screen!")
+         .padding()
     }
 }
 
@@ -45,26 +32,5 @@ struct Testing_File_Previews: PreviewProvider {
     }
 }
 
-
-struct PopupContent: View {
-    @Binding var isPopupVisible: Bool
-
-    var body: some View {
-        VStack {
-            Text("Popup Content")
-                .font(.headline)
-            Button("Close Popup") {
-                isPopupVisible = false
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(20)
-    }
-}
 
 
