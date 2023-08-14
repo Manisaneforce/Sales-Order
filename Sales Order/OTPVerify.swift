@@ -6,23 +6,32 @@
 //
 
 import SwiftUI
+import Foundation
 
 @available(iOS 15.0, *)
 struct OTPVerify: View {
+   
     @State private var phoneNumber: String = ""
     @State private var phoneNumber2: String = ""
     @State private var storedValue: String = ""
     @FocusState private var fieldFocus: Int?
     @State private var oldValue = ""
-   
+    @State private var showToast = false
+    @State private var toststring = ""
+    @State private var NavigteBoll = false
+    
+    @Binding var jsondata: Outputdata
     let numberOffFields: Int
     @State var enterValue: [String]
     @State private var Value = ""
-    init(numberOffFields: Int){
+    init(numberOffFields: Int, jsondata: Binding<Outputdata>) {
         self.numberOffFields = numberOffFields
+        self._jsondata = jsondata
         self.enterValue = Array(repeating: "", count: numberOffFields)
     }
+   
     var body: some View {
+        
         NavigationView {
         ZStack {
          
@@ -105,8 +114,66 @@ struct OTPVerify: View {
                 }
                 
             }
-            
-            NavigationLink(destination: HomePage()) {
+         
+            //NavigationLink(destination: HomePage()) {
+           
+            Button(action: {
+                print("JSON Data: \(jsondata.data)") // This will print the current value of jsondata
+                let otpNumber = enterValue[0]+enterValue[1]+enterValue[2]+enterValue[3]+enterValue[4]+enterValue[5]
+                print(otpNumber.count)
+                let otpInt=Int(otpNumber)
+                //print(otpInt!)
+                let value: Int? = otpInt
+                var item = 0
+                if let unwrappedValue = value {
+                    item=unwrappedValue
+                    
+                } else {
+                    //Text("No value")
+                }
+                let otpdata = jsondata.data["otp"]
+                print(item)
+                print(otpdata as! Int)
+                print(otpNumber.count >= 6)
+                
+                if item == otpdata as! Int {
+                    print(item)
+                    NavigteBoll = true
+                }else{
+                    toststring = "Pls Enter Correct OTP"
+                    showToast = true
+                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                         showToast = false
+                                     }
+                }
+                
+//                if otpNumber.count >= 6 {
+//                    toststring = "Enter Six Digit OTP number"
+//                    showToast = true
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                        showToast = false
+//                    }
+//                }
+//                else if item != otpdata as! Int{
+//                    toststring = "Pls Enter Correct OTP"
+//                    showToast = true
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                        showToast = false
+//                    }
+//                }
+//                else if  otpNumber.isEmpty{
+//                    toststring = "Enter OTP"
+//                    showToast = true
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                        showToast = false
+//                    }
+//                }
+//                else{
+//
+//                }
+                
+                
+            }){
                            Text("Verify")
                               .frame(width: 300, height: 12)
                                .font(.title)
@@ -115,9 +182,16 @@ struct OTPVerify: View {
                                .background(Color.blue)
                               .cornerRadius(10)
                               
-                       }
+                     }
+            .toast(isPresented: $showToast, message: "\(toststring)")
             .offset(y:148)
-            
+            if NavigteBoll {
+                NavigationLink(
+                    destination: HomePage(),isActive: $NavigteBoll
+                ) {
+                    EmptyView()
+                }
+            }
 
             
         }
@@ -130,6 +204,6 @@ struct OTPVerify: View {
 @available(iOS 15.0, *)
 struct OTPVerify_Previews: PreviewProvider {
     static var previews: some View {
-        OTPVerify(numberOffFields: 6)
+        OTPVerify(numberOffFields: 6, jsondata: .constant(Outputdata()))
     }
 }

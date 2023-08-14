@@ -7,7 +7,11 @@
 
 import SwiftUI
 import Alamofire
+import Foundation
 
+struct Outputdata {
+    var data: [String: AnyObject] = [:]
+}
 struct ContentView: View {
     @State private var phoneNumber: String = ""
     @State private var phoneNumber2: String = ""
@@ -22,6 +26,11 @@ struct ContentView: View {
     @State private var SubmitBt: Bool = false
     @State private var objcalls: [AnyObject]?
     @State private var showOTPVerifyView = false
+    @State private var showToast = false
+    @State private var ShowTost = ""
+    @State private var NavigteBoll = false
+    @State private var jsondata = Outputdata()
+   // @State private var jsondata = JSONData()
 
     @State private var Value = ""
 
@@ -83,6 +92,7 @@ struct ContentView: View {
                         })
                 }
                 
+
                 if #available(iOS 15.0, *) {
                     //NavigationLink(destination: OTPVerify(numberOffFields: 6)){
                     Button(action: {
@@ -105,10 +115,31 @@ struct ContentView: View {
                                         }
                                         
                                         print(prettyPrintedJson)
-                                        NavigationLink(destination:OTPVerify(numberOffFields: 6)){
-                                            EmptyView()
+                                        jsondata.data = json
+                                        
+                                        let mobileNumber = json["mobile"] as? String ?? ""
+                                        if mobileNumber.count < 10 {
+                                            // If the mobile number is less than 10 characters
+                                            print(json["result"] as? String ?? "")
+                                            ShowTost = (json["result"] as? String ?? "")
+                                            showToast = true
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                showToast = false
+                                            }
+                                        } else {
+                                            NavigteBoll = true
+                                            // If the mobile number is 10 characters or more
+                                            print(json["msg"] as? String ?? "")
+                                            ShowTost = json["msg"] as? String ?? ""
+                                            showToast = true
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                showToast = false
+                                            }
+                                           
                                         }
-                                     
+                                        
+
+                                 
                                     }
                                 case .failure(let error):
                                     print(error)
@@ -122,22 +153,36 @@ struct ContentView: View {
                             .background(Color.blue)
                             .cornerRadius(10)
                     }
-                    
+                    .toast(isPresented: $showToast, message: "\(ShowTost)")
                     .offset(y: 145)
                     
-                //}
+//                    .background(
+//                                NavigationLink("", destination: OTPVerify(numberOffFields: 6), isActive: $showToast)
+//                                    .opacity(0)
+//                                    .disabled(true)
+//                            )
             }
+                if NavigteBoll {
+                    if #available(iOS 15.0, *) {
+                        NavigationLink(
+                            destination: OTPVerify(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
+                            isActive: $NavigteBoll
+                        ) {
+                            EmptyView()
+                        }
+                    } else {
+                        // Handle non-iOS 15 case if needed
+                    }
+                }
+                
             
         }
     }
         .navigationBarHidden(true)
         
             }
-            
         }
 
-    
-    
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             if #available(iOS 15.0, *) {
@@ -147,4 +192,12 @@ struct ContentView: View {
             }
         }
     }
+
+
+
+
+
+
+
+
 

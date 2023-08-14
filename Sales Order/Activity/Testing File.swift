@@ -10,19 +10,8 @@ import SwiftUI
 struct Testing_File: View {
     @State private var showToast = false
     var body: some View {
-        VStack {
-             Button("Show Toast on Another Screen") {
-                 showToast = true
-                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                     showToast = false
-                 }
-             }
-             .padding()
-             
-             Spacer()
-         }
-         .toast(isPresented: $showToast, message: "This is a toast message on another screen!")
-         .padding()
+        LottieUIView(filename: "OTP").frame(width: 200,height: 200)
+        
     }
 }
 
