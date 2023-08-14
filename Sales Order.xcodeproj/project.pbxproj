@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3801AE192A8A4EBF0069B136 /* UI in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE182A8A4EBF0069B136 /* UI */; };
+		3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE1A2A8A52070069B136 /* LottieUIURL.swift */; };
 		38595AE32A8A38FE005EB704 /* Lottie in Resources */ = {isa = PBXBuildFile; fileRef = 38595AE22A8A38FE005EB704 /* Lottie */; };
-		38595AE52A8A3921005EB704 /* Lottie in Resources */ = {isa = PBXBuildFile; fileRef = 38595AE42A8A3921005EB704 /* Lottie */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
 		385960B92A8A30A200FD602C /* lottiefiles in Resources */ = {isa = PBXBuildFile; fileRef = 385960B82A8A30A200FD602C /* lottiefiles */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
@@ -47,8 +48,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3801AE182A8A4EBF0069B136 /* UI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = UI; path = ../UI; sourceTree = "<group>"; };
+		3801AE1A2A8A52070069B136 /* LottieUIURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIURL.swift; sourceTree = "<group>"; };
 		38595AE22A8A38FE005EB704 /* Lottie */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Lottie; sourceTree = "<group>"; };
-		38595AE42A8A3921005EB704 /* Lottie */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Lottie; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		385960B82A8A30A200FD602C /* lottiefiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lottiefiles; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
@@ -101,8 +103,8 @@
 			isa = PBXGroup;
 			children = (
 				387E0E842A85F7A600FEACBA /* Showtoast.swift */,
-				38595AE42A8A3921005EB704 /* Lottie */,
 				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
+				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -122,6 +124,7 @@
 				38EEBC592A7A255F00AEF032 /* Sales Order */,
 				38EEBC6A2A7A256000AEF032 /* Sales OrderTests */,
 				38EEBC742A7A256000AEF032 /* Sales OrderUITests */,
+				3801AE182A8A4EBF0069B136 /* UI */,
 				38EEBC582A7A255F00AEF032 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -299,7 +302,6 @@
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
 				38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */,
 				385960B92A8A30A200FD602C /* lottiefiles in Resources */,
-				38595AE52A8A3921005EB704 /* Lottie in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +316,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3801AE192A8A4EBF0069B136 /* UI in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
+				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,

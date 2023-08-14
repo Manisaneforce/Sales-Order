@@ -10,7 +10,7 @@ import SwiftUI
 struct Testing_File: View {
     @State private var showToast = false
     var body: some View {
-        LottieUIView(filename: "OTP").frame(width: 200,height: 200)
+        LottieUIView(filename: "OTP").frame(width: 150,height: 150)
         
     }
 }
