@@ -38,7 +38,7 @@ struct OTPVerify: View {
             Image("logo_new")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 200, height: 100)
+                .frame(width: 250, height: 100)
                 .offset(y: -310)
             
             Text("Welcome to ReliVet")
@@ -56,10 +56,12 @@ struct OTPVerify: View {
                 .frame(width: 200, height: 150)
                 .offset(y: -160)
             
-            Image("Phonecall")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 100, height: 100)
+//            Image("Phonecall")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 100, height: 100)
+//                .offset(y: -60)
+            LottieUIView(filename: "OTP").frame(width: 200,height: 200)
                 .offset(y: -60)
 
             

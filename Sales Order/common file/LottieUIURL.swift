@@ -10,7 +10,7 @@ import Lottie
 
 struct LottieUIURL: View {
     var body: some View {
-        URLView(url: URL(string: "https://lottiefiles.com/animations/movie-theatre-XLdqrTZ4tG")!)
+        URLView(url: URL(string: "https://lottie.host/0914af97-4515-445b-9fd6-e8d9b6153dac/IhEkINiBpc.json")!)
     }
 }
 

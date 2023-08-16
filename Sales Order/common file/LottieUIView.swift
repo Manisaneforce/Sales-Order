@@ -15,9 +15,10 @@ struct LottieUIView: UIViewRepresentable {
         let view = UIView(frame: .zero)
         
         let animationView = LottieAnimationView()
-        let animation = Animation.named("")
+        let animation = Animation.named(filename)
         animationView.animation = animation
         animationView.contentMode = .scaleAspectFit
+        animationView.loopMode = .loop
         animationView.play()
         animationView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(animationView)
@@ -33,4 +34,6 @@ struct LottieUIView: UIViewRepresentable {
     }
 
 }
+
+
    

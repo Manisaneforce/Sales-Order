@@ -16,9 +16,18 @@ struct Order: View {
     @State private var nubers = [15,555,554,54]
     @State private var isPopupVisible = false
     @State private var selectedItem: String = "Pipette"
+    @State private var prettyPrintedJson: String = ""
+    @State private var prodTypes2 = [String]()
+    @State private var prodCate: String = ""
+    @State private var prodDets: String = ""
+    @State private var selectedIndices: Set<Int> = []
+    @State private var selectedIndex: Int? = nil
+    
     var body: some View {
+        
         NavigationView {
             VStack(spacing: 0) {
+                
                 ZStack(alignment: .top) {
                     Rectangle()
                         .foregroundColor(Color.blue)
@@ -59,48 +68,83 @@ struct Order: View {
                     }
                     Text("Shivaji Park, Dadar")
                         .font(.system(size: 15))
-                    Text("ReliVet")
+                    
+                    Text(prettyPrintedJson)
                         .font(.system(size: 15))
                         .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            Text("Ectoparasiticidal")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.gray)
-                                .frame(height:25)
-                                .cornerRadius(10)
-                            
-                            Text("Dewormer")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.gray)
-                                .frame(height:25)
-                                .cornerRadius(10)
-                            Text("Health Supplement")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.gray)
-                                .frame(height:25)
-                                .cornerRadius(10)
-                            Text("Anti infective")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.gray)
-                                .frame(height:25)
-                                .cornerRadius(10)
-                            Text("Ectoparasiticidal")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.gray)
-                                .frame(height:25)
-                                .cornerRadius(10)
-                        }
-                        .padding(.horizontal, 20)
+                             ForEach(prodTypes2.indices, id: \.self) { index in
+                                 Button(action: {
+                                     if selectedIndex == index {
+                                         selectedIndex = nil // Deselect if already selected
+                                     } else {
+                                         selectedIndex = index // Select the new button
+                                     }
+                                     print("Clicked button at index: \(index)")
+                                 }) {
+                                     Text(prodTypes2[index])
+                                         .foregroundColor(.white)
+                                         .padding(.horizontal, 10)
+                                         .padding(.vertical, 5)
+                                         .background(selectedIndex == index ? Color.blue : Color.gray)
+                                         .cornerRadius(10)
+                                 }
+                             }
+                         }
+                         .padding(.horizontal, 20)
+
                     }
+
                 }
                 .padding(.bottom, 20)
+                .onAppear {
+                    prodGroup { jsonString in
+                        if let jsonData = jsonString.data(using: .utf8) {
+                            do {
+                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]],
+                                   let firstItem = jsonArray.first {
+                                    let textname = firstItem["name"] as? String ?? ""
+                                    print("Name: \(textname)")
+                                    prettyPrintedJson = textname
+                                }
+                            } catch {
+                                print("Error parsing JSON: \(error)")
+                            }
+                        }
+                    }
+                    Sales_Order.prodTypes { json in
+                        if let jsonData = json.data(using: .utf8) {
+                            do {
+                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                    var prodTypes1 = [String]()
+                                    for item in jsonArray {
+                                        if let textName = item["name"] as? String {
+                                            prodTypes1.append(textName)
+                                        }
+                                    }
+                                    print(prodTypes1)
+                                    prodTypes2 = prodTypes1
+                                }
+                            } catch {
+                                print("Error parsing JSON: \(error)")
+                            }
+                        }
+                    }
+
+                    Sales_Order.prodCate{
+                        json in
+                        prodCate = json
+                        print(prodCate)
+                    }
+                    Sales_Order.prodDets{
+                        json in
+                        prodDets = json
+                        print(prodDets)
+                    }
+                               }
+                
                 NavigationView {
                 List(0 ..< Arry.count, id: \.self) { index in
                     HStack {
@@ -202,7 +246,7 @@ struct Order: View {
             .padding(.top, 10)
             .navigationBarHidden(true)
         }
-        
+       
     }
 }
 
@@ -316,4 +360,207 @@ struct ExtractedView: View {
     
       
     }
+
 }
+
+struct YourDataStructure: Codable {
+    let id: Int
+    let name: String
+    let ProdGrp_Sl_No: Int
+}
+
+
+func prodGroup(completion: @escaping (String) -> Void) {
+    
+    let axn = "get/prodGroup"
+    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
+  
+    let apiKey = "\(axn)"
+    
+    let aFormData: [String: Any] = [
+        "CusID":"9","Stk":"3"
+    ]
+    print(aFormData)
+    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+    let jsonString = String(data: jsonData!, encoding: .utf8)!
+    let params: Parameters = [
+        "data": jsonString
+    ]
+    
+    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                    completion(prettyPrintedJson)
+                    
+                    print("______________________prodGroup_______________")
+                   
+                    
+             
+                    
+
+             
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+}
+
+
+func prodTypes(completi: @escaping (String) -> Void) {
+    let axn = "get/prodTypes"
+    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
+  
+    let apiKey = "\(axn)"
+    
+    let aFormData: [String: Any] = [
+        "CusID":"9","Stk":"3"
+    ]
+    print(aFormData)
+    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+    let jsonString = String(data: jsonData!, encoding: .utf8)!
+    let params: Parameters = [
+        "data": jsonString
+    ]
+    
+    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                    completi(prettyPrintedJson)
+                    print("______________________prodTypes_______________")
+                    
+             
+                    
+
+             
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    
+}
+
+
+func prodCate(prodcatedata: @escaping (String) -> Void) {
+    let axn = "get/prodCate"
+    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
+  
+    let apiKey = "\(axn)"
+    
+    let aFormData: [String: Any] = [
+        "CusID":"9","Stk":"3"
+    ]
+    print(aFormData)
+    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+    let jsonString = String(data: jsonData!, encoding: .utf8)!
+    let params: Parameters = [
+        "data": jsonString
+    ]
+    
+    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                    prodcatedata(prettyPrintedJson)
+                   
+                    print("______________________prodCate_______________")
+             
+                    
+
+             
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    
+}
+
+
+func prodDets(proddetsdata: @escaping (String) -> Void) {
+    let axn = "get/prodDets"
+    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
+  
+    let apiKey = "\(axn)"
+    
+    let aFormData: [String: Any] = [
+        "CusID":"9","Stk":"3"
+    ]
+    print(aFormData)
+    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+    let jsonString = String(data: jsonData!, encoding: .utf8)!
+    let params: Parameters = [
+        "data": jsonString
+    ]
+    
+    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                    proddetsdata(prettyPrintedJson)
+                    print("______________________prodDets_______________")
+             
+                    
+             
+                    
+
+             
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    
+}
+

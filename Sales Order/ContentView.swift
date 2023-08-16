@@ -41,7 +41,7 @@ struct ContentView: View {
                 Image("logo_new")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 200, height: 100)
+                    .frame(width: 250, height: 100)
                     .offset(y: -310)
                 
                 Text("Welcome to ReliVet")
@@ -59,10 +59,12 @@ struct ContentView: View {
                     .frame(width: 200, height: 150)
                     .offset(y: -160)
                 
-                Image("Phonecall")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
+//                Image("Phonecall")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 100, height: 100)
+//                    .offset(y: -60)
+                LottieUIView(filename: "Msg").frame(width: 180,height: 180)
                     .offset(y: -60)
                 
                 // Show the text field conditionally based on the state variable
@@ -76,10 +78,14 @@ struct ContentView: View {
                 }
                 if !isTextFieldHidden {
                     TextField("Mobile Number", text: $phoneNumber)
-                        .border(Color.blue, width: 2)
+                       // .border(Color.blue, width: 2)
                         .cornerRadius(10)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 325)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.blue, lineWidth: 2)
+                        )
                         .offset(y: 100)
                         .keyboardType(.numberPad)  // Set keyboard to number pad
                         .onChange(of: phoneNumber, perform: { newValue in
@@ -146,15 +152,18 @@ struct ContentView: View {
                                 }
                             }
                     }) {
-                        Text("Submit")
-                            .font(.title)
+                        Text("SEND OTP")
+                            //.font(.title)
+                            .fontWeight(.heavy)
                             .foregroundColor(.white)
-                            .frame(width: 300, height: 50)
+                            .font(.system(size: 18))
+                            .multilineTextAlignment(.center)
+                            .frame(width: 325, height: 40)
                             .background(Color.blue)
                             .cornerRadius(10)
                     }
                     .toast(isPresented: $showToast, message: "\(ShowTost)")
-                    .offset(y: 145)
+                    .offset(y: 150)
                     
 //                    .background(
 //                                NavigationLink("", destination: OTPVerify(numberOffFields: 6), isActive: $showToast)

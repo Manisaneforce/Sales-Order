@@ -23,8 +23,6 @@ struct HomePage: View {
                     
                     ZStack(){
                         Rectangle()
-                        //Color(red: 0.58, green: 0.65, blue: 0.65)
-                        //.foregroundColor(Color(red: 0.74, green: 0.76, blue: 0.78))
                             .foregroundColor(Color.blue)
                             .frame(height: 100)
                         
@@ -38,7 +36,7 @@ struct HomePage: View {
                                 .cornerRadius(10)
                                 .offset(x: -70, y: 20)
                             
-                            Text(currentDate) // Display current date and time here
+                            Text(currentDate)
                                 .font(.system(size: 15))
                                 .font(.headline)
                                 .fontWeight(.bold)
@@ -61,9 +59,6 @@ struct HomePage: View {
                                     title: Text("Logout"),
                                     message: Text("Do you want to log out?"),
                                     primaryButton: .default(Text("OK")) {
-                                        // Handle logout and navigation here
-                                        // For example:
-                                        // self.logout()
                                         navigateToContentView = true
                                     },
                                     secondaryButton: .cancel()
@@ -83,6 +78,7 @@ struct HomePage: View {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 0) {
                         NavigationLink(destination: Order()){
                             DashboardItem(imageName: "order", title: "Order")
+                            
                         }
                     
                         NavigationLink(destination: NextScreen()) {
@@ -99,15 +95,11 @@ struct HomePage: View {
                     .cornerRadius(15)
                     .frame(width: 380)
                     
-                    Spacer() // This Spacer pushes the LazyVGrid to the bottom
-                    
+                    Spacer()
                     SliderAd()
                         .frame(height: 150)
                         .foregroundColor(Color.blue)
                         .offset()
-                   // Spacer(minLength: 440)
-                                    
-                    
                 }
                 .frame(minHeight: geometry.size.height)
                 
@@ -120,8 +112,6 @@ struct HomePage: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
         currentDate = formatter.string(from: Date())
-        
-        // Update date every day
         Timer.scheduledTimer(withTimeInterval: 86400, repeats: true) { _ in
             currentDate = formatter.string(from: Date())
         }
@@ -136,16 +126,12 @@ struct HomePage_Previews: PreviewProvider {
 
 struct SliderAd: View {
     var body: some View {
-        // Replace this with your actual slider advertisement content
         Image("")
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 360, height: 150)
-           // .offset(y:-300)
             .padding(10)
-            //.border(Color.gray, width: 2)
             .background(Color.white)
-           // .background(Color(red: 0.87, green: 0.90, blue: 0.91, opacity: 1.00))
             .cornerRadius(10)
     }
 }
@@ -169,16 +155,8 @@ struct DashboardItem: View {
                 
         }
         .padding(10)
-        //.border(Color.gray, width: 2)
         .background(Color.white)
-       // .background(Color(red: 0.87, green: 0.90, blue: 0.91, opacity: 1.00))
         .cornerRadius(10)
-    }
-}
-struct line : View{
-    var body: some View{
-        Text("Order")
-        
     }
 }
 
@@ -187,21 +165,7 @@ struct NextScreen: View {
         Text("My Orders")
     }
 }
-//@ViewBuilder
-//func createVerticalSeparator() -> some View {
-//    Rectangle()
-//        .fill(Color.gray)
-//        .frame(width: 1)
-//        .opacity(0.5)
-//}
-//
-//@ViewBuilder
-//func createHorizontalSeparator() -> some View {
-//    Rectangle()
-//        .fill(Color.gray)
-//        .frame(height: 1)
-//        .opacity(0.5)
-//}
+
 
 
 
