@@ -12,9 +12,9 @@
 		3801AE222A8C8BD70069B136 /* Call.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE212A8C8BD70069B136 /* Call.json */; };
 		3801AE242A8C90970069B136 /* Msg.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE232A8C90970069B136 /* Msg.json */; };
 		3801AE262A8C9A840069B136 /* Order.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE252A8C9A840069B136 /* Order.json */; };
-		38595AE32A8A38FE005EB704 /* Lottie in Resources */ = {isa = PBXBuildFile; fileRef = 38595AE22A8A38FE005EB704 /* Lottie */; };
+		3801AE282A8E17C80069B136 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE272A8E17C80069B136 /* APIClient.swift */; };
+		3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE292A8E551A0069B136 /* Phonering.json */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
-		385960B92A8A30A200FD602C /* lottiefiles in Resources */ = {isa = PBXBuildFile; fileRef = 385960B82A8A30A200FD602C /* lottiefiles */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
@@ -56,9 +56,9 @@
 		3801AE212A8C8BD70069B136 /* Call.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Call.json; path = ../../../UI/Call.json; sourceTree = "<group>"; };
 		3801AE232A8C90970069B136 /* Msg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Msg.json; path = ../../../UI/Msg.json; sourceTree = "<group>"; };
 		3801AE252A8C9A840069B136 /* Order.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Order.json; path = ../../../UI/Order.json; sourceTree = "<group>"; };
-		38595AE22A8A38FE005EB704 /* Lottie */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Lottie; sourceTree = "<group>"; };
+		3801AE272A8E17C80069B136 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		3801AE292A8E551A0069B136 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Phonering.json; path = ../../../UI/Phonering.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
-		385960B82A8A30A200FD602C /* lottiefiles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lottiefiles; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		38C0994A2A8399F4003A7290 /* Testing File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Testing File.swift"; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
@@ -112,6 +112,7 @@
 				3801AE212A8C8BD70069B136 /* Call.json */,
 				3801AE232A8C90970069B136 /* Msg.json */,
 				3801AE252A8C9A840069B136 /* Order.json */,
+				3801AE292A8E551A0069B136 /* Phonering.json */,
 			);
 			name = Lottie;
 			path = ../Lottie;
@@ -169,6 +170,7 @@
 				38EEBC602A7A256000AEF032 /* Preview Content */,
 				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
 				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
+				3801AE272A8E17C80069B136 /* APIClient.swift */,
 			);
 			path = "Sales Order";
 			sourceTree = "<group>";
@@ -176,9 +178,7 @@
 		38EEBC602A7A256000AEF032 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				38595AE22A8A38FE005EB704 /* Lottie */,
 				38EEBC612A7A256000AEF032 /* Preview Assets.xcassets */,
-				385960B82A8A30A200FD602C /* lottiefiles */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -315,13 +315,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38595AE32A8A38FE005EB704 /* Lottie in Resources */,
+				3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */,
 				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
 				3801AE202A8C8A830069B136 /* OTP.json in Resources */,
 				38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */,
-				385960B92A8A30A200FD602C /* lottiefiles in Resources */,
 				3801AE242A8C90970069B136 /* Msg.json in Resources */,
 				3801AE262A8C9A840069B136 /* Order.json in Resources */,
 			);
@@ -351,6 +350,7 @@
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
+				3801AE282A8E17C80069B136 /* APIClient.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,

@@ -46,6 +46,8 @@ struct HomePage: View {
                             
                             VStack {
                                 Button(action: {
+                                    UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
+                                    
                                     showAlert = true
                                 }) {
                                     Image("logout")
@@ -165,7 +167,3 @@ struct NextScreen: View {
         Text("My Orders")
     }
 }
-
-
-
-

@@ -78,9 +78,9 @@ struct Order: View {
                              ForEach(prodTypes2.indices, id: \.self) { index in
                                  Button(action: {
                                      if selectedIndex == index {
-                                         selectedIndex = nil // Deselect if already selected
+                                         selectedIndex = nil
                                      } else {
-                                         selectedIndex = index // Select the new button
+                                         selectedIndex = index
                                      }
                                      print("Clicked button at index: \(index)")
                                  }) {
@@ -174,7 +174,7 @@ struct Order: View {
                                     Button(action: {
                                         
                                     }) {
-                                        Text("Mani")
+                                        Text("Pipette")
                                             .padding(.vertical, 6)
                                             .padding(.horizontal, 20)
                                             .background(Color.gray.opacity(0.2))
@@ -422,7 +422,6 @@ func prodGroup(completion: @escaping (String) -> Void) {
 
 func prodTypes(completi: @escaping (String) -> Void) {
     let axn = "get/prodTypes"
-    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
   
     let apiKey = "\(axn)"
     
@@ -563,4 +562,5 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
         }
     
 }
+
 

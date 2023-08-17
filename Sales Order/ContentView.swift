@@ -30,6 +30,9 @@ struct ContentView: View {
     @State private var ShowTost = ""
     @State private var NavigteBoll = false
     @State private var jsondata = Outputdata()
+    @State private var StoragePhoneNumber = ""
+    @State private var userEmail:String = UserDefaults.standard.string(forKey: "savedPhoneNumber") ?? ""
+    @State private var HomePageNvigater:Bool = false
    // @State private var jsondata = JSONData()
 
     @State private var Value = ""
@@ -38,6 +41,7 @@ struct ContentView: View {
        
         NavigationView {
             ZStack {
+               
                 Image("logo_new")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -59,15 +63,19 @@ struct ContentView: View {
                     .frame(width: 200, height: 150)
                     .offset(y: -160)
                 
-//                Image("Phonecall")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .frame(width: 100, height: 100)
-//                    .offset(y: -60)
                 LottieUIView(filename: "Msg").frame(width: 180,height: 180)
                     .offset(y: -60)
-                
-                // Show the text field conditionally based on the state variable
+                    .onAppear {
+                            print("Saved Value  \(userEmail)")
+                        if userEmail.isEmpty{
+                            HomePageNvigater = false
+                        }else{
+                           HomePageNvigater = true
+                        }
+                      
+
+                    }
+             
                 if  !Mobilnumber{
                     Text("Enter your registered mobile number")
                         .font(.system(size: 17))
@@ -87,7 +95,7 @@ struct ContentView: View {
                                 .stroke(Color.blue, lineWidth: 2)
                         )
                         .offset(y: 100)
-                        .keyboardType(.numberPad)  // Set keyboard to number pad
+                        .keyboardType(.numberPad)
                         .onChange(of: phoneNumber, perform: { newValue in
                             // Limit the phone number to 10 characters
                             if newValue.count > 10 {
@@ -95,6 +103,7 @@ struct ContentView: View {
                             }
                             // Remove non-numeric characters
                             phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
+                            //UserDefaults.standard.set(phoneNumber, forKey: "savedPhoneNumber")
                         })
                 }
                 
@@ -102,6 +111,11 @@ struct ContentView: View {
                 if #available(iOS 15.0, *) {
                     //NavigationLink(destination: OTPVerify(numberOffFields: 6)){
                     Button(action: {
+                       // var StoragePhoneNumber = ""
+                        
+                        
+                        
+                        
                         let axn = "send/sms"
                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
                         
@@ -122,6 +136,7 @@ struct ContentView: View {
                                         
                                         print(prettyPrintedJson)
                                         jsondata.data = json
+                                        UserDefaults.standard.set(prettyPrintedJson, forKey: "savedPhoneNumber")
                                         
                                         let mobileNumber = json["mobile"] as? String ?? ""
                                         if mobileNumber.count < 10 {
@@ -165,11 +180,6 @@ struct ContentView: View {
                     .toast(isPresented: $showToast, message: "\(ShowTost)")
                     .offset(y: 150)
                     
-//                    .background(
-//                                NavigationLink("", destination: OTPVerify(numberOffFields: 6), isActive: $showToast)
-//                                    .opacity(0)
-//                                    .disabled(true)
-//                            )
             }
                 if NavigteBoll {
                     if #available(iOS 15.0, *) {
@@ -183,9 +193,13 @@ struct ContentView: View {
                         // Handle non-iOS 15 case if needed
                     }
                 }
+                NavigationLink(destination: HomePage(), isActive: $HomePageNvigater) {
+                    EmptyView()
+                }
                 
             
         }
+           
     }
         .navigationBarHidden(true)
         
@@ -201,12 +215,3 @@ struct ContentView: View {
             }
         }
     }
-
-
-
-
-
-
-
-
-
