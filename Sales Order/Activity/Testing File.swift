@@ -7,43 +7,68 @@ struct Testing_File: View {
     private let toastMessage = "Timer completed!"
 
     var body: some View {
-        VStack {
-            Text("OTP didn't recevied? Resend the OTP in \(remainingTime) seconds")
-                .font(.headline)
-                
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 20)
-
-            Button(action: {
-                // Start the timer
-                remainingTime = 60 // Set the countdown time
-                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                    if remainingTime > 0 {
-                        remainingTime -= 1
-                    } else {
-                        showToast = true
-                        timer?.invalidate()
-                        timer = nil
+       
+        Button(action: {
+          
+            
+        }) {
+            ZStack(alignment: .top) {
+                Rectangle()
+                    .foregroundColor(Color.blue)
+                    .frame(height: 70)
+               
+                    
+                    HStack {
+                        
+                        Image(systemName: "cart.fill")
+                            .foregroundColor(.white)
+                            .font(.system(size: 30))
+                            .frame(width: 60,height: 40)
+                        
+                        Text("Item: 1")
+                            .font(.system(size: 20))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        Text("Qty : 10")
+                            .font(.system(size: 20))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        Spacer()
+                        
+                        
                     }
-                }
-            }) {
-                Text("Resend OTP")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-                    .frame(height: 30)
-            }
-            .frame(height: 30)
-            .toast(isPresented: $showToast, message: toastMessage)
+                HStack{
 
-           
-            .onDisappear {
-                timer?.invalidate()
-                timer = nil
+                    Text("\(Image(systemName: "indianrupeesign"))10000")
+                        .font(.system(size: 17))
+                        .fontWeight(.heavy)
+                        .foregroundColor(.white)
+                        .offset(x:30)
+                    
+                    Spacer()
+                    
+                    Text("SUBMIT")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                        .multilineTextAlignment(.center)
+                        .offset(x:-10)
+                    
+                    
+                }
+                   .offset(y:40)
+              
             }
+            //.cornerRadius(5)
+            .edgesIgnoringSafeArea(.bottom)
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
         }
+        
+       
+        
+        
+        
     }
 }
 
@@ -52,3 +77,5 @@ struct Testing_File_Previews: PreviewProvider {
         Testing_File()
     }
 }
+
+

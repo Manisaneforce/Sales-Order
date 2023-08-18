@@ -49,12 +49,13 @@ struct Order: View {
                             .offset(x: -20)
                     }
                 }
-                .cornerRadius(5)
+                //.cornerRadius(5)
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                
-                VStack(alignment: .leading, spacing: 10) {
+             
+                VStack(alignment: .leading, spacing: 6) {
+                    
                     Text("DR. INGOLE")
                         .font(.system(size: 15))
                     HStack {
@@ -71,7 +72,12 @@ struct Order: View {
                     
                     Text(prettyPrintedJson)
                         .font(.system(size: 15))
+                        .frame(width: 80,height: 25)
                         .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 7)
+                                .stroke(Color.blue, lineWidth: 2)
+                        )
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -96,9 +102,19 @@ struct Order: View {
                          .padding(.horizontal, 20)
 
                     }
+                    Divider()
+                      Text("Ectoparasiticidal")
+                        .font(.system(size: 15))
+                        .frame(width: 150,height: 25)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 7)
+                                .stroke(Color.blue, lineWidth: 2)
+                        )
+                    
+                
 
                 }
-                .padding(.bottom, 20)
+                .padding(.top,0)
                 .onAppear {
                     prodGroup { jsonString in
                         if let jsonData = jsonString.data(using: .utf8) {
@@ -145,7 +161,8 @@ struct Order: View {
                     }
                                }
                 
-                NavigationView {
+        //NavigationView {
+                    
                 List(0 ..< Arry.count, id: \.self) { index in
                     HStack {
                         Image("logo_new")
@@ -168,12 +185,12 @@ struct Order: View {
                                 Text("Price ₹197.00")
                             }
                             HStack {
-                                NavigationLink(destination: ExtractedView()) {
-                                   
-                                    
-                                    Button(action: {
-                                        
-                                    }) {
+//                                NavigationLink(destination: ExtractedView()) {
+//
+//
+//                                    Button(action: {
+//
+//                                    }) {
                                         Text("Pipette")
                                             .padding(.vertical, 6)
                                             .padding(.horizontal, 20)
@@ -183,8 +200,8 @@ struct Order: View {
                                                 RoundedRectangle(cornerRadius: 10)
                                                     .stroke(Color.gray, lineWidth: 2)
                                             )
-                                    }
-                                }
+//                                    }
+//                                }
                                 
                                 Spacer()
                                 HStack {
@@ -238,14 +255,102 @@ struct Order: View {
                         .padding(.vertical, 5)
                     }
                     .background(Color.white)
+                    .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+                        .shadow(color: Color.gray, radius:2 , x:0,y:0)
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                    .frame(width: 350)
+                    
                 }
                 .listStyle(PlainListStyle())
-            }
+                .padding(.vertical, 5)
+                     .background(Color.white)
+                     .overlay(
+                         RoundedRectangle(cornerRadius: 6)
+                             .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                     )
+                    
+                     //.frame(width: 365)
+                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                     .padding(.horizontal, 10)
+                
+                .clipped()
+                .shadow(color: Color.gray, radius:3 , x:0,y:0)
+          
+                .padding(.top,10)
+//                .onAppear{
+//                    UIScrollView.appearance().showsVerticalScrollIndicator = false
+//                }
+                
+                
+                 Button(action: {
+                   
+                     
+                 }) {
+                     ZStack(alignment: .top) {
+                         Rectangle()
+                             .foregroundColor(Color.blue)
+                             .frame(height: 70)
+                        
+                             
+                             HStack {
+                                 
+                                 Image(systemName: "cart.fill")
+                                     .foregroundColor(.white)
+                                     .font(.system(size: 30))
+                                     .frame(width: 60,height: 40)
+                                 
+                                 Text("Item: 1")
+                                     .font(.system(size: 14))
+                                     .fontWeight(.bold)
+                                     .foregroundColor(.white)
+                                 Text("Qty : 10")
+                                     .font(.system(size: 14))
+                                     .fontWeight(.bold)
+                                     .foregroundColor(.white)
+                                 Spacer()
+                                 
+                                 
+                             }
+                         HStack{
+
+                             Text("\(Image(systemName: "indianrupeesign"))10000")
+                                 .font(.system(size: 15))
+                                 .fontWeight(.heavy)
+                                 .foregroundColor(.white)
+                                 .offset(x:30)
+                             
+                             Spacer()
+                             
+                             Text("PROCEED")
+                                 .fontWeight(.bold)
+                                 .foregroundColor(.white)
+                                 .font(.system(size: 17))
+                                 .multilineTextAlignment(.center)
+                                 .offset(x:-40,y:-10)
+                             
+                             
+                         }
+                            .offset(y:40)
+                       
+                     }
+                     //.cornerRadius(5)
+                     .edgesIgnoringSafeArea(.bottom)
+                     .frame(maxWidth: .infinity)
+                     .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
+                 }
+                
                 
             }
             .padding(.top, 10)
-            .navigationBarHidden(true)
+            
+           
+            
         }
+        .navigationBarHidden(true)
        
     }
 }

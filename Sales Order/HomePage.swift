@@ -95,6 +95,7 @@ struct HomePage: View {
                     .padding()
                     .background(Color.white)
                     .cornerRadius(15)
+                    .frame(width: .infinity)
                     .frame(width: 380)
                     
                     Spacer()
