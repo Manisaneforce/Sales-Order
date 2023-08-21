@@ -12,16 +12,22 @@ import Alamofire
 struct Order: View {
     @State private var number = 0
     @State private var inputNumberString = ""
-    @State private var Arry = ["FIPOREL_ S DOG 0.67 ML","gjehfu","ndhbhbf","FIPOREL_ S DOG 0.67 ML"]
+    @State private var Arry = [String]()
     @State private var nubers = [15,555,554,54]
     @State private var isPopupVisible = false
     @State private var selectedItem: String = "Pipette"
     @State private var prettyPrintedJson: String = ""
     @State private var prodTypes2 = [String]()
+    @State private var prodTypes3 = [Int]()
+    @State private var prodofcat = [String]()
     @State private var prodCate: String = ""
-    @State private var prodDets: String = ""
     @State private var selectedIndices: Set<Int> = []
     @State private var selectedIndex: Int? = nil
+    @State private var SelectId:Int = 0
+    @State private var ProSelectID:Int = 0
+    @State private var proDetsID = [Int]()
+    @State private var  imgdataURL = [String]()
+    
     
     var body: some View {
         
@@ -81,35 +87,125 @@ struct Order: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                             ForEach(prodTypes2.indices, id: \.self) { index in
-                                 Button(action: {
-                                     if selectedIndex == index {
-                                         selectedIndex = nil
-                                     } else {
-                                         selectedIndex = index
-                                     }
-                                     print("Clicked button at index: \(index)")
-                                 }) {
-                                     Text(prodTypes2[index])
-                                         .foregroundColor(.white)
-                                         .padding(.horizontal, 10)
-                                         .padding(.vertical, 5)
-                                         .background(selectedIndex == index ? Color.blue : Color.gray)
-                                         .cornerRadius(10)
-                                 }
-                             }
-                         }
-                         .padding(.horizontal, 20)
-
+                            ForEach(prodTypes2.indices, id: \.self) { index in
+                                Button(action: {
+                                    prodofcat.removeAll()
+                                    proDetsID.removeAll()
+                                    if selectedIndex == index {
+                                        selectedIndex = nil
+                                    } else {
+                                        selectedIndex = index
+                                    }
+                                    print("Clicked button at index: \(index)")
+                                    SelectId = prodTypes3[index]
+                                    print(SelectId)
+                                    Sales_Order.prodCate { json in
+                                        print(json)
+                                        if let jsonData = json.data(using: .utf8) {
+                                            do {
+                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                    print(jsonArray)
+                                                    print(SelectId)
+                                                    
+                                                    
+                                                    let itemsWithTypID3 = jsonArray.filter { ($0["TypID"] as? Int) == SelectId }
+                                                    
+                                                    if !itemsWithTypID3.isEmpty {
+                                                        for item in itemsWithTypID3 {
+                                                            print(itemsWithTypID3)
+                                                            if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
+                                                                print(procat)
+                            
+                                                                prodofcat.append(procat)
+                                                                proDetsID.append(proDetID)
+                                                                print(proDetsID)
+                                                                
+                                                            }
+                                                        }
+                                                    } else {
+                                                        print("No data with TypID \(SelectId)")
+                                                    }
+                                                    
+                                                }
+                                            } catch {
+                                                print("Error is \(error)")
+                                            }
+                                        }
+                                    }
+                                    
+                                }) {
+                                    
+                                    Text(prodTypes2[index])
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 5)
+                                        .background(selectedIndex == index ? Color.blue : Color.gray)
+                                        .cornerRadius(10)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        
                     }
                     Divider()
-                      Text("Ectoparasiticidal")
-                        .font(.system(size: 15))
-                        .frame(width: 150,height: 25)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 7)
-                                .stroke(Color.blue, lineWidth: 2)
-                        )
+                    ScrollView(.horizontal, showsIndicators: false) {
+                    HStack{
+                        ForEach(prodofcat.indices, id: \.self) { index in
+                            Button(action:{
+                                imgdataURL.removeAll()
+                                Arry.removeAll()
+                                print("If Select data")
+                               ProSelectID = proDetsID[index]
+                                print(ProSelectID)
+                                Sales_Order.prodDets{
+                                    json in
+                                    if let jsonData = json.data(using: .utf8){
+                                        do{
+                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                               print(jsonArray)
+                                                let itemsWithTypID3 = jsonArray.filter { ($0["Product_Cat_Code"] as? Int) == ProSelectID }
+                                               
+                                                if !itemsWithTypID3.isEmpty {
+                                                    for item in itemsWithTypID3 {
+                                                        print(itemsWithTypID3)
+                                                        if let procat = item["PImage"] as? String, let proname = item["name"] as? String {
+                                                            print(procat)
+                                                            print(proname)
+                                                            
+                                                          let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
+                                                            imgdataURL.append(inputText)
+                                                            Arry.append(proname)
+                                                            print(imgdataURL)
+                                                            
+                                                            
+                                                        }
+                                                    }
+                                                } else {
+                                                    print("No data with TypID \(SelectId)")
+                                                }
+                                                print(imgdataURL)
+                                                print(Arry)
+                                            }
+                                        } catch{
+                                            print("Data is error\(error)")
+                                        }
+                                    }
+                                }
+                               
+                            }) {
+                                Text(prodofcat[index])
+                                .font(.system(size: 15))
+                                    .frame(width: 150,height: 25)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 7)
+                                            .stroke(Color.blue, lineWidth: 2)
+                                    )
+                            }
+                        }
+                        
+                    }
+                }
+                      
                     
                 
 
@@ -135,13 +231,18 @@ struct Order: View {
                             do {
                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                     var prodTypes1 = [String]()
+                                    var Typofid = [Int]()
                                     for item in jsonArray {
-                                        if let textName = item["name"] as? String {
+                                        if let textName = item["name"] as? String , let typid = item["id"] as? Int {
                                             prodTypes1.append(textName)
+                                            Typofid.append(typid)
                                         }
                                     }
                                     print(prodTypes1)
+                                    print(Typofid)
                                     prodTypes2 = prodTypes1
+                                    prodTypes3 = Typofid
+                                    print(json)
                                 }
                             } catch {
                                 print("Error parsing JSON: \(error)")
@@ -149,29 +250,27 @@ struct Order: View {
                         }
                     }
 
-                    Sales_Order.prodCate{
-                        json in
-                        prodCate = json
-                        print(prodCate)
-                    }
-                    Sales_Order.prodDets{
-                        json in
-                        prodDets = json
-                        print(prodDets)
-                    }
+           
                                }
                 
         //NavigationView {
                     
-                List(0 ..< Arry.count, id: \.self) { index in
+                List(0 ..< imgdataURL.count, id: \.self) { index in
                     HStack {
-                        Image("logo_new")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 70)
-                            .cornerRadius(4)
+                        if let imageUrl = URL(string: imgdataURL[index]),
+                           let imageData = try? Data(contentsOf: imageUrl),
+                           let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 70)
+                                .cornerRadius(4)
+                        } else {
+                            Text("Image not available")
+                        }
                         
                         VStack(alignment: .leading, spacing: 5) {
+                           // Text(Arry[index])
                             Text(Arry[index])
                                 .fontWeight(.semibold)
                                 .lineLimit(2)
@@ -180,7 +279,8 @@ struct Order: View {
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                             HStack {
-                                Text("MRP ₹\(nubers[index])")
+                                //Text("MRP ₹\(nubers[index])")
+                                Text("MRP 1454")
                                 Spacer()
                                 Text("Price ₹197.00")
                             }
@@ -263,7 +363,7 @@ struct Order: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     .frame(width: 350)
-                    
+                   
                 }
                 .listStyle(PlainListStyle())
                 .padding(.vertical, 5)
