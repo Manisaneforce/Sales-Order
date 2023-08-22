@@ -8,7 +8,12 @@
 import SwiftUI
 import Alamofire
 
-
+struct Prodata: Any {
+    let ImgURL:String
+    let ProName :String
+    let ProID : String
+    let ProMRP : String
+}
 struct Order: View {
     @State private var number = 0
     @State private var inputNumberString = ""
@@ -27,6 +32,10 @@ struct Order: View {
     @State private var ProSelectID:Int = 0
     @State private var proDetsID = [Int]()
     @State private var  imgdataURL = [String]()
+    @State private var uiImage: UIImage? = nil
+
+    @State private var Allprod:[Prodata]=[]
+    @State private var numbers: [Int] = Array(repeating: 0, count: 5)
     
     
     var body: some View {
@@ -91,6 +100,7 @@ struct Order: View {
                                 Button(action: {
                                     prodofcat.removeAll()
                                     proDetsID.removeAll()
+                                    Allprod.removeAll()
                                     if selectedIndex == index {
                                         selectedIndex = nil
                                     } else {
@@ -154,6 +164,7 @@ struct Order: View {
                             Button(action:{
                                 imgdataURL.removeAll()
                                 Arry.removeAll()
+                                Allprod.removeAll()
                                 print("If Select data")
                                ProSelectID = proDetsID[index]
                                 print(ProSelectID)
@@ -168,9 +179,11 @@ struct Order: View {
                                                 if !itemsWithTypID3.isEmpty {
                                                     for item in itemsWithTypID3 {
                                                         print(itemsWithTypID3)
-                                                        if let procat = item["PImage"] as? String, let proname = item["name"] as? String {
+                                                        if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String {
                                                             print(procat)
                                                             print(proname)
+
+                                                            Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP ))
                                                             
                                                           let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                                             imgdataURL.append(inputText)
@@ -185,6 +198,7 @@ struct Order: View {
                                                 }
                                                 print(imgdataURL)
                                                 print(Arry)
+                                                print(Allprod.count)
                                             }
                                         } catch{
                                             print("Data is error\(error)")
@@ -255,34 +269,33 @@ struct Order: View {
                 
         //NavigationView {
                     
-                List(0 ..< imgdataURL.count, id: \.self) { index in
+                List(0 ..< Allprod.count, id: \.self) { index in
                     HStack {
-                        if let imageUrl = URL(string: imgdataURL[index]),
-                           let imageData = try? Data(contentsOf: imageUrl),
-                           let uiImage = UIImage(data: imageData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100, height: 70)
-                                .cornerRadius(4)
-                        } else {
-                            Text("Image not available")
-                        }
+                        if let uiImage = uiImage {
+                             Image(uiImage: uiImage)
+                                 .resizable()
+                                 .scaledToFit()
+                                 .frame(width: 100, height: 70)
+                                 .cornerRadius(4)
+                         } else {
+                             Text("Image loading...")
+                                 .onAppear{ loadImage(at: index) }
+                         }
                         
                         VStack(alignment: .leading, spacing: 5) {
                            // Text(Arry[index])
-                            Text(Arry[index])
+                            Text(Allprod[index].ProName)
                                 .fontWeight(.semibold)
                                 .lineLimit(2)
                                 .minimumScaleFactor(0.5)
-                            Text("RLVT001")
+                            Text(Allprod[index].ProID)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                             HStack {
                                 //Text("MRP ₹\(nubers[index])")
-                                Text("MRP 1454")
+                                Text("MRP 0")
                                 Spacer()
-                                Text("Price ₹197.00")
+                                Text("Price: \(Allprod[index].ProMRP)")
                             }
                             HStack {
 //                                NavigationLink(destination: ExtractedView()) {
@@ -306,25 +319,23 @@ struct Order: View {
                                 Spacer()
                                 HStack {
                                     Button(action: {
-                                        self.number -= 1
-                                        
+                                        self.decrementNumber(at: index)
                                     }) {
                                         Text("-")
                                             .font(.headline)
                                             .fontWeight(.bold)
-                                            .multilineTextAlignment(.leading)
                                     }
                                     .buttonStyle(PlainButtonStyle())
-                                    Text("\(number)")
+                                    
+                                    Text("\(numbers[index])")
                                         .fontWeight(.bold)
                                         .foregroundColor(Color.black)
+                                    
                                     Button(action: {
-                                        self.number += 1
+                                        self.incrementNumber(at: index)
                                     }) {
-                                        Text("+")
-                                            .font(.headline)
+                                        Text("+")                                             .font(.headline)
                                             .fontWeight(.bold)
-                                            .multilineTextAlignment(.trailing)
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                 }
@@ -453,6 +464,27 @@ struct Order: View {
         .navigationBarHidden(true)
        
     }
+    private func incrementNumber(at index: Int) {
+        numbers[index] += 1
+    }
+    
+    private func decrementNumber(at index: Int) {
+        if numbers[index] > 0 {
+            numbers[index] -= 1
+        }
+    }
+    
+    private func loadImage(at index : Int) {
+        if let imageUrl = URL(string: Allprod[index].ImgURL) {
+               URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+                   if let data = data, let uiImage = UIImage(data: data) {
+                       DispatchQueue.main.async {
+                           self.uiImage = uiImage
+                       }
+                   }
+               }.resume()
+           }
+       }
 }
 
 struct Order_Previews: PreviewProvider {
@@ -754,11 +786,6 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
                     print(prettyPrintedJson)
                     proddetsdata(prettyPrintedJson)
                     print("______________________prodDets_______________")
-             
-                    
-             
-                    
-
              
                 }
             case .failure(let error):

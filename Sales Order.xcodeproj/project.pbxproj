@@ -19,6 +19,7 @@
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
+		38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B5FB8D2A94E9B100565B9F /* Nedata.swift */; };
 		38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C0994A2A8399F4003A7290 /* Testing File.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
 		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
@@ -60,6 +61,7 @@
 		3801AE292A8E551A0069B136 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Phonering.json; path = ../../../UI/Phonering.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
+		38B5FB8D2A94E9B100565B9F /* Nedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nedata.swift; sourceTree = "<group>"; };
 		38C0994A2A8399F4003A7290 /* Testing File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Testing File.swift"; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				38CADF352A810D9700842DC9 /* Order.swift */,
 				38C0994A2A8399F4003A7290 /* Testing File.swift */,
+				38B5FB8D2A94E9B100565B9F /* Nedata.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
+				38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
 			);

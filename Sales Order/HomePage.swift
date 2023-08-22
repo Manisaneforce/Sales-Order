@@ -83,7 +83,7 @@ struct HomePage: View {
                             
                         }
                     
-                        NavigationLink(destination: NextScreen()) {
+                        NavigationLink(destination: Testing_File()) {
                             DashboardItem(imageName: "Myorder", title: "My Orders")
                         }
                         
