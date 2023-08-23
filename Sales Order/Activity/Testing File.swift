@@ -10,7 +10,7 @@ struct Category: Identifiable, Equatable {
     let id: Int
     let name: String
     let products: [Product]
-    
+
     static func == (lhs: Category, rhs: Category) -> Bool {
         return lhs.id == rhs.id
     }
@@ -36,7 +36,7 @@ struct Testing_File: View {
     ]
     @State private var selectedCategories: [Category] = []
     @State private var selectedProducts: [Product] = []
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -49,7 +49,7 @@ struct Testing_File: View {
                     }
                 }
                 .navigationBarTitle("Categories")
-                
+
                 List(selectedProducts) { product in
                     HStack {
                         Text(product.name)
@@ -68,7 +68,7 @@ struct Testing_File: View {
                         }
                     }
                 }
-                
+
                 if selectedProducts.isEmpty == false {
                     NavigationLink(destination: SelectedProductsView(selectedCategories: selectedCategories, selectedProducts: selectedProducts)) {
                         Text("Proceed")
@@ -82,7 +82,7 @@ struct Testing_File: View {
             }
         }
     }
-    
+
     private func toggleCategorySelection(for category: Category) {
         if selectedCategories.contains(category) {
             selectedCategories.removeAll { $0 == category }
@@ -92,7 +92,7 @@ struct Testing_File: View {
             selectedProducts.append(contentsOf: category.products)
         }
     }
-    
+
     private func toggleProductSelection(for product: Product) {
         if selectedProducts.contains(product) {
             selectedProducts.removeAll { $0 == product }
@@ -109,13 +109,13 @@ struct Testing_File: View {
 struct SelectedProductsView: View {
     let selectedCategories: [Category]
     let selectedProducts: [Product]
-    
+
     var body: some View {
         VStack {
             Text("Selected Products:")
                 .font(.title)
                 .padding()
-            
+
             List(selectedProducts) { product in
                 HStack {
                     Text(product.name)
@@ -123,11 +123,11 @@ struct SelectedProductsView: View {
                     Text("₹\(product.rate)")
                 }
             }
-            
+
             Text("Selected Categories:")
                 .font(.title)
                 .padding(.top)
-            
+
             List(selectedCategories) { category in
                 Text(category.name)
                     .font(.headline)
@@ -139,7 +139,109 @@ struct SelectedProductsView: View {
 }
 struct Testing_File_Previews: PreviewProvider {
     static var previews: some View {
-        Testing_File()
+       Testing_File()
+       //OrderScreen()
     }
 }
 
+//struct OrderScreen: View {
+//    @State private var selectedCategory: Category? = nil
+//    var body: some View {
+//        NavigationView {
+//                   VStack {
+//                       ScrollView(.horizontal, showsIndicators: false) {
+//                           HStack(spacing: 20) {
+//                               ForEach(Category.allCases, id: \.self) { category in
+//                                   CategoryButton(category: category, isSelected: selectedCategory == category) {
+//                                       selectedCategory = category
+//                                   }
+//                               }
+//                           }
+//                           .padding()
+//                       }
+//
+//                       if let selectedCategory = selectedCategory {
+//                           switch selectedCategory {
+//                           case .biscuit:
+//                               ProductListView(products: .biscuitProducts)
+//                           case .cake:
+//                               ProductListView(products: .cakeProducts)
+//                           case .chocolate:
+//                               ProductListView(products: .chocolateProducts)
+//                           }
+//                       }
+//
+//                       Spacer()
+//                   }
+//                   .navigationTitle("Products")
+//               }
+//    }
+//}
+//
+//struct ProductListView: View {
+//    let products: [Product]
+//
+//    var body: some View {
+//        VStack(alignment: .leading) {
+//            Text("Products")
+//                .font(.headline)
+//                .padding(.horizontal)
+//
+//            List(products, id: \.id) { product in
+//                Text(product.name)
+//            }
+//        }
+//    }
+//}
+//
+//struct CategoryButton: View {
+//    let category: Category
+//    let isSelected: Bool
+//    let action: () -> Void
+//
+//    var body: some View {
+//        Button(action: {
+//            action()
+//        }) {
+//            Text(category.rawValue)
+//                .foregroundColor(isSelected ? .white : .black)
+//                .padding()
+//                .background(isSelected ? Color.blue : Color.gray.opacity(0.5))
+//                .cornerRadius(10)
+//        }
+//    }
+//}
+//
+//enum Category: String, CaseIterable {
+//    case biscuit = "Biscuit"
+//    case cake = "Cake"
+//    case chocolate = "Chocolate"
+//}
+//
+//struct Product: Identifiable {
+//    let id = UUID()
+//    let name: String
+//}
+//
+//extension Array where Element == Product {
+//    static let biscuitProducts: [Product] = [
+//        Product(name: "Biscuit 1"),
+//        Product(name: "Biscuit 2"),
+//        Product(name: "Biscuit 3"),
+//        Product(name: "Biscuit 4"),
+//        Product(name: "Biscuit 5")
+//    ]
+//
+//    static let cakeProducts: [Product] = [
+//        Product(name: "Cake 1"),
+//        Product(name: "Cake 2"),
+//        Product(name: "Cake 3"),
+//        Product(name: "Cake 4")
+//    ]
+//
+//    static let chocolateProducts: [Product] = [
+//        Product(name: "Chocolate 1"),
+//        Product(name: "Chocolate 2"),
+//        Product(name: "Chocolate 3")
+//    ]
+//}

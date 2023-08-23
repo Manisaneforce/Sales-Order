@@ -41,9 +41,12 @@ struct Nedata: View {
                     ForEach(selectedCategory.products, id: \.self) { product in
                         Button(action: {
                             toggleProductSelection(product)
+                            print(selectedProducts)
+                            print(selectedCategory)
                         }) {
                             Text(product)
                                 .foregroundColor(selectedProducts.contains(product) ? .blue : .black)
+                           
                         }
                     }
                     
