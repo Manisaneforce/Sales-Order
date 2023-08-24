@@ -15,7 +15,10 @@ struct Prodata: Any {
     let ProMRP : String
     let sUoms : Int
     let sUomNms : String
+    let Unit_Typ_Product: [String : Any]
 }
+var lstPrvOrder: [AnyObject] = []
+var lblTotAmt:String = ""
 struct Order: View {
     @State private var number = 0
     @State private var inputNumberString = ""
@@ -36,7 +39,7 @@ struct Order: View {
     @State private var  imgdataURL = [String]()
     @State private var uiImage: UIImage? = nil
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
-    @State private var FilterProduct:[AnyObject]=[]
+    @State private var FilterProduct = [AnyObject]()
 
     @State private var Allprod:[Prodata]=[]
     @State private var numbers: [Int] = []
@@ -187,14 +190,15 @@ struct Order: View {
                                                 if !itemsWithTypID3.isEmpty {
                                                     for item in itemsWithTypID3 {
                                                         print(itemsWithTypID3)
-                                                        FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
+                                                       // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
+                                                        FilterProduct = itemsWithTypID3  as [AnyObject]
                                                         if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String{
                                                             print(procat)
                                                             print(proname)
                                                             print(sUoms)
                                                             print(sUomNms)
                                                             
-                                                            Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms ))
+                                                            Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Unit_Typ_Product: item ))
                                                             
                                                             
                                                             
@@ -337,6 +341,18 @@ struct Order: View {
                                 HStack {
                                     Button(action: {
                                         self.decrementNumber(at: index)
+                                        let proditem = Allprod[index]
+                                        print(proditem)
+                                        let FilterProduct = Allprod[index].Unit_Typ_Product
+                                        print(FilterProduct)
+                                        let id = proditem.ProID
+                                        
+                                        let selectproduct = $FilterProduct[index] as? AnyObject
+                                        print(selectproduct as Any)
+                                        let  sQty = String(numbers[index])
+                                        print(sQty)
+                                        minusQty(sQty: sQty, SelectProd: FilterProduct)
+                                        
                                     }) {
                                         Text("-")
                                             .font(.headline)
@@ -350,33 +366,17 @@ struct Order: View {
                                     
                                     Button(action: {
                                         self.incrementNumber(at: index)
-                                        //                    SEF11426
-                                        //                    241
-                                        //                    PIECE
-                                        //                    1
-                                        //
-                                        //                    1
-                                        //                    1
-                                        //                    ["OrdConv": 1, "product_netwt": , "Product_Type_Code": R, "id": SEF11426, "cateid": 1658, "OrdConvSec": 1, "Product_Description": w, "Default_UOM": <null>, "Product_Sale_Unit": PIECE, "Code": 13135, "Product_Image": 5e74c374c485400e59249483.webp, "name": Oreo, "product_unit": PIECE, "Default_UOMQty": <null>, "Base_Unit_code": 241, "pSlNo": 11426, "HSN": , "Unit_code": 441, "Division_Code": 29, "conversionQty": 10]
-                                        
-                                        
+                            
                                         let proditem = Allprod[index]
                                         print(proditem)
-                                        let id = proditem.ProID
+                                        let FilterProduct = Allprod[index].Unit_Typ_Product
+                                        print(FilterProduct)
                                         
                                         let selectproduct = $FilterProduct[index] as? AnyObject
                                         print(selectproduct as Any)
-                                        let  sUom = String(proditem.sUoms)
-                                        let sUomNm = ""
-                                        let sUomConv = proditem.sUomNms
-                                        let sNetUnt = ""
                                         let  sQty = String(numbers[index])
                                         print(sQty)
-                                        
-                                        
-                                        updateQty(id: id, sUom: sUom, sUomNm: sUomNm, sUomConv: "gfg", sNetUnt: "reg", sQty: sQty, ProdItem: selectproduct as Any, refresh: 1)
-                                        
-                                        
+                        addQty(sQty: sQty, SelectProd: FilterProduct)
                                         
                                     }) {
                                         Text("+")                                             .font(.headline)
@@ -463,7 +463,7 @@ struct Order: View {
                                 .font(.system(size: 14))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                            Text("Qty : 10")
+                            Text("Qty : 0")
                                 .font(.system(size: 14))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -473,7 +473,7 @@ struct Order: View {
                         }
                         HStack{
                             
-                            Text("\(Image(systemName: "indianrupeesign"))10000")
+                            Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
                                 .font(.system(size: 15))
                                 .fontWeight(.heavy)
                                 .foregroundColor(.white)
@@ -514,6 +514,7 @@ struct Order: View {
     }
     private func incrementNumber(at index: Int) {
         numbers[index] += 1
+        
     }
     
     private func decrementNumber(at index: Int) {
@@ -534,97 +535,7 @@ struct Order: View {
            }
        }
     
-    func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:Any,refresh: Int){
-        
-        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
-            if item["id"] as! String == id {
-                return true
-            }
-            return false
-        })
-        print(id)
-        print(sUom)
-        print(sUomNm)
-        print(sUomConv)
-        print(sNetUnt)
-        print(sQty)
-        print(refresh)
-        print(ProdItem)
-        let TotQty: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
-        
-//        let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
-//            if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
-//                return true
-//            }
-//            return false
-//        })
-        let Scheme: Double = 0
-        let FQ : Int32 = 0
-        let OffQty: Int = 0
-        let OffProd: String = ""
-        let OffProdNm: String = ""
-        let Rate: Double = 0
-        let Schmval: String = ""
-        let Disc: String = ""
-        
-//        let RateItems: [AnyObject] = lstRateList.filter ({ (Rate) in
-//
-//            if Rate["Product_Detail_Code"] as! String == id {
-//                return true
-//            }
-//            return false
-//        })
-//        if(RateItems.count>0){
-//            Rate = (RateItems[0]["Retailor_Price"] as! NSString).doubleValue
-//        }
-       var ItmValue: Double = (TotQty*Rate)
-//        if(Schemes.count>0){
-//            Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
-//            FQ = (Schemes[0]["FQ"] as! NSString).intValue
-//            let SchmQty: Double
-//            if(Schemes[0]["pkg"] as! String == "Y"){
-//                SchmQty=Double(Int(TotQty / Scheme))
-//            } else {
-//                SchmQty = (TotQty / Scheme)
-//            }
-//            OffQty = Int(SchmQty * Double(FQ))
-//            OffProd = Schemes[0]["OffProd"] as! String
-//            OffProdNm = Schemes[0]["OffProdNm"] as! String
-//
-//            var dis: Double = 0;
-//            Disc = Schemes[0]["Disc"] as! String
-//            if (Disc != "") {
-//                dis = ItmValue * (Double(Disc)! / 100);
-//            }
-//            Schmval = String(format: "%.02f", dis);
-//            ItmValue = ItmValue - dis;
-//        }
-        if items.count>0 {
-            print(VisitData.shared.ProductCart)
-            if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
-                if item["id"] as! String == id {
-                    return true
-                }
-                return false
-            })
-            {
 
-                let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
-                let jitm: AnyObject = itm as AnyObject
-                VisitData.shared.ProductCart[i] = jitm
-                print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
-            }
-        }else{
-            let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": Rate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
-            let jitm: AnyObject = itm as AnyObject
-            print(itm)
-            VisitData.shared.ProductCart.append(jitm)
-          
-            
-        }
-        print(VisitData.shared.ProductCart)
-       // updateOrderValues(refresh: refresh)
-    }
     
 }
 
@@ -947,48 +858,176 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
 
 struct SelPrvOrder: View {
     @State private var OrderNavigte:Bool = false
+    @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
+    @State private var FilterItem = [[String: Any]]()
+   
     var body: some View {
         VStack{
             VStack(spacing:10){
-            ZStack{
-                Rectangle()
-                    .foregroundColor(Color.blue)
-                    .frame(height: 100)
+                ZStack{
+                    Rectangle()
+                        .foregroundColor(Color.blue)
+                        .frame(height: 100)
+                    
+                    HStack {
+                        
+                        Text(" Selected Order Prv")
+                            .font(.system(size: 25))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top, 50)
+                            .offset(x: -20)
+                    }
+                }
+                .frame(maxWidth: .infinity)
                 
-                HStack {
-                     
-                    Text(" Selected Order Prv")
-                        .font(.system(size: 25))
+                
+                HStack(spacing: 200){
+                    Text("Items")
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.top, 50)
-                        .offset(x: -20)
+                        .font(.system(size: 20))
+                    
+                    Button(action:{
+                        OrderNavigte = true
+                    }){
+                        Text("+ Add Product")
+                            .foregroundColor(Color.orange)
+                        
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity)
-           
-            
-            HStack(spacing: 200){
-                Text("Items")
-                    .fontWeight(.bold)
-                    .font(.system(size: 20))
+                .onAppear{
+                    print(lstPrvOrder)
+                    var ProSelectID = [String]()
+                    //                if lstPrvOrder.count<0 {
+                    //                    for i in 0...lstPrvOrder.count-1 {
+                    //                        let item: AnyObject = lstPrvOrder[i]
+                    //                        ProSelectID =  item["id"] as! String
+                    //                        //(item["SalQty"] as! NSString).doubleValue
+                    //
+                    //                    }
+                    //                }
+                    for itemID in lstPrvOrder{
+                        let id =  itemID["id"] as! String
+                        ProSelectID.append(id)
+                    }
+                    print(ProSelectID)
+                    print(Allproddata)
+                    if let jsonData = Allproddata.data(using: .utf8) {
+                        do {
+                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                print(jsonArray)
+                                for RelID in ProSelectID {
+                                    if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                                        FilterItem.append(selectedPro)
+                                    }
+                                }
+                                
+                            }
+                        } catch {
+                            print("Error is \(error)")
+                        }
+                        print(FilterItem)
+                    }
+                    
+                }
+                
+                Divider()
+                List(0 ..< FilterItem.count, id: \.self) { index in
+                    HStack {
+                        Image("logo_new")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 70)
+                            .cornerRadius(4)
+                        
+                        VStack {
+                            HStack(spacing: 120) {
+                                Text("Get data")
+                                Button(action: {
+                                    
+                                }) {
+                                    Image(systemName: "trash.fill")
+                                        .foregroundColor(Color.red)
+                                }
+                            }
+                            
+                            HStack(spacing: 60) {
+                                Text("Rs: 000")
+                                
+                                HStack {
+                                    Button(action: {
+                                        
+                                    }) {
+                                        Text("-")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    
+                                    Text("0")
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color.black)
+                                    
+                                    Button(action: {
+                                        
+                                    }) {
+                                        Text("+")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                                .padding(.vertical, 6)
+                                .padding(.horizontal, 20)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.gray, lineWidth: 2)
+                                )
+                                .foregroundColor(Color.blue)
+                            }
+                            
+                            Divider()
+                            
+                            HStack(spacing: 100) {
+                                Text("Total")
+                                Text("₹100.00")
+                            }
+                        }
+                    }
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+                            .shadow(color: Color.gray, radius:2 , x:0,y:0)
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                    .frame(width: 350)
+                }
+                .listStyle(PlainListStyle())
+                .padding(.vertical, 5)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                )
+                
+                //.frame(width: 365)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.horizontal, 10)
+                
+                .clipped()
+                .shadow(color: Color.gray, radius:3 , x:0,y:0)
+                
 
-                Button(action:{
-                    OrderNavigte = true
-                }){
-                    Text("+ Add Product")
-                        .foregroundColor(Color.orange)
-                       
-                }
-            }
+                
+                
             }
             .edgesIgnoringSafeArea(.top)
             
-//            HStack{
-//                Image("logo_new")
-//                    .resizable()
-//            }
-            
+      
             
            Spacer()
             ZStack{
@@ -997,11 +1036,9 @@ struct SelPrvOrder: View {
                     .frame(height: 100)
                 
                 Button(action: {
-                                
+                    
                 }) {
-                    //                                  Text("Submit")
-                    //                                      .foregroundColor(Color.white)
-                    //                                      .frame(maxWidth: .infinity)
+                  
                     VStack(spacing:-1){
                     HStack (){
                         
@@ -1024,7 +1061,7 @@ struct SelPrvOrder: View {
                     }
                     HStack(spacing: 200){
                         
-                        Text("\(Image(systemName: "indianrupeesign"))000")
+                        Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
                             .font(.system(size: 15))
                             .fontWeight(.heavy)
                             .foregroundColor(.white)
@@ -1056,62 +1093,143 @@ struct SelPrvOrder: View {
       
        
     }
+  
 }
 
 
-//Button(action: {
-//    SelPrvOrderNavigte = true
-//
-//}) {
-//    ZStack(alignment: .top) {
-//        Rectangle()
-//            .foregroundColor(Color.blue)
-//            .frame(height: 70)
-//
-//
-//        HStack {
-//
-//            Image(systemName: "cart.fill")
-//                .foregroundColor(.white)
-//                .font(.system(size: 30))
-//                .frame(width: 60,height: 40)
-//
-//            Text("Item: \(VisitData.shared.ProductCart.count)")
-//                .font(.system(size: 14))
-//                .fontWeight(.bold)
-//                .foregroundColor(.white)
-//            Text("Qty : 10")
-//                .font(.system(size: 14))
-//                .fontWeight(.bold)
-//                .foregroundColor(.white)
-//            Spacer()
-//
-//
-//        }
-//        HStack{
-//
-//            Text("\(Image(systemName: "indianrupeesign"))10000")
-//                .font(.system(size: 15))
-//                .fontWeight(.heavy)
-//                .foregroundColor(.white)
-//                .offset(x:30)
-//
-//            Spacer()
-//
-//            Text("PROCEED")
-//                .fontWeight(.bold)
-//                .foregroundColor(.white)
-//                .font(.system(size: 17))
-//                .multilineTextAlignment(.center)
-//                .offset(x:-40,y:-10)
-//
-//
-//        }
-//        .offset(y:40)
-//
-//    }
-//    //.cornerRadius(5)
-//    .edgesIgnoringSafeArea(.bottom)
-//    .frame(maxWidth: .infinity)
-//    .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
-//}
+func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String:Any],refresh: Int){
+    
+    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
+        if item["id"] as! String == id {
+            return true
+        }
+        return false
+    })
+    print(id)
+    print(sUom)
+    print(sUomNm)
+    print(sUomConv)
+    print(sNetUnt)
+    print(sQty)
+    print(refresh)
+    print(ProdItem)
+    let TotQty: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
+    print(TotQty)
+    let source: String = (ProdItem["Rate"] as? String)!
+    let Rate: Double = Double(source)!
+    print(Rate)
+    let ItmValue: Double = (TotQty*Rate)
+    print(ItmValue)
+    
+    
+    let Scheme: Double = 0
+    let FQ : Int32 = 0
+    let OffQty: Int = 0
+    let OffProd: String = ""
+    let OffProdNm: String = ""
+    let Schmval: String = ""
+    let Disc: String = ""
+    
+   
+
+    if items.count>0 {
+        print(VisitData.shared.ProductCart)
+        if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
+            if item["id"] as! String == id {
+                return true
+            }
+            return false
+        })
+        {
+
+            let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
+            let jitm: AnyObject = itm as AnyObject
+            VisitData.shared.ProductCart[i] = jitm
+            print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
+        }
+    }else{
+        let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": Rate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
+        let jitm: AnyObject = itm as AnyObject
+        print(itm)
+        VisitData.shared.ProductCart.append(jitm)
+      
+        
+    }
+    print(VisitData.shared.ProductCart)
+    lstPrvOrder = VisitData.shared.ProductCart
+    updateOrderValues()
+}
+
+
+func addQty(sQty:String,SelectProd:[String:Any]) {
+    
+    print(sQty)
+    print(SelectProd)
+  
+    let Ids = SelectProd["ERP_Code"] as? String
+    print(Ids as Any)
+
+      let  selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+        print(selUOM)
+     let   selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+        print(selUOMNm)
+      let  selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+        print(selUOMConv)
+      // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+    let selNetWt = ""
+        print(selNetWt)
+
+
+    updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
+
+}
+
+ func minusQty(sQty:String,SelectProd:[String:Any]) {
+     print(sQty)
+     print(SelectProd)
+   
+     let Ids = SelectProd["ERP_Code"] as? String
+     print(Ids as Any)
+
+       let  selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+         print(selUOM)
+      let   selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+         print(selUOMNm)
+       let  selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+         print(selUOMConv)
+       // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+     let selNetWt = ""
+         print(selNetWt)
+
+
+     updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
+}
+
+
+
+func updateOrderValues(){
+    var totAmt: Double = 0
+    print(lstPrvOrder)
+    
+   lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+        print(lstPrvOrder)
+        if (Cart["SalQty"] as! Double) > 0 {
+            print(Cart["SalQty"] as! Double)
+            return true
+        }
+        return false
+    })
+    if lstPrvOrder.count>0 {
+        for i in 0...lstPrvOrder.count-1 {
+            let item: AnyObject = lstPrvOrder[i]
+            totAmt = totAmt + (item["NetVal"] as! Double)
+            //(item["SalQty"] as! NSString).doubleValue
+
+        }
+    }
+  //  lblTotAmt = String(format: "Rs. %.02f", totAmt)
+    lblTotAmt = String(totAmt)
+    print(totAmt)
+
+}
+
