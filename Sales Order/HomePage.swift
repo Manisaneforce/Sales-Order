@@ -83,7 +83,7 @@ struct HomePage: View {
                             
                         }
                     
-                        NavigationLink(destination: Nedata()) {
+                        NavigationLink(destination: Loctionfile()) {
                             DashboardItem(imageName: "Myorder", title: "My Orders")
                         }
                         

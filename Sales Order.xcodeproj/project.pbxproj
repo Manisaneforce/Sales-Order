@@ -15,6 +15,11 @@
 		3801AE282A8E17C80069B136 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE272A8E17C80069B136 /* APIClient.swift */; };
 		3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE292A8E551A0069B136 /* Phonering.json */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
+		384CB6F92A98A261009439E5 /* LoaderMsg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F82A98A261009439E5 /* LoaderMsg.swift */; };
+		384CB6FB2A98A905009439E5 /* order Submite.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB6FA2A98A905009439E5 /* order Submite.json */; };
+		384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */; };
+		384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FE2A98B20A009439E5 /* LocationService.swift */; };
+		384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7002A98B5B1009439E5 /* Loctionfile.swift */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
@@ -61,6 +66,11 @@
 		3801AE272A8E17C80069B136 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3801AE292A8E551A0069B136 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Phonering.json; path = ../../../UI/Phonering.json; sourceTree = "<group>"; };
 		384CB6F42A9608D4009439E5 /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
+		384CB6F82A98A261009439E5 /* LoaderMsg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderMsg.swift; sourceTree = "<group>"; };
+		384CB6FA2A98A905009439E5 /* order Submite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "order Submite.json"; path = "../../../UI/order Submite.json"; sourceTree = "<group>"; };
+		384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		384CB6FE2A98B20A009439E5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		384CB7002A98B5B1009439E5 /* Loctionfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loctionfile.swift; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		38B5FB8D2A94E9B100565B9F /* Nedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nedata.swift; sourceTree = "<group>"; };
@@ -114,6 +124,7 @@
 			children = (
 				3801AE1F2A8C8A830069B136 /* OTP.json */,
 				3801AE212A8C8BD70069B136 /* Call.json */,
+				384CB6FA2A98A905009439E5 /* order Submite.json */,
 				3801AE232A8C90970069B136 /* Msg.json */,
 				3801AE252A8C9A840069B136 /* Order.json */,
 				3801AE292A8E551A0069B136 /* Phonering.json */,
@@ -130,6 +141,10 @@
 				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
 				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
 				384CB6F42A9608D4009439E5 /* VisitData.swift */,
+				384CB6F82A98A261009439E5 /* LoaderMsg.swift */,
+				384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */,
+				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
+				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -321,6 +336,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				384CB6FB2A98A905009439E5 /* order Submite.json in Resources */,
 				3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */,
 				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
@@ -357,14 +373,18 @@
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
 				3801AE282A8E17C80069B136 /* APIClient.swift in Sources */,
+				384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
+				384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
 				38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
+				384CB6F92A98A261009439E5 /* LoaderMsg.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
+				384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

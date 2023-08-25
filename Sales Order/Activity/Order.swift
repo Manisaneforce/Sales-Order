@@ -854,20 +854,32 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
     
 }
 
-struct FilterItem: Identifiable {
-    let id: Int
-    var quantity: Int // The property to increase and decrease
-    // Add other properties if needed
+
+struct PrvProddata: Any {
+    let ImgURL:String
+    let ProName :String
+    let ProID : String
+    let ProMRP : String
 }
 
+struct FilterItem: Identifiable {
+    let id: Int
+    var quantity: Int
+}
+
+var LstAllproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
+var selectitemCount:Int = 0
 struct SelPrvOrder: View {
     @State private var OrderNavigte:Bool = false
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
     @State private var FilterItem = [[String: Any]]()
+    @State private var AllPrvprod:[PrvProddata]=[]
     @State var filterItems: [FilterItem] = []
+    
     init() {
         var items: [FilterItem] = []
-        for index in 0..<10 {
+        print(selectitemCount)
+        for index in 0..<selectitemCount {
             items.append(Sales_Order.FilterItem(id: index, quantity: 0))
         }
         self._filterItems = State(initialValue: items)
@@ -932,6 +944,19 @@ struct SelPrvOrder: View {
                             print("Error is \(error)")
                         }
                         print(FilterItem)
+                        
+                        print(FilterItem)
+                                             for PrvProd in FilterItem{
+                                                 
+                                                 let url = PrvProd["PImage"] as? String
+                                                 let name  = PrvProd["name"] as? String
+                                                 let Proid = PrvProd["ERP_Code"] as? String
+                                                 let rate = PrvProd["Rate"] as? String
+                                                 AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: rate!))
+                                         }
+                                             print(AllPrvprod)
+                        
+                        
                     }
                     
                 }
@@ -947,17 +972,18 @@ struct SelPrvOrder: View {
                         
                         VStack {
                             HStack(spacing: 120) {
-                                Text("Get data")
+                                Text(AllPrvprod[index].ProName)
                                 Button(action: {
-                                    
+                                    deleteItem(at: index)
                                 }) {
                                     Image(systemName: "trash.fill")
                                         .foregroundColor(Color.red)
                                 }
+                                .buttonStyle(PlainButtonStyle())
                             }
                             
                             HStack(spacing: 60) {
-                                Text("Rs: 000")
+                                Text("Rs: \(AllPrvprod[index].ProMRP)")
                                 
                                 HStack {
                                     Button(action: {
@@ -999,7 +1025,7 @@ struct SelPrvOrder: View {
                             
                             HStack(spacing: 100) {
                                 Text("Total")
-                                Text("₹100.00")
+                                Text("₹00.00")
                             }
                         }
                     }
@@ -1043,6 +1069,8 @@ struct SelPrvOrder: View {
                     .frame(height: 100)
                 
                 Button(action: {
+                    OrderSubmit()
+                    
                     
                 }) {
                   
@@ -1164,7 +1192,8 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     }
     print(VisitData.shared.ProductCart)
     lstPrvOrder = VisitData.shared.ProductCart
-    updateOrderValues()
+    selectitemCount = lstPrvOrder.count
+    updateOrderValues(refresh: 1)
 }
 
 
@@ -1214,7 +1243,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 
 
 
-func updateOrderValues(){
+func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
     print(lstPrvOrder)
     
@@ -1237,6 +1266,106 @@ func updateOrderValues(){
   //  lblTotAmt = String(format: "Rs. %.02f", totAmt)
     lblTotAmt = String(totAmt)
     print(totAmt)
+    if(refresh == 1){
+     
+    }
 
+}
+func deleteItem(at index: Int) {
+    print(lstPrvOrder)
+    print(VisitData.shared.ProductCart)
+    var ids = [String]()
+    var id = ""
+    for allid in lstPrvOrder{
+        ids.append(allid["id"] as! String)
+    }
+    id = ids[index]
+    print(ids)
+    print(id)
+    //let id=lstPrvOrder["id"] as! String
+    
+    
+    
+    lstPrvOrder.remove(at: index)
+    VisitData.shared.ProductCart.removeAll(where: { (item) in
+        if item["id"] as! String == id {
+            return true
+        }
+        return false
+    })
+    print(lstPrvOrder)
+    print(VisitData.shared.ProductCart)
+    updateOrderValues(refresh: 1)
+}
+
+func OrderSubmit() {
+    print(lstPrvOrder)
+    var sPItems: [String] = [] // Use an array to store JSON strings
+    
+    for i in 0..<lstPrvOrder.count {
+        guard let item = lstPrvOrder[i] as? [String: Any],
+              let id = item["id"] as? String else {
+            continue
+        }
+        
+        var prodItems: [[String: Any]] = []
+        
+        if let jsonData = LstAllproddata.data(using: .utf8) {
+            do {
+                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                    prodItems = jsonArray.filter { product in
+                        if let prodId = product["ERP_Code"] as? String {
+                            return prodId == id
+                        }
+                        return false
+                    }
+                }
+            } catch {
+                print("Error is \(error)")
+            }
+        }
+        
+        let disc: String = item["Disc"] as? String ?? "0"
+        let disVal: String = item["DisVal"] as? String ?? "0"
+        
+        let productQty = item["OffQty"] as? Int ?? 0
+        let productCode = id
+        let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
+        
+        let sPItem = """
+        {
+            "product_code": "\(productCode)",
+            "product_Name": "\(productName)",
+            "Product_Rx_Qty": \(String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)),
+            "Product_Qty": \(productQty),
+            "Product_RegularQty": \(productQty),
+            "Product_Amount": \(productQty),
+            "Rate": "\(productName)",
+            "free": "\(productName)",
+            "dis": \(productQty),
+            "dis_value": "\(productName)",
+            "Off_Pro_code": "\(productName)",
+            "Off_Pro_name": "\(productName)",
+            "Off_Pro_Unit": "\(productName)",
+            "discount_type": "\(productName)",
+            "ConversionFactor": \(productQty),
+            "UOM_Id": "\(productName)",
+            "UOM_Nm": "\(productName)",
+            "TAX_details": [{
+                "Tax_Id": "\(productName)",
+                "Tax_Val": \(productQty),
+                "Tax_Type": "\(productName)",
+                "Tax_Amt": "\(productName)"
+            }]
+        }
+        """
+        
+        sPItems.append(sPItem) // Add the JSON string to the array
+    }
+    
+    // Print or process the sPItems array as needed
+    for sPItem in sPItems {
+        print(sPItem)
+    }
 }
 
