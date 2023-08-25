@@ -854,12 +854,25 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
     
 }
 
-
+struct FilterItem: Identifiable {
+    let id: Int
+    var quantity: Int // The property to increase and decrease
+    // Add other properties if needed
+}
 
 struct SelPrvOrder: View {
     @State private var OrderNavigte:Bool = false
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
     @State private var FilterItem = [[String: Any]]()
+    @State var filterItems: [FilterItem] = []
+    init() {
+        var items: [FilterItem] = []
+        for index in 0..<10 {
+            items.append(Sales_Order.FilterItem(id: index, quantity: 0))
+        }
+        self._filterItems = State(initialValue: items)
+    }
+
    
     var body: some View {
         VStack{
@@ -898,14 +911,6 @@ struct SelPrvOrder: View {
                 .onAppear{
                     print(lstPrvOrder)
                     var ProSelectID = [String]()
-                    //                if lstPrvOrder.count<0 {
-                    //                    for i in 0...lstPrvOrder.count-1 {
-                    //                        let item: AnyObject = lstPrvOrder[i]
-                    //                        ProSelectID =  item["id"] as! String
-                    //                        //(item["SalQty"] as! NSString).doubleValue
-                    //
-                    //                    }
-                    //                }
                     for itemID in lstPrvOrder{
                         let id =  itemID["id"] as! String
                         ProSelectID.append(id)
@@ -956,7 +961,9 @@ struct SelPrvOrder: View {
                                 
                                 HStack {
                                     Button(action: {
-                                        
+                                        if filterItems[index].quantity > 0 {
+                                               filterItems[index].quantity -= 1
+                                           }
                                     }) {
                                         Text("-")
                                             .font(.headline)
@@ -964,12 +971,12 @@ struct SelPrvOrder: View {
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                     
-                                    Text("0")
+                                    Text("\(filterItems[index].quantity)")
                                         .fontWeight(.bold)
                                         .foregroundColor(Color.black)
                                     
                                     Button(action: {
-                                        
+                                        filterItems[index].quantity += 1
                                     }) {
                                         Text("+")
                                             .font(.headline)
