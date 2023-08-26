@@ -1300,72 +1300,94 @@ func deleteItem(at index: Int) {
 
 func OrderSubmit() {
     print(lstPrvOrder)
-    var sPItems: [String] = [] // Use an array to store JSON strings
+//    var sPItems:String = ""
+//    for i in 0..<lstPrvOrder.count {
+//        guard let item = lstPrvOrder[i] as? [String: Any],
+//              let id = item["id"] as? String else {
+//            continue
+//        }
+//
+//        var prodItems: [[String: Any]] = []
+//
+//        if let jsonData = LstAllproddata.data(using: .utf8) {
+//            do {
+//                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+//                    prodItems = jsonArray.filter { product in
+//                        if let prodId = product["ERP_Code"] as? String {
+//                            return prodId == id
+//                        }
+//                        return false
+//                    }
+//                }
+//            } catch {
+//                print("Error is \(error)")
+//            }
+//        }
+//        print(item)
+//        let disc: String = item["Disc"] as? String ?? "0"
+//        let disVal: String = item["DisVal"] as? String ?? "0"
+//
+//        let productQty = item["OffQty"] as? Int ?? 0
+//        let productCode = prodItems.isEmpty ? "" : (prodItems[0]["id"] as? String ?? "")
+//        print(prodItems)
+//        let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
+//
+//                   sPItems = sPItems + "{\"product_code\":\""+productCode+"\", \"product_Name\":\""+productName+"\","
+//                   sPItems = sPItems + " \"Product_Rx_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
+//                   sPItems = sPItems + " \"Product_Total_Qty\": \"1\","
+//                   sPItems = sPItems + " \"Product_Amount\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+//                   sPItems = sPItems + " \"Rate\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+//                   sPItems = sPItems + " \"free\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+//                   sPItems = sPItems + " \"dis\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+//                   sPItems = sPItems + " \"dis_value\":\""+productQty+"\","
+//                   sPItems = sPItems + " \"Off_Pro_code\":\"\","
+//                   sPItems = sPItems + " \"Off_Pro_name\":\"\","
+//                   sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
+//                   sPItems = sPItems + " \"discount_type\":\"\","
+//                   sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
+//                   sPItems = sPItems + " \"UOM_Id\": \"2\","
+//                   sPItems = sPItems + " \"UOM_Nm\": \"Pipette\","
+//                   sPItems = sPItems + " \"TAX_details\": \"[{\","
+//                   sPItems = sPItems + " \"Tax_Id\": \"1\","
+//                   sPItems = sPItems + " \"Tax_Val\": 12,"
+//                   sPItems = sPItems + " \"Tax_Type\": \"GST 12%\","
+//                   sPItems = sPItems + " \"Tax_Amt\": 23.64,}],}”
+//
+//
+//    }
+
+let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"2023-08-26 10:58:12\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"524.24\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"2023-08-26 10:58:12\",\"modified_time\":\"2023-08-26 10:58:12\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"524.24\",\"CashDiscount\":0,\"NetAmount\":\"524.24\",\"No_Of_items\":\"2\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[{\"product_Name\":\"FiproRel- S Dog 0.67 ml\",\"product_code\":\"D111\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":220.64,\"Rate\":\"197.00\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"23.64\"}]},{\"product_Name\":\"FiproRel - S Dog 1.34 ml\",\"product_code\":\"D112\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":303.6,\"Rate\":\"271.07\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"32.53\"}]}]}]"
     
-    for i in 0..<lstPrvOrder.count {
-        guard let item = lstPrvOrder[i] as? [String: Any],
-              let id = item["id"] as? String else {
-            continue
-        }
-        
-        var prodItems: [[String: Any]] = []
-        
-        if let jsonData = LstAllproddata.data(using: .utf8) {
-            do {
-                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                    prodItems = jsonArray.filter { product in
-                        if let prodId = product["ERP_Code"] as? String {
-                            return prodId == id
-                        }
-                        return false
-                    }
-                }
-            } catch {
-                print("Error is \(error)")
-            }
-        }
-        
-        let disc: String = item["Disc"] as? String ?? "0"
-        let disVal: String = item["DisVal"] as? String ?? "0"
-        
-        let productQty = item["OffQty"] as? Int ?? 0
-        let productCode = id
-        let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
-        
-        let sPItem = """
-        {
-            "product_code": "\(productCode)",
-            "product_Name": "\(productName)",
-            "Product_Rx_Qty": \(String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)),
-            "Product_Qty": \(productQty),
-            "Product_RegularQty": \(productQty),
-            "Product_Amount": \(productQty),
-            "Rate": "\(productName)",
-            "free": "\(productName)",
-            "dis": \(productQty),
-            "dis_value": "\(productName)",
-            "Off_Pro_code": "\(productName)",
-            "Off_Pro_name": "\(productName)",
-            "Off_Pro_Unit": "\(productName)",
-            "discount_type": "\(productName)",
-            "ConversionFactor": \(productQty),
-            "UOM_Id": "\(productName)",
-            "UOM_Nm": "\(productName)",
-            "TAX_details": [{
-                "Tax_Id": "\(productName)",
-                "Tax_Val": \(productQty),
-                "Tax_Type": "\(productName)",
-                "Tax_Amt": "\(productName)"
-            }]
-        }
-        """
-        
-        sPItems.append(sPItem) // Add the JSON string to the array
-    }
+    let params: Parameters = [
+        "data": jsonString
+    ]
     
-    // Print or process the sPItems array as needed
-    for sPItem in sPItems {
-        print(sPItem)
+    print(params)
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"save/salescalls"+"&divisionCode=227"+"&Sf_code=96", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+    AFdata in
+    switch AFdata.result
+    {
+        
+    case .success(let value):
+        print(value)
+        if let json = value as? [String: Any] {
+            
+           print(json)
+            UIApplication.shared.windows.first?.makeKeyAndVisible()
+            
+            VisitData.shared.clear()
+        }
+        
+    case .failure(let error):
+        
+        let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+            return
+        })
+        //self.present(alert, animated: true)
     }
+}
+    
+  
 }
 

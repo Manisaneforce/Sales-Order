@@ -145,6 +145,7 @@
 				384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */,
 				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
+				3801AE272A8E17C80069B136 /* APIClient.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -191,7 +192,6 @@
 				38EEBC602A7A256000AEF032 /* Preview Content */,
 				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
 				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
-				3801AE272A8E17C80069B136 /* APIClient.swift */,
 			);
 			path = "Sales Order";
 			sourceTree = "<group>";
