@@ -20,6 +20,8 @@
 		384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */; };
 		384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FE2A98B20A009439E5 /* LocationService.swift */; };
 		384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7002A98B5B1009439E5 /* Loctionfile.swift */; };
+		384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7032A99FABA009439E5 /* DeviceLocationService.swift */; };
+		384CB7062A9A205C009439E5 /* mobile_number.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB7052A9A205C009439E5 /* mobile_number.json */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
@@ -71,6 +73,9 @@
 		384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		384CB6FE2A98B20A009439E5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		384CB7002A98B5B1009439E5 /* Loctionfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loctionfile.swift; sourceTree = "<group>"; };
+		384CB7022A99F794009439E5 /* Sales-Order-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Sales-Order-Info.plist"; sourceTree = SOURCE_ROOT; };
+		384CB7032A99FABA009439E5 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
+		384CB7052A9A205C009439E5 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mobile_number.json; path = ../../../../Downloads/mobile_number.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		38B5FB8D2A94E9B100565B9F /* Nedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nedata.swift; sourceTree = "<group>"; };
@@ -128,6 +133,7 @@
 				3801AE232A8C90970069B136 /* Msg.json */,
 				3801AE252A8C9A840069B136 /* Order.json */,
 				3801AE292A8E551A0069B136 /* Phonering.json */,
+				384CB7052A9A205C009439E5 /* mobile_number.json */,
 			);
 			name = Lottie;
 			path = ../Lottie;
@@ -146,6 +152,7 @@
 				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
+				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -183,6 +190,7 @@
 		38EEBC592A7A255F00AEF032 /* Sales Order */ = {
 			isa = PBXGroup;
 			children = (
+				384CB7022A99F794009439E5 /* Sales-Order-Info.plist */,
 				387E0E7F2A85F62A00FEACBA /* common file */,
 				38CADF342A810D8400842DC9 /* Activity */,
 				38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */,
@@ -338,6 +346,7 @@
 			files = (
 				384CB6FB2A98A905009439E5 /* order Submite.json in Resources */,
 				3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */,
+				384CB7062A9A205C009439E5 /* mobile_number.json in Resources */,
 				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
@@ -372,6 +381,7 @@
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
+				384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */,
 				3801AE282A8E17C80069B136 /* APIClient.swift in Sources */,
 				384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
@@ -550,6 +560,11 @@
 				DEVELOPMENT_TEAM = N89SJ534H4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Sales-Order-Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -583,6 +598,11 @@
 				DEVELOPMENT_TEAM = N89SJ534H4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Sales-Order-Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

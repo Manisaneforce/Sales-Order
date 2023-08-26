@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 public class LocationService: NSObject, CLLocationManagerDelegate{
     public static var sharedInstance = LocationService()
@@ -82,6 +83,8 @@ public class LocationService: NSObject, CLLocationManagerDelegate{
 
 
 
+
+
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
     @Published var userLocation: CLLocation?
@@ -90,14 +93,30 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         self.locationManager.delegate = self
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.startUpdatingLocation()
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedWhenInUse, .authorizedAlways:
+                self.locationManager.startUpdatingLocation()
+            case .notDetermined:
+                self.locationManager.requestWhenInUseAuthorization()
+            case .restricted, .denied:
+                // Handle case when user denied or restricted location access
+                break
+            @unknown default:
+                fatalError("Unhandled case of authorization status")
+            }
+        } else {
+            // Handle case when location services are disabled
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            userLocation = location
-            getAddress(for: location)
+            // Check location accuracy if needed
+            if location.horizontalAccuracy < 100 {
+                userLocation = location
+                getAddress(for: location)
+            }
         }
     }
     
@@ -107,14 +126,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             } else if let placemark = placemarks?.first {
-                self.userAddress = placemark.formattedAddress ?? "Address not available"
+                print("Placemark: \(placemark)")
+                self.userAddress = placemark.formattedAddresss ?? "Address not available"
             }
         }
     }
 }
 
 extension CLPlacemark {
-    var formattedAddress: String? {
+    var formattedAddresss: String? {
         if let name = name, let locality = locality, let country = country {
             return "\(name), \(locality), \(country)"
         } else {
@@ -122,4 +142,3 @@ extension CLPlacemark {
         }
     }
 }
-

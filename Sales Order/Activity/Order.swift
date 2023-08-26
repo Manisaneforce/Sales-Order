@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import CoreLocation
 
 struct Prodata: Any {
     let ImgURL:String
@@ -58,7 +59,7 @@ struct Order: View {
                 ZStack(alignment: .top) {
                     Rectangle()
                         .foregroundColor(Color.blue)
-                        .frame(height: 100)
+                        .frame(height: 80)
                     
                     HStack {
                         NavigationLink(destination: HomePage()) {
@@ -75,6 +76,7 @@ struct Order: View {
                             .padding(.top, 50)
                             .offset(x: -20)
                     }
+                    
                 }
                 //.cornerRadius(5)
                 .edgesIgnoringSafeArea(.top)
@@ -82,20 +84,22 @@ struct Order: View {
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 
                 VStack(alignment: .leading, spacing: 6) {
-                    
-                    Text("DR. INGOLE")
-                        .font(.system(size: 15))
-                    HStack {
-                        Image("SubmittedCalls")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                        Text("9923125671")
+                    VStack(alignment:.center){
+                        Text("DR. INGOLE")
                             .font(.system(size: 15))
+                        HStack {
+                            Image("SubmittedCalls")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                            Text("9923125671")
+                                .font(.system(size: 15))
+                        }
+                        Text("Shivaji Park, Dadar")
+                            .font(.system(size: 15))
+                            .offset(x:30)
                     }
-                    Text("Shivaji Park, Dadar")
-                        .font(.system(size: 15))
                     
                     Text(prettyPrintedJson)
                         .font(.system(size: 15))
@@ -291,41 +295,100 @@ struct Order: View {
                 //NavigationView {
                 
                 List(0 ..< Allprod.count, id: \.self) { index in
-                    HStack {
-                        if let uiImage = uiImage {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100, height: 70)
-                                .cornerRadius(4)
-                        } else {
-                            Text("Image loading...")
-                                .onAppear{ loadImage(at: index) }
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            // Text(Arry[index])
-                            Text(Allprod[index].ProName)
-                                .fontWeight(.semibold)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.5)
-                            Text(Allprod[index].ProID)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            HStack {
-                                //Text("MRP ₹\(nubers[index])")
-                                Text("MRP 0")
-                                Spacer()
-                                Text("Price: \(Allprod[index].ProMRP)")
+                    if #available(iOS 15.0, *) {
+                        HStack {
+                            if let uiImage = uiImage {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 70)
+                                    .cornerRadius(4)
+                            } else {
+                                Text("Image loading...")
+                                    .onAppear{ loadImage(at: index) }
                             }
-                            HStack {
-                                //                                NavigationLink(destination: ExtractedView()) {
-                                //
-                                //
-                                //                                    Button(action: {
-                                //
-                                //                                    }) {
-                                Text("Pipette")
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                // Text(Arry[index])
+                                Text(Allprod[index].ProName)
+                                    .fontWeight(.semibold)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.5)
+                                Text(Allprod[index].ProID)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    //Text("MRP ₹\(nubers[index])")
+                                    Text("MRP 0")
+                                    Spacer()
+                                    Text("Price: \(Allprod[index].ProMRP)")
+                                }
+                                HStack {
+                                    //                                NavigationLink(destination: ExtractedView()) {
+                                    //
+                                    //
+                                    //                                    Button(action: {
+                                    //
+                                    //                                    }) {
+                                    Text("Pipette")
+                                        .padding(.vertical, 6)
+                                        .padding(.horizontal, 20)
+                                        .background(Color.gray.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.gray, lineWidth: 2)
+                                        )
+                                    //                                    }
+                                    //                                }
+                                    
+                                    Spacer()
+                                    HStack {
+                                        Button(action: {
+                                            self.decrementNumber(at: index)
+                                            let proditem = Allprod[index]
+                                            print(proditem)
+                                            let FilterProduct = Allprod[index].Unit_Typ_Product
+                                            print(FilterProduct)
+                                            let id = proditem.ProID
+                                            
+                                            let selectproduct = $FilterProduct[index] as? AnyObject
+                                            print(selectproduct as Any)
+                                            let  sQty = String(numbers[index])
+                                            print(sQty)
+                                            minusQty(sQty: sQty, SelectProd: FilterProduct)
+                                            
+                                        }) {
+                                            Text("-")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                        
+                                        Text("\(numbers[index])")
+                                            .fontWeight(.bold)
+                                            .foregroundColor(Color.black)
+                                        
+                                        Button(action: {
+                                            self.incrementNumber(at: index)
+                                            
+                                            let proditem = Allprod[index]
+                                            print(proditem)
+                                            let FilterProduct = Allprod[index].Unit_Typ_Product
+                                            print(FilterProduct)
+                                            
+                                            let selectproduct = $FilterProduct[index] as? AnyObject
+                                            print(selectproduct as Any)
+                                            let  sQty = String(numbers[index])
+                                            print(sQty)
+                                            addQty(sQty: sQty, SelectProd: FilterProduct)
+                                            
+                                        }) {
+                                            Text("+")                                             .font(.headline)
+                                                .fontWeight(.bold)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
                                     .padding(.vertical, 6)
                                     .padding(.horizontal, 20)
                                     .background(Color.gray.opacity(0.2))
@@ -334,92 +397,37 @@ struct Order: View {
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.gray, lineWidth: 2)
                                     )
-                                //                                    }
-                                //                                }
-                                
-                                Spacer()
-                                HStack {
-                                    Button(action: {
-                                        self.decrementNumber(at: index)
-                                        let proditem = Allprod[index]
-                                        print(proditem)
-                                        let FilterProduct = Allprod[index].Unit_Typ_Product
-                                        print(FilterProduct)
-                                        let id = proditem.ProID
-                                        
-                                        let selectproduct = $FilterProduct[index] as? AnyObject
-                                        print(selectproduct as Any)
-                                        let  sQty = String(numbers[index])
-                                        print(sQty)
-                                        minusQty(sQty: sQty, SelectProd: FilterProduct)
-                                        
-                                    }) {
-                                        Text("-")
-                                            .font(.headline)
-                                            .fontWeight(.bold)
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                    
-                                    Text("\(numbers[index])")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color.black)
-                                    
-                                    Button(action: {
-                                        self.incrementNumber(at: index)
-                            
-                                        let proditem = Allprod[index]
-                                        print(proditem)
-                                        let FilterProduct = Allprod[index].Unit_Typ_Product
-                                        print(FilterProduct)
-                                        
-                                        let selectproduct = $FilterProduct[index] as? AnyObject
-                                        print(selectproduct as Any)
-                                        let  sQty = String(numbers[index])
-                                        print(sQty)
-                        addQty(sQty: sQty, SelectProd: FilterProduct)
-                                        
-                                    }) {
-                                        Text("+")                                             .font(.headline)
-                                            .fontWeight(.bold)
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
+                                    .foregroundColor(Color.blue)
                                 }
-                                .padding(.vertical, 6)
-                                .padding(.horizontal, 20)
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray, lineWidth: 2)
-                                )
-                                .foregroundColor(Color.blue)
+                                
+                                HStack {
+                                    Text("Free : 0")
+                                    Spacer()
+                                    Text("₹0.00")
+                                }
+                                Divider()
+                                HStack {
+                                    Text("Total Qty: \(number)")
+                                    Spacer()
+                                    let totalvalue = nubers[0]
+                                    Text("₹\(totalvalue).00")
+                                }
                             }
-                            
-                            HStack {
-                                Text("Free : 0")
-                                Spacer()
-                                Text("₹0.00")
-                            }
-                            Divider()
-                            HStack {
-                                Text("Total Qty: \(number)")
-                                Spacer()
-                                let totalvalue = nubers[0]
-                                Text("₹\(totalvalue).00")
-                            }
+                            .padding(.vertical, 5)
                         }
-                        .padding(.vertical, 5)
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                        .frame(width: 350)
+                        .listRowSeparator(.hidden)
+                    } else {
+                        // Fallback on earlier versions
                     }
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-                            .shadow(color: Color.gray, radius:2 , x:0,y:0)
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    .frame(width: 350)
-                    
                 }
                 .listStyle(PlainListStyle())
                 .padding(.vertical, 5)
@@ -841,6 +849,8 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
                     if !Allproddata.isEmpty {
                        
                         UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
+                    } else {
+                        UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
                     }
                    // UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
                     proddetsdata(prettyPrintedJson)
@@ -963,82 +973,88 @@ struct SelPrvOrder: View {
                 
                 Divider()
                 List(0 ..< FilterItem.count, id: \.self) { index in
-                    HStack {
-                        Image("logo_new")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 70)
-                            .cornerRadius(4)
-                        
-                        VStack {
-                            HStack(spacing: 120) {
-                                Text(AllPrvprod[index].ProName)
-                                Button(action: {
-                                    deleteItem(at: index)
-                                }) {
-                                    Image(systemName: "trash.fill")
-                                        .foregroundColor(Color.red)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
+                    if #available(iOS 15.0, *) {
+                        HStack {
+                            Image("logo_new")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 70)
+                                .cornerRadius(4)
                             
-                            HStack(spacing: 60) {
-                                Text("Rs: \(AllPrvprod[index].ProMRP)")
+                            VStack {
+                                HStack(spacing: 120) {
+                                    Text(AllPrvprod[index].ProName)
+                                    Button(action: {
+                                        deleteItem(at: index)
+                                    }) {
+                                        Image(systemName: "trash.fill")
+                                            .foregroundColor(Color.red)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
                                 
-                                HStack {
-                                    Button(action: {
-                                        if filterItems[index].quantity > 0 {
-                                               filterItems[index].quantity -= 1
-                                           }
-                                    }) {
-                                        Text("-")
-                                            .font(.headline)
-                                            .fontWeight(.bold)
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
+                                HStack(spacing: 60) {
+                                    Text("Rs: \(AllPrvprod[index].ProMRP)")
                                     
-                                    Text("\(filterItems[index].quantity)")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color.black)
-                                    
-                                    Button(action: {
-                                        filterItems[index].quantity += 1
-                                    }) {
-                                        Text("+")
-                                            .font(.headline)
+                                    HStack {
+                                        Button(action: {
+                                            if filterItems[index].quantity > 0 {
+                                                filterItems[index].quantity -= 1
+                                            }
+                                        }) {
+                                            Text("-")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                        
+                                        Text("\(filterItems[index].quantity)")
                                             .fontWeight(.bold)
+                                            .foregroundColor(Color.black)
+                                        
+                                        Button(action: {
+                                            filterItems[index].quantity += 1
+                                        }) {
+                                            Text("+")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
                                     }
-                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 20)
+                                    .background(Color.gray.opacity(0.2))
+                                    .cornerRadius(10)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.gray, lineWidth: 2)
+                                    )
+                                    .foregroundColor(Color.blue)
                                 }
-                                .padding(.vertical, 6)
-                                .padding(.horizontal, 20)
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray, lineWidth: 2)
-                                )
-                                .foregroundColor(Color.blue)
-                            }
-                            
-                            Divider()
-                            
-                            HStack(spacing: 100) {
-                                Text("Total")
-                                Text("₹00.00")
+                                
+                                Divider()
+                                
+                                HStack(spacing: 100) {
+                                    Text("Total")
+                                    Text("₹00.00")
+                                }
                             }
                         }
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                        .frame(width: 350)
+                        .listRowSeparator(.hidden)
+                    } else {
+                        // Fallback on earlier versions
                     }
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-                            .shadow(color: Color.gray, radius:2 , x:0,y:0)
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                    .frame(width: 350)
                 }
+               
                 .listStyle(PlainListStyle())
                 .padding(.vertical, 5)
                 .background(Color.white)
@@ -1069,7 +1085,8 @@ struct SelPrvOrder: View {
                     .frame(height: 100)
                 
                 Button(action: {
-                    OrderSubmit()
+                   // OrderSubmit()
+                    getLocation()
                     
                     
                 }) {
@@ -1300,6 +1317,7 @@ func deleteItem(at index: Int) {
 
 func OrderSubmit() {
     print(lstPrvOrder)
+    
 //    var sPItems:String = ""
 //    for i in 0..<lstPrvOrder.count {
 //        guard let item = lstPrvOrder[i] as? [String: Any],
@@ -1389,5 +1407,27 @@ let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"0\",\"Town_cod
 }
     
   
+}
+
+func getLocation() {
+//    let locationService = LocationService.sharedInstance
+//    locationService.getNewLocation(location: { location in
+//        let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+//        let geocoder = CLGeocoder()
+//        var sAddress: String = ""
+//        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+//            if let placemark = placemarks?.first {
+//                if let formattedAddresssLines = placemark.addressDictionary?["FormattedAddressLines"] as? [String] {
+//                    sAddress = formattedAddressLines.joined(separator: ", ")
+//                }
+//            }
+//            print(sLocation)
+//            print(sAddress)
+//            // Call your function here like: self.orderSubmit(sLocation: sLocation, sAddress: sAddress)
+//        }
+//    }, error: { errMsg in
+//        print(errMsg)
+//        // Handle error or dismiss loading here
+//    })
 }
 

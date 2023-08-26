@@ -63,7 +63,7 @@ struct ContentView: View {
                     .frame(width: 200, height: 150)
                     .offset(y: -160)
                 
-                LottieUIView(filename: "Msg").frame(width: 180,height: 180)
+                LottieUIView(filename: "mobile_number").frame(width: 180,height: 180)
                     .offset(y: -60)
                     .onAppear {
                             print("Saved Value  \(userEmail)")
