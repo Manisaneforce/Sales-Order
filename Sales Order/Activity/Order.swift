@@ -84,23 +84,27 @@ struct Order: View {
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 
                 VStack(alignment: .leading, spacing: 6) {
-                    VStack(alignment:.center){
+                    VStack(spacing:5){
                         Text("DR. INGOLE")
                             .font(.system(size: 15))
+                            .offset(x:-25)
                         HStack {
-                            Image("SubmittedCalls")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .background(Color.blue)
-                                .cornerRadius(10)
+//                            Image("SubmittedCalls")
+//                                .resizable()
+//                                .frame(width: 20, height: 20)
+//                                .background(Color.blue)
+//                                .cornerRadius(10)
                             Text("9923125671")
                                 .font(.system(size: 15))
+                                .offset(x:-25)
                         }
                         Text("Shivaji Park, Dadar")
-                            .font(.system(size: 15))
-                            .offset(x:30)
+                            //.font(.system(size: 15))
                     }
+                    .padding(.horizontal, 12)
                     
+                    Divider()
+                        .frame(height: 10)
                     Text(prettyPrintedJson)
                         .font(.system(size: 15))
                         .frame(width: 80,height: 25)
@@ -109,6 +113,7 @@ struct Order: View {
                             RoundedRectangle(cornerRadius: 7)
                                 .stroke(Color.blue, lineWidth: 2)
                         )
+                        .padding(.horizontal, 12)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -123,42 +128,8 @@ struct Order: View {
                                         selectedIndex = index
                                     }
                                     print("Clicked button at index: \(index)")
-                                    SelectId = prodTypes3[index]
-                                    print(SelectId)
-                                    Sales_Order.prodCate { json in
-                                        print(json)
-                                        if let jsonData = json.data(using: .utf8) {
-                                            do {
-                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                    print(jsonArray)
-                                                    print(SelectId)
-                                                    
-                                                    
-                                                    let itemsWithTypID3 = jsonArray.filter { ($0["TypID"] as? Int) == SelectId }
-                                                    
-                                                    if !itemsWithTypID3.isEmpty {
-                                                        for item in itemsWithTypID3 {
-                                                            print(itemsWithTypID3)
-                                                            if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
-                                                                print(procat)
-                                                                
-                                                                prodofcat.append(procat)
-                                                                proDetsID.append(proDetID)
-                                                                print(proDetsID)
-                                                                
-                                                            }
-                                                        }
-                                                    } else {
-                                                        print("No data with TypID \(SelectId)")
-                                                    }
-                                                    
-                                                }
-                                            } catch {
-                                                print("Error is \(error)")
-                                            }
-                                        }
-                                    }
-                                    
+                                    self.OrderprodCate(at: index)
+                               
                                 }) {
                                     
                                     Text(prodTypes2[index])
@@ -170,7 +141,7 @@ struct Order: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 10)
                         
                     }
                     Divider()
@@ -182,51 +153,9 @@ struct Order: View {
                                     Arry.removeAll()
                                     Allprod.removeAll()
                                     print("If Select data")
-                                    ProSelectID = proDetsID[index]
-                                    print(ProSelectID)
-                                    print(Allproddata)
-                                    if let jsonData = Allproddata.data(using: .utf8){
-                                        do{
-                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                print(jsonArray)
-                                                let itemsWithTypID3 = jsonArray.filter { ($0["Product_Cat_Code"] as? Int) == ProSelectID }
-                                                
-                                                if !itemsWithTypID3.isEmpty {
-                                                    for item in itemsWithTypID3 {
-                                                        print(itemsWithTypID3)
-                                                       // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
-                                                        FilterProduct = itemsWithTypID3  as [AnyObject]
-                                                        if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String{
-                                                            print(procat)
-                                                            print(proname)
-                                                            print(sUoms)
-                                                            print(sUomNms)
-                                                            
-                                                            Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Unit_Typ_Product: item ))
-                                                            
-                                                            
-                                                            
-                                                            let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
-                                                            imgdataURL.append(inputText)
-                                                            Arry.append(proname)
-                                                            print(imgdataURL)
-                                                            
-                                                            
-                                                        }
-                                                    }
-                                                } else {
-                                                    print("No data with TypID \(SelectId)")
-                                                }
-                                                print(imgdataURL)
-                                                print(Arry)
-                                                print(Allprod.count)
-                                            }
-                                        } catch{
-                                            print("Data is error\(error)")
-                                        }
-                                    }
-                                    
-                                    
+                                    print("Clicked button at index: \(index)")
+                                    self.OrderprodDets(at: index)
+    
                                 }) {
                                     Text(prodofcat[index])
                                         .font(.system(size: 15))
@@ -240,6 +169,7 @@ struct Order: View {
                             
                         }
                     }
+                    .padding(.horizontal, 10)
                     
                     
                     
@@ -247,6 +177,7 @@ struct Order: View {
                 }
                 .padding(.top,0)
                 .onAppear {
+                    
                     prodGroup { jsonString in
                         if let jsonData = jsonString.data(using: .utf8) {
                             do {
@@ -283,7 +214,9 @@ struct Order: View {
                                 print("Error parsing JSON: \(error)")
                             }
                         }
+                        self.OrderprodCate(at: 0)
                     }
+                   
                     Sales_Order.prodDets{
                         json in
                         print(json)
@@ -542,7 +475,91 @@ struct Order: View {
                }.resume()
            }
        }
+    private func OrderprodCate(at index: Int){
+        SelectId = prodTypes3[index]
+        print(SelectId)
+        Sales_Order.prodCate { json in
+            print(json)
+            if let jsonData = json.data(using: .utf8) {
+                do {
+                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                        print(jsonArray)
+                        print(SelectId)
+                        
+                        
+                        let itemsWithTypID3 = jsonArray.filter { ($0["TypID"] as? Int) == SelectId }
+                        
+                        if !itemsWithTypID3.isEmpty {
+                            for item in itemsWithTypID3 {
+                                print(itemsWithTypID3)
+                                if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
+                                    print(procat)
+                                    
+                                    prodofcat.append(procat)
+                                    proDetsID.append(proDetID)
+                                    print(proDetsID)
+                                    
+                                }
+                            }
+                        } else {
+                            print("No data with TypID \(SelectId)")
+                        }
+                        
+                    }
+                } catch {
+                    print("Error is \(error)")
+                }
+                self.OrderprodDets(at: 0)
+            }
+        }
+    }
     
+    private func OrderprodDets(at index: Int){
+        ProSelectID = proDetsID[index]
+        print(ProSelectID)
+        print(Allproddata)
+        if let jsonData = Allproddata.data(using: .utf8){
+            do{
+                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                    print(jsonArray)
+                    let itemsWithTypID3 = jsonArray.filter { ($0["Product_Cat_Code"] as? Int) == ProSelectID }
+                    
+                    if !itemsWithTypID3.isEmpty {
+                        for item in itemsWithTypID3 {
+                            print(itemsWithTypID3)
+                           // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
+                            FilterProduct = itemsWithTypID3  as [AnyObject]
+                            if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String{
+                                print(procat)
+                                print(proname)
+                                print(sUoms)
+                                print(sUomNms)
+                                
+                                Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Unit_Typ_Product: item ))
+                                
+                                
+                                
+                                let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
+                                imgdataURL.append(inputText)
+                                Arry.append(proname)
+                                print(imgdataURL)
+                                
+                                
+                            }
+                        }
+                    } else {
+                        print("No data with TypID \(SelectId)")
+                    }
+                    print(imgdataURL)
+                    print(Arry)
+                    print(Allprod.count)
+                }
+            } catch{
+                print("Data is error\(error)")
+            }
+        }
+        
+    }
 
     
 }
