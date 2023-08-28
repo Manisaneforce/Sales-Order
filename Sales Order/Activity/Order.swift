@@ -16,17 +16,26 @@ struct Prodata: Any {
     let ProMRP : String
     let sUoms : Int
     let sUomNms : String
+    let Uomname : String
     let Unit_Typ_Product: [String : Any]
+}
+struct Uomtyp: Any{
+    let UomName:String
+    let UomConv:String
 }
 var lstPrvOrder: [AnyObject] = []
 var lblTotAmt:String = ""
+var TotamtlistShow:String = ""
 struct Order: View {
+    @State private var lblSelTitle = 0
+    @State private var SelMode: String = ""
+    @State private var SelectItem = ""
     @State private var number = 0
     @State private var inputNumberString = ""
     @State private var Arry = [String]()
     @State private var nubers = [15,555,554,54]
     @State private var isPopupVisible = false
-    @State private var selectedItem: String = "Pipette"
+    @State private var selectedItem: String = ""
     @State private var prettyPrintedJson: String = ""
     @State private var prodTypes2 = [String]()
     @State private var prodTypes3 = [Int]()
@@ -43,8 +52,10 @@ struct Order: View {
     @State private var FilterProduct = [AnyObject]()
 
     @State private var Allprod:[Prodata]=[]
+    @State private var allUomlist:[Uomtyp]=[]
     @State private var numbers: [Int] = []
     @State private var SelPrvOrderNavigte:Bool = false
+    @State private var isShowingPopUp = false
     init() {
           // Initialize the 'numbers' array with the same count as 'Allprod'
           self._numbers = State(initialValue: Array(repeating: 0, count: 5))
@@ -54,6 +65,7 @@ struct Order: View {
     var body: some View {
         
         NavigationView {
+            ZStack{
             VStack(spacing: 0) {
                 
                 ZStack(alignment: .top) {
@@ -89,17 +101,17 @@ struct Order: View {
                             .font(.system(size: 15))
                             .offset(x:-25)
                         HStack {
-//                            Image("SubmittedCalls")
-//                                .resizable()
-//                                .frame(width: 20, height: 20)
-//                                .background(Color.blue)
-//                                .cornerRadius(10)
+                            //                            Image("SubmittedCalls")
+                            //                                .resizable()
+                            //                                .frame(width: 20, height: 20)
+                            //                                .background(Color.blue)
+                            //                                .cornerRadius(10)
                             Text("9923125671")
                                 .font(.system(size: 15))
                                 .offset(x:-25)
                         }
                         Text("Shivaji Park, Dadar")
-                            //.font(.system(size: 15))
+                        //.font(.system(size: 15))
                     }
                     .padding(.horizontal, 12)
                     
@@ -129,7 +141,7 @@ struct Order: View {
                                     }
                                     print("Clicked button at index: \(index)")
                                     self.OrderprodCate(at: index)
-                               
+                                    
                                 }) {
                                     
                                     Text(prodTypes2[index])
@@ -155,7 +167,7 @@ struct Order: View {
                                     print("If Select data")
                                     print("Clicked button at index: \(index)")
                                     self.OrderprodDets(at: index)
-    
+                                    
                                 }) {
                                     Text(prodofcat[index])
                                         .font(.system(size: 15))
@@ -216,7 +228,7 @@ struct Order: View {
                         }
                         self.OrderprodCate(at: 0)
                     }
-                   
+                    
                     Sales_Order.prodDets{
                         json in
                         print(json)
@@ -257,23 +269,35 @@ struct Order: View {
                                     Text("Price: \(Allprod[index].ProMRP)")
                                 }
                                 HStack {
-                                    //                                NavigationLink(destination: ExtractedView()) {
-                                    //
-                                    //
-                                    //                                    Button(action: {
-                                    //
-                                    //                                    }) {
-                                    Text("Pipette")
-                                        .padding(.vertical, 6)
-                                        .padding(.horizontal, 20)
-                                        .background(Color.gray.opacity(0.2))
-                                        .cornerRadius(10)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(Color.gray, lineWidth: 2)
-                                        )
-                                    //                                    }
-                                    //                                }
+                                        VStack{
+                                            Text(Allprod[index].Uomname)
+                                                .padding(.vertical, 6)
+                                                .padding(.horizontal, 20)
+                                                .background(Color.gray.opacity(0.2))
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(Color.gray, lineWidth: 2)
+                                                )
+                                                .onTapGesture {
+                                                    allUomlist.removeAll()
+                                                    isShowingPopUp.toggle()
+                                                  let FilterUnite =  FilterProduct[index]
+                                                    print(FilterUnite)
+                                                    let uomList = FilterUnite["UOMList"] as? [[String: Any]]
+                                                    
+                                                    
+                                                    if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
+                                                        print(uomLists)
+                                                        self.lstOfUnitList(at: index, filterUnite: uomLists)
+                                                      } else {
+                                                          print("UOMList not found or not in the expected format.")
+                                                      }
+                                                
+                                                }
+                                        }
+                                    
+                                    
                                     
                                     Spacer()
                                     HStack {
@@ -343,7 +367,7 @@ struct Order: View {
                                     Text("Total Qty: \(number)")
                                     Spacer()
                                     let totalvalue = nubers[0]
-                                    Text("₹\(totalvalue).00")
+                                    Text(TotamtlistShow)
                                 }
                             }
                             .padding(.vertical, 5)
@@ -381,7 +405,7 @@ struct Order: View {
                 //                .onAppear{
                 //                    UIScrollView.appearance().showsVerticalScrollIndicator = false
                 //                }
-               
+                
                 
                 Button(action: {
                     SelPrvOrderNavigte = true
@@ -439,13 +463,91 @@ struct Order: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
                 }
-         
+                
                 NavigationLink(destination: SelPrvOrder(), isActive: $SelPrvOrderNavigte) {
                     EmptyView()
                 }
                 
             }
             .padding(.top, 10)
+                
+                
+                if isShowingPopUp {
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            isShowingPopUp.toggle()
+                        }
+                    
+                    VStack {
+                        HStack {
+                            Text("Select Item")
+                                .font(.headline)
+                                .foregroundColor(.blue)
+                                .padding(.top, 10)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                isShowingPopUp.toggle()
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.blue)
+                            }
+                            .padding(.top, 10)
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        SearchBar(text: $selectedItem) // Assuming you have a SearchBar view
+                            .padding(.horizontal, 20)
+                            .padding(.top, 10)
+                        
+                        List(0 ..< allUomlist.count, id: \.self) { index in
+                            VStack {
+                            Button(action: {
+                                isShowingPopUp.toggle()
+                                 SelectItem = allUomlist[index].UomName
+                                let UOMNAME = allUomlist[index].UomName
+                                print(SelectItem)
+                                let FilterUnite =  FilterProduct[index]
+                                  print(FilterUnite)
+                                  let uomList = FilterUnite["UOMList"] as? [[String: Any]]
+                                  
+                                  
+                                if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
+                                    if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
+                                        print(uomLists2)
+                                        self.didselectRow(at: index, UOMNAME: uomLists2)
+                                    } else {
+                                        print("Invalid index or data")
+                                    }
+                                } else {
+                                    print("UOMList not found or not in the expected format.")
+                                }
+
+                               
+                                
+                                
+                                
+                                
+                                
+                            }) {
+                                
+                                    Text(allUomlist[index].UomName)
+                                    Text("1x\(allUomlist[index].UomConv)")
+                                }
+                            }
+                            
+                        }
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        //.padding(20)
+                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(20)
+                }
+        }
             
            
             
@@ -453,6 +555,86 @@ struct Order: View {
         .navigationBarHidden(true)
        
     }
+    
+    private func lstOfUnitList(at index: Int,filterUnite:[[String:Any]]){
+       print(filterUnite)
+        autoreleasepool {
+            let item: [[String: Any]] = filterUnite
+            print(item)
+            for items in item {
+                if let uomName = items["UOM_Nm"] as? String, let CnvQty = items["CnvQty"] as? Int {
+                    print(uomName)
+                    print(CnvQty)
+                    allUomlist.append(Uomtyp(UomName: uomName, UomConv: String(CnvQty)))
+                }
+            }
+            print(allUomlist)
+//            let lblUOM = ""
+//            print(item["ConQty"] as! CVarArg)
+//            if SelMode=="UOM" {
+//                lblUOM = String(format: "1 x  %@", item["ConQty"] as! CVarArg)
+//                print(item["ConQty"] as! CVarArg)
+//            }
+        }
+        
+    }
+    
+    private func didselectRow(at index: Int,UOMNAME:[String:Any]){
+        
+        print(UOMNAME)
+        let UOM_Name = UOMNAME["UOM_Nm"] as? String
+        let id=String(format: "%@", UOMNAME["id"] as! CVarArg)
+        if SelMode=="DIS" {
+            //lblDistNm.text = name
+           // lblPrvDistNm.text = name
+            VisitData.shared.Dist.name = UOM_Name!
+            VisitData.shared.Dist.id = id
+
+        }
+        else if SelMode=="UOM"
+        {
+            let selectProd: String
+
+            let lProdItem:[String: Any]
+            var selNetWt: String = ""
+            print(lstPrvOrder)
+//            if lblSelTitle.tag == 1 {
+//                lProdItem = lstPrvOrder[tbDataSelect.tag] as! [String : Any]
+//                selectProd = String(format: "%@",lstPrvOrder[tbDataSelect.tag]["id"] as! CVarArg)
+//                selNetWt = String(format: "%@", lstPrvOrder[tbDataSelect.tag]["NetWt"] as! CVarArg)
+//           } else {
+               lProdItem = lstProducts[index] as! [String : Any]
+                selectProd = String(format: "%@",lstProducts[tbDataSelect.tag]["id"] as! CVarArg)
+                selNetWt = String(format: "%@", lstProducts[tbDataSelect.tag]["product_netwt"] as! CVarArg)
+          // }
+            let ConvQty=String(format: "%@", item["ConQty"] as! CVarArg)
+            print(ConvQty)
+           let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (item) in
+                if item["id"] as! String == selectProd {
+                    return true
+                }
+                return false
+            })
+            var sQty: Int = 0
+            if (items.count>0)
+            {
+                sQty = Int((items[0]["Qty"] as! NSString).intValue)
+            }
+
+           //mani
+
+            print(selectProd)
+            print(id)
+            print(UOM_Name as Any)
+            print(ConvQty)
+            print(selNetWt)
+            print(sQty)
+            print(lProdItem)
+
+            updateQty(id: selectProd, sUom: id, sUomNm: UOM_Name!, sUomConv: ConvQty,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
+        }
+    }
+    
     private func incrementNumber(at index: Int) {
         numbers[index] += 1
         
@@ -529,13 +711,16 @@ struct Order: View {
                             print(itemsWithTypID3)
                            // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
                             FilterProduct = itemsWithTypID3  as [AnyObject]
-                            if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String{
+                            if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 print(proname)
                                 print(sUoms)
                                 print(sUomNms)
+                                print(Uomname)
                                 
-                                Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Unit_Typ_Product: item ))
+                                
+                                
+                                Allprod.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
                                 
                                 
                                 
@@ -560,7 +745,6 @@ struct Order: View {
         }
         
     }
-
     
 }
 
@@ -589,93 +773,6 @@ struct SearchBar: View {
                 .foregroundColor(.gray)
         }
     }
-}
-
-
-struct ExtractedView: View {
-    @State private var isPopupVisible = false
-    @State private var selectedItem: String = "Pipette"
-    var body: some View {
-        
-        ZStack{
-            VStack{
-                Text(selectedItem)
-                    .padding(.vertical, 3)
-                    .padding(.horizontal, 15)
-                    .background(Color.white.opacity(0.2))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 2)
-                            .stroke(Color.gray, lineWidth: 2)
-                    )
-                    .foregroundColor(Color.black)
-                    .onTapGesture {
-                        isPopupVisible.toggle()
-                    }
-            }
-            
-            
-            if isPopupVisible {
-                Color.black.opacity(0.5)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        isPopupVisible.toggle()
-                    }
-                VStack {
-                    HStack {
-                        Text("Select Item")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .padding(.top, 10)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isPopupVisible.toggle()
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.top, 10)
-                    }
-                    .padding(.horizontal, 20)
-                    SearchBar(text: $selectedItem) // Assuming you have a SearchBar view
-                        .padding(.horizontal, 20)
-                        .padding(.top, 10)
-                    
-                    VStack {
-                        Button(action: {
-                            selectedItem = "Pipette"
-                            isPopupVisible.toggle()
-                        }) {
-                            VStack {
-                                Text("Pipette")
-                                Text("1x1=1")
-                            }
-                        }
-                        Divider()
-                        Button(action: {
-                            selectedItem = "Box"
-                            isPopupVisible.toggle()
-                        }) {
-                            VStack {
-                                Text("Box")
-                                Text("10x1=10")
-                            }
-                        }
-                    }
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .padding(20)
-                }
-                .background(Color.white)
-                .cornerRadius(10)
-                .padding(20)
-            }
-        }
-    
-      
-    }
-
 }
 
 struct YourDataStructure: Codable {
@@ -1293,6 +1390,7 @@ func updateOrderValues(refresh:Int){
         for i in 0...lstPrvOrder.count-1 {
             let item: AnyObject = lstPrvOrder[i]
             totAmt = totAmt + (item["NetVal"] as! Double)
+            TotamtlistShow = String(totAmt)
             //(item["SalQty"] as! NSString).doubleValue
 
         }

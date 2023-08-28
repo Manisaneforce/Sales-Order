@@ -70,6 +70,49 @@ struct Nedata: View {
 struct Nedata_Previews: PreviewProvider {
     static var previews: some View {
         Nedata()
+        ShowPopup()
+        
     }
 }
 
+
+
+struct PopUpView: View {
+    @Binding var isShowingPopUp: Bool
+    
+    var body: some View {
+        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)){
+            VStack(spacing: 25){
+                LottieUIView(filename: "mobile_number").frame(width: 180,height: 180)
+                
+                Text("Select ITEM")
+                
+            }
+            .padding(.vertical,25)
+            .padding(.horizontal,30)
+            .background(Color.gray)
+            .cornerRadius(25)
+        }
+    }
+}
+
+struct ShowPopup: View {
+    @State private var isShowingPopUp = false
+    
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(0..<10, id: \.self) { index in
+                    Text("Row \(index)")
+                        .onTapGesture {
+                            isShowingPopUp.toggle()
+                        }
+                }
+            }
+            .navigationBarTitle("List with Pop-up")
+        }
+        .sheet(isPresented: $isShowingPopUp, content: {
+            PopUpView(isShowingPopUp: $isShowingPopUp)
+        })
+    }
+}
