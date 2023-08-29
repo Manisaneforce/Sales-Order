@@ -23,10 +23,21 @@ struct Uomtyp: Any{
     let UomName:String
     let UomConv:String
 }
+
+struct TotAmt: Identifiable {
+    let id: Int
+    var Amt: Int
+    var TotAmt:String
+}
+
 var lstPrvOrder: [AnyObject] = []
-var lblTotAmt:String = ""
+var lblTotAmt:String = "00.0"
 var TotamtlistShow:String = ""
+var selUOM: String = ""
+var selUOMNm: String = ""
 struct Order: View {
+    @State private var clickeindex:Int = 0
+    @State private var IndexToAmt:String = ""
     @State private var lblSelTitle = 0
     @State private var SelMode: String = ""
     @State private var SelectItem = ""
@@ -50,17 +61,26 @@ struct Order: View {
     @State private var uiImage: UIImage? = nil
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
     @State private var FilterProduct = [AnyObject]()
-
     @State private var Allprod:[Prodata]=[]
     @State private var allUomlist:[Uomtyp]=[]
     @State private var numbers: [Int] = []
     @State private var SelPrvOrderNavigte:Bool = false
     @State private var isShowingPopUp = false
+    @State private var showAlert = false
+    @State private var showToast = false
+    @State private var ShowTost = ""
+    @State private var navigateToHomepage = false
+    @State private var filterItems: [TotAmt] = []
     init() {
-          // Initialize the 'numbers' array with the same count as 'Allprod'
-          self._numbers = State(initialValue: Array(repeating: 0, count: 5))
-      }
-    
+        
+        var items: [TotAmt] = []
+        print(FilterProduct.count)
+        for index in 0..<5 {
+            print(index)
+            items.append(Sales_Order.TotAmt(id: index, Amt: 0, TotAmt: "0"))
+        }
+        self._filterItems = State(initialValue: items)
+    }
     
     var body: some View {
         
@@ -74,12 +94,29 @@ struct Order: View {
                         .frame(height: 80)
                     
                     HStack {
-                        NavigationLink(destination: HomePage()) {
+                        Button(action: {
+                            showAlert = true
+                        })
+                        {
                             Image("backsmall")
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
                         }
+                        
                         .offset(x: -120, y: 25)
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("Confirmation"),
+                                message: Text("Do you want cancel this order dreaft"),
+                                primaryButton: .default(Text("OK")) {
+                                    navigateToHomepage = true
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
+                        NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
+                                        EmptyView()
+                                    }
                         
                         Text("Order")
                             .font(.system(size: 25))
@@ -182,9 +219,7 @@ struct Order: View {
                         }
                     }
                     .padding(.horizontal, 10)
-                    
-                    
-                    
+             
                     
                 }
                 .padding(.top,0)
@@ -280,13 +315,12 @@ struct Order: View {
                                                         .stroke(Color.gray, lineWidth: 2)
                                                 )
                                                 .onTapGesture {
+                                                    clickeindex=index
                                                     allUomlist.removeAll()
                                                     isShowingPopUp.toggle()
                                                   let FilterUnite =  FilterProduct[index]
                                                     print(FilterUnite)
-                                                    let uomList = FilterUnite["UOMList"] as? [[String: Any]]
-                                                    
-                                                    
+                                        
                                                     if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
                                                         print(uomLists)
                                                         self.lstOfUnitList(at: index, filterUnite: uomLists)
@@ -302,7 +336,9 @@ struct Order: View {
                                     Spacer()
                                     HStack {
                                         Button(action: {
-                                            self.decrementNumber(at: index)
+                                            if filterItems[index].Amt > 0 {
+                                                filterItems[index].Amt -= 1
+                                            }
                                             let proditem = Allprod[index]
                                             print(proditem)
                                             let FilterProduct = Allprod[index].Unit_Typ_Product
@@ -311,8 +347,35 @@ struct Order: View {
                                             
                                             let selectproduct = $FilterProduct[index] as? AnyObject
                                             print(selectproduct as Any)
-                                            let  sQty = String(numbers[index])
+                                            let  sQty = String(filterItems[index].Amt)
                                             print(sQty)
+                                            print(Allprod[index].ProID)
+
+                                            let Ids = Allprod[index].ProID
+                                            print(Ids as Any)
+
+                                            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+
+                                                if (Cart["id"] as! String) == Ids {
+                                                    return true
+                                                }
+                                                return false
+                                            })
+                                            var selUOMConv: String = "1"
+
+                                            if(items.count>0){
+                                                selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                               let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                filterItems[index].TotAmt=String(TotalAmount)
+                                            } else{
+
+                                              selUOMConv=String(filterItems[index].Amt)
+                                              print(selUOMConv)
+                                                let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                 let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                filterItems[index].TotAmt=String(TotalAmount)
+                                          }
                                             minusQty(sQty: sQty, SelectProd: FilterProduct)
                                             
                                         }) {
@@ -322,12 +385,14 @@ struct Order: View {
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                         
-                                        Text("\(numbers[index])")
+                                        Text("\(filterItems[index].Amt)")
                                             .fontWeight(.bold)
                                             .foregroundColor(Color.black)
                                         
                                         Button(action: {
-                                            self.incrementNumber(at: index)
+                                            filterItems[index].Amt += 1
+                                            print(lstPrvOrder)
+                                            
                                             
                                             let proditem = Allprod[index]
                                             print(proditem)
@@ -336,9 +401,41 @@ struct Order: View {
                                             
                                             let selectproduct = $FilterProduct[index] as? AnyObject
                                             print(selectproduct as Any)
-                                            let  sQty = String(numbers[index])
+                                            let  sQty = String(filterItems[index].Amt)
                                             print(sQty)
+                                            
+                                            print(Allprod[index].ProID)
+
+                                            let Ids = Allprod[index].ProID
+                                            print(Ids as Any)
+
+                                            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+
+                                                if (Cart["id"] as! String) == Ids {
+                                                    return true
+                                                }
+                                                return false
+                                            })
+                                            var selUOMConv: String = "1"
+
+                                            if(items.count>0){
+                                                selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                               let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                filterItems[index].TotAmt=String(TotalAmount)
+                                            } else{
+
+                                              selUOMConv=String(filterItems[index].Amt)
+                                              print(selUOMConv)
+                                                let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                 let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                filterItems[index].TotAmt=String(TotalAmount)
+                                          }
+                                            
+                                            
                                             addQty(sQty: sQty, SelectProd: FilterProduct)
+                                            
+                               
                                             
                                         }) {
                                             Text("+")                                             .font(.headline)
@@ -364,10 +461,10 @@ struct Order: View {
                                 }
                                 Divider()
                                 HStack {
-                                    Text("Total Qty: \(number)")
+                                    Text("Total Qty: \(filterItems[index].Amt)")
                                     Spacer()
                                     let totalvalue = nubers[0]
-                                    Text(TotamtlistShow)
+                                    Text(filterItems[index].TotAmt)
                                 }
                             }
                             .padding(.vertical, 5)
@@ -408,7 +505,16 @@ struct Order: View {
                 
                 
                 Button(action: {
-                    SelPrvOrderNavigte = true
+                    if lblTotAmt=="00.0"{
+                        ShowTost="Cart is Empty"
+                        showToast = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            showToast = false
+                        }
+                    }else{
+                        
+                        SelPrvOrderNavigte = true
+                    }
                     
                 }) {
                     ZStack(alignment: .top) {
@@ -517,7 +623,7 @@ struct Order: View {
                                 if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
                                     if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
                                         print(uomLists2)
-                                        self.didselectRow(at: index, UOMNAME: uomLists2)
+                                        self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
                                     } else {
                                         print("Invalid index or data")
                                     }
@@ -547,7 +653,9 @@ struct Order: View {
                     .cornerRadius(10)
                     .padding(20)
                 }
+                    
         }
+            .toast(isPresented: $showToast, message: "\(ShowTost)")
             
            
             
@@ -580,34 +688,24 @@ struct Order: View {
     }
     
     private func didselectRow(at index: Int,UOMNAME:[String:Any]){
-        
+        print(index)
         print(UOMNAME)
         let UOM_Name = UOMNAME["UOM_Nm"] as? String
-        let id=String(format: "%@", UOMNAME["id"] as! CVarArg)
-        if SelMode=="DIS" {
-            //lblDistNm.text = name
-           // lblPrvDistNm.text = name
-            VisitData.shared.Dist.name = UOM_Name!
-            VisitData.shared.Dist.id = id
-
-        }
-        else if SelMode=="UOM"
-        {
+        let id=String(format: "%@", UOMNAME["UOM_Id"] as! CVarArg)
+    
             let selectProd: String
 
             let lProdItem:[String: Any]
             var selNetWt: String = ""
             print(lstPrvOrder)
-//            if lblSelTitle.tag == 1 {
-//                lProdItem = lstPrvOrder[tbDataSelect.tag] as! [String : Any]
-//                selectProd = String(format: "%@",lstPrvOrder[tbDataSelect.tag]["id"] as! CVarArg)
-//                selNetWt = String(format: "%@", lstPrvOrder[tbDataSelect.tag]["NetWt"] as! CVarArg)
-//           } else {
-               lProdItem = lstProducts[index] as! [String : Any]
-                selectProd = String(format: "%@",lstProducts[tbDataSelect.tag]["id"] as! CVarArg)
-                selNetWt = String(format: "%@", lstProducts[tbDataSelect.tag]["product_netwt"] as! CVarArg)
+
+               lProdItem = Allprod[index].Unit_Typ_Product
+            print(lProdItem)
+                selectProd = String(format: "%@",lProdItem["ERP_Code"] as! CVarArg)
+        print(selectProd)
+                selNetWt = String(format: "%@", lProdItem["product_netwt"] as! CVarArg)
           // }
-            let ConvQty=String(format: "%@", item["ConQty"] as! CVarArg)
+            let ConvQty=String(format: "%@", UOMNAME["CnvQty"] as! CVarArg)
             print(ConvQty)
            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (item) in
                 if item["id"] as! String == selectProd {
@@ -621,7 +719,6 @@ struct Order: View {
                 sQty = Int((items[0]["Qty"] as! NSString).intValue)
             }
 
-           //mani
 
             print(selectProd)
             print(id)
@@ -632,7 +729,8 @@ struct Order: View {
             print(lProdItem)
 
             updateQty(id: selectProd, sUom: id, sUomNm: UOM_Name!, sUomConv: ConvQty,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: lProdItem,refresh: 1)
-        }
+         
+        
     }
     
     private func incrementNumber(at index: Int) {
@@ -674,6 +772,7 @@ struct Order: View {
                         if !itemsWithTypID3.isEmpty {
                             for item in itemsWithTypID3 {
                                 print(itemsWithTypID3)
+                                
                                 if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
                                     print(procat)
                                     
@@ -704,13 +803,14 @@ struct Order: View {
             do{
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
-                    let itemsWithTypID3 = jsonArray.filter { ($0["Product_Cat_Code"] as? Int) == ProSelectID }
+                    let itemsWithTypID3 = jsonArray.filter { ($0["cateid"] as? Int) == ProSelectID }
                     
                     if !itemsWithTypID3.isEmpty {
                         for item in itemsWithTypID3 {
                             print(itemsWithTypID3)
                            // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
                             FilterProduct = itemsWithTypID3  as [AnyObject]
+                            print(FilterProduct.count)
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 print(proname)
@@ -737,7 +837,7 @@ struct Order: View {
                     }
                     print(imgdataURL)
                     print(Arry)
-                    print(Allprod.count)
+                    print(Allprod)
                 }
             } catch{
                 print("Data is error\(error)")
@@ -1004,6 +1104,7 @@ struct SelPrvOrder: View {
         var items: [FilterItem] = []
         print(selectitemCount)
         for index in 0..<selectitemCount {
+            print(index)
             items.append(Sales_Order.FilterItem(id: index, quantity: 0))
         }
         self._filterItems = State(initialValue: items)
@@ -1067,10 +1168,7 @@ struct SelPrvOrder: View {
                         } catch {
                             print("Error is \(error)")
                         }
-                        print(FilterItem)
-                        
-                        print(FilterItem)
-                                             for PrvProd in FilterItem{
+                          for PrvProd in FilterItem{
                                                  
                                                  let url = PrvProd["PImage"] as? String
                                                  let name  = PrvProd["name"] as? String
@@ -1079,8 +1177,6 @@ struct SelPrvOrder: View {
                                                  AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: rate!))
                                          }
                                              print(AllPrvprod)
-                        
-                        
                     }
                     
                 }
@@ -1150,7 +1246,7 @@ struct SelPrvOrder: View {
                                 
                                 HStack(spacing: 100) {
                                     Text("Total")
-                                    Text("₹00.00")
+                                    Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
                                 }
                             }
                         }
@@ -1335,17 +1431,38 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
   
     let Ids = SelectProd["ERP_Code"] as? String
     print(Ids as Any)
+    
+    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+        
+        if (Cart["id"] as! String) == Ids {
+            return true
+        }
+        return false
+    })
+    var selUOMConv: String = "1"
+    var selNetWt: String = ""
 
-      let  selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+    if(items.count>0){
+        selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
         print(selUOM)
-     let   selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+        selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
         print(selUOMNm)
-      let  selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+        selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
         print(selUOMConv)
-      // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
-    let selNetWt = ""
+        selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
         print(selNetWt)
-
+    } else{
+          selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+        print(selUOM)
+           selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+        print(selUOMNm)
+        selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+        print(selUOMConv)
+         selNetWt=String(format: "%@", SelectProd["product_netwt"] as! CVarArg)
+        //selNetWt = ""
+        print(selNetWt)
+        
+    }
 
     updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
 
@@ -1357,16 +1474,33 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
    
      let Ids = SelectProd["ERP_Code"] as? String
      print(Ids as Any)
-
-       let  selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+     
+     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+         
+         if Cart["id"] as! String == Ids {
+             return true
+         }
+         return false
+     })
+     var selUOMConv: String = "1"
+     var selNetWt: String = ""
+     if (items.count>0){
+         selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+         selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+         selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+         selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+     }
+     else{
+          selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
          print(selUOM)
-      let   selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+           selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
          print(selUOMNm)
-       let  selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+          selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
          print(selUOMConv)
-       // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
-     let selNetWt = ""
+         // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+          selNetWt = ""
          print(selNetWt)
+     }
 
 
      updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
@@ -1390,6 +1524,8 @@ func updateOrderValues(refresh:Int){
         for i in 0...lstPrvOrder.count-1 {
             let item: AnyObject = lstPrvOrder[i]
             totAmt = totAmt + (item["NetVal"] as! Double)
+            print(totAmt)
+            print(item["NetVal"] as! Double)
             TotamtlistShow = String(totAmt)
             //(item["SalQty"] as! NSString).doubleValue
 
