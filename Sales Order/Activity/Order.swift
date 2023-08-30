@@ -1084,6 +1084,9 @@ struct PrvProddata: Any {
     let ProName :String
     let ProID : String
     let ProMRP : String
+    let Uomnm : String
+    let Qty: String
+    let totAmt:Double
 }
 
 struct FilterItem: Identifiable {
@@ -1103,9 +1106,19 @@ struct SelPrvOrder: View {
     init() {
         var items: [FilterItem] = []
         print(selectitemCount)
-        for index in 0..<selectitemCount {
+        var qty=[String]()
+        
+        for items in VisitData.shared.ProductCart {
+          let  qtys = (items["Qty"] as? String)!
+            qty.append(qtys)
+        }
+        print(lstPrvOrder.count)
+        print(VisitData.shared.ProductCart.count)
+        print(qty)
+        
+        for index in 0..<VisitData.shared.ProductCart.count {
             print(index)
-            items.append(Sales_Order.FilterItem(id: index, quantity: 0))
+            items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
         }
         self._filterItems = State(initialValue: items)
     }
@@ -1168,14 +1181,51 @@ struct SelPrvOrder: View {
                         } catch {
                             print("Error is \(error)")
                         }
-                          for PrvProd in FilterItem{
+                     
                                                  
-                                                 let url = PrvProd["PImage"] as? String
-                                                 let name  = PrvProd["name"] as? String
-                                                 let Proid = PrvProd["ERP_Code"] as? String
-                                                 let rate = PrvProd["Rate"] as? String
-                                                 AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: rate!))
-                                         }
+                              for PrvOrderData in lstPrvOrder{
+                                  print(PrvOrderData)
+                                  let RelID = PrvOrderData["id"] as? String
+                                  let Uomnm = PrvOrderData["UOMNm"] as? String
+                                  let Qty = PrvOrderData["Qty"] as? String
+                                  let totAmt = PrvOrderData["NetVal"] as? Double
+                                  print(totAmt as Any)
+                                  
+                                  do {
+                                      if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                          print(jsonArray)
+                                              if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                                                  print(selectedPro)
+                                                  
+                                                  
+                                                  let url = selectedPro["PImage"] as? String
+                                                  let name  = selectedPro["name"] as? String
+                                                  let Proid = selectedPro["ERP_Code"] as? String
+                                                  let rate = selectedPro["Rate"] as? String
+                                                  let Uom = PrvOrderData["UOMConv"] as? String
+                                                  var result:Double = 0.0
+                                                  if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
+                                                       result = rateValue * uomValue
+                                                      print(result) // This will be a Double value
+                                                  } else {
+                                                      print("Invalid input values")
+                                                  }
+
+                                                  
+                                                  
+                                                  AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
+                                              }
+
+
+                                      }
+                                  } catch {
+                                      print("Error is \(error)")
+                                  }
+                              }
+                              
+                            
+                                              
+                                    
                                              print(AllPrvprod)
                     }
                     
@@ -1191,9 +1241,18 @@ struct SelPrvOrder: View {
                                 .frame(width: 100, height: 70)
                                 .cornerRadius(4)
                             
-                            VStack {
-                                HStack(spacing: 120) {
+                            VStack(spacing: 10) {
+                                VStack() {
                                     Text(AllPrvprod[index].ProName)
+                                 
+                                }
+                                HStack(spacing: 60){
+                                    Text(AllPrvprod[index].Uomnm)
+                                    Text("Rs: \(AllPrvprod[index].ProMRP)")
+                                }
+                                
+                                HStack(spacing: 60) {
+                                  
                                     Button(action: {
                                         deleteItem(at: index)
                                     }) {
@@ -1201,10 +1260,6 @@ struct SelPrvOrder: View {
                                             .foregroundColor(Color.red)
                                     }
                                     .buttonStyle(PlainButtonStyle())
-                                }
-                                
-                                HStack(spacing: 60) {
-                                    Text("Rs: \(AllPrvprod[index].ProMRP)")
                                     
                                     HStack {
                                         Button(action: {
@@ -1294,9 +1349,9 @@ struct SelPrvOrder: View {
                     .foregroundColor(Color.blue)
                     .frame(height: 100)
                 
-                Button(action: {
-                   // OrderSubmit()
-                    getLocation()
+                Button(action:{
+                    OrderSubmit()
+                    //getLocation()
                     
                     
                 }) {
@@ -1569,63 +1624,67 @@ func deleteItem(at index: Int) {
 func OrderSubmit() {
     print(lstPrvOrder)
     
-//    var sPItems:String = ""
-//    for i in 0..<lstPrvOrder.count {
-//        guard let item = lstPrvOrder[i] as? [String: Any],
-//              let id = item["id"] as? String else {
-//            continue
-//        }
-//
-//        var prodItems: [[String: Any]] = []
-//
-//        if let jsonData = LstAllproddata.data(using: .utf8) {
-//            do {
-//                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-//                    prodItems = jsonArray.filter { product in
-//                        if let prodId = product["ERP_Code"] as? String {
-//                            return prodId == id
-//                        }
-//                        return false
-//                    }
-//                }
-//            } catch {
-//                print("Error is \(error)")
-//            }
-//        }
-//        print(item)
-//        let disc: String = item["Disc"] as? String ?? "0"
-//        let disVal: String = item["DisVal"] as? String ?? "0"
-//
-//        let productQty = item["OffQty"] as? Int ?? 0
-//        let productCode = prodItems.isEmpty ? "" : (prodItems[0]["id"] as? String ?? "")
-//        print(prodItems)
-//        let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
-//
-//                   sPItems = sPItems + "{\"product_code\":\""+productCode+"\", \"product_Name\":\""+productName+"\","
-//                   sPItems = sPItems + " \"Product_Rx_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
-//                   sPItems = sPItems + " \"Product_Total_Qty\": \"1\","
-//                   sPItems = sPItems + " \"Product_Amount\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
-//                   sPItems = sPItems + " \"Rate\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
-//                   sPItems = sPItems + " \"free\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
-//                   sPItems = sPItems + " \"dis\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
-//                   sPItems = sPItems + " \"dis_value\":\""+productQty+"\","
-//                   sPItems = sPItems + " \"Off_Pro_code\":\"\","
-//                   sPItems = sPItems + " \"Off_Pro_name\":\"\","
-//                   sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
-//                   sPItems = sPItems + " \"discount_type\":\"\","
-//                   sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
-//                   sPItems = sPItems + " \"UOM_Id\": \"2\","
-//                   sPItems = sPItems + " \"UOM_Nm\": \"Pipette\","
-//                   sPItems = sPItems + " \"TAX_details\": \"[{\","
-//                   sPItems = sPItems + " \"Tax_Id\": \"1\","
-//                   sPItems = sPItems + " \"Tax_Val\": 12,"
-//                   sPItems = sPItems + " \"Tax_Type\": \"GST 12%\","
-//                   sPItems = sPItems + " \"Tax_Amt\": 23.64,}],}”
-//
-//
-//    }
+    var sPItems:String = ""
+    for i in 0..<lstPrvOrder.count {
+        guard let item = lstPrvOrder[i] as? [String: Any],
+              let id = item["id"] as? String else {
+            continue
+        }
+        
+        var prodItems: [[String: Any]] = []
+        
+        if let jsonData = LstAllproddata.data(using: .utf8) {
+            do {
+                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                    prodItems = jsonArray.filter { product in
+                        if let prodId = product["ERP_Code"] as? String {
+                            return prodId == id
+                        }
+                        return false
+                    }
+                }
+            } catch {
+                print("Error is \(error)")
+            }
+        }
+        print(item)
+        let disc: String = item["Disc"] as? String ?? "0"
+        let disVal: String = item["DisVal"] as? String ?? "0"
+        let Product_Total_Qty = Int(item["Qty"] as! String)!
+        
+        let productQty = String(item["OffQty"] as? Int ?? 0)
+        let productCode = prodItems.isEmpty ? "" : (prodItems[0]["id"] as? String ?? "")
+        print(prodItems)
+        let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
+        
+        sPItems = sPItems + "{\"product_code\":\""+productCode+"\", \"product_Name\":\""+productName+"\","
+        sPItems = sPItems + " \"Product_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
+        sPItems = sPItems + " \"Product_Total_Qty\": \(Product_Total_Qty),"
+        sPItems = sPItems + " \"Product_RegularQty\": 0,"
+        sPItems = sPItems + " \"Product_Amount\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+        sPItems = sPItems + " \"Rate\": \"\(item["Rate"] as! Double)\","
+        sPItems = sPItems + " \"free\": 0,"
+        sPItems = sPItems + " \"dis\": "+productQty+","
+        sPItems = sPItems + " \"dis_value\":\""+productQty+"\","
+        sPItems = sPItems + " \"Off_Pro_code\":\"\","
+        sPItems = sPItems + " \"Off_Pro_name\":\"\","
+        sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
+        sPItems = sPItems + " \"discount_type\":\"\","
+        sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
+        sPItems = sPItems + " \"UOM_Id\": \"2\","
+        sPItems = sPItems + " \"UOM_Nm\": \"" + ((item["UOMNm"] as? String)!) + "\","
+        sPItems = sPItems + " \"TAX_details\": [{"
+        sPItems = sPItems + " \"Tax_Id\": \"1\","
+        sPItems = sPItems + " \"Tax_Val\": 12,"
+        sPItems = sPItems + " \"Tax_Type\": \"GST 12%,\""
+        sPItems = sPItems + " \"Tax_Amt\": 23.64"
+        sPItems = sPItems + "}]}"
+        
+        
+    }
+    
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"2023-08-30 10:58:12\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"2023-08-30 10:58:12\",\"modified_time\":\"2023-08-30 10:58:12\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
-let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"2023-08-26 10:58:12\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"524.24\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"2023-08-26 10:58:12\",\"modified_time\":\"2023-08-26 10:58:12\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"524.24\",\"CashDiscount\":0,\"NetAmount\":\"524.24\",\"No_Of_items\":\"2\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[{\"product_Name\":\"FiproRel- S Dog 0.67 ml\",\"product_code\":\"D111\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":220.64,\"Rate\":\"197.00\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"23.64\"}]},{\"product_Name\":\"FiproRel - S Dog 1.34 ml\",\"product_code\":\"D112\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":303.6,\"Rate\":\"271.07\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"32.53\"}]}]}]"
     
     let params: Parameters = [
         "data": jsonString
@@ -1653,7 +1712,7 @@ let jsonString =  "[{\"Activity_Report_APP\":{\"Worktype_code\":\"0\",\"Town_cod
         alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
             return
         })
-        //self.present(alert, animated: true)
+       
     }
 }
     
