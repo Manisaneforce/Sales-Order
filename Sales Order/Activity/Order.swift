@@ -35,6 +35,7 @@ var lblTotAmt:String = "00.0"
 var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
+var currentDateTime = ""
 struct Order: View {
     @State private var clickeindex:Int = 0
     @State private var IndexToAmt:String = ""
@@ -1125,6 +1126,9 @@ struct SelPrvOrder: View {
 
    
     var body: some View {
+        ZStack{
+            Color.gray.opacity(0.2)
+                .edgesIgnoringSafeArea(.all)
         VStack{
             VStack(spacing:10){
                 ZStack{
@@ -1181,52 +1185,52 @@ struct SelPrvOrder: View {
                         } catch {
                             print("Error is \(error)")
                         }
-                     
-                                                 
-                              for PrvOrderData in lstPrvOrder{
-                                  print(PrvOrderData)
-                                  let RelID = PrvOrderData["id"] as? String
-                                  let Uomnm = PrvOrderData["UOMNm"] as? String
-                                  let Qty = PrvOrderData["Qty"] as? String
-                                  let totAmt = PrvOrderData["NetVal"] as? Double
-                                  print(totAmt as Any)
-                                  
-                                  do {
-                                      if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                          print(jsonArray)
-                                              if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
-                                                  print(selectedPro)
-                                                  
-                                                  
-                                                  let url = selectedPro["PImage"] as? String
-                                                  let name  = selectedPro["name"] as? String
-                                                  let Proid = selectedPro["ERP_Code"] as? String
-                                                  let rate = selectedPro["Rate"] as? String
-                                                  let Uom = PrvOrderData["UOMConv"] as? String
-                                                  var result:Double = 0.0
-                                                  if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
-                                                       result = rateValue * uomValue
-                                                      print(result) // This will be a Double value
-                                                  } else {
-                                                      print("Invalid input values")
-                                                  }
-
-                                                  
-                                                  
-                                                  AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
-                                              }
-
-
-                                      }
-                                  } catch {
-                                      print("Error is \(error)")
-                                  }
-                              }
-                              
+                        
+                        
+                        for PrvOrderData in lstPrvOrder{
+                            print(PrvOrderData)
+                            let RelID = PrvOrderData["id"] as? String
+                            let Uomnm = PrvOrderData["UOMNm"] as? String
+                            let Qty = PrvOrderData["Qty"] as? String
+                            let totAmt = PrvOrderData["NetVal"] as? Double
+                            print(totAmt as Any)
                             
-                                              
+                            do {
+                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                    print(jsonArray)
+                                    if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                                        print(selectedPro)
+                                        
+                                        
+                                        let url = selectedPro["PImage"] as? String
+                                        let name  = selectedPro["name"] as? String
+                                        let Proid = selectedPro["ERP_Code"] as? String
+                                        let rate = selectedPro["Rate"] as? String
+                                        let Uom = PrvOrderData["UOMConv"] as? String
+                                        var result:Double = 0.0
+                                        if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
+                                            result = rateValue * uomValue
+                                            print(result) // This will be a Double value
+                                        } else {
+                                            print("Invalid input values")
+                                        }
+                                        
+                                        
+                                        
+                                        AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
+                                    }
                                     
-                                             print(AllPrvprod)
+                                    
+                                }
+                            } catch {
+                                print("Error is \(error)")
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        print(AllPrvprod)
                     }
                     
                 }
@@ -1244,7 +1248,7 @@ struct SelPrvOrder: View {
                             VStack(spacing: 10) {
                                 VStack() {
                                     Text(AllPrvprod[index].ProName)
-                                 
+                                    
                                 }
                                 HStack(spacing: 60){
                                     Text(AllPrvprod[index].Uomnm)
@@ -1252,7 +1256,7 @@ struct SelPrvOrder: View {
                                 }
                                 
                                 HStack(spacing: 60) {
-                                  
+                                    
                                     Button(action: {
                                         deleteItem(at: index)
                                     }) {
@@ -1319,31 +1323,32 @@ struct SelPrvOrder: View {
                         // Fallback on earlier versions
                     }
                 }
-               
+                
                 .listStyle(PlainListStyle())
                 .padding(.vertical, 5)
                 .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                )
+                .cornerRadius(10)
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 6)
+//                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+//                )
                 
                 //.frame(width: 365)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.horizontal, 10)
                 
-                .clipped()
-                .shadow(color: Color.gray, radius:3 , x:0,y:0)
+//                .clipped()
+//                .shadow(color: Color.gray, radius:3 , x:0,y:0)
                 
-
+                
                 
                 
             }
             .edgesIgnoringSafeArea(.top)
             
-      
             
-           Spacer()
+            
+            Spacer()
             ZStack{
                 Rectangle()
                     .foregroundColor(Color.blue)
@@ -1355,49 +1360,49 @@ struct SelPrvOrder: View {
                     
                     
                 }) {
-                  
+                    
                     VStack(spacing:-1){
-                    HStack (){
-                        
-                        Image(systemName: "cart.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: 30))
-                            .frame(width: 60,height: 40)
-                        
-                        Text("Item: \(VisitData.shared.ProductCart.count)")
-                            .font(.system(size: 14))
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        Text("Qty : 0")
-                            .font(.system(size: 14))
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        
+                        HStack (){
+                            
+                            Image(systemName: "cart.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: 30))
+                                .frame(width: 60,height: 40)
+                            
+                            Text("Item: \(VisitData.shared.ProductCart.count)")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Text("Qty : 0")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                        }
+                        HStack(spacing: 200){
+                            
+                            Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
+                                .font(.system(size: 15))
+                                .fontWeight(.heavy)
+                                .foregroundColor(.white)
+                                .offset(x:30)
+                            
+                            
+                            
+                            Text("Submite")
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .font(.system(size: 17))
+                                .multilineTextAlignment(.center)
+                                .offset(x:-40,y:-10)
+                            
+                            
+                        }
                         Spacer()
-                        
                     }
-                    HStack(spacing: 200){
-                        
-                        Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
-                            .font(.system(size: 15))
-                            .fontWeight(.heavy)
-                            .foregroundColor(.white)
-                            .offset(x:30)
-                        
-                       
-                        
-                        Text("Submite")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .font(.system(size: 17))
-                            .multilineTextAlignment(.center)
-                            .offset(x:-40,y:-10)
-                        
-                        
-                    }
-                        Spacer()
                 }
-                              }
             }
             .frame(maxWidth: .infinity,maxHeight: 40 )
             .edgesIgnoringSafeArea(.bottom)
@@ -1407,6 +1412,7 @@ struct SelPrvOrder: View {
                 EmptyView()
             }
         }
+    }
       
        
     }
@@ -1657,34 +1663,45 @@ func OrderSubmit() {
         print(prodItems)
         let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
         
-        sPItems = sPItems + "{\"product_code\":\""+productCode+"\", \"product_Name\":\""+productName+"\","
-        sPItems = sPItems + " \"Product_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
-        sPItems = sPItems + " \"Product_Total_Qty\": \(Product_Total_Qty),"
-        sPItems = sPItems + " \"Product_RegularQty\": 0,"
-        sPItems = sPItems + " \"Product_Amount\": " + (String(format: "%.2f", item["Rate"] as! Double)) + ","
-        sPItems = sPItems + " \"Rate\": \"\(item["Rate"] as! Double)\","
-        sPItems = sPItems + " \"free\": 0,"
-        sPItems = sPItems + " \"dis\": "+productQty+","
-        sPItems = sPItems + " \"dis_value\":\""+productQty+"\","
-        sPItems = sPItems + " \"Off_Pro_code\":\"\","
-        sPItems = sPItems + " \"Off_Pro_name\":\"\","
-        sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
-        sPItems = sPItems + " \"discount_type\":\"\","
-        sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
-        sPItems = sPItems + " \"UOM_Id\": \"2\","
-        sPItems = sPItems + " \"UOM_Nm\": \"" + ((item["UOMNm"] as? String)!) + "\","
-        sPItems = sPItems + " \"TAX_details\": [{"
-        sPItems = sPItems + " \"Tax_Id\": \"1\","
-        sPItems = sPItems + " \"Tax_Val\": 12,"
-        sPItems = sPItems + " \"Tax_Type\": \"GST 12%,\""
-        sPItems = sPItems + " \"Tax_Amt\": 23.64"
-        sPItems = sPItems + "}]}"
+        sPItems = sPItems + "{\"product_code\":\"" + productCode + "\", \"product_Name\":\"" + productName + "\","
+               sPItems = sPItems + " \"Product_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
+               sPItems = sPItems + " \"Product_Total_Qty\": \(Product_Total_Qty),"
+               sPItems = sPItems + " \"Product_RegularQty\": 0,"
+               sPItems = sPItems + " \"Product_Amount\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+               sPItems = sPItems + " \"Rate\": \"\(item["Rate"] as! Double)\","
+               sPItems = sPItems + " \"free\": 0,"
+               sPItems = sPItems + " \"dis\": \"" + productQty + "\","
+               sPItems = sPItems + " \"dis_value\":\"" + productQty + "\","
+               sPItems = sPItems + " \"Off_Pro_code\":\"\","
+               sPItems = sPItems + " \"Off_Pro_name\":\"\","
+               sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
+               sPItems = sPItems + " \"discount_type\":\"\","
+               sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
+               sPItems = sPItems + " \"UOM_Id\": \"2\","
+               sPItems = sPItems + " \"UOM_Nm\": \"" + ((item["UOMNm"] as? String)!) + "\","
+               sPItems = sPItems + " \"TAX_details\": [{\"Tax_Id\": \"1\","
+               sPItems = sPItems + " \"Tax_Val\": 12,"
+               sPItems = sPItems + " \"Tax_Type\": \"GST 12%,\","
+               sPItems = sPItems + " \"Tax_Amt\": 23.64}]},"
         
         
     }
     
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"2023-08-30 10:58:12\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"2023-08-30 10:58:12\",\"modified_time\":\"2023-08-30 10:58:12\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    var sPItems4: String = ""
+    if sPItems.hasSuffix(",") {
+        while sPItems.hasSuffix(",") {
+            sPItems.removeLast()
+        }
+        sPItems4 = sPItems
+    }
+    updateDateAndTime()
+    
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
+    
+    
+//    let jsonString =  "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"524.24\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"524.24\",\"CashDiscount\":0,\"NetAmount\":\"524.24\",\"No_Of_items\":\"2\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[{\"product_Name\":\"FiproRel- S Dog 0.67 ml\",\"product_code\":\"D111\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":220.64,\"Rate\":\"197.00\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"23.64\"}]}]}]"
+    
     
     let params: Parameters = [
         "data": jsonString
@@ -1718,6 +1735,17 @@ func OrderSubmit() {
     
   
 }
+func updateDateAndTime() {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    currentDateTime = formatter.string(from: Date())
+    
+    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        currentDateTime = formatter.string(from: Date())
+        print(currentDateTime)
+    }
+}
+
 
 func getLocation() {
 //    let locationService = LocationService.sharedInstance

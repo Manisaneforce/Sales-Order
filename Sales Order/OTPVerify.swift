@@ -235,9 +235,16 @@ struct OTPVerify: View {
 struct OTPVerify_Previews: PreviewProvider {
     static var previews: some View {
         OTPVerify(numberOffFields: 6, jsondata: .constant(Outputdata()))
+        NotRegister()
     }
 }
-
+struct NotRegister: View {
+    var body: some View{
+        LottieUIView(filename: "something_went_wrong").frame(width: 200,height: 200)
+       
+        
+    }
+}
 
 
 

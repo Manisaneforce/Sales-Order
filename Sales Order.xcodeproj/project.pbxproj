@@ -40,6 +40,8 @@
 		38EEBC762A7A256000AEF032 /* Sales_OrderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */; };
 		38EEBC782A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */; };
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
+		38EEC7AA2AA07051004ACC3C /* DateAndTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEC7A92AA07050004ACC3C /* DateAndTime.swift */; };
+		38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */ = {isa = PBXBuildFile; fileRef = 38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +96,8 @@
 		38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITests.swift; sourceTree = "<group>"; };
 		38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		38EEC7A92AA07050004ACC3C /* DateAndTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndTime.swift; sourceTree = "<group>"; };
+		38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = something_went_wrong.json; path = ../../../../Downloads/something_went_wrong.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +138,7 @@
 				3801AE252A8C9A840069B136 /* Order.json */,
 				3801AE292A8E551A0069B136 /* Phonering.json */,
 				384CB7052A9A205C009439E5 /* mobile_number.json */,
+				38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */,
 			);
 			name = Lottie;
 			path = ../Lottie;
@@ -153,6 +158,7 @@
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
 				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
+				38EEC7A92AA07050004ACC3C /* DateAndTime.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -352,6 +358,7 @@
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
 				3801AE202A8C8A830069B136 /* OTP.json in Resources */,
 				38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */,
+				38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */,
 				3801AE242A8C90970069B136 /* Msg.json in Resources */,
 				3801AE262A8C9A840069B136 /* Order.json in Resources */,
 			);
@@ -378,6 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38EEC7AA2AA07051004ACC3C /* DateAndTime.swift in Sources */,
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
