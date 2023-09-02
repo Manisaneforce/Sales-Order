@@ -67,11 +67,14 @@ struct Order: View {
     @State private var numbers: [Int] = []
     @State private var SelPrvOrderNavigte:Bool = false
     @State private var isShowingPopUp = false
+    @State private var ADDaddress = false
     @State private var showAlert = false
     @State private var showToast = false
     @State private var ShowTost = ""
     @State private var navigateToHomepage = false
     @State private var filterItems: [TotAmt] = []
+    @State private var isChecked = false
+    @State private var SameAddrssmark = true
     init() {
         
         var items: [TotAmt] = []
@@ -135,9 +138,11 @@ struct Order: View {
                 
                 VStack(alignment: .leading, spacing: 6) {
                     VStack(spacing:5){
-                        Text("DR. INGOLE")
-                            .font(.system(size: 15))
-                            .offset(x:-25)
+                        HStack{
+                            Text("DR. INGOLE")
+                                .font(.system(size: 15))
+                            Spacer()
+                        }
                         HStack {
                             //                            Image("SubmittedCalls")
                             //                                .resizable()
@@ -146,10 +151,57 @@ struct Order: View {
                             //                                .cornerRadius(10)
                             Text("9923125671")
                                 .font(.system(size: 15))
-                                .offset(x:-25)
+                                Spacer()
                         }
-                        Text("Shivaji Park, Dadar")
-                        //.font(.system(size: 15))
+                        HStack{
+                            Text("Billing Address:")
+                                .font(.system(size: 12))
+                            Text("Chennai")
+                                .font(.system(size: 12))
+                            Spacer()
+                          
+                                Image(systemName: "pencil" )
+                                    .foregroundColor(Color(.blue))
+                                    .frame(width: 20)
+                                    .onTapGesture {
+                                        ADDaddress.toggle()
+                                    }
+                            
+                        }
+                        
+                        HStack {
+                            
+                            Image(systemName: isChecked ? "square" : "checkmark.square.fill")
+                                .foregroundColor(isChecked ? .blue : .blue)
+                                .onTapGesture {
+                                    isChecked.toggle()
+                                    if isChecked == true{
+                                        SameAddrssmark = false
+                                    }else{
+                                        SameAddrssmark = true
+                                    }
+                                }
+                            Text("Shipping Address same As Billing Address")
+                                .font(.system(size: 12))
+                            Spacer()
+                        }
+                        if !SameAddrssmark{
+                        HStack{
+                            Text("Shipping Address:")
+                                .font(.system(size: 12))
+                            Text("Chennai")
+                                .font(.system(size: 12))
+                            Spacer()
+                                Image(systemName: "pencil")
+                                    .foregroundColor(Color(.blue))
+                                    .frame(width: 20)
+                                    .onTapGesture {
+                                        ADDaddress.toggle()
+                                    }
+                            
+                        }
+                    }
+                        
                     }
                     .padding(.horizontal, 12)
                     
@@ -662,7 +714,9 @@ struct Order: View {
             
         }
         .navigationBarHidden(true)
-       
+        .sheet(isPresented: $ADDaddress, content: {
+            Address(ADDaddress: $ADDaddress)
+        })
     }
     
     private func lstOfUnitList(at index: Int,filterUnite:[[String:Any]]){
@@ -846,15 +900,225 @@ struct Order: View {
         }
         
     }
-    
+      
 }
 
 struct Order_Previews: PreviewProvider {
     static var previews: some View {
         Order()
         SelPrvOrder()
+        //Address()
     }
 }
+
+struct Address:View{
+   @Binding var ADDaddress: Bool
+    @State private var clickPlusButton = false
+    @State private var ClickStateButton = false
+    @State private var AddressTextInpute:String = ""
+    @State private var EditeAddressHed:String = ""
+    var body: some View{
+        ZStack{
+        VStack{
+            Text("")
+                .font(.system(size: 20))
+            Text("Select Address")
+                .font(.system(size: 20))
+                .font(.headline)
+                .fontWeight(.bold)
+            Divider()
+            List(0..<2, id: \.self) { index in
+                if #available(iOS 15.0, *) {
+                    ZStack{
+                        Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
+                        HStack(){
+                            Text("Row \(index)")
+                                .frame(height: 50)
+                                .offset(x:10)
+                            Spacer()
+                            Image(systemName: "pencil" )
+                                .foregroundColor(Color(.blue))
+                                .frame(width: 30)
+                                .onTapGesture {
+                                    clickPlusButton.toggle()
+                                    EditeAddressHed = "Edite Address"
+                                }
+                            Image(systemName: "trash.fill")
+                                .foregroundColor(Color.red)
+                                .frame(width: 50, height: 30)
+                        }
+                        
+                    }
+                    .cornerRadius(10)
+                    
+                    
+                    
+                    .listRowSeparator(.hidden)
+                } else {
+                    
+                }
+            }
+            .listStyle(PlainListStyle())
+            .padding(.vertical, 5)
+            //.background(Color.white)
+            .background(Color.white)
+            
+            
+            Spacer()
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(Color.blue)
+                .onTapGesture {
+                    clickPlusButton.toggle()
+                    EditeAddressHed = "Add New Address"
+                }
+            
+            
+        }
+            if clickPlusButton{
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        clickPlusButton.toggle()
+                    }
+                VStack{
+                    HStack {
+                        Text(EditeAddressHed)
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                            .padding(.top, 10)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            clickPlusButton.toggle()
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.top, 10)
+                    }
+                    .padding(.horizontal, 20)
+                    Divider()
+                    VStack{
+                        HStack{
+                            Text("State")
+                                .padding(.leading,25)
+                            Spacer()
+                        }
+                        HStack(spacing: 180){
+                            Text("Select State")
+                                .padding(.leading,15)
+                            
+                            Image(systemName: "chevron.down")
+                                .padding(.trailing,5)
+                        }
+                        .frame(height: 30)
+                        .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.blue,lineWidth: 2)
+                        )
+                        .onTapGesture {
+                            ClickStateButton.toggle()
+                            print(ClickStateButton)
+                        }
+                        HStack{
+                            Text("Full Address")
+                                .padding(.leading,25)
+                            Spacer()
+                        }
+                        HStack(spacing:180){
+                            TextField("Enter full address with pincode",text: $AddressTextInpute)
+                                .frame(width: 310,height: 100)
+                        }
+                        .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.blue,lineWidth: 2)
+                        )
+                        
+                        
+                        HStack{
+                            Spacer()
+                            Image(systemName: "location.circle.fill")
+                                .foregroundColor(Color.blue)
+                            Text("Use my current location")
+                                .font(.system(size: 17))
+                                .foregroundColor(Color.blue)
+                            Spacer()
+                        }
+                        .frame(height: 40)
+                        ZStack{
+                            Rectangle()
+                                .foregroundColor(Color.blue)
+                                .frame(height: 50)
+                            VStack{
+                            Button(action:{
+                                
+                            }){
+                                Text("Submite")
+                                    .frame(width: 350)
+                                    .foregroundColor(Color.white)
+                            }
+                        }
+                        }
+                        
+                        
+                    }
+                    
+                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(20)
+            }
+            if ClickStateButton{
+                Color.black.opacity(0.0)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        ClickStateButton.toggle()
+                    }
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(Color.blue)
+                            .frame(height: 40)
+                        Text("")
+                        Text("Select State")
+                            .foregroundColor(Color.white)
+                    }
+                    
+                    Divider()
+                    List(0..<10,id: \.self){index in
+                        Text("Select State\(index)")
+                        
+                    }
+                    .listStyle(PlainListStyle())
+                    
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(Color.blue)
+                            .frame(height: 60)
+                      
+                            Text("Close")
+                                .foregroundColor(Color.white)
+                                
+                        
+                    }
+                    .onTapGesture {
+                        ClickStateButton.toggle()
+                    }
+                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(20)
+            }
+    }
+            
+        
+        
+    }
+}
+
 struct SearchBar: View {
     @Binding var text: String
     
@@ -1742,7 +2006,7 @@ func updateDateAndTime() {
     
     Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
         currentDateTime = formatter.string(from: Date())
-        print(currentDateTime)
+       // print(currentDateTime)
     }
 }
 

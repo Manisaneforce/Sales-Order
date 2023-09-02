@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct Nedata: View {
     enum Category: String, CaseIterable, Identifiable {
         case A, B, C
@@ -114,5 +115,6 @@ struct ShowPopup: View {
         .sheet(isPresented: $isShowingPopUp, content: {
             PopUpView(isShowingPopUp: $isShowingPopUp)
         })
+        
     }
 }
