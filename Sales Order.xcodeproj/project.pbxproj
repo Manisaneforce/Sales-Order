@@ -27,6 +27,7 @@
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
+		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
 		38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B5FB8D2A94E9B100565B9F /* Nedata.swift */; };
 		38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C0994A2A8399F4003A7290 /* Testing File.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
@@ -80,6 +81,7 @@
 		384CB7052A9A205C009439E5 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mobile_number.json; path = ../../../../Downloads/mobile_number.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
+		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38B5FB8D2A94E9B100565B9F /* Nedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nedata.swift; sourceTree = "<group>"; };
 		38C0994A2A8399F4003A7290 /* Testing File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Testing File.swift"; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				384CB6FA2A98A905009439E5 /* order Submite.json */,
 				3801AE232A8C90970069B136 /* Msg.json */,
 				3801AE252A8C9A840069B136 /* Order.json */,
+				38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */,
 				3801AE292A8E551A0069B136 /* Phonering.json */,
 				384CB7052A9A205C009439E5 /* mobile_number.json */,
 				38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */,
@@ -355,6 +358,7 @@
 				384CB7062A9A205C009439E5 /* mobile_number.json in Resources */,
 				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
+				38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */,
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
 				3801AE202A8C8A830069B136 /* OTP.json in Resources */,
 				38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */,

@@ -41,7 +41,7 @@ struct LocationView_Previews: PreviewProvider {
 struct UpdateLocation: View {
     @StateObject var deviceLocationService = DeviceLocationService.shared
     @State var tokens: Set<AnyCancellable> = []
-    @State var coordinates: (lat: Double, lon: Double) = (0, 0)
+    @State var coordinates: (lat: Double, lon: Double) = (0,0)
     @State var address = ""
 
     var body: some View {

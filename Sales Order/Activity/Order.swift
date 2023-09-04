@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import Combine
 import CoreLocation
 
 struct Prodata: Any {
@@ -29,6 +30,14 @@ struct TotAmt: Identifiable {
     var Amt: Int
     var TotAmt:String
 }
+struct EdditeAddres : Any{
+    let listedDrCode:String
+    let address : String
+    let id : Int
+    let stateCode: Int
+    
+}
+var GetingAddress:[EdditeAddres]=[]
 
 var lstPrvOrder: [AnyObject] = []
 var lblTotAmt:String = "00.0"
@@ -36,6 +45,8 @@ var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
+var ShpingAddress = ""
+var BillingAddress = ""
 struct Order: View {
     @State private var clickeindex:Int = 0
     @State private var IndexToAmt:String = ""
@@ -156,7 +167,7 @@ struct Order: View {
                         HStack{
                             Text("Billing Address:")
                                 .font(.system(size: 12))
-                            Text("Chennai")
+                            Text(BillingAddress)
                                 .font(.system(size: 12))
                             Spacer()
                           
@@ -165,7 +176,10 @@ struct Order: View {
                                     .frame(width: 20)
                                     .onTapGesture {
                                         ADDaddress.toggle()
+                                        GetingAddress.removeAll()
+                                        GetingListAddress()
                                     }
+                                  
                             
                         }
                         
@@ -189,14 +203,17 @@ struct Order: View {
                         HStack{
                             Text("Shipping Address:")
                                 .font(.system(size: 12))
-                            Text("Chennai")
+                            Text(ShpingAddress)
                                 .font(.system(size: 12))
                             Spacer()
                                 Image(systemName: "pencil")
                                     .foregroundColor(Color(.blue))
                                     .frame(width: 20)
                                     .onTapGesture {
+                                        
+                                        GetingListAddress()
                                         ADDaddress.toggle()
+                                        
                                     }
                             
                         }
@@ -716,6 +733,7 @@ struct Order: View {
         .navigationBarHidden(true)
         .sheet(isPresented: $ADDaddress, content: {
             Address(ADDaddress: $ADDaddress)
+            
         })
     }
     
@@ -925,6 +943,12 @@ struct Address:View{
     @State private var Getstates:[get_states]=[]
     @State private var selectedstate:String = "Select State"
     @State private var GetLoction = false
+    @StateObject var deviceLocationService = DeviceLocationService.shared
+    @State var tokens: Set<AnyCancellable> = []
+    @State var coordinates: (lat: Double, lon: Double) = (0,0)
+    @State var address = ""
+    @State private var EditState = ""
+    @State private var EditeAddres = ""
  
     var body: some View{
         ZStack{
@@ -936,14 +960,29 @@ struct Address:View{
                 .font(.headline)
                 .fontWeight(.bold)
             Divider()
-            List(0..<2, id: \.self) { index in
+            ZStack{
+                Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
+                Text("Borivali")
+                    
+                    //.frame(width: 50, height: 50)
+            }
+            .frame(width: 350,height: 50)
+            .cornerRadius(10)
+            List(0..<GetingAddress.count, id: \.self) { index in
                 if #available(iOS 15.0, *) {
                     ZStack{
                         Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
                         HStack(){
-                            Text("Row \(index)")
+                            Text(GetingAddress[index].address)
                                 .frame(height: 50)
                                 .offset(x:10)
+                                .onTapGesture {
+                                    ShpingAddress = GetingAddress[index].address
+                                    print(ShpingAddress)
+                                    BillingAddress = GetingAddress[index].address
+                                    ADDaddress = false
+                                    
+                                }
                             Spacer()
                             Image(systemName: "pencil" )
                                 .foregroundColor(Color(.blue))
@@ -951,10 +990,51 @@ struct Address:View{
                                 .onTapGesture {
                                     clickPlusButton.toggle()
                                     EditeAddressHed = "Edite Address"
+                                    //EditState = GetingAddress[index].address
+                                    EditeAddres = GetingAddress[index].address
+                                    AddressTextInpute = EditeAddres
+                                    
+                                    
+                                    
                                 }
                             Image(systemName: "trash.fill")
                                 .foregroundColor(Color.red)
                                 .frame(width: 50, height: 30)
+                                .onTapGesture {
+                                    
+                                    let getid = GetingAddress[index].id
+                                    let listedDrCode = GetingAddress[index].listedDrCode
+                                    print(getid)
+                                    
+                                    let axn = "delete_ret_address&id=\(getid)&listedDrCode=\(listedDrCode)"
+                                  //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
+                                    let apiKey = "\(axn)"
+                                    
+                                    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                        .validate(statusCode: 200 ..< 299)
+                                        .responseJSON { response in
+                                            switch response.result {
+                                            case .success(let value):
+                                                print(value)
+                                     
+                                                if let json = value as? [String:AnyObject] {
+                                                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                        return
+                                                    }
+                                                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                        print("Error: Could print JSON in String")
+                                                        return
+                                                    }
+                                                    
+                                                    print(prettyPrintedJson)
+                                        
+                                                }
+                                            case .failure(let error):
+                                                print(error)
+                                            }
+                                        }
+                                }
                         }
                         
                     }
@@ -971,8 +1051,6 @@ struct Address:View{
             .padding(.vertical, 5)
             //.background(Color.white)
             .background(Color.white)
-            
-            
             Spacer()
             Image(systemName: "plus.circle.fill")
                 .resizable()
@@ -1108,6 +1186,7 @@ struct Address:View{
                         HStack(spacing:180){
                             //TextField("Enter full address with pincode",text: $AddressTextInpute)
                             TextEditor(text: $AddressTextInpute)
+                            
                                 .frame(width: 310,height: 100)
                                // .padding()
                                     .overlay(
@@ -1133,18 +1212,51 @@ struct Address:View{
                             Spacer()
                         }
                         .frame(height: 40)
+                        .onTapGesture {
+                            AddressTextInpute.removeAll()
+                            observeCoordinateUpdates()
+                            observeLocationAccessDenied()
+                            deviceLocationService.requestLocationUpdates()
+                            GetLoction.toggle()
+
+                        }
                        
                         ZStack{
                             Rectangle()
                                 .foregroundColor(Color.blue)
                                 .frame(height: 50)
                             VStack{
-                            Button(action:{
-                                
-                            }){
+                         
                                 Text("Submite")
-                                    .frame(width: 350)
                                     .foregroundColor(Color.white)
+                            
+                        }
+                        }
+                        .onTapGesture {
+                            
+                            
+                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=96"+"&address=\(AddressTextInpute)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                            AFdata in
+                            switch AFdata.result
+                            {
+                                
+                            case .success(let value):
+                                print(value)
+                                if let json = value as? [String: Any] {
+                                    
+                                   print(json)
+                                    ClickStateButton.toggle()
+                                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                                    
+                                }
+                                
+                            case .failure(let error):
+                                
+                                let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                                    return
+                                })
+                               
                             }
                         }
                         }
@@ -1204,11 +1316,22 @@ struct Address:View{
                 .padding(20)
             }
             if GetLoction{
-                Color.black.opacity(0.0)
+                Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
                         GetLoction.toggle()
                     }
+                VStack{
+                    LottieUIView(filename: "Gettingloction").frame(width: 220,height: 150)
+                    Text("Getting Current Loction...")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                    Text("")
+                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(20)
                 
             }
     }
@@ -1217,6 +1340,101 @@ struct Address:View{
         
     }
     
+    func observeCoordinateUpdates() {
+        deviceLocationService.coordinatesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                if case .failure(let error) = completion {
+                    print(error)
+                }
+            } receiveValue: { coordinates in
+                self.coordinates = (coordinates.latitude, coordinates.longitude)
+                self.updateAddress()
+            }
+            .store(in: &tokens)
+    }
+
+    func observeLocationAccessDenied() {
+        deviceLocationService.deniedLocationAccessPublisher
+            .receive(on: DispatchQueue.main)
+            .sink {
+                print("Show some kind of alert to the user")
+            }
+            .store(in: &tokens)
+    }
+    
+    func updateAddress() {
+        let location = CLLocation(latitude: coordinates.lat, longitude: coordinates.lon)
+        var sAddress: String = ""
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            if(placemarks != nil){
+                if(placemarks!.count>0){
+                    let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
+                    for i in 0...jAddress.count-1 {
+                        print(jAddress[i])
+                        if i==0{
+                            sAddress = String(format: "%@", jAddress[i])
+                        }else{
+                            sAddress = String(format: "%@, %@", sAddress,jAddress[i])
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                GetLoction.toggle()
+                AddressTextInpute = sAddress
+            }
+            
+            print(sAddress)
+            
+        }
+    }
+    
+}
+
+
+func GetingListAddress(){
+    let axn = "get_ret_addresses&listedDrCode=96"
+    let apiKey = "\(axn)"
+
+    GetingAddress.removeAll()
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String:AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                
+                    if let jsonData = prettyPrintedJson.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                       let responseArray = json["response"] as? [[String: Any]] {
+                        print(responseArray)
+                        for AddressItem in responseArray {
+                            if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
+                                 GetingAddress.append(EdditeAddres(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
+                               
+                            }
+                        }
+                    }
+                    print(GetingAddress)
+                    
+                   
+        
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
 }
 
 struct SearchBar: View {
@@ -1394,7 +1612,6 @@ func prodCate(prodcatedata: @escaping (String) -> Void) {
 
 func prodDets(proddetsdata: @escaping (String) -> Void) {
     let axn = "get/prodDets"
-    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
   
     let apiKey = "\(axn)"
     
@@ -2064,9 +2281,6 @@ func OrderSubmit() {
 
     
     
-//    let jsonString =  "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"524.24\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"524.24\",\"CashDiscount\":0,\"NetAmount\":\"524.24\",\"No_Of_items\":\"2\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"13.029959\",\"Long\":\"80.2414085\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[{\"product_Name\":\"FiproRel- S Dog 0.67 ml\",\"product_code\":\"D111\",\"Product_Qty\":1,\"Product_RegularQty\":0,\"Product_Total_Qty\":1,\"Product_Amount\":220.64,\"Rate\":\"197.00\",\"free\":\"0\",\"dis\":0,\"dis_value\":\"0.00\",\"Off_Pro_code\":\"\",\"Off_Pro_name\":\"\",\"Off_Pro_Unit\":\"\",\"discount_type\":\"\",\"ConversionFactor\":1,\"UOM_Id\":\"2\",\"UOM_Nm\":\"Pipette\",\"TAX_details\":[{\"Tax_Id\":\"1\",\"Tax_Val\":12,\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"23.64\"}]}]}]"
-    
-    
     let params: Parameters = [
         "data": jsonString
     ]
@@ -2111,25 +2325,4 @@ func updateDateAndTime() {
 }
 
 
-func getLocation() {
-//    let locationService = LocationService.sharedInstance
-//    locationService.getNewLocation(location: { location in
-//        let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
-//        let geocoder = CLGeocoder()
-//        var sAddress: String = ""
-//        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-//            if let placemark = placemarks?.first {
-//                if let formattedAddresssLines = placemark.addressDictionary?["FormattedAddressLines"] as? [String] {
-//                    sAddress = formattedAddressLines.joined(separator: ", ")
-//                }
-//            }
-//            print(sLocation)
-//            print(sAddress)
-//            // Call your function here like: self.orderSubmit(sLocation: sLocation, sAddress: sAddress)
-//        }
-//    }, error: { errMsg in
-//        print(errMsg)
-//        // Handle error or dismiss loading here
-//    })
-}
 
