@@ -910,6 +910,10 @@ struct Order_Previews: PreviewProvider {
         //Address()
     }
 }
+struct get_states: Any{
+    let id:String
+    let title:String
+}
 
 struct Address:View{
    @Binding var ADDaddress: Bool
@@ -917,6 +921,11 @@ struct Address:View{
     @State private var ClickStateButton = false
     @State private var AddressTextInpute:String = ""
     @State private var EditeAddressHed:String = ""
+    @State private var SelectState:String=""
+    @State private var Getstates:[get_states]=[]
+    @State private var selectedstate:String = "Select State"
+    @State private var GetLoction = false
+ 
     var body: some View{
         ZStack{
         VStack{
@@ -1008,8 +1017,12 @@ struct Address:View{
                             Spacer()
                         }
                         HStack(spacing: 180){
-                            Text("Select State")
-                                .padding(.leading,15)
+                            Text(selectedstate)
+                                .font(.system(size: 15))
+                                .frame(width: 100)
+                                .padding(.leading,10)
+                                
+                            
                             
                             Image(systemName: "chevron.down")
                                 .padding(.trailing,5)
@@ -1022,6 +1035,70 @@ struct Address:View{
                         .onTapGesture {
                             ClickStateButton.toggle()
                             print(ClickStateButton)
+                            
+                            
+                            let axn = "get_states"
+                       /// http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get_states
+                          
+                            let apiKey = "\(axn)"
+                            
+                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                .validate(statusCode: 200 ..< 299)
+                                .responseJSON { response in
+                                    switch response.result {
+                                    case .success(let value):
+                                        print(value)
+                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                                            return
+                                        }
+                                        guard let prettyPrintedJsons = String(data: prettyJsonData, encoding: .utf8) else {
+                                            print("Error: Could print JSON in String")
+                                            return
+                                        }
+                                        SelectState = prettyPrintedJsons
+                                        print(prettyPrintedJsons)
+                                        
+                                        // Assuming prettyPrintedJsons is a JSON string
+                                        if let jsonData = prettyPrintedJsons.data(using: .utf8),
+                                           let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                                           let responseArray = json["response"] as? [[String: Any]] {
+                                            for stateItem in responseArray {
+                                                if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
+                                                    
+                                                    Getstates.append(get_states(id: id, title: title))
+                                                }
+                                            }
+                                        }
+                                        print(Getstates)
+
+
+
+                                        if let json = value as? [AnyObject] {
+                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                return
+                                            }
+                                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                print("Error: Could print JSON in String")
+                                                return
+                                            }
+                                            
+                                            print(prettyPrintedJson)
+                                           
+                                            
+                                            print("______________________prodGroup_______________")
+                                           
+                                            
+                                     
+                                            
+
+                                     
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                }
                         }
                         HStack{
                             Text("Full Address")
@@ -1029,8 +1106,16 @@ struct Address:View{
                             Spacer()
                         }
                         HStack(spacing:180){
-                            TextField("Enter full address with pincode",text: $AddressTextInpute)
+                            //TextField("Enter full address with pincode",text: $AddressTextInpute)
+                            TextEditor(text: $AddressTextInpute)
                                 .frame(width: 310,height: 100)
+                               // .padding()
+                                    .overlay(
+                                        Text("Enter full address with pincode")
+                                            .foregroundColor(Color.gray)
+                                            .padding(.horizontal, 4)
+                                            .opacity(AddressTextInpute.isEmpty ? 1 : 0)
+                                    )
                         }
                         .overlay(
                         RoundedRectangle(cornerRadius: 10)
@@ -1048,6 +1133,7 @@ struct Address:View{
                             Spacer()
                         }
                         .frame(height: 40)
+                       
                         ZStack{
                             Rectangle()
                                 .foregroundColor(Color.blue)
@@ -1088,9 +1174,13 @@ struct Address:View{
                     }
                     
                     Divider()
-                    List(0..<10,id: \.self){index in
-                        Text("Select State\(index)")
-                        
+                    List(0..<Getstates.count,id: \.self){index in
+                        Text(Getstates[index].title)
+                            .onTapGesture {
+                                selectedstate = Getstates[index].title
+                                ClickStateButton.toggle()
+                            }
+                       
                     }
                     .listStyle(PlainListStyle())
                     
@@ -1106,17 +1196,27 @@ struct Address:View{
                     }
                     .onTapGesture {
                         ClickStateButton.toggle()
+                        print(SelectState)
                     }
                 }
                 .background(Color.white)
                 .cornerRadius(10)
                 .padding(20)
             }
+            if GetLoction{
+                Color.black.opacity(0.0)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        GetLoction.toggle()
+                    }
+                
+            }
     }
             
         
         
     }
+    
 }
 
 struct SearchBar: View {
