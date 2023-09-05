@@ -28,6 +28,8 @@
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
 		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
+		38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */; };
+		38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */; };
 		38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B5FB8D2A94E9B100565B9F /* Nedata.swift */; };
 		38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C0994A2A8399F4003A7290 /* Testing File.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
@@ -82,6 +84,8 @@
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
+		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
+		38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersDetails.swift; sourceTree = "<group>"; };
 		38B5FB8D2A94E9B100565B9F /* Nedata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nedata.swift; sourceTree = "<group>"; };
 		38C0994A2A8399F4003A7290 /* Testing File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Testing File.swift"; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
@@ -166,6 +170,15 @@
 			path = "common file";
 			sourceTree = "<group>";
 		};
+		38AA42E12AA7066300B8AA10 /* MyOrdersDet */ = {
+			isa = PBXGroup;
+			children = (
+				38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */,
+				38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */,
+			);
+			path = MyOrdersDet;
+			sourceTree = "<group>";
+		};
 		38CADF342A810D8400842DC9 /* Activity */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,6 +215,7 @@
 				384CB7022A99F794009439E5 /* Sales-Order-Info.plist */,
 				387E0E7F2A85F62A00FEACBA /* common file */,
 				38CADF342A810D8400842DC9 /* Activity */,
+				38AA42E12AA7066300B8AA10 /* MyOrdersDet */,
 				38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */,
 				38EEBC5C2A7A255F00AEF032 /* ContentView.swift */,
 				38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */,
@@ -390,7 +404,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				38EEC7AA2AA07051004ACC3C /* DateAndTime.swift in Sources */,
+				38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */,
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
+				38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
 				384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */,

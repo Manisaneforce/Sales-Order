@@ -70,9 +70,9 @@ struct Nedata: View {
 
 struct Nedata_Previews: PreviewProvider {
     static var previews: some View {
-        Nedata()
-        ShowPopup()
-        
+       // Nedata()
+        //ShowPopup()
+        dateFilter()
     }
 }
 
@@ -118,3 +118,55 @@ struct ShowPopup: View {
         
     }
 }
+
+
+struct dateFilter: View{
+    @State private var showLast7Days = false
+       @State private var showLast30Days = false
+    let currentDate = Date()
+      let calendar = Calendar.current
+    var body: some View{
+        VStack {
+            Text("Current Date: \(formattedDate(date: currentDate))")
+                .padding()
+            
+            Divider()
+            
+            Button("Last 7 Days") {
+                showLast7Days.toggle()
+                showLast30Days = false
+            }
+            .padding()
+            
+            Button("Last 30 Days") {
+                showLast30Days.toggle()
+                showLast7Days = false
+            }
+            .padding()
+            
+            if showLast7Days {
+                Text("From: \(formattedDate(date: calculateStartDate(for: 7)))")
+                Text("To: \(formattedDate(date: currentDate))")
+            }
+            
+            if showLast30Days {
+                Text("From: \(formattedDate(date: calculateStartDate(for: 30)))")
+                Text("To: \(formattedDate(date: currentDate))")
+            }
+            
+            Spacer()
+        }
+    }
+    
+    func formattedDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
+    
+    func calculateStartDate(for days: Int) -> Date {
+        let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
+        return startDate ?? currentDate
+    }
+}
+

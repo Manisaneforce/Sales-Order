@@ -83,7 +83,8 @@ struct HomePage: View {
                             
                         }
                     
-                        NavigationLink(destination: UpdateLocation()) {
+                       // NavigationLink(destination: UpdateLocation()) {
+                        NavigationLink(destination:MyOrdersScreen()){
                             DashboardItem(imageName: "Myorder", title: "My Orders")
                         }
                         
