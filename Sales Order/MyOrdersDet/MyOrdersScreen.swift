@@ -16,6 +16,7 @@ struct OrderDetails: Any{
     let Order_Date : String
     let isPaid : String
 }
+var selecteddate = ""
 struct MyOrdersScreen: View {
     @State private var Filterdate = false
     @State private var isCalendarVisible = false
@@ -24,6 +25,7 @@ struct MyOrdersScreen: View {
     @State private var FilterDate = ""
     @State private var CurrentData = ""
     @State private var NaviOrdeDetNiew = false
+    @State private var OrderId:String = ""
     
     let currentDate = Date()
     let calendar = Calendar.current
@@ -121,23 +123,27 @@ struct MyOrdersScreen: View {
                     Rectangle()
                         .foregroundColor(Color.blue)
                         .frame(height: 40)
-                    HStack(spacing:40){
+                    HStack{
                         Text("Descrition")
                             .foregroundColor(Color.white)
                             .font(.system(size: 16))
-                        Text("items")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 16))
-                        Text("Qty")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 16))
-                        Text("Values")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 16))
-                        Text("Type")
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 16))
+                        Spacer()
+                        HStack(spacing:40){
+                            Text("items")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 16))
+                            Text("Qty")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 16))
+                            Text("Values")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 16))
+                            Text("Type")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 16))
+                        }
                     }
+                    .padding(10)
                 }
                 .onAppear{
                     OrderPaymentDetails.removeAll()
@@ -163,7 +169,7 @@ struct MyOrdersScreen: View {
                                 .font(.system(size: 15))
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Status)
-                                .font(.system(size: 15))
+                                .font(.system(size: 13))
                                 .multilineTextAlignment(.trailing)
                             
                         }
@@ -201,11 +207,13 @@ struct MyOrdersScreen: View {
                     }
                     .onTapGesture{
                         print(index)
+                      OrderId = OrderPaymentDetails[index].OrderNo
+                        print(OrderId)
                         NaviOrdeDetNiew = true
                     }
                 }
                 .listStyle(PlainListStyle())
-                NavigationLink(destination: OrderDetView(), isActive: $NaviOrdeDetNiew) {
+                NavigationLink(destination: OrderDetView(OrderId:$OrderId), isActive: $NaviOrdeDetNiew) {
                                 EmptyView()
                             }
                 Spacer()
@@ -347,7 +355,7 @@ struct MyOrdersScreen: View {
 struct MyOrdersScreen_Previews: PreviewProvider {
     static var previews: some View {
         MyOrdersScreen()
-        OrderDetView()
+       // OrderDetView()
     }
 }
 
@@ -387,6 +395,9 @@ struct CalendarView: View {
                 .font(.headline)
                 .foregroundColor(.blue)
         }
+        .onAppear{
+            print(selectedDate)
+        }
     }
     
     func formattedDate(date: Date) -> String {
@@ -400,12 +411,23 @@ struct CalendarView: View {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let formattedDate = dateFormatter.string(from: date)
         print("Selected Date: \(formattedDate)")
+        selecteddate = String(formattedDate)
+        print(selecteddate)
         
     }
 }
-
+struct listProdDet: Any{
+    let Product_Name:String
+    let Unit_Name : String
+    let New_Qty : String
+    let BillRate : String
+    let value :String
+}
 struct OrderDetView:View{
     @State private var phase = 0.0
+    @Binding var OrderId: String
+    @State private var SelectDet:[listProdDet]=[]
+    
     var body: some View{
         NavigationView{
         ZStack{
@@ -462,24 +484,63 @@ struct OrderDetView:View{
                     RoundedRectangle(cornerRadius: 5)
                         .fill(Color.white)
                         .shadow(radius: 5)
-                    VStack{
-                        HStack(spacing:100){
+                    VStack(spacing:-12){
+                        HStack(){
                             Text("Relivate Animale Health")
-                            
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                            Spacer()
                             Text("ORDER")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
                         }
+                        .padding(10)
                         HStack{
                             Image(systemName: "phone.circle.fill")
                                 .foregroundColor(Color.blue)
                             Text("99")
                             Spacer()
                         }
-                        .padding(.leading,17)
+                        .padding(10)
                         ZStack{
                             Rectangle()
                                 .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
                             
                                 .foregroundColor(Color.gray)
+                            VStack(spacing:-15){
+                                HStack{
+                                    Text("BILL TO")
+                                        .fontWeight(.bold)
+                                        .font(.system(size: 13))
+                                    Spacer()
+                                }
+                                .padding(10)
+                                HStack{
+                                    Text("Kartike Test")
+                                        .font(.system(size: 13))
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                }
+                                .padding(10)
+                                HStack{
+                                    Image(systemName: "phone.circle.fill")
+                                        .foregroundColor(Color.blue)
+                                    Text("9342117731")
+                                        .font(.system(size: 13))
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                }
+                                .padding(10)
+                                HStack{
+                                    Text("Borivali")
+                                        .font(.system(size: 13))
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                }
+                                .padding(10)
+                                    
+                            }
+                            
                             
                         }
                        
@@ -489,23 +550,231 @@ struct OrderDetView:View{
                 .frame(height: 200)
                 .padding(10)
                 
-                ZStack{
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(Color.white)
-                        .shadow(radius: 5)
-                    VStack{
-                        HStack(spacing:180){
-                            Text("MUMBAI01-2023")
-                            Text("Delivery")
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.white)
+                            .shadow(radius: 5)
+                        VStack{
+                            VStack(spacing:-15){
+                                HStack{
+                                    Text("MUMBAI01-2023-2024-SO-95")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                    HStack{
+                                        Text("Delivery")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.bold)
+                                    }
+                                }
+                                .padding(10)
+                                HStack{
+                                    Text("05/09/2023 10:13:38")
+                                    Spacer()
+                                }
+                                .padding(10)
+                                VStack(spacing:-15){
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .padding(10)
+                                    HStack{
+                                        Text("Item")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.bold)
+                                        Spacer()
+                                        HStack(spacing:30){
+                                            Text("UOM")
+                                                .font(.system(size: 15))
+                                                .fontWeight(.bold)
+                                            Text("Qty")
+                                                .font(.system(size: 15))
+                                                .fontWeight(.bold)
+                                            Text("Price")
+                                                .font(.system(size: 15))
+                                                .fontWeight(.bold)
+                                            Text("Total")
+                                                .font(.system(size: 15))
+                                                .fontWeight(.bold)
+                                        }
+                                    }
+                                    .padding(10)
+                                    
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .padding(10)
+                                }
+                            }
+                            .onAppear{
+                                print(OrderId)
+                                let axn = "get/orderDet&orderID=\(OrderId)"
+                              //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/orderDet&orderID=MUMBAI01-2023-2024-SO-95
+                                let apiKey = "\(axn)"
+                            
+                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                    .validate(statusCode: 200 ..< 299)
+                                    .responseJSON { response in
+                                        switch response.result {
+                                        case .success(let value):
+                                            if let json = value as? [AnyObject] {
+                                                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                    print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                    return
+                                                }
+                                                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                    print("Error: Could print JSON in String")
+                                                    return
+                                                }
+                                                print(prettyPrintedJson)
+                                                if let jsonData = prettyPrintedJson.data(using: .utf8){
+                                                    do{
+                                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                                                            for Items in jsonArray{
+                                                                print(Items)
+
+                                                                let Product_Name = Items["Product_Name"] as? String
+                                                                let UOM = Items["UOM"] as? String
+                                                                let New_Qty = String((Items["New_Qty"] as? Int)!)
+                                                                var BillRate = ""
+                                                                if let BillRates = Items["BillRate"] as? Double {
+                                                                    BillRate = String(format: "%.2f", BillRates)
+                                                                    print("Formatted Order Value: \(BillRates)")
+                                                                } else {
+                                                                    print("Order Value is not a valid Double.")
+                                                                }
+                                                                
+                                                              
+                                                                var value = ""
+                                                                if let values = Items["value"] as? Double {
+                                                                    value = String(format: "%.2f", values)
+                                                                    print("Formatted Order Value: \(values)")
+                                                                } else {
+                                                                    print("Order Value is not a valid Double.")
+                                                                }
+                                                               
+                                                                SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, value: value))
+                                                            }
+                                                        }
+                                                    } catch{
+                                                        print("Error Data")
+                                                    }
+                                                }
+                                                print(SelectDet)
+                                                
+                                            }
+                                        case .failure(let error):
+                                            print(error)
+                                        }
+                                    }
+
+                            }
+                            List(0 ..< SelectDet.count, id: \.self) { index in
+                                HStack{
+                                    Text(SelectDet[index].Product_Name)
+                                        .font(.system(size: 12))
+                                        //.frame(width: 100)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(-10)
+                                    
+                                    Spacer()
+                                    HStack(spacing:30){
+                                        
+                                        Text(SelectDet[index].Unit_Name)
+                                            .font(.system(size: 12))
+                                            .multilineTextAlignment(.leading)
+                                            .padding(-10)
+                                        
+                                        
+                                        Text(SelectDet[index].New_Qty)
+                                            .font(.system(size: 12))
+                                        
+                                        Text(SelectDet[index].BillRate)
+                                            .font(.system(size: 12))
+                                            .multilineTextAlignment(.center)
+                                        
+                                        Text(SelectDet[index].value)
+                                            .font(.system(size: 12))
+                                            .padding(-10)
+                                        
+                                    }
+                                }
+                                
+                                
+                                
+                            }
+                            .listStyle(PlainListStyle())
+                            VStack(spacing:-10){
+                            Rectangle()
+                                .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
+                                .foregroundColor(Color.gray)
+                                .frame(height: 2)
+                                .padding(10)
+                            HStack{
+                                Text("PRICE DETAILS")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.bold)
+                                Spacer()
+                            }
+                            .padding(10)
+                                Rectangle()
+                                    .foregroundColor(Color.gray)
+                                    .frame(height: 1)
+                                    .padding(10)
+                                VStack(spacing:-10){
+                                    HStack{
+                                        Text("Subtotal")
+                                            .font(.system(size: 12))
+                                        
+                                        Spacer()
+                                        Text("202.64")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    HStack{
+                                        Text("Total item")
+                                            .font(.system(size: 12))
+                                        Spacer()
+                                        Text("1")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    HStack{
+                                        Text("Total Qty")
+                                            .font(.system(size: 12))
+                                        Spacer()
+                                        Text("1")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    HStack{
+                                        Text("GST 12%")
+                                            .font(.system(size: 12))
+                                        Spacer()
+                                        Text("23.64")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    Rectangle()
+                                        .foregroundColor(Color.gray)
+                                        .frame(height: 1)
+                                        .padding(10)
+                                }
                         }
-                        .padding(10)
-                        HStack{
-                            Text("05/09/2023 10:13:38")
-                            Spacer()
-                        }
-                        .padding(10)
+                            HStack{
+                                Text("NET AMOUNT")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.bold)
+                                Spacer()
+                                
+                                Text("220.64")
+                                    .font(.system(size: 16))
+                                    .fontWeight(.bold)
+                                    
+                            }
+                            .padding(10)
+                                
+                            
+                       
                     }
-                    
                 }
                 .padding(10)
             }
