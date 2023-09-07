@@ -17,6 +17,7 @@ struct OrderDetails: Any{
     let isPaid : String
 }
 var selecteddate = ""
+var html:String = ""
 struct MyOrdersScreen: View {
     @State private var Filterdate = false
     @State private var isCalendarVisible = false
@@ -26,6 +27,9 @@ struct MyOrdersScreen: View {
     @State private var CurrentData = ""
     @State private var NaviOrdeDetNiew = false
     @State private var OrderId:String = ""
+    @State private var Jiomoneypage = false
+    @State private var PaymentStaus = false
+   // @State private var html:String = ""
     
     let currentDate = Date()
     let calendar = Calendar.current
@@ -37,7 +41,7 @@ struct MyOrdersScreen: View {
             VStack{
                 ZStack{
                     Rectangle()
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 80)
                     
                     HStack {
@@ -121,7 +125,7 @@ struct MyOrdersScreen: View {
                 
                 ZStack{
                     Rectangle()
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 40)
                     HStack{
                         Text("Descrition")
@@ -152,25 +156,31 @@ struct MyOrdersScreen: View {
                 
                     print(selectedDate)
                     OrderDetailsTriger()
+                
                 }
                 List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
                     VStack{
-                        HStack(spacing:45){
+                        HStack{
                             Text(OrderPaymentDetails[index].OrderNo)
                                 .font(.system(size: 12))
+                                .frame(width: 100, alignment: OrderPaymentDetails[index].OrderNo.count > 10 ? .center : .leading)
                                 .multilineTextAlignment(.leading)
+                            Spacer()
+                            HStack(spacing:40){
                             Text(OrderPaymentDetails[index].No_Of_items)
-                                .font(.system(size: 15))
+                                .font(.system(size: 12))
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Quantity)
-                                .font(.system(size: 15))
+                                .font(.system(size: 12))
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Order_Value)
-                                .font(.system(size: 15))
+                                .font(.system(size: 12))
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Status)
-                                .font(.system(size: 13))
+                                .font(.system(size: 12))
                                 .multilineTextAlignment(.trailing)
+                        }
+                            
                             
                         }
                         HStack{
@@ -187,6 +197,7 @@ struct MyOrdersScreen: View {
                                 .font(.system(size: 9))
                                 .foregroundColor(Color.red)
                             Spacer()
+                            if PaymentStaus{
                             Button(action:{
                                 
                             }){
@@ -198,10 +209,16 @@ struct MyOrdersScreen: View {
                                         .font(.system(size: 15))
                                         .foregroundColor(Color.white)
                                     
+                                    
                                 }
                                 .frame(width: 50,height: 12)
+                                .onTapGesture{
+                                    OrderId = OrderPaymentDetails[index].OrderNo
+                                    PaymentHTML()
+                                }
                             }
                             .buttonStyle(PlainButtonStyle())
+                        }
                         }
                       
                     }
@@ -214,6 +231,9 @@ struct MyOrdersScreen: View {
                 }
                 .listStyle(PlainListStyle())
                 NavigationLink(destination: OrderDetView(OrderId:$OrderId), isActive: $NaviOrdeDetNiew) {
+                                EmptyView()
+                            }
+                NavigationLink(destination: Jiomoney(), isActive: $Jiomoneypage) {
                                 EmptyView()
                             }
                 Spacer()
@@ -287,6 +307,50 @@ struct MyOrdersScreen: View {
     }
         .navigationBarHidden(true)
     }
+    func PaymentHTML(){
+    
+    
+        AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        if let jsonData = prettyPrintedJson.data(using: .utf8){
+                            do{
+                                if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                    if let HTML = jsonObject["html"] as? String {
+                                        print(HTML)
+                                        html = HTML
+                                         print(html)
+                                        Jiomoneypage = true
+                                    } else {
+                                        print("Error: Couldn't extract HTML")
+                                    }
+                                }
+                            } catch{
+                                print("Error Data")
+                            }
+                        }
+
+                        
+
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
     func formattedDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -335,6 +399,8 @@ struct MyOrdersScreen: View {
                                         let Status = Items["Status"] as? String
                                         let OrderDate = Items["Order_Date"] as? String
                                         let Ispaid = Items["isPaid"] as? String
+                                        print(Items)
+                                        
                                         OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo!, No_Of_items: NoofItems!, Quantity: Qty, Order_Value: OrderValue, Status: Status!, Order_Date: OrderDate!, isPaid: Ispaid!))
                                     }
                                 }
@@ -355,7 +421,6 @@ struct MyOrdersScreen: View {
 struct MyOrdersScreen_Previews: PreviewProvider {
     static var previews: some View {
         MyOrdersScreen()
-       // OrderDetView()
     }
 }
 
@@ -436,7 +501,7 @@ struct OrderDetView:View{
             VStack{
                 ZStack{
                     Rectangle()
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 80)
                     
                     HStack {
@@ -554,6 +619,7 @@ struct OrderDetView:View{
                         RoundedRectangle(cornerRadius: 5)
                             .fill(Color.white)
                             .shadow(radius: 5)
+                        ScrollView{
                         VStack{
                             VStack(spacing:-15){
                                 HStack{
@@ -607,9 +673,9 @@ struct OrderDetView:View{
                             .onAppear{
                                 print(OrderId)
                                 let axn = "get/orderDet&orderID=\(OrderId)"
-                              //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/orderDet&orderID=MUMBAI01-2023-2024-SO-95
+                                //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/orderDet&orderID=MUMBAI01-2023-2024-SO-95
                                 let apiKey = "\(axn)"
-                            
+                                
                                 AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
                                     .validate(statusCode: 200 ..< 299)
                                     .responseJSON { response in
@@ -630,7 +696,7 @@ struct OrderDetView:View{
                                                         if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
                                                             for Items in jsonArray{
                                                                 print(Items)
-
+                                                                
                                                                 let Product_Name = Items["Product_Name"] as? String
                                                                 let UOM = Items["UOM"] as? String
                                                                 let New_Qty = String((Items["New_Qty"] as? Int)!)
@@ -642,7 +708,7 @@ struct OrderDetView:View{
                                                                     print("Order Value is not a valid Double.")
                                                                 }
                                                                 
-                                                              
+                                                                
                                                                 var value = ""
                                                                 if let values = Items["value"] as? Double {
                                                                     value = String(format: "%.2f", values)
@@ -650,7 +716,7 @@ struct OrderDetView:View{
                                                                 } else {
                                                                     print("Order Value is not a valid Double.")
                                                                 }
-                                                               
+                                                                
                                                                 SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, value: value))
                                                             }
                                                         }
@@ -665,15 +731,14 @@ struct OrderDetView:View{
                                             print(error)
                                         }
                                     }
-
+                                
                             }
-                            List(0 ..< SelectDet.count, id: \.self) { index in
+                            ForEach(0 ..< SelectDet.count, id: \.self) { index in
                                 HStack{
                                     Text(SelectDet[index].Product_Name)
                                         .font(.system(size: 12))
-                                        //.frame(width: 100)
-                                        .multilineTextAlignment(.leading)
-                                        .padding(-10)
+                                                    .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .center : .leading)
+                                                    .multilineTextAlignment(.leading)
                                     
                                     Spacer()
                                     HStack(spacing:30){
@@ -681,7 +746,7 @@ struct OrderDetView:View{
                                         Text(SelectDet[index].Unit_Name)
                                             .font(.system(size: 12))
                                             .multilineTextAlignment(.leading)
-                                            .padding(-10)
+                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .center : .leading)
                                         
                                         
                                         Text(SelectDet[index].New_Qty)
@@ -693,28 +758,30 @@ struct OrderDetView:View{
                                         
                                         Text(SelectDet[index].value)
                                             .font(.system(size: 12))
-                                            .padding(-10)
+                                        //.padding(-10)
                                         
                                     }
                                 }
                                 
                                 
                                 
+                                
                             }
                             .listStyle(PlainListStyle())
+                            .padding(13)
                             VStack(spacing:-10){
-                            Rectangle()
-                                .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
-                                .foregroundColor(Color.gray)
-                                .frame(height: 2)
+                                Rectangle()
+                                    .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
+                                    .foregroundColor(Color.gray)
+                                    .frame(height: 2)
+                                    .padding(10)
+                                HStack{
+                                    Text("PRICE DETAILS")
+                                        .font(.system(size: 16))
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                }
                                 .padding(10)
-                            HStack{
-                                Text("PRICE DETAILS")
-                                    .font(.system(size: 16))
-                                    .fontWeight(.bold)
-                                Spacer()
-                            }
-                            .padding(10)
                                 Rectangle()
                                     .foregroundColor(Color.gray)
                                     .frame(height: 1)
@@ -758,7 +825,7 @@ struct OrderDetView:View{
                                         .frame(height: 1)
                                         .padding(10)
                                 }
-                        }
+                            }
                             HStack{
                                 Text("NET AMOUNT")
                                     .font(.system(size: 16))
@@ -768,12 +835,10 @@ struct OrderDetView:View{
                                 Text("220.64")
                                     .font(.system(size: 16))
                                     .fontWeight(.bold)
-                                    
+                                
                             }
                             .padding(10)
-                                
-                            
-                       
+                        }
                     }
                 }
                 .padding(10)
@@ -784,3 +849,4 @@ struct OrderDetView:View{
         .navigationBarHidden(true)
     }
 }
+
