@@ -105,7 +105,7 @@ struct Order: View {
                 
                 ZStack(alignment: .top) {
                     Rectangle()
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(ColorData.shared.HeaderColor)
                         .frame(height: 80)
                     
                     HStack {
@@ -589,7 +589,7 @@ struct Order: View {
                 }) {
                     ZStack(alignment: .top) {
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 70)
                         
                         
@@ -659,7 +659,7 @@ struct Order: View {
                         HStack {
                             Text("Select Item")
                                 .font(.headline)
-                                .foregroundColor(.blue)
+                                .foregroundColor(ColorData.shared.HeaderColor)
                                 .padding(.top, 10)
                             
                             Spacer()
@@ -1223,7 +1223,7 @@ struct Address:View{
                        
                         ZStack{
                             Rectangle()
-                                .foregroundColor(Color.blue)
+                                .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 50)
                             VStack{
                          
@@ -1278,7 +1278,7 @@ struct Address:View{
                 VStack{
                     ZStack{
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 40)
                         Text("")
                         Text("Select State")
@@ -1298,7 +1298,7 @@ struct Address:View{
                     
                     ZStack{
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 60)
                       
                             Text("Close")

@@ -23,7 +23,7 @@ struct HomePage: View {
                     
                     ZStack(){
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 100)
                         
                         HStack() {
@@ -77,22 +77,22 @@ struct HomePage: View {
                     .offset( y: -75)
                     .padding(.top)
                     
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 0) {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
                         NavigationLink(destination: Order()){
-                            DashboardItem(imageName: "order", title: "Order")
+                            DashboardItem(imageName: "package", title: "Order")
                             
                         }
                     
                        // NavigationLink(destination: UpdateLocation()) {
                         NavigationLink(destination:MyOrdersScreen()){
-                            DashboardItem(imageName: "Myorder", title: "My Orders")
+                            DashboardItem(imageName: "features", title: "My Orders")
                         }
                         NavigationLink(destination:PaymentScreen()){
-                            DashboardItem(imageName: "order", title: "Payments")
+                            DashboardItem(imageName: "credit-card", title: "Payments")
                         }
-                        DashboardItem(imageName: "Reports", title: "Reports")
-                        DashboardItem(imageName: "Shop", title: "My Profile")
-                        DashboardItem(imageName: "order", title: "Add")
+                        DashboardItem(imageName: "business-report", title: "Reports")
+                        DashboardItem(imageName: "resume", title: "My Profile")
+                        DashboardItem(imageName: "feedback", title: "Complaints")
                     }
                     .padding()
                     .background(Color.white)
@@ -152,9 +152,9 @@ struct DashboardItem: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40, height: 40)
             Text(title)
-                .font(.callout)
-                .font(.system(size: 14))
-                .fontWeight(.semibold)
+                //.font(.callout)
+                .font(.system(size: 12))
+                //.fontWeight(.semibold)
                 .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 
