@@ -26,6 +26,8 @@
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
+		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
+		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
 		38A659CD2AA98E390020E543 /* Jiomoney.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A659CC2AA98E390020E543 /* Jiomoney.swift */; };
 		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
@@ -84,6 +86,8 @@
 		384CB7052A9A205C009439E5 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mobile_number.json; path = ../../../../Downloads/mobile_number.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
+		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
+		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		38A659CC2AA98E390020E543 /* Jiomoney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jiomoney.swift; sourceTree = "<group>"; };
 		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
@@ -168,6 +172,7 @@
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
 				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
 				38EEC7A92AA07050004ACC3C /* DateAndTime.swift */,
+				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -176,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				38A659CC2AA98E390020E543 /* Jiomoney.swift */,
+				3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -429,11 +435,13 @@
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
 				384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
+				3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */,
 				38B5FB8E2A94E9B100565B9F /* Nedata.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
 				384CB6F92A98A261009439E5 /* LoaderMsg.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
+				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
 				384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

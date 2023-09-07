@@ -87,8 +87,9 @@ struct HomePage: View {
                         NavigationLink(destination:MyOrdersScreen()){
                             DashboardItem(imageName: "Myorder", title: "My Orders")
                         }
-                        
-                        DashboardItem(imageName: "order", title: "Payments")
+                        NavigationLink(destination:PaymentScreen()){
+                            DashboardItem(imageName: "order", title: "Payments")
+                        }
                         DashboardItem(imageName: "Reports", title: "Reports")
                         DashboardItem(imageName: "Shop", title: "My Profile")
                         DashboardItem(imageName: "order", title: "Add")

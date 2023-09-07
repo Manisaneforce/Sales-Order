@@ -28,7 +28,6 @@ struct MyOrdersScreen: View {
     @State private var NaviOrdeDetNiew = false
     @State private var OrderId:String = ""
     @State private var Jiomoneypage = false
-    @State private var PaymentStaus = false
    // @State private var html:String = ""
     
     let currentDate = Date()
@@ -197,7 +196,6 @@ struct MyOrdersScreen: View {
                                 .font(.system(size: 9))
                                 .foregroundColor(Color.red)
                             Spacer()
-                            if PaymentStaus{
                             Button(action:{
                                 
                             }){
@@ -208,7 +206,7 @@ struct MyOrdersScreen: View {
                                     Text("Pay")
                                         .font(.system(size: 15))
                                         .foregroundColor(Color.white)
-                                    
+                                     
                                     
                                 }
                                 .frame(width: 50,height: 12)
@@ -218,7 +216,6 @@ struct MyOrdersScreen: View {
                                 }
                             }
                             .buttonStyle(PlainButtonStyle())
-                        }
                         }
                       
                     }
