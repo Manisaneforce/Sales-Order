@@ -28,7 +28,6 @@ struct MyOrdersScreen: View {
     @State private var NaviOrdeDetNiew = false
     @State private var OrderId:String = ""
     @State private var Jiomoneypage = false
-    @State private var JIOPAYMENT = false
    // @State private var html:String = ""
     
     let currentDate = Date()
