@@ -86,13 +86,14 @@ struct Order: View {
     @State private var filterItems: [TotAmt] = []
     @State private var isChecked = false
     @State private var SameAddrssmark = true
+    @State private var TotalQty = [String]()
     init() {
         
         var items: [TotAmt] = []
         print(FilterProduct.count)
         for index in 0..<5 {
             print(index)
-            items.append(Sales_Order.TotAmt(id: index, Amt: 0, TotAmt: "0"))
+            items.append(Sales_Order.TotAmt(id: index, Amt: 0, TotAmt:TotalQty[index]))
         }
         self._filterItems = State(initialValue: items)
     }
@@ -241,6 +242,7 @@ struct Order: View {
                                     prodofcat.removeAll()
                                     proDetsID.removeAll()
                                     Allprod.removeAll()
+                                    TotalQty.removeAll()
                                     if selectedIndex == index {
                                         selectedIndex = nil
                                     } else {
@@ -911,6 +913,7 @@ struct Order: View {
                     print(imgdataURL)
                     print(Arry)
                     print(Allprod)
+                    TexQty()
                 }
             } catch{
                 print("Data is error\(error)")
@@ -918,7 +921,32 @@ struct Order: View {
         }
         
     }
-      
+    private func TexQty(){
+        var Qty = "0"
+        for item in FilterProduct{
+           print(item)
+            let id=String(format: "%@", item["ERP_Code"] as! CVarArg)
+            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                
+                if Cart["id"] as! String == id {
+                    return true
+                }
+                return false
+            })
+            if items.count>0 {
+                 Qty = (items[0]["Qty"] as? String)!
+                print(items[0]["Qty"] as? String as Any)
+                print(items)
+                TotalQty.append(Qty)
+            }else{
+                let ZerQty = "0"
+                TotalQty.append(ZerQty)
+            }
+        }
+        print(TotalQty)
+    }
+    
+    
 }
 
 struct Order_Previews: PreviewProvider {
