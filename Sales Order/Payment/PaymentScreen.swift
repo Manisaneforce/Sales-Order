@@ -7,10 +7,16 @@
 
 import SwiftUI
 
+//var SelMode: String = ""
+//var FromDate = Date()
+//var ToDate = Date()
+//var Getdate = Date()
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
     @State private var SelMode: String = ""
+    @State private var FromDate = Date()
+    @State private var ToDate = Date()
     @State private var CalenderTit = ""
     var body: some View {
         NavigationView{
@@ -57,7 +63,7 @@ struct PaymentScreen: View {
                                 .shadow(radius: 5)
                             
                             HStack {
-                                Text(dateFormatter.string(from: selectedDate))
+                                Text(dateFormatter.string(from: FromDate))
                                  
                                 
                                 Image(systemName: "calendar")
@@ -67,7 +73,7 @@ struct PaymentScreen: View {
                         }
                         .onTapGesture {
                             SelMode = "DOF"
-                            CalenderTit = "Select From Date"
+                            CalenderTit = "Select Date"
                             isPopoverVisible.toggle()
                             
                         }
@@ -80,10 +86,16 @@ struct PaymentScreen: View {
                                 .fill(Color.white)
                                 .shadow(radius: 5)
                             HStack {
-                                Text("2023-09-07")
+                                Text(dateFormatter.string(from: ToDate))
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
                             }
+                        }
+                        .onTapGesture {
+                            SelMode = "DOT"
+                            CalenderTit = "Select From Date"
+                            isPopoverVisible.toggle()
+                            
                         }
                         .padding(10)
                         VStack{
@@ -96,6 +108,55 @@ struct PaymentScreen: View {
                         .padding(10)
                     }
                     .frame(height: 60)
+                    
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                        HStack{
+                            Text("Date")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 15))
+                            Spacer()
+                            HStack(spacing:40){
+                                Text("Debit")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 15))
+                                Text("Credit")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 15))
+                                Text("Balance")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 15))
+                            }
+                                
+                        }
+                        .padding(10)
+                    }
+                   
+                    .frame(height:40)
+                    Spacer()
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.white)
+                            .shadow(radius: 5)
+                        HStack{
+                            Text("Total")
+                                .fontWeight(.bold)
+                            Spacer()
+                            Text("0.00")
+                                .foregroundColor(.red)
+                                .fontWeight(.bold)
+                        }
+                        .padding(10)
+                    }
+                    .frame(height: 50)
+                    .padding(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
+                            .padding(10)
+                    )
                 }
                 .popover(isPresented: $isPopoverVisible) {
                     VStack{
@@ -104,7 +165,7 @@ struct PaymentScreen: View {
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 60)
                                 .padding(20)
-                            Text("Select From Date")
+                            Text("Select Date")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                         }
@@ -117,6 +178,8 @@ struct PaymentScreen: View {
                                 .padding()
                             
                             Button(action:{
+                                
+                                Selectdate()
                                 isPopoverVisible.toggle()
                             }){
                                 ZStack{
@@ -136,12 +199,22 @@ struct PaymentScreen: View {
                 }
             }
         }
-            
+        .navigationBarHidden(true)
+    
     }
+    
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
           formatter.dateFormat = "yyyy-MM-dd"
           return formatter
+      }
+    private  func Selectdate(){
+          if SelMode == "DOF"{
+              FromDate = selectedDate
+          }
+          if SelMode == "DOT"{
+              ToDate = selectedDate
+          }
       }
 }
 

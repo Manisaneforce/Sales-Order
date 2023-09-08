@@ -28,6 +28,7 @@
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
 		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
+		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
 		38A659CD2AA98E390020E543 /* Jiomoney.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A659CC2AA98E390020E543 /* Jiomoney.swift */; };
 		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
@@ -88,6 +89,7 @@
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
+		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
 		38A659CC2AA98E390020E543 /* Jiomoney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jiomoney.swift; sourceTree = "<group>"; };
 		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			children = (
 				38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */,
 				38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */,
+				3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */,
 			);
 			path = MyOrdersDet;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			files = (
 				38EEC7AA2AA07051004ACC3C /* DateAndTime.swift in Sources */,
 				38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */,
+				3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */,
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
 				38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
