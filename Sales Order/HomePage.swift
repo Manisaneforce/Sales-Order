@@ -15,74 +15,81 @@ struct HomePage: View {
     @State private var navigateToContentView = false
     var body: some View {
         NavigationView {
-            GeometryReader { geometry in
+           // GeometryReader { geometry in
+            ZStack{
                 Color(red: 0.87, green: 0.90, blue: 0.91)
                     .edgesIgnoringSafeArea(.all)
                 
-                VStack(spacing: -50) { 
+                VStack{
                     
                     ZStack(){
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 100)
+                            .frame(height: 80)
                         
                         HStack() {
+                            Text(" ")
                             Text("Dashboard")
-                                .font(.system(size: 25))
-                                .font(.headline)
+                                .font(.system(size: 20))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .padding([.top, .leading, .bottom])
-                                .cornerRadius(10)
-                                .offset(x: -70, y: 20)
+                                .padding(.top,50)
                             
-                            Text(currentDate)
-                                .font(.system(size: 15))
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.white)
-                                .offset(x: 30, y: 20)
-                            
-                            
-                            VStack {
-                                Button(action: {
-                                    UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
-                                    
-                                    showAlert = true
-                                }) {
-                                    Image("logout")
-                                    .renderingMode(.template)
-                                    .foregroundColor(.white)
+                                 Spacer()
+                            HStack(spacing:30){
+                                Text(currentDate)
+                                    .font(.system(size: 15))
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.white)
+                                //.offset(x: 30, y: 20)
+                                
+                                
+                                VStack {
+                                    Button(action: {
+                                        UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
+                                        
+                                        showAlert = true
+                                    }) {
+                                        Image("logout")
+                                            .renderingMode(.template)
+                                            .foregroundColor(.white)
+                                    }
+                                    //.offset(x: 55, y: 20)
                                 }
-                                .offset(x: 55, y: 20)
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Logout"),
+                                        message: Text("Do you want to log out?"),
+                                        primaryButton: .default(Text("OK")) {
+                                            navigateToContentView = true
+                                        },
+                                        secondaryButton: .cancel()
+                                    )
+                                }
+                                Text("")
                             }
-                            .alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("Logout"),
-                                    message: Text("Do you want to log out?"),
-                                    primaryButton: .default(Text("OK")) {
-                                        navigateToContentView = true
-                                    },
-                                    secondaryButton: .cancel()
-                                )
-                            }
+                            .padding(.top,50)
                             NavigationLink(destination: ContentView(), isActive: $navigateToContentView) {
                                             EmptyView()
                                         }
                         }
+                        
                     }
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                    
+                    
                     .onAppear() {
                         updateDate()
                     }
-                    .offset( y: -75)
-                    .padding(.top)
-                    
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
                         NavigationLink(destination: Order()){
                             DashboardItem(imageName: "package", title: "Order")
                             
                         }
-                    
+                       
                        // NavigationLink(destination: UpdateLocation()) {
                         NavigationLink(destination:MyOrdersScreen()){
                             DashboardItem(imageName: "features", title: "My Orders")
@@ -106,7 +113,7 @@ struct HomePage: View {
                         .foregroundColor(Color.blue)
                         .offset()
                 }
-                .frame(minHeight: geometry.size.height)
+                //.frame(minHeight: geometry.size.height)
                 
             }
         }

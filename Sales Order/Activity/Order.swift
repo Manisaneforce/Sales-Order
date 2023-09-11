@@ -41,13 +41,14 @@ struct EdditeAddres : Any{
 var GetingAddress:[EdditeAddres]=[]
 
 var lstPrvOrder: [AnyObject] = []
-var lblTotAmt:String = "00.0"
+var lblTotAmt:String = "0.0"
 var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
 var ShpingAddress = ""
 var BillingAddress = ""
+var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 struct Order: View {
     @State private var clickeindex:Int = 0
     @State private var IndexToAmt:String = ""
@@ -162,6 +163,7 @@ struct Order: View {
                             //                                .cornerRadius(10)
                             Text("9923125671")
                                 .font(.system(size: 15))
+                                .fontWeight(.semibold)
                                 Spacer()
                         }
                         HStack{
@@ -256,7 +258,7 @@ struct Order: View {
                                         .foregroundColor(.white)
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 5)
-                                        .background(selectedIndex == index ? Color.blue : Color.gray)
+                                        .background(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
                                         .cornerRadius(10)
                                 }
                             }
@@ -293,7 +295,7 @@ struct Order: View {
              
                     
                 }
-                .padding(.top,0)
+                //.padding(.top,0)
                 .onAppear {
                     
                     prodGroup { jsonString in
@@ -352,10 +354,11 @@ struct Order: View {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 100, height: 70)
+                                    .frame(width: 75, height: 75)
                                     .cornerRadius(4)
                             } else {
                                 Text("Image loading...")
+                                    .font(.system(size: 14))
                                     .onAppear{ loadImage(at: index) }
                             }
                             
@@ -363,21 +366,26 @@ struct Order: View {
                                 // Text(Arry[index])
                                 Text(Allprod[index].ProName)
                                     .fontWeight(.semibold)
+                                    .font(.system(size: 14))
                                     .lineLimit(2)
                                     .minimumScaleFactor(0.5)
                                 Text(Allprod[index].ProID)
-                                    .font(.subheadline)
+                                    .font(.system(size: 13))
                                     .foregroundColor(.secondary)
                                 HStack {
                                     //Text("MRP ₹\(nubers[index])")
                                     Text("MRP 0")
+                                    .font(.system(size: 13))
                                     Spacer()
                                     Text("Price: \(Allprod[index].ProMRP)")
+                                    .font(.system(size: 13))
+                                    .fontWeight(.semibold)
                                 }
                                 HStack {
                                         VStack{
                                             Text(filterItems[index].SelectUom)
                                                 .padding(.vertical, 6)
+                                                .font(.system(size: 14))
                                                 .padding(.horizontal, 20)
                                                 .background(Color.gray.opacity(0.2))
                                                 .cornerRadius(10)
@@ -452,13 +460,14 @@ struct Order: View {
                                             
                                         }) {
                                             Text("-")
-                                                .font(.headline)
+                                                .font(.system(size: 15))
                                                 .fontWeight(.bold)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                         
                                         Text("\(filterItems[index].Amt)")
                                             .fontWeight(.bold)
+                                            .font(.system(size: 15))
                                             .foregroundColor(Color.black)
                                         
                                         Button(action: {
@@ -510,8 +519,8 @@ struct Order: View {
                                
                                             
                                         }) {
-                                            Text("+")                                             .font(.headline)
-                                                .fontWeight(.bold)
+                                            Text("+")                          .font(.system(size: 15))
+                                            .fontWeight(.bold)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                     }
@@ -528,56 +537,44 @@ struct Order: View {
                                 
                                 HStack {
                                     Text("Free : 0")
+                                        .font(.system(size: 14))
+                                    
+                                        
                                     Spacer()
                                     Text("₹0.00")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.semibold)
                                 }
                                 Divider()
                                 HStack {
                                     Text("Total Qty: \(filterItems[index].Amt)")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.semibold)
                                     Spacer()
                                     let totalvalue = nubers[0]
                                     Text(filterItems[index].TotAmt)
+                                        .font(.system(size: 14))
+                                        .fontWeight(.semibold)
                                 }
+                              
                             }
                             .padding(.vertical, 5)
+                           
                         }
-                        .background(Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
-                        )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
-                        .frame(width: 350)
-                        .listRowSeparator(.hidden)
+                        
+                      
+                        //.listRowSeparator(.hidden)
                     } else {
                         // Fallback on earlier versions
                     }
                 }
                 .listStyle(PlainListStyle())
-                .padding(.vertical, 5)
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                )
                 
-                //.frame(width: 365)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.horizontal, 10)
-                
-                .clipped()
-                .shadow(color: Color.gray, radius:3 , x:0,y:0)
-                
-                .padding(.top,10)
-                //                .onAppear{
-                //                    UIScrollView.appearance().showsVerticalScrollIndicator = false
-                //                }
                 
                 
                 Button(action: {
-                    if lblTotAmt=="00.0"{
+                    if lblTotAmt=="0.0"{
                         ShowTost="Cart is Empty"
                         showToast = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -1898,6 +1895,8 @@ struct SelPrvOrder: View {
                                     
                                     Button(action: {
                                         deleteItem(at: index)
+                                        
+                                        
                                     }) {
                                         Image(systemName: "trash.fill")
                                             .foregroundColor(Color.red)
@@ -1909,6 +1908,29 @@ struct SelPrvOrder: View {
                                             if filterItems[index].quantity > 0 {
                                                 filterItems[index].quantity -= 1
                                             }
+                                            let ProId = AllPrvprod[index].ProID
+                                            if let jsonData = Allproddata.data(using: .utf8){
+                                                do{
+                                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                        print(jsonArray)
+                                                        let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+
+                                                        if !itemsWithTypID3.isEmpty {
+                                                            for item in itemsWithTypID3 {
+                                                                let Qty = String(filterItems[index].quantity)
+                                                                 minusQty(sQty: Qty, SelectProd: item)
+
+                                                            }
+                                                        } else {
+                                                            print("No data with TypID")
+                                                        }
+
+                                                    }
+                                                } catch{
+                                                    print("Data is error\(error)")
+                                                }
+                                            }
+                                            
                                         }) {
                                             Text("-")
                                                 .font(.headline)
@@ -1922,6 +1944,29 @@ struct SelPrvOrder: View {
                                         
                                         Button(action: {
                                             filterItems[index].quantity += 1
+                                            print(AllPrvprod[index].ProID)
+                                            let ProId = AllPrvprod[index].ProID
+                                            if let jsonData = Allproddata.data(using: .utf8){
+                                                do{
+                                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                        print(jsonArray)
+                                                        let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+
+                                                        if !itemsWithTypID3.isEmpty {
+                                                            for item in itemsWithTypID3 {
+                                                                let Qty = String(filterItems[index].quantity)
+                                                                 addQty(sQty: Qty, SelectProd: item)
+
+                                                            }
+                                                        } else {
+                                                            print("No data with TypID")
+                                                        }
+
+                                                    }
+                                                } catch{
+                                                    print("Data is error\(error)")
+                                                }
+                                            }
                                         }) {
                                             Text("+")
                                                 .font(.headline)
@@ -2378,7 +2423,6 @@ func updateDateAndTime() {
     
     Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
         currentDateTime = formatter.string(from: Date())
-       // print(currentDateTime)
     }
 }
 
