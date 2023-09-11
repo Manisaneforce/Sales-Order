@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import UIKit
 struct OrderDetails: Any{
     let OrderNo : String
     let No_Of_items : String
@@ -528,6 +529,9 @@ struct OrderDetView:View{
                                 .resizable()
                                 .frame(width: 20,height: 20)
                                 .foregroundColor(Color.white)
+                                .onTapGesture{
+                                    printDocument()
+                                }
                             Image(systemName: "square.and.arrow.up.fill")
                                 .resizable()
                                 .frame(width: 20,height: 20)
@@ -845,5 +849,32 @@ struct OrderDetView:View{
     }
         .navigationBarHidden(true)
     }
+    
 }
 
+
+class CustomPrintFormatter: UIPrintFormatter {
+    var customPageWidth: CGFloat = 200 // Adjust this value to match your bill format width
+    var customPageHeight: CGFloat = 200 // Adjust this value to match your bill format height
+
+    override func draw(in rect: CGRect, forPageAt pageIndex: Int) {
+        let customPageRect = CGRect(x: rect.origin.x, y: rect.origin.y, width: customPageWidth, height: customPageHeight)
+        super.draw(in: customPageRect, forPageAt: pageIndex)
+    }
+}
+
+func printDocument() {
+    let printController = UIPrintInteractionController.shared
+
+    let printInfo = UIPrintInfo(dictionary: nil)
+    printInfo.jobName = "Print Job"
+    printInfo.outputType = .general
+
+    printController.printInfo = printInfo
+
+    let formatter = CustomPrintFormatter()
+    formatter.perPageContentInsets = UIEdgeInsets(top: 72, left: 72, bottom: 72, right: 72)
+    printController.printFormatter = formatter
+
+    printController.present(animated: true, completionHandler: nil)
+}

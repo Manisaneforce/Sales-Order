@@ -140,6 +140,7 @@ struct SelectedProductsView: View {
 struct Testing_File_Previews: PreviewProvider {
     static var previews: some View {
        Testing_File()
+        ShareFile()
        //OrderScreen()
     }
 }
@@ -245,3 +246,83 @@ struct Testing_File_Previews: PreviewProvider {
 //        Product(name: "Chocolate 3")
 //    ]
 //}
+
+
+
+struct ShareFile: View{
+    @State private var isShowingShareSheet = false
+    var body: some View{
+        VStack {
+            Text("Hello, World!")
+                .padding()
+            
+            Button("Share") {
+                isShowingShareSheet.toggle()
+            }
+            .padding()
+            .sheet(isPresented: $isShowingShareSheet, onDismiss: {
+                isShowingShareSheet = false
+            }) {
+                ShareSheet()
+            }
+        }
+    }
+}
+
+
+
+struct ShareSheet: View {
+    @State private var isShowingActivityView = false
+    
+    var body: some View {
+        VStack {
+            Text("Share As Image")
+                .font(.headline)
+                .padding()
+            
+            Button("Share") {
+                isShowingActivityView.toggle()
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .sheet(isPresented: $isShowingActivityView, onDismiss: {
+                isShowingActivityView = false
+            }) {
+                ActivityViewController(activityItems: [snapshot()])
+            }
+        }
+    }
+    
+    func snapshot() -> UIImage {
+        let controller = UIHostingController(rootView: ContentView())
+        let view = controller.view
+
+        let targetSize = controller.view.intrinsicContentSize
+        view?.bounds = CGRect(origin: .zero, size: targetSize)
+        view?.backgroundColor = .white
+
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { _ in
+            view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
+        }
+    }
+}
+
+struct ActivityViewController: UIViewControllerRepresentable {
+    typealias UIViewControllerType = UIActivityViewController
+    
+    var activityItems: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        return activityViewController
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        // Nothing to do here
+    }
+}
+
+

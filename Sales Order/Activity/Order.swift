@@ -1874,6 +1874,7 @@ struct SelPrvOrder: View {
                 Divider()
                 List(0 ..< FilterItem.count, id: \.self) { index in
                     if #available(iOS 15.0, *) {
+                        VStack{
                         HStack {
                             Image("logo_new")
                                 .resizable()
@@ -1914,17 +1915,17 @@ struct SelPrvOrder: View {
                                                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                         print(jsonArray)
                                                         let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-
+                                                        
                                                         if !itemsWithTypID3.isEmpty {
                                                             for item in itemsWithTypID3 {
                                                                 let Qty = String(filterItems[index].quantity)
-                                                                 minusQty(sQty: Qty, SelectProd: item)
-
+                                                                minusQty(sQty: Qty, SelectProd: item)
+                                                                
                                                             }
                                                         } else {
                                                             print("No data with TypID")
                                                         }
-
+                                                        
                                                     }
                                                 } catch{
                                                     print("Data is error\(error)")
@@ -1951,17 +1952,17 @@ struct SelPrvOrder: View {
                                                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                         print(jsonArray)
                                                         let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-
+                                                        
                                                         if !itemsWithTypID3.isEmpty {
                                                             for item in itemsWithTypID3 {
                                                                 let Qty = String(filterItems[index].quantity)
-                                                                 addQty(sQty: Qty, SelectProd: item)
-
+                                                                addQty(sQty: Qty, SelectProd: item)
+                                                                
                                                             }
                                                         } else {
                                                             print("No data with TypID")
                                                         }
-
+                                                        
                                                     }
                                                 } catch{
                                                     print("Data is error\(error)")
@@ -1994,14 +1995,18 @@ struct SelPrvOrder: View {
                             }
                         }
                         .background(Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
-                        )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            Divider()
+                                .frame(width: 400)
+                                .foregroundColor(.black)
+                    }
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 6)
+//                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+//                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
+//                        )
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
-                        .frame(width: 350)
+                        //.frame(width: 350)
                         .listRowSeparator(.hidden)
                     } else {
                         // Fallback on earlier versions
@@ -2009,17 +2014,17 @@ struct SelPrvOrder: View {
                 }
                 
                 .listStyle(PlainListStyle())
-                .padding(.vertical, 5)
+                //.padding(.vertical, 5)
                 .background(Color.white)
-                .cornerRadius(10)
+                //.cornerRadius(10)
 //                .overlay(
 //                    RoundedRectangle(cornerRadius: 6)
 //                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
 //                )
                 
                 //.frame(width: 365)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.horizontal, 10)
+                //.frame(maxWidth: .infinity, maxHeight: .infinity)
+                //.padding(.horizontal, 10)
                 
 //                .clipped()
 //                .shadow(color: Color.gray, radius:3 , x:0,y:0)
