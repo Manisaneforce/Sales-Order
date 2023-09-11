@@ -20,7 +20,7 @@ struct HomePage: View {
                 Color(red: 0.87, green: 0.90, blue: 0.91)
                     .edgesIgnoringSafeArea(.all)
                 
-                VStack{
+                VStack(spacing:22){
                     
                     ZStack(){
                         Rectangle()
@@ -84,34 +84,50 @@ struct HomePage: View {
                     .onAppear() {
                         updateDate()
                     }
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
-                        NavigationLink(destination: Order()){
-                            DashboardItem(imageName: "package", title: "Order")
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.white)
+                            .shadow(radius: 4)
+                     
+                        VStack{
+                            HStack{
+                                Text("Hi! Kartik Test")
+                                    .font(.system(size: 18))
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                            .padding(.leading,40)
+                            .padding(7)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
+                            NavigationLink(destination: Order()){
+                                DashboardItem(imageName: "package", title: "Order")
+                                
+                            }
                             
+                            // NavigationLink(destination: UpdateLocation()) {
+                            NavigationLink(destination:MyOrdersScreen()){
+                                DashboardItem(imageName: "features", title: "My Orders")
+                            }
+                            NavigationLink(destination:PaymentScreen()){
+                                DashboardItem(imageName: "credit-card", title: "Payments")
+                            }
+                            DashboardItem(imageName: "business-report", title: "Reports")
+                            DashboardItem(imageName: "resume", title: "My Profile")
+                            DashboardItem(imageName: "feedback", title: "Complaints")
                         }
-                       
-                       // NavigationLink(destination: UpdateLocation()) {
-                        NavigationLink(destination:MyOrdersScreen()){
-                            DashboardItem(imageName: "features", title: "My Orders")
-                        }
-                        NavigationLink(destination:PaymentScreen()){
-                            DashboardItem(imageName: "credit-card", title: "Payments")
-                        }
-                        DashboardItem(imageName: "business-report", title: "Reports")
-                        DashboardItem(imageName: "resume", title: "My Profile")
-                        DashboardItem(imageName: "feedback", title: "Complaints")
                     }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .frame(width: .infinity)
-                    .frame(width: 380)
+                    }
+                    .padding(10)
+                    .frame(height:200)
+                    
+                    
+                    
                     
                     Spacer()
-                    SliderAd()
-                        .frame(height: 150)
-                        .foregroundColor(Color.blue)
-                        .offset()
+//                    SliderAd()
+//                        .frame(height: 150)
+//                        .foregroundColor(Color.blue)
+//                        .offset()
                 }
                 //.frame(minHeight: geometry.size.height)
                 
@@ -133,6 +149,7 @@ struct HomePage: View {
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
+        Dashboard()
     }
 }
 
@@ -178,3 +195,81 @@ struct NextScreen: View {
     }
 }
  
+struct Dashboard: View{
+    @State private var currentDate = ""
+    var body: some View{
+        NavigationView{
+            ZStack{
+                Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
+                    .edgesIgnoringSafeArea(.all)
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
+                        HStack{
+                            Text("Dashboard")
+                                .font(.system(size: 20))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.top,50)
+                            Spacer()
+                            HStack(spacing:30){
+                                Text(currentDate)
+                                    .padding(.top,50)
+                                    .foregroundColor(.white)
+                                Image("logout")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.white)
+                                    .padding(.top,50)
+                            }
+                        }
+                        //.padding(10)
+                    }
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+               
+                //Spacer()
+                ZStack{
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color.white)
+                        .shadow(radius: 5)
+                    VStack{
+                        HStack(spacing:50){
+                            NavigationLink(destination: Order()){
+                                DashboardItem(imageName: "package", title: "Order")
+                                
+                            }
+                            
+                            NavigationLink(destination:MyOrdersScreen()){
+                                DashboardItem(imageName: "features", title: "My Orders")
+                            }
+                            NavigationLink(destination:PaymentScreen()){
+                                DashboardItem(imageName: "credit-card", title: "Payments")
+                            }
+                        }
+                        HStack(spacing:50){
+                            DashboardItem(imageName: "business-report", title: "Reports")
+                            DashboardItem(imageName: "resume", title: "My Profile")
+                            DashboardItem(imageName: "feedback", title: "Complaints")
+                        }
+                    }
+                }
+                .padding(10)
+                .frame(height:150)
+                    Spacer()
+            }
+            }
+        }
+    }
+    private func updateDate() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        currentDate = formatter.string(from: Date())
+        Timer.scheduledTimer(withTimeInterval: 86400, repeats: true) { _ in
+            currentDate = formatter.string(from: Date())
+        }
+    }
+}
+
