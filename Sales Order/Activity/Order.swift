@@ -29,6 +29,7 @@ struct TotAmt: Identifiable {
     let id: Int
     var Amt: Int
     var TotAmt:String
+    var SelectUom:String
 }
 struct EdditeAddres : Any{
     let listedDrCode:String
@@ -87,16 +88,14 @@ struct Order: View {
     @State private var isChecked = false
     @State private var SameAddrssmark = true
     @State private var TotalQty = [String]()
-    init() {
-        
-        var items: [TotAmt] = []
-        print(FilterProduct.count)
-        for index in 0..<5 {
-            print(index)
-            items.append(Sales_Order.TotAmt(id: index, Amt: 0, TotAmt:TotalQty[index]))
-        }
-        self._filterItems = State(initialValue: items)
-    }
+    @State private var TotalAmt = [String]()
+    @State private var SelectUOMN = [String]()
+    @State private var items: [TotAmt] = []
+//    init() {
+//
+//
+//
+//    }
     
     var body: some View {
         
@@ -340,7 +339,7 @@ struct Order: View {
                         json in
                         print(json)
                     }
-                    
+                    TexQty()
                     
                 }
                 
@@ -377,7 +376,7 @@ struct Order: View {
                                 }
                                 HStack {
                                         VStack{
-                                            Text(Allprod[index].Uomname)
+                                            Text(filterItems[index].SelectUom)
                                                 .padding(.vertical, 6)
                                                 .padding(.horizontal, 20)
                                                 .background(Color.gray.opacity(0.2))
@@ -448,6 +447,7 @@ struct Order: View {
                                                  let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
                                                 filterItems[index].TotAmt=String(TotalAmount)
                                           }
+                                            
                                             minusQty(sQty: sQty, SelectProd: FilterProduct)
                                             
                                         }) {
@@ -464,7 +464,7 @@ struct Order: View {
                                         Button(action: {
                                             filterItems[index].Amt += 1
                                             print(lstPrvOrder)
-                                            
+                                            print(filterItems[index].Amt)
                                             
                                             let proditem = Allprod[index]
                                             print(proditem)
@@ -702,7 +702,7 @@ struct Order: View {
                                 } else {
                                     print("UOMList not found or not in the expected format.")
                                 }
-
+                                TexQty()
                                
                                 
                                 
@@ -923,6 +923,9 @@ struct Order: View {
     }
     private func TexQty(){
         var Qty = "0"
+        var Amount="0"
+        TotalAmt.removeAll()
+        SelectUOMN.removeAll()
         for item in FilterProduct{
            print(item)
             let id=String(format: "%@", item["ERP_Code"] as! CVarArg)
@@ -937,13 +940,39 @@ struct Order: View {
                  Qty = (items[0]["Qty"] as? String)!
                 print(items[0]["Qty"] as? String as Any)
                 print(items)
+                Amount = String((items[0]["Value"] as? Double)!)
+                let Uom = items[0]["UOMNm"] as? String
+                SelectUOMN.append(Uom!)
+                print(items)
+                print(Amount as Any)
+                TotalAmt.append(Amount)
+                
                 TotalQty.append(Qty)
             }else{
+                print(FilterProduct)
+                let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
+                SelectUOMN.append(UomQty!)
                 let ZerQty = "0"
+                TotalAmt.append(ZerQty)
                 TotalQty.append(ZerQty)
             }
         }
         print(TotalQty)
+        print(FilterProduct)
+        print(SelectUOMN)
+        print(TotalAmt)
+        
+        items.removeAll()
+        for index in 0..<FilterProduct.count {
+            print(index)
+            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index] ))
+            print(items)
+        }
+        
+        print(items)
+        filterItems = items
+        print(FilterProduct.count)
+        print(filterItems)
     }
     
     
@@ -1765,6 +1794,7 @@ struct SelPrvOrder: View {
                     
                     Button(action:{
                         OrderNavigte = true
+                        
                     }){
                         Text("+ Add Product")
                             .foregroundColor(Color.orange)
