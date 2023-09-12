@@ -112,10 +112,11 @@ struct HomePage: View {
                             NavigationLink(destination:PaymentScreen()){
                                 DashboardItem(imageName: "credit-card", title: "Payments")
                             }
-                            
-                            DashboardItem(imageName: "business-report", title: "Reports")
+                            NavigationLink(destination:MyOrdersDetails()){
+                                DashboardItem(imageName: "business-report", title: "Reports")
+                            }
                             DashboardItem(imageName: "resume", title: "My Profile")
-                            DashboardItem(imageName: "feedback", title: "Complaints")
+                            DashboardItem(imageName: "feedback", title: "Feedback")
                         }
                     }
                     }

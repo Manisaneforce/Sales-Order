@@ -700,12 +700,7 @@ struct Order: View {
                                     print("UOMList not found or not in the expected format.")
                                 }
                                 TexQty()
-                               
-                                
-                                
-                                
-                                
-                                
+          
                             }) {
                                 
                                     Text(allUomlist[index].UomName)
@@ -817,6 +812,9 @@ struct Order: View {
     }
     
     private func loadImage(at index : Int) {
+        print(index)
+        print(Allprod[index].ImgURL)
+        print(Allprod)
         if let imageUrl = URL(string: Allprod[index].ImgURL) {
                URLSession.shared.dataTask(with: imageUrl) { data, response, error in
                    if let data = data, let uiImage = UIImage(data: data) {
@@ -1394,7 +1392,7 @@ struct Address:View{
         
     }
     
-    func observeCoordinateUpdates() {
+    func observeCoordinateUpdates(){
         deviceLocationService.coordinatesPublisher
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -1440,7 +1438,6 @@ struct Address:View{
             }
             
             print(sAddress)
-            
         }
     }
     
@@ -1738,6 +1735,7 @@ struct SelPrvOrder: View {
     @State private var FilterItem = [[String: Any]]()
     @State private var AllPrvprod:[PrvProddata]=[]
     @State var filterItems: [FilterItem] = []
+    @State private var showAlert = false
     
     init() {
         var items: [FilterItem] = []
@@ -1761,347 +1759,361 @@ struct SelPrvOrder: View {
 
    
     var body: some View {
+        NavigationView{
         ZStack{
-            Color.gray.opacity(0.2)
-                .edgesIgnoringSafeArea(.all)
-        VStack{
-            VStack(spacing:10){
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(Color.blue)
-                        .frame(height: 100)
-                    
-                    HStack {
+            //            Color.gray.opacity(0.2)
+            //                .edgesIgnoringSafeArea(.all)
+            VStack{
+                VStack(spacing:10){
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 100)
                         
-                        Text(" Selected Order Prv")
-                            .font(.system(size: 25))
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.top, 50)
-                            .offset(x: -20)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                
-                
-                HStack(spacing: 200){
-                    Text("Items")
-                        .fontWeight(.bold)
-                        .font(.system(size: 20))
-                    
-                    Button(action:{
-                        OrderNavigte = true
-                        
-                    }){
-                        Text("+ Add Product")
-                            .foregroundColor(Color.orange)
-                        
-                    }
-                }
-                .onAppear{
-                    print(lstPrvOrder)
-                    var ProSelectID = [String]()
-                    for itemID in lstPrvOrder{
-                        let id =  itemID["id"] as! String
-                        ProSelectID.append(id)
-                    }
-                    print(ProSelectID)
-                    print(Allproddata)
-                    if let jsonData = Allproddata.data(using: .utf8) {
-                        do {
-                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                print(jsonArray)
-                                for RelID in ProSelectID {
-                                    if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
-                                        FilterItem.append(selectedPro)
-                                    }
-                                }
-                                
-                            }
-                        } catch {
-                            print("Error is \(error)")
-                        }
-                        
-                        
-                        for PrvOrderData in lstPrvOrder{
-                            print(PrvOrderData)
-                            let RelID = PrvOrderData["id"] as? String
-                            let Uomnm = PrvOrderData["UOMNm"] as? String
-                            let Qty = PrvOrderData["Qty"] as? String
-                            let totAmt = PrvOrderData["NetVal"] as? Double
-                            print(totAmt as Any)
+                        HStack {
                             
+                            Text(" Selected Order Prv")
+                                .font(.system(size: 25))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.top, 50)
+                                .offset(x: -20)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    
+                    HStack(spacing: 200){
+                        Text("Items")
+                            .fontWeight(.bold)
+                            .font(.system(size: 20))
+                        
+                        Button(action:{
+                            OrderNavigte = true
+                            
+                        }){
+                            Text("+ Add Product")
+                                .foregroundColor(Color.orange)
+                            
+                        }
+                    }
+                    .onAppear{
+                        print(lstPrvOrder)
+                        var ProSelectID = [String]()
+                        for itemID in lstPrvOrder{
+                            let id =  itemID["id"] as! String
+                            ProSelectID.append(id)
+                        }
+                        print(ProSelectID)
+                        print(Allproddata)
+                        if let jsonData = Allproddata.data(using: .utf8) {
                             do {
                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                     print(jsonArray)
-                                    if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
-                                        print(selectedPro)
-                                        
-                                        
-                                        let url = selectedPro["PImage"] as? String
-                                        let name  = selectedPro["name"] as? String
-                                        let Proid = selectedPro["ERP_Code"] as? String
-                                        let rate = selectedPro["Rate"] as? String
-                                        let Uom = PrvOrderData["UOMConv"] as? String
-                                        var result:Double = 0.0
-                                        if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
-                                            result = rateValue * uomValue
-                                            print(result) // This will be a Double value
-                                        } else {
-                                            print("Invalid input values")
+                                    for RelID in ProSelectID {
+                                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                                            FilterItem.append(selectedPro)
                                         }
-                                        
-                                        
-                                        
-                                        AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
                                     }
-                                    
                                     
                                 }
                             } catch {
                                 print("Error is \(error)")
                             }
-                        }
-                        
-                        
-                        
-                        
-                        print(AllPrvprod)
-                    }
-                    
-                }
-                
-                Divider()
-                List(0 ..< FilterItem.count, id: \.self) { index in
-                    if #available(iOS 15.0, *) {
-                        VStack{
-                        HStack {
-                            Image("logo_new")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100, height: 70)
-                                .cornerRadius(4)
                             
-                            VStack(spacing: 10) {
-                                VStack() {
-                                    Text(AllPrvprod[index].ProName)
-                                    
-                                }
-                                HStack(spacing: 60){
-                                    Text(AllPrvprod[index].Uomnm)
-                                    Text("Rs: \(AllPrvprod[index].ProMRP)")
-                                }
+                            
+                            for PrvOrderData in lstPrvOrder{
+                                print(PrvOrderData)
+                                let RelID = PrvOrderData["id"] as? String
+                                let Uomnm = PrvOrderData["UOMNm"] as? String
+                                let Qty = PrvOrderData["Qty"] as? String
+                                let totAmt = PrvOrderData["NetVal"] as? Double
+                                print(totAmt as Any)
                                 
-                                HStack(spacing: 60) {
-                                    
-                                    Button(action: {
-                                        deleteItem(at: index)
-                                        
-                                        
-                                    }) {
-                                        Image(systemName: "trash.fill")
-                                            .foregroundColor(Color.red)
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                    
-                                    HStack {
-                                        Button(action: {
-                                            if filterItems[index].quantity > 0 {
-                                                filterItems[index].quantity -= 1
-                                            }
-                                            let ProId = AllPrvprod[index].ProID
-                                            if let jsonData = Allproddata.data(using: .utf8){
-                                                do{
-                                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                        print(jsonArray)
-                                                        let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-                                                        
-                                                        if !itemsWithTypID3.isEmpty {
-                                                            for item in itemsWithTypID3 {
-                                                                let Qty = String(filterItems[index].quantity)
-                                                                minusQty(sQty: Qty, SelectProd: item)
-                                                                
-                                                            }
-                                                        } else {
-                                                            print("No data with TypID")
-                                                        }
-                                                        
-                                                    }
-                                                } catch{
-                                                    print("Data is error\(error)")
-                                                }
+                                do {
+                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                        print(jsonArray)
+                                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                                            print(selectedPro)
+                                            
+                                            
+                                            let url = selectedPro["PImage"] as? String
+                                            let name  = selectedPro["name"] as? String
+                                            let Proid = selectedPro["ERP_Code"] as? String
+                                            let rate = selectedPro["Rate"] as? String
+                                            let Uom = PrvOrderData["UOMConv"] as? String
+                                            var result:Double = 0.0
+                                            if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
+                                                result = rateValue * uomValue
+                                                print(result) // This will be a Double value
+                                            } else {
+                                                print("Invalid input values")
                                             }
                                             
-                                        }) {
-                                            Text("-")
-                                                .font(.headline)
-                                                .fontWeight(.bold)
+                                            
+                                            
+                                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
                                         }
-                                        .buttonStyle(PlainButtonStyle())
                                         
-                                        Text("\(filterItems[index].quantity)")
-                                            .fontWeight(.bold)
-                                            .foregroundColor(Color.black)
                                         
-                                        Button(action: {
-                                            filterItems[index].quantity += 1
-                                            print(AllPrvprod[index].ProID)
-                                            let ProId = AllPrvprod[index].ProID
-                                            if let jsonData = Allproddata.data(using: .utf8){
-                                                do{
-                                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                        print(jsonArray)
-                                                        let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-                                                        
-                                                        if !itemsWithTypID3.isEmpty {
-                                                            for item in itemsWithTypID3 {
-                                                                let Qty = String(filterItems[index].quantity)
-                                                                addQty(sQty: Qty, SelectProd: item)
-                                                                
-                                                            }
-                                                        } else {
-                                                            print("No data with TypID")
-                                                        }
-                                                        
-                                                    }
-                                                } catch{
-                                                    print("Data is error\(error)")
-                                                }
-                                            }
-                                        }) {
-                                            Text("+")
-                                                .font(.headline)
-                                                .fontWeight(.bold)
-                                        }
-                                        .buttonStyle(PlainButtonStyle())
                                     }
-                                    .padding(.vertical, 6)
-                                    .padding(.horizontal, 20)
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(10)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.gray, lineWidth: 2)
-                                    )
-                                    .foregroundColor(Color.blue)
-                                }
-                                
-                                Divider()
-                                
-                                HStack(spacing: 100) {
-                                    Text("Total")
-                                    Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
+                                } catch {
+                                    print("Error is \(error)")
                                 }
                             }
+                            
+                            
+                            
+                            
+                            print(AllPrvprod)
                         }
-                        .background(Color.white)
-                            Divider()
-                                .frame(width: 400)
-                                .foregroundColor(.black)
-                    }
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 6)
-//                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-//                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
-//                        )
-//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
-                        //.frame(width: 350)
-                        .listRowSeparator(.hidden)
-                    } else {
-                        // Fallback on earlier versions
                     }
+                    
+                    Divider()
+                    List(0 ..< FilterItem.count, id: \.self) { index in
+                        if #available(iOS 15.0, *) {
+                            VStack{
+                                HStack {
+                                    Image("logo_new")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 100, height: 70)
+                                        .cornerRadius(4)
+                                    
+                                    VStack(spacing: 10) {
+                                        VStack() {
+                                            Text(AllPrvprod[index].ProName)
+                                            
+                                        }
+                                        HStack(spacing: 60){
+                                            Text(AllPrvprod[index].Uomnm)
+                                            Text("Rs: \(AllPrvprod[index].ProMRP)")
+                                        }
+                                        
+                                        HStack(spacing: 60) {
+                                            
+                                            Button(action: {
+                                                deleteItem(at: index)
+                                                
+                                                
+                                            }) {
+                                                Image(systemName: "trash.fill")
+                                                    .foregroundColor(Color.red)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                            
+                                            HStack {
+                                                Button(action: {
+                                                    if filterItems[index].quantity > 0 {
+                                                        filterItems[index].quantity -= 1
+                                                    }
+                                                    let ProId = AllPrvprod[index].ProID
+                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                        do{
+                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                                print(jsonArray)
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                
+                                                                if !itemsWithTypID3.isEmpty {
+                                                                    for item in itemsWithTypID3 {
+                                                                        let Qty = String(filterItems[index].quantity)
+                                                                        minusQty(sQty: Qty, SelectProd: item)
+                                                                        
+                                                                    }
+                                                                } else {
+                                                                    print("No data with TypID")
+                                                                }
+                                                                
+                                                            }
+                                                        } catch{
+                                                            print("Data is error\(error)")
+                                                        }
+                                                    }
+                                                    
+                                                }) {
+                                                    Text("-")
+                                                        .font(.headline)
+                                                        .fontWeight(.bold)
+                                                }
+                                                .buttonStyle(PlainButtonStyle())
+                                                
+                                                Text("\(filterItems[index].quantity)")
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(Color.black)
+                                                
+                                                Button(action: {
+                                                    filterItems[index].quantity += 1
+                                                    print(AllPrvprod[index].ProID)
+                                                    let ProId = AllPrvprod[index].ProID
+                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                        do{
+                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                                print(jsonArray)
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                
+                                                                if !itemsWithTypID3.isEmpty {
+                                                                    for item in itemsWithTypID3 {
+                                                                        let Qty = String(filterItems[index].quantity)
+                                                                        addQty(sQty: Qty, SelectProd: item)
+                                                                        
+                                                                    }
+                                                                } else {
+                                                                    print("No data with TypID")
+                                                                }
+                                                                
+                                                            }
+                                                        } catch{
+                                                            print("Data is error\(error)")
+                                                        }
+                                                    }
+                                                }) {
+                                                    Text("+")
+                                                        .font(.headline)
+                                                        .fontWeight(.bold)
+                                                }
+                                                .buttonStyle(PlainButtonStyle())
+                                            }
+                                            .padding(.vertical, 6)
+                                            .padding(.horizontal, 20)
+                                            .background(Color.gray.opacity(0.2))
+                                            .cornerRadius(10)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.gray, lineWidth: 2)
+                                            )
+                                            .foregroundColor(Color.blue)
+                                        }
+                                        
+                                        Divider()
+                                        
+                                        HStack(spacing: 100) {
+                                            Text("Total")
+                                            Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
+                                        }
+                                    }
+                                }
+                                .background(Color.white)
+                                Divider()
+                                    .frame(width: 400)
+                                    .foregroundColor(.black)
+                            }
+                            //                        .overlay(
+                            //                            RoundedRectangle(cornerRadius: 6)
+                            //                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
+                            //                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
+                            //                        )
+                            //                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            
+                            //.frame(width: 350)
+                            .listRowSeparator(.hidden)
+                        } else {
+                            // Fallback on earlier versions
+                        }
+                    }
+                    
+                    .listStyle(PlainListStyle())
+                    //.padding(.vertical, 5)
+                    .background(Color.white)
+                    //.cornerRadius(10)
+                    //                .overlay(
+                    //                    RoundedRectangle(cornerRadius: 6)
+                    //                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    //                )
+                    
+                    //.frame(width: 365)
+                    //.frame(maxWidth: .infinity, maxHeight: .infinity)
+                    //.padding(.horizontal, 10)
+                    
+                    //                .clipped()
+                    //                .shadow(color: Color.gray, radius:3 , x:0,y:0)
+                    
+                    
+                    
+                    
                 }
-                
-                .listStyle(PlainListStyle())
-                //.padding(.vertical, 5)
-                .background(Color.white)
-                //.cornerRadius(10)
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 6)
-//                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-//                )
-                
-                //.frame(width: 365)
-                //.frame(maxWidth: .infinity, maxHeight: .infinity)
-                //.padding(.horizontal, 10)
-                
-//                .clipped()
-//                .shadow(color: Color.gray, radius:3 , x:0,y:0)
+                .edgesIgnoringSafeArea(.top)
                 
                 
                 
-                
-            }
-            .edgesIgnoringSafeArea(.top)
-            
-            
-            
-            Spacer()
-            ZStack{
-                Rectangle()
-                    .foregroundColor(Color.blue)
-                    .frame(height: 100)
-                
-                Button(action:{
-                    OrderSubmit()
-                    //getLocation()
+                Spacer()
+                ZStack{
+                    Rectangle()
+                        .foregroundColor(ColorData.shared.HeaderColor)
+                        .frame(height: 100)
                     
-                    
-                }) {
-                    
-                    VStack(spacing:-1){
-                        HStack (){
-                            
-                            Image(systemName: "cart.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 30))
-                                .frame(width: 60,height: 40)
-                            
-                            Text("Item: \(VisitData.shared.ProductCart.count)")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            Text("Qty : 0")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
+                    Button(action:{
+                        
+                        //getLocation()
+                        showAlert = true
+                        
+                    }) {
+                        
+                        VStack(spacing:-1){
+                            HStack (){
+                                
+                                Image(systemName: "cart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 30))
+                                    .frame(width: 60,height: 40)
+                                
+                                Text("Item: \(VisitData.shared.ProductCart.count)")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                Text("Qty : 0")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                
+                                Spacer()
+                                
+                            }
+                            HStack(spacing: 200){
+                                
+                                Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(.white)
+                                    .offset(x:30)
+                                
+                                
+                                
+                                Text("Submite")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 17))
+                                    .multilineTextAlignment(.center)
+                                    .offset(x:-40,y:-10)
+                                
+                                
+                            }
                             Spacer()
-                            
                         }
-                        HStack(spacing: 200){
-                            
-                            Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
-                                .font(.system(size: 15))
-                                .fontWeight(.heavy)
-                                .foregroundColor(.white)
-                                .offset(x:30)
-                            
-                            
-                            
-                            Text("Submite")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .font(.system(size: 17))
-                                .multilineTextAlignment(.center)
-                                .offset(x:-40,y:-10)
-                            
-                            
-                        }
-                        Spacer()
                     }
                 }
-            }
-            .frame(maxWidth: .infinity,maxHeight: 40 )
-            .edgesIgnoringSafeArea(.bottom)
-            .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
-            
-            NavigationLink(destination: Order(), isActive: $OrderNavigte) {
-                EmptyView()
+                .frame(maxWidth: .infinity,maxHeight: 40 )
+                .edgesIgnoringSafeArea(.bottom)
+                .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
+                
+                NavigationLink(destination: Order(), isActive: $OrderNavigte) {
+                    EmptyView()
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Confirmation"),
+                        message: Text("Do you want submit order?"),
+                        primaryButton: .default(Text("OK")) {
+                           // OrderSubmit()
+                            getlatandlong()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
             }
         }
     }
+        .navigationBarHidden(true)
       
        
     }
@@ -2315,9 +2327,27 @@ func deleteItem(at index: Int) {
     print(VisitData.shared.ProductCart)
     updateOrderValues(refresh: 1)
 }
+var deviceLocationServices = DeviceLocationService.shared
+func getlatandlong(){
+    var tokens = Set<AnyCancellable>()
+    deviceLocationServices.coordinatesPublisher
+        .receive(on: DispatchQueue.main)
+        .sink { completion in
+            if case .failure(let error) = completion {
+                print(error)
+            }
+        } receiveValue: { coordinates in
+            OrderSubmit(lat: String(coordinates.latitude), log: String(coordinates.longitude))
+        }
+        .store(in: &tokens)
 
-func OrderSubmit() {
+}
+
+
+func OrderSubmit(lat:String,log:String) {
     print(lstPrvOrder)
+    print(lat)
+    print(log)
     
     var sPItems:String = ""
     for i in 0..<lstPrvOrder.count {
