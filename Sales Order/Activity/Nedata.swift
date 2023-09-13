@@ -70,8 +70,8 @@ struct Nedata: View {
 
 struct Nedata_Previews: PreviewProvider {
     static var previews: some View {
-       // Nedata()
-        //ShowPopup()
+        Nedata()
+        ShowPopup()
         dateFilter()
     }
 }

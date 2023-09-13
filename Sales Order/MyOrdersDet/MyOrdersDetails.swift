@@ -143,9 +143,11 @@ struct MyOrdersDetails: View {
                             Text("INVOICE")
                                 .foregroundColor(.white)
                                 .font(.system(size: 15))
-                            Text("ORDER VS INVOICE")
-                                .foregroundColor(.white)
-                                .font(.system(size: 13))
+                           
+                                Text("ORDER VS INVOICE")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 13))
+                                 
                         }
                         .padding(10)
                     }
