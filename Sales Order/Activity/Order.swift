@@ -2104,8 +2104,8 @@ struct SelPrvOrder: View {
                         title: Text("Confirmation"),
                         message: Text("Do you want submit order?"),
                         primaryButton: .default(Text("OK")) {
-                           // OrderSubmit()
-                            getlatandlong()
+                            OrderSubmit()
+                            //getlatandlong()
                         },
                         secondaryButton: .cancel()
                     )
@@ -2337,17 +2337,16 @@ func getlatandlong(){
                 print(error)
             }
         } receiveValue: { coordinates in
-            OrderSubmit(lat: String(coordinates.latitude), log: String(coordinates.longitude))
+            //OrderSubmit(lat: String(coordinates.latitude), log: String(coordinates.longitude))
         }
         .store(in: &tokens)
 
 }
 
 
-func OrderSubmit(lat:String,log:String) {
+func OrderSubmit() {
     print(lstPrvOrder)
-    print(lat)
-    print(log)
+  
     
     var sPItems:String = ""
     for i in 0..<lstPrvOrder.count {

@@ -115,8 +115,12 @@ struct HomePage: View {
                             NavigationLink(destination:MyOrdersDetails()){
                                 DashboardItem(imageName: "business-report", title: "Reports")
                             }
-                            DashboardItem(imageName: "resume", title: "My Profile")
-                            DashboardItem(imageName: "feedback", title: "Feedback")
+                            NavigationLink(destination:My_Profile()){
+                                DashboardItem(imageName: "resume", title: "My Profile")
+                            }
+                            NavigationLink(destination:Feedback()){
+                                DashboardItem(imageName: "feedback", title: "Feedback")
+                            }
                         }
                     }
                     }

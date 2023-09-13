@@ -29,6 +29,7 @@ struct MyOrdersScreen: View {
     @State private var NaviOrdeDetNiew = false
     @State private var OrderId:String = ""
     @State private var Jiomoneypage = false
+    @State private var navigateToHomepage = false
    // @State private var html:String = ""
     
     let currentDate = Date()
@@ -47,19 +48,16 @@ struct MyOrdersScreen: View {
                     HStack {
                         
                         Button(action: {
-                            
+                            navigateToHomepage = true
                         })
                         {
                             Image("backsmall")
-                            
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                                 .frame(width: 50)
                             
                         }
-                        
-                        
                         Text("MY ORDER")
                             .font(.system(size: 18))
                             .fontWeight(.bold)
@@ -67,7 +65,9 @@ struct MyOrdersScreen: View {
                             .padding(.top,50)
                         Spacer()
                     }
-                    
+                    NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
+                                    EmptyView()
+                                }
                     
                 }
                 .edgesIgnoringSafeArea(.top)

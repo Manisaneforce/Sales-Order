@@ -18,6 +18,7 @@ struct PaymentScreen: View {
     @State private var FromDate = Date()
     @State private var ToDate = Date()
     @State private var CalenderTit = ""
+    @State private var navigateToHomepage = false
     var body: some View {
         NavigationView{
             ZStack{
@@ -31,7 +32,7 @@ struct PaymentScreen: View {
                         HStack {
                             
                             Button(action: {
-                                
+                                navigateToHomepage = true
                             })
                             {
                                 Image("backsmall")
@@ -51,6 +52,9 @@ struct PaymentScreen: View {
                                 .padding(.top,50)
                             Spacer()
                         }
+                        NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
+                                        EmptyView()
+                                    }
                     }
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
@@ -217,6 +221,8 @@ struct PaymentScreen: View {
           }
       }
 }
+
+
 
 struct PaymentScreen_Previews: PreviewProvider {
     static var previews: some View {

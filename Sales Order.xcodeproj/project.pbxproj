@@ -24,6 +24,8 @@
 		384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7032A99FABA009439E5 /* DeviceLocationService.swift */; };
 		384CB7062A9A205C009439E5 /* mobile_number.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB7052A9A205C009439E5 /* mobile_number.json */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
+		386AB3162AB1D3EA00FF49D2 /* My Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386AB3152AB1D3EA00FF49D2 /* My Profile.swift */; };
+		386AB3182AB1D49B00FF49D2 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386AB3172AB1D49B00FF49D2 /* Feedback.swift */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
@@ -88,6 +90,8 @@
 		384CB7032A99FABA009439E5 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
 		384CB7052A9A205C009439E5 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mobile_number.json; path = ../../../../Downloads/mobile_number.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
+		386AB3152AB1D3EA00FF49D2 /* My Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "My Profile.swift"; sourceTree = "<group>"; };
+		386AB3172AB1D49B00FF49D2 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
@@ -246,6 +250,8 @@
 				38EEBC602A7A256000AEF032 /* Preview Content */,
 				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
 				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
+				386AB3152AB1D3EA00FF49D2 /* My Profile.swift */,
+				386AB3172AB1D49B00FF49D2 /* Feedback.swift */,
 			);
 			path = "Sales Order";
 			sourceTree = "<group>";
@@ -434,8 +440,10 @@
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
 				384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */,
+				386AB3162AB1D3EA00FF49D2 /* My Profile.swift in Sources */,
 				3801AE282A8E17C80069B136 /* APIClient.swift in Sources */,
 				384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */,
+				386AB3182AB1D49B00FF49D2 /* Feedback.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
 				38C0994B2A8399F4003A7290 /* Testing File.swift in Sources */,
 				38A659CD2AA98E390020E543 /* Jiomoney.swift in Sources */,
