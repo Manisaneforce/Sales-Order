@@ -211,7 +211,7 @@ struct PaymentScreen: View {
 struct PaymentScreen_Previews: PreviewProvider {
     static var previews: some View {
         PaymentScreen()
-        //EditeOrder()
+       
     }
 }
 
@@ -362,3 +362,4 @@ struct PaymentScreen_Previews: PreviewProvider {
 //        }
 //    }
 //}
+

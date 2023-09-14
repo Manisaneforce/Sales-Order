@@ -1872,7 +1872,7 @@ struct SelPrvOrder: View {
                     
                     Divider()
                     ScrollView{
-                        ForEach(0..<AllPrvprod.count, id: \.self) { index in
+                        ForEach(AllPrvprod.indices, id: \.self) { index in
                             VStack{
                                 HStack{
                                     Image("sanlogo")
@@ -2294,10 +2294,6 @@ func deleteItem(at index: Int) {
     id = ids[index]
     print(ids)
     print(id)
-    //let id=lstPrvOrder["id"] as! String
-    
-    
-    
     lstPrvOrder.remove(at: index)
     VisitData.shared.ProductCart.removeAll(where: { (item) in
         if item["id"] as! String == id {
