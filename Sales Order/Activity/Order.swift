@@ -1871,78 +1871,79 @@ struct SelPrvOrder: View {
                     }
                     
                     Divider()
-                    List(0 ..< FilterItem.count, id: \.self) { index in
-                        if #available(iOS 15.0, *) {
+                    ScrollView{
+                        ForEach(0..<AllPrvprod.count, id: \.self) { index in
                             VStack{
-                                HStack {
-                                    Image("logo_new")
+                                HStack{
+                                    Image("sanlogo")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 100, height: 70)
-                                        .cornerRadius(4)
-                                    
-                                    VStack(spacing: 10) {
-                                        VStack() {
+                                        .frame(width: 75,height: 75)
+                                        .padding(.leading,10)
+                                    Spacer()
+                                    VStack{
+                                        HStack{
                                             Text(AllPrvprod[index].ProName)
-                                            
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                                .padding(.leading,10)
+                                            Spacer()
                                         }
-                                        HStack(spacing: 60){
+                                        HStack{
                                             Text(AllPrvprod[index].Uomnm)
+                                            Spacer()
                                             Text("Rs: \(AllPrvprod[index].ProMRP)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
                                         }
-                                        
-                                        HStack(spacing: 60) {
-                                            
+                                        .padding(.leading,10)
+                                        .padding(.trailing,12)
+                                        HStack{
                                             Button(action: {
                                                 deleteItem(at: index)
-                                                
-                                                
                                             }) {
                                                 Image(systemName: "trash.fill")
                                                     .foregroundColor(Color.red)
                                             }
                                             .buttonStyle(PlainButtonStyle())
-                                            
-                                            HStack {
-                                                Button(action: {
-                                                    if filterItems[index].quantity > 0 {
-                                                        filterItems[index].quantity -= 1
-                                                    }
-                                                    let ProId = AllPrvprod[index].ProID
-                                                    if let jsonData = Allproddata.data(using: .utf8){
-                                                        do{
-                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                                print(jsonArray)
-                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-                                                                
-                                                                if !itemsWithTypID3.isEmpty {
-                                                                    for item in itemsWithTypID3 {
-                                                                        let Qty = String(filterItems[index].quantity)
-                                                                        minusQty(sQty: Qty, SelectProd: item)
-                                                                        
-                                                                    }
-                                                                } else {
-                                                                    print("No data with TypID")
-                                                                }
-                                                                
-                                                            }
-                                                        } catch{
-                                                            print("Data is error\(error)")
-                                                        }
-                                                    }
-                                                    
-                                                }) {
-                                                    Text("-")
-                                                        .font(.headline)
-                                                        .fontWeight(.bold)
+                                            Spacer()
+                                            HStack{
+                                            Button(action:{
+                                                if filterItems[index].quantity > 0 {
+                                                    filterItems[index].quantity -= 1
                                                 }
-                                                .buttonStyle(PlainButtonStyle())
-                                                
+                                                let ProId = AllPrvprod[index].ProID
+                                                if let jsonData = Allproddata.data(using: .utf8){
+                                                    do{
+                                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                            print(jsonArray)
+                                                            let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                            
+                                                            if !itemsWithTypID3.isEmpty {
+                                                                for item in itemsWithTypID3 {
+                                                                    let Qty = String(filterItems[index].quantity)
+                                                                    minusQty(sQty: Qty, SelectProd: item)
+                                                                    
+                                                                }
+                                                            } else {
+                                                                print("No data with TypID")
+                                                            }
+                                                            
+                                                        }
+                                                    } catch{
+                                                        print("Data is error\(error)")
+                                                    }
+                                                }
+                                            }){
+                                                Text("-")
+                                                    .font(.headline)
+                                                    .fontWeight(.bold)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                                 Text("\(filterItems[index].quantity)")
                                                     .fontWeight(.bold)
                                                     .foregroundColor(Color.black)
-                                                
-                                                Button(action: {
+                                                Button(action:{
                                                     filterItems[index].quantity += 1
                                                     print(AllPrvprod[index].ProID)
                                                     let ProId = AllPrvprod[index].ProID
@@ -1967,15 +1968,15 @@ struct SelPrvOrder: View {
                                                             print("Data is error\(error)")
                                                         }
                                                     }
-                                                }) {
+                                                }){
                                                     Text("+")
                                                         .font(.headline)
                                                         .fontWeight(.bold)
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
-                                            }
-                                            .padding(.vertical, 6)
-                                            .padding(.horizontal, 20)
+                                        }
+                                            .padding(.vertical, 4)
+                                            .padding(.horizontal, 15)
                                             .background(Color.gray.opacity(0.2))
                                             .cornerRadius(10)
                                             .overlay(
@@ -1983,54 +1984,35 @@ struct SelPrvOrder: View {
                                                     .stroke(Color.gray, lineWidth: 2)
                                             )
                                             .foregroundColor(Color.blue)
-                                        }
-                                        
-                                        Divider()
-                                        
-                                        HStack(spacing: 100) {
-                                            Text("Total")
-                                            Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
-                                        }
                                     }
+                                        .padding(.leading,10)
+                                        .padding(.trailing,10)
+                                        .padding(.top,-5)
+                                        Divider()
+                                            .padding(5)
+                                        
+                                        HStack{
+                                            Text("Total")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.leading,10)
+                                        .padding(.trailing,10)
+                                    }
+                                    
                                 }
-                                .background(Color.white)
-                                Divider()
-                                    .frame(width: 400)
-                                    .foregroundColor(.black)
+                              Rectangle()
+                                    .frame(height: 1)
+                                    .foregroundColor(.gray)
+                               
+                                
                             }
-                            //                        .overlay(
-                            //                            RoundedRectangle(cornerRadius: 6)
-                            //                                .stroke(Color.gray.opacity(0.5),lineWidth: 1)
-                            //                                .shadow(color: Color.gray, radius:2 , x:0,y:0)
-                            //                        )
-                            //                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                            //.frame(width: 350)
-                            .listRowSeparator(.hidden)
-                        } else {
-                            // Fallback on earlier versions
                         }
                     }
-                    
-                    .listStyle(PlainListStyle())
-                    //.padding(.vertical, 5)
-                    .background(Color.white)
-                    //.cornerRadius(10)
-                    //                .overlay(
-                    //                    RoundedRectangle(cornerRadius: 6)
-                    //                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                    //                )
-                    
-                    //.frame(width: 365)
-                    //.frame(maxWidth: .infinity, maxHeight: .infinity)
-                    //.padding(.horizontal, 10)
-                    
-                    //                .clipped()
-                    //                .shadow(color: Color.gray, radius:3 , x:0,y:0)
-                    
-                    
-                    
-                    
                 }
                 .edgesIgnoringSafeArea(.top)
                 

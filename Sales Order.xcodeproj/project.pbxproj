@@ -175,11 +175,11 @@
 				384CB6F42A9608D4009439E5 /* VisitData.swift */,
 				384CB6F82A98A261009439E5 /* LoaderMsg.swift */,
 				384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */,
+				38EEC7A92AA07050004ACC3C /* DateAndTime.swift */,
 				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
 				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
-				38EEC7A92AA07050004ACC3C /* DateAndTime.swift */,
 				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
 			);

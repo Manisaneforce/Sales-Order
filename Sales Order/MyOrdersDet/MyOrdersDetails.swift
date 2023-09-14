@@ -136,18 +136,15 @@ struct MyOrdersDetails: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                         HStack(spacing:50){
-                            
                             Text("ORDER")
                                 .foregroundColor(.white)
                                 .font(.system(size: 15))
                             Text("INVOICE")
                                 .foregroundColor(.white)
                                 .font(.system(size: 15))
-                           
-                                Text("ORDER VS INVOICE")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 13))
-                                 
+                            Text("ORDER VS INVOICE")
+                                .foregroundColor(.white)
+                                .font(.system(size: 13))
                         }
                         .padding(10)
                     }
@@ -215,10 +212,7 @@ struct MyOrdersDetails: View {
                         }
                     }
                 }
-                    
                     Spacer()
-                    
-          
                 }
                 .popover(isPresented: $isPopoverVisible) {
                     VStack{
@@ -253,8 +247,6 @@ struct MyOrdersDetails: View {
                                         .foregroundColor(.white)
                                 }
                             }
-                            
-                            //.padding()
                         }
                     }
                     
@@ -297,10 +289,7 @@ struct MyOrdersDetails: View {
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                     orderandinvoice()
-                                    
-                                  
                                 }
-                            
                         }
                         Spacer()
                         ZStack{
@@ -316,7 +305,6 @@ struct MyOrdersDetails: View {
                         .onTapGesture {
                             Filterdate.toggle()
                         }
-                        
                     }
                     .background(Color.white)
                     .cornerRadius(10)
@@ -325,9 +313,7 @@ struct MyOrdersDetails: View {
             }
         }
         .navigationBarHidden(true)
-    
     }
-    
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
           formatter.dateFormat = "yyyy-MM-dd"
@@ -358,7 +344,6 @@ struct MyOrdersDetails: View {
               "fdt": "\(FromDate)",
               "tdt": "\(ToDate)"
         ]
-       // print(aFormData)
         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = [
@@ -406,8 +391,6 @@ struct MyOrdersDetails: View {
                                         print(OrderDetails)
                                         let productNames = OrderDetails.joined(separator: ", ")
                                         invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value!), Product_Name: productNames))
-
-                                         
                                         
                                     }
                                     print(invoice)
@@ -440,3 +423,5 @@ struct MyOrdersDetails_Previews: PreviewProvider {
         MyOrdersDetails()
     }
 }
+
+

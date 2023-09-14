@@ -30,6 +30,10 @@ struct MyOrdersScreen: View {
     @State private var OrderId:String = ""
     @State private var Jiomoneypage = false
     @State private var navigateToHomepage = false
+    @State private var isPopoverVisible = false
+    @State private var SelMode: String = ""
+    @State private var FromDate = ""
+    @State private var ToDate = ""
    // @State private var html:String = ""
     
     let currentDate = Date()
@@ -73,7 +77,15 @@ struct MyOrdersScreen: View {
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                
+                .onAppear{
+                    
+                    let fromDate = String(dateFormatter.string(from:selectedDate))
+                    print(fromDate)
+                    FromDate = fromDate
+                    ToDate = fromDate
+                    OrderDetailsTriger()
+                   
+                }
                 
                 
                 HStack {
@@ -82,32 +94,33 @@ struct MyOrdersScreen: View {
                             .fill(Color.white)
                             .shadow(radius: 5)
                         HStack {
-                            if #available(iOS 15.0, *) {
-                                Text("\(CurrentData)")
-                            } else {
-                                // Fallback on earlier versions
-                            }
+                                Text(FromDate)
+                         
                             Image(systemName: "calendar")
                                 .foregroundColor(Color.blue)
                         }
                     }
                     .onTapGesture {
+                        SelMode = "DOF"
+                        isPopoverVisible.toggle()
                         
-                        isCalendarVisible = true
                     }
                     .padding(10)
-                    .sheet(isPresented: $isCalendarVisible) {
-                                   CalendarView(selectedDate: $selectedDate, isCalendarVisible: $isCalendarVisible)
-                               }
+                
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.white)
                             .shadow(radius: 5)
                         HStack {
-                            Text("\(CurrentData)")
+                            Text(ToDate)
                             Image(systemName: "calendar")
                                 .foregroundColor(Color.blue)
                         }
+                    }
+                    .onTapGesture {
+                        SelMode = "DOT"
+                        isPopoverVisible.toggle()
+                        
                     }
                     .padding(10)
                     VStack{
@@ -149,15 +162,7 @@ struct MyOrdersScreen: View {
                     }
                     .padding(10)
                 }
-                .onAppear{
-                    OrderPaymentDetails.removeAll()
-                    FilterDate=(formattedDate(date: currentDate))
-                    CurrentData = (formattedDate(date: currentDate))
-                
-                    print(selectedDate)
-                    OrderDetailsTriger()
-                
-                }
+             
                 List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
                     VStack{
                         HStack{
@@ -236,6 +241,46 @@ struct MyOrdersScreen: View {
                             }
                 Spacer()
             }
+            
+            .popover(isPresented: $isPopoverVisible) {
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 60)
+                            .padding(20)
+                        Text("Select Date")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
+                    VStack {
+                        
+                        DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .labelsHidden()
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .padding()
+                        
+                        Button(action:{
+                            Selectdate()
+                            isPopoverVisible.toggle()
+                        }){
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                    .frame(height: 40)
+                                    .padding(20)
+                                Text("Submit Date")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        
+                        //.padding()
+                    }
+                }
+                
+            }
+            
             if Filterdate{
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
@@ -261,11 +306,8 @@ struct MyOrdersScreen: View {
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
-                                FilterDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                CurrentData = (formattedDate(date: currentDate))
+                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                 OrderDetailsTriger()
-                                print(FilterDate)
-                                print(CurrentData)
                             }
                             
                         Divider()
@@ -273,11 +315,8 @@ struct MyOrdersScreen: View {
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
-                                FilterDate = (formattedDate(date: calculateStartDate(for: 30)))
-                                CurrentData = (formattedDate(date: currentDate))
+                                FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                 OrderDetailsTriger()
-                                print(FilterDate)
-                                print(CurrentData)
                             }
                         
                     }
@@ -301,10 +340,32 @@ struct MyOrdersScreen: View {
                 .cornerRadius(10)
                 .padding(20)
             }
+            
         }
     }
         .navigationBarHidden(true)
     }
+    private var dateFormatter: DateFormatter {
+          let formatter = DateFormatter()
+          formatter.dateFormat = "yyyy-MM-dd"
+          return formatter
+      }
+    func formattedDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
+    private  func Selectdate(){
+          if SelMode == "DOF"{
+              FromDate=dateFormatter.string(from: selectedDate)
+              OrderDetailsTriger()
+              
+          }
+          if SelMode == "DOT"{
+              ToDate = dateFormatter.string(from: selectedDate)
+              OrderDetailsTriger()
+          }
+      }
     func PaymentHTML(){
     
     
@@ -349,18 +410,12 @@ struct MyOrdersScreen: View {
             }
     }
     
-    func formattedDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.string(from: date)
-    }
-    
     func calculateStartDate(for days: Int) -> Date {
         let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
         return startDate ?? currentDate
     }
     func OrderDetailsTriger(){
-        let axn = "get/orderlst&sfCode=96&fromdate=\(FilterDate)&todate=\(CurrentData)"
+        let axn = "get/orderlst&sfCode=96&fromdate=\(FromDate)&todate=\(ToDate)"
       
         let apiKey = "\(axn)"
     
@@ -379,6 +434,7 @@ struct MyOrdersScreen: View {
                             return
                         }
                         print(prettyPrintedJson)
+                        OrderPaymentDetails.removeAll()
                         if let jsonData = prettyPrintedJson.data(using: .utf8){
                             do{
                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
@@ -423,62 +479,62 @@ struct MyOrdersScreen_Previews: PreviewProvider {
 }
 
 
-struct CalendarView: View {
-    @Binding var selectedDate: Date
-    @Binding var isCalendarVisible: Bool
-    @State private var temporarySelectedDate: Date
-
-    init(selectedDate: Binding<Date>, isCalendarVisible: Binding<Bool>) {
-        _selectedDate = selectedDate
-        _isCalendarVisible = isCalendarVisible
-        _temporarySelectedDate = State(initialValue: selectedDate.wrappedValue)
-    }
-
-    var body: some View {
-        VStack {
-            DatePicker("Select a date", selection: $temporarySelectedDate, displayedComponents: .date)
-                .datePickerStyle(.graphical)
-                .padding()
-                .onAppear {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-                    dateFormatter.timeZone = TimeZone.autoupdatingCurrent
-                    temporarySelectedDate = dateFormatter.date(from: dateFormatter.string(from: selectedDate)) ?? selectedDate
-                }
-
-            Button("Done") {
-                selectedDate = temporarySelectedDate
-                isCalendarVisible = false // Close the calendar when "Done" is tapped
-                printSelectedDate(selectedDate)
-            }
-            .padding()
-            
-            Text("Selected Date: \(formattedDate(date: selectedDate))")
-                .font(.headline)
-                .foregroundColor(.blue)
-        }
-        .onAppear{
-            print(selectedDate)
-        }
-    }
-    
-    func formattedDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.string(from: date)
-    }
-    
-    func printSelectedDate(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let formattedDate = dateFormatter.string(from: date)
-        print("Selected Date: \(formattedDate)")
-        selecteddate = String(formattedDate)
-        print(selecteddate)
-        
-    }
-}
+//struct CalendarView: View {
+//    @Binding var selectedDate: Date
+//    @Binding var isCalendarVisible: Bool
+//    @State private var temporarySelectedDate: Date
+//
+//    init(selectedDate: Binding<Date>, isCalendarVisible: Binding<Bool>) {
+//        _selectedDate = selectedDate
+//        _isCalendarVisible = isCalendarVisible
+//        _temporarySelectedDate = State(initialValue: selectedDate.wrappedValue)
+//    }
+//
+//    var body: some View {
+//        VStack {
+//            DatePicker("Select a date", selection: $temporarySelectedDate, displayedComponents: .date)
+//                .datePickerStyle(.graphical)
+//                .padding()
+//                .onAppear {
+//                    let dateFormatter = DateFormatter()
+//                    dateFormatter.dateFormat = "yyyy-MM-dd"
+//                    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+//                    dateFormatter.timeZone = TimeZone.autoupdatingCurrent
+//                    temporarySelectedDate = dateFormatter.date(from: dateFormatter.string(from: selectedDate)) ?? selectedDate
+//                }
+//
+//            Button("Done") {
+//                selectedDate = temporarySelectedDate
+//                isCalendarVisible = false // Close the calendar when "Done" is tapped
+//                printSelectedDate(selectedDate)
+//            }
+//            .padding()
+//
+//            Text("Selected Date: \(formattedDate(date: selectedDate))")
+//                .font(.headline)
+//                .foregroundColor(.blue)
+//        }
+//        .onAppear{
+//            print(selectedDate)
+//        }
+//    }
+//
+//    func formattedDate(date: Date) -> String {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd"
+//        return dateFormatter.string(from: date)
+//    }
+//
+//    func printSelectedDate(_ date: Date) {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd"
+//        let formattedDate = dateFormatter.string(from: date)
+//        print("Selected Date: \(formattedDate)")
+//        selecteddate = String(formattedDate)
+//        print(selecteddate)
+//
+//    }
+//}
 struct listProdDet: Any{
     let Product_Name:String
     let Unit_Name : String
@@ -545,6 +601,7 @@ struct OrderDetView:View{
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+           
                 VStack(spacing:-10){
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)

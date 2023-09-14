@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-//var SelMode: String = ""
-//var FromDate = Date()
-//var ToDate = Date()
-//var Getdate = Date()
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
@@ -19,6 +15,7 @@ struct PaymentScreen: View {
     @State private var ToDate = Date()
     @State private var CalenderTit = ""
     @State private var navigateToHomepage = false
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         NavigationView{
             ZStack{
@@ -31,30 +28,15 @@ struct PaymentScreen: View {
                         .frame(height: 80)
                         HStack {
                             
-                            Button(action: {
-                                navigateToHomepage = true
-                            })
-                            {
-                                Image("backsmall")
-                                
-                                    .renderingMode(.template)
-                                    .foregroundColor(.white)
-                                    .padding(.top,50)
-                                    .frame(width: 50)
-                                
-                            }
-                            
-                            
                             Text("PAYMENT LEDGER")
                                 .font(.system(size: 18))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
+                                .padding(.leading,50)
                             Spacer()
                         }
-                        NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
-                                        EmptyView()
-                                    }
+                        
                     }
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
@@ -195,15 +177,20 @@ struct PaymentScreen: View {
                                         .foregroundColor(.white)
                                 }
                             }
-                            
-                            //.padding()
                         }
                     }
                     
                 }
             }
         }
-        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "arrow.left")
+                .foregroundColor(.white)
+                .padding(.bottom,8)
+        })
     
     }
     
@@ -221,13 +208,157 @@ struct PaymentScreen: View {
           }
       }
 }
-
-
-
 struct PaymentScreen_Previews: PreviewProvider {
     static var previews: some View {
         PaymentScreen()
+        //EditeOrder()
     }
 }
 
 
+//struct EditeOrder:View{
+//    var body: some View{
+//        ScrollView{
+//            ForEach(0..<5, id: \.self) { index in
+//                VStack{
+//                    HStack{
+//                        Image("sanlogo")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 75,height: 75)
+//                            .padding(.leading,10)
+//                        Spacer()
+//                        VStack{
+//                            HStack{
+//                                Text(AllPrvprod[index].ProName)
+//                                    .font(.system(size: 14))
+//                                    .fontWeight(.semibold)
+//                                    .padding(.leading,10)
+//                                Spacer()
+//                            }
+//                            HStack{
+//                                Text(AllPrvprod[index].Uomnm)
+//                                Spacer()
+//                                Text("Rs: \(AllPrvprod[index].ProMRP)")
+//                                    .font(.system(size: 12))
+//                                    .fontWeight(.semibold)
+//                            }
+//                            .padding(.leading,10)
+//                            .padding(.trailing,12)
+//                            HStack{
+//                                Button(action: {
+//                                    deleteItem(at: index)
+//                                }) {
+//                                    Image(systemName: "trash.fill")
+//                                        .foregroundColor(Color.red)
+//                                }
+//                                .buttonStyle(PlainButtonStyle())
+//                                Spacer()
+//                                HStack{
+//                                Button(action:{
+//                                    if filterItems[index].quantity > 0 {
+//                                        filterItems[index].quantity -= 1
+//                                    }
+//                                    let ProId = AllPrvprod[index].ProID
+//                                    if let jsonData = Allproddata.data(using: .utf8){
+//                                        do{
+//                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+//                                                print(jsonArray)
+//                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+//
+//                                                if !itemsWithTypID3.isEmpty {
+//                                                    for item in itemsWithTypID3 {
+//                                                        let Qty = String(filterItems[index].quantity)
+//                                                        minusQty(sQty: Qty, SelectProd: item)
+//
+//                                                    }
+//                                                } else {
+//                                                    print("No data with TypID")
+//                                                }
+//
+//                                            }
+//                                        } catch{
+//                                            print("Data is error\(error)")
+//                                        }
+//                                    }
+//                                }){
+//                                    Text("-")
+//                                        .font(.headline)
+//                                        .fontWeight(.bold)
+//                                }
+//                                .buttonStyle(PlainButtonStyle())
+//                                    Text("\(filterItems[index].quantity)")
+//                                        .fontWeight(.bold)
+//                                        .foregroundColor(Color.black)
+//                                    Button(action:{
+//                                        ilterItems[index].quantity += 1
+//                                        print(AllPrvprod[index].ProID)
+//                                        let ProId = AllPrvprod[index].ProID
+//                                        if let jsonData = Allproddata.data(using: .utf8){
+//                                            do{
+//                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+//                                                    print(jsonArray)
+//                                                    let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+//
+//                                                    if !itemsWithTypID3.isEmpty {
+//                                                        for item in itemsWithTypID3 {
+//                                                            let Qty = String(filterItems[index].quantity)
+//                                                            addQty(sQty: Qty, SelectProd: item)
+//
+//                                                        }
+//                                                    } else {
+//                                                        print("No data with TypID")
+//                                                    }
+//
+//                                                }
+//                                            } catch{
+//                                                print("Data is error\(error)")
+//                                            }
+//                                        }
+//                                    }){
+//                                        Text("+")
+//                                            .font(.headline)
+//                                            .fontWeight(.bold)
+//                                    }
+//                                    .buttonStyle(PlainButtonStyle())
+//                            }
+//                                .padding(.vertical, 4)
+//                                .padding(.horizontal, 15)
+//                                .background(Color.gray.opacity(0.2))
+//                                .cornerRadius(10)
+//                                .overlay(
+//                                    RoundedRectangle(cornerRadius: 10)
+//                                        .stroke(Color.gray, lineWidth: 2)
+//                                )
+//                                .foregroundColor(Color.blue)
+//                        }
+//                            .padding(.leading,10)
+//                            .padding(.trailing,10)
+//                            .padding(.top,-5)
+//                            Divider()
+//                                .padding(5)
+//
+//                            HStack{
+//                                Text("Total")
+//                                    .font(.system(size: 14))
+//                                    .fontWeight(.semibold)
+//                                Spacer()
+//                                Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
+//                                    .font(.system(size: 14))
+//                                    .fontWeight(.semibold)
+//                            }
+//                            .padding(.leading,10)
+//                            .padding(.trailing,10)
+//                        }
+//
+//                    }
+//                  Rectangle()
+//                        .frame(height: 1)
+//                        .foregroundColor(.gray)
+//
+//
+//                }
+//            }
+//        }
+//    }
+//}
