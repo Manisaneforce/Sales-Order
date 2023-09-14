@@ -29,6 +29,7 @@
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
+		38850A9E2AB3435D005061EE /* loader.json in Resources */ = {isa = PBXBuildFile; fileRef = 38850A9D2AB3435D005061EE /* loader.json */; };
 		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
@@ -93,6 +94,7 @@
 		386AB3152AB1D3EA00FF49D2 /* My Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "My Profile.swift"; sourceTree = "<group>"; };
 		386AB3172AB1D49B00FF49D2 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
+		38850A9D2AB3435D005061EE /* loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = loader.json; path = ../../../../Downloads/loader.json; sourceTree = "<group>"; };
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */,
 				3801AE292A8E551A0069B136 /* Phonering.json */,
 				384CB7052A9A205C009439E5 /* mobile_number.json */,
+				38850A9D2AB3435D005061EE /* loader.json */,
 				38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */,
 			);
 			name = Lottie;
@@ -399,6 +402,7 @@
 				384CB6FB2A98A905009439E5 /* order Submite.json in Resources */,
 				3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */,
 				384CB7062A9A205C009439E5 /* mobile_number.json in Resources */,
+				38850A9E2AB3435D005061EE /* loader.json in Resources */,
 				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
 				38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */,

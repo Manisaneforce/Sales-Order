@@ -8,11 +8,14 @@
 
 
 import SwiftUI
+import Combine
+import CoreLocation
 
 struct HomePage: View {
     @State private var currentDate = ""
     @State private var showAlert = false
     @State private var navigateToContentView = false
+  
     var body: some View {
         NavigationView {
            // GeometryReader { geometry in
@@ -83,6 +86,7 @@ struct HomePage: View {
                     
                     
                     .onAppear() {
+                        GetCurrentLoction()
                         updateDate()
                     }
                     ZStack{
@@ -99,6 +103,9 @@ struct HomePage: View {
                             }
                             .padding(.leading,40)
                             .padding(7)
+                            .onAppear{
+                              
+                            }
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
                             NavigationLink(destination: Order()){
                                 DashboardItem(imageName: "package", title: "Order")
@@ -150,6 +157,33 @@ struct HomePage: View {
         Timer.scheduledTimer(withTimeInterval: 86400, repeats: true) { _ in
             currentDate = formatter.string(from: Date())
         }
+    }
+    func GetCurrentLoction(){
+        LocationService.sharedInstance.getNewLocation(location: { location in
+            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+            print(sLocation)
+            lazy var geocoder = CLGeocoder()
+            var sAddress: String = ""
+//            geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+//                if(placemarks != nil){
+//                    if(placemarks!.count>0){
+//                        let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
+//                        for i in 0...jAddress.count-1 {
+//                            print(jAddress[i])
+//                            if i==0{
+//                                sAddress = String(format: "%@", jAddress[i])
+//                            }else{
+//                                sAddress = String(format: "%@, %@", sAddress,jAddress[i])
+//                            }
+//                        }
+//                    }
+//                }
+//
+//            }
+        }, error:{ errMsg in
+            print (errMsg)
+            //self.LoadingDismiss()
+        })
     }
 }
 
