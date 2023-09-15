@@ -47,7 +47,8 @@ var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
 var ShpingAddress = ""
-var BillingAddress = ""
+var BillingAddress = "Borivali"
+var isChecked = false
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 struct Order: View {
     @State private var clickeindex:Int = 0
@@ -86,7 +87,7 @@ struct Order: View {
     @State private var ShowTost = ""
     @State private var navigateToHomepage = false
     @State private var filterItems: [TotAmt] = []
-    @State private var isChecked = false
+    //@State private var isChecked = false
     @State private var SameAddrssmark = true
     @State private var TotalQty = [String]()
     @State private var TotalAmt = [String]()
@@ -177,6 +178,7 @@ struct Order: View {
                                         ADDaddress.toggle()
                                         SelMod = "BA"
                                       
+                                      
                                     }
                                   
                             
@@ -191,6 +193,7 @@ struct Order: View {
                                     if isChecked == true{
                                         SameAddrssmark = false
                                     }else{
+                                        ShpingAddress = BillingAddress
                                         SameAddrssmark = true
                                     }
                                 }
@@ -211,7 +214,11 @@ struct Order: View {
                                     .onTapGesture {
                                         SelMod = "SA"
                                         ADDaddress.toggle()
-                                        
+                                        if isChecked == true{
+                                        }else{
+                                            ShpingAddress = BillingAddress
+                                            
+                                        }
                                     }
                             
                         }
@@ -338,6 +345,7 @@ struct Order: View {
                         print(json)
                     }
                     TexQty()
+                    ShpingAddress = BillingAddress
                     
                 }
                 
@@ -355,7 +363,7 @@ struct Order: View {
                             } else {
                                 Text("Image loading...")
                                     .font(.system(size: 14))
-                                    .onAppear{ loadImage(at: index) }
+                                   // .onAppear{ loadImage(at: index) }
                             }
                             
                             VStack(alignment: .leading, spacing: 5) {
@@ -810,16 +818,23 @@ struct Order: View {
     private func loadImage(at index : Int) {
         print(index)
         print(Allprod[index].ImgURL)
-        print(Allprod)
-        if let imageUrl = URL(string: Allprod[index].ImgURL) {
-               URLSession.shared.dataTask(with: imageUrl) { data, response, error in
-                   if let data = data, let uiImage = UIImage(data: data) {
-                       DispatchQueue.main.async {
-                           self.uiImage = uiImage
-                       }
-                   }
-               }.resume()
-           }
+        for item in 0..<Allprod.count{
+            let getdata = Allprod[item].ImgURL
+            print(getdata)
+      
+        
+        if let imageUrl = URL(string: getdata) {
+            URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+                if let data = data, let uiImage = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.uiImage = uiImage
+                        print(uiImage)
+                    }
+                }
+            }.resume()
+        }
+    }
+        
        }
     private func OrderprodCate(at index: Int){
         SelectId = prodTypes3[index]
@@ -906,6 +921,7 @@ struct Order: View {
                     print(Allprod)
                     TexQty()
                     GetingListAddress()
+                    loadImage(at: 0)
                 }
             } catch{
                 print("Data is error\(error)")
@@ -1036,9 +1052,16 @@ struct Address:View{
                                     if SelMod == "SA"{
                                         ShpingAddress = GetingAddress[index].address
                                         print(ShpingAddress)
+                                        if isChecked == true{
+                                            
+                                        }else{
+                                            ShpingAddress = BillingAddress
+                                           
+                                        }
                                     }
                                     if SelMod == "BA"{
                                         BillingAddress = GetingAddress[index].address
+                                        
                                     }
                                     ADDaddress = false
                                     
@@ -1761,6 +1784,7 @@ struct SelPrvOrder: View {
     @State private var GetLoction = false
     @State private var OrderSubStatus = ""
     @State private var isActive: Bool = false
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     init() {
         var items: [FilterItem] = []
@@ -2078,14 +2102,14 @@ struct SelPrvOrder: View {
                                     Spacer()
                                     
                                 }
-                                HStack(spacing: 200){
+                                HStack{
                                     
                                     Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
                                         .font(.system(size: 15))
                                         .fontWeight(.heavy)
                                         .foregroundColor(.white)
-                                        .offset(x:30)
-                                    
+                                        .padding(.leading,10)
+                                    Spacer()
                                     
                                     
                                     Text("Submite")
@@ -2093,10 +2117,14 @@ struct SelPrvOrder: View {
                                         .foregroundColor(.white)
                                         .font(.system(size: 17))
                                         .multilineTextAlignment(.center)
-                                        .offset(x:-40,y:-10)
+                                        .padding(.trailing,20)
+                                        //.padding(.bottom,20)
+                                        
                                     
                                     
                                 }
+                                .padding(.leading,10)
+                                .padding(.trailing,10)
                                 Spacer()
                             }
                         }
@@ -2146,7 +2174,7 @@ struct SelPrvOrder: View {
                             .font(.headline)
                             .fontWeight(.bold)
                             .multilineTextAlignment(.center)
-                        Text("")
+                            .padding(10)
                     }
                     .background(Color.white)
                     .cornerRadius(10)
@@ -2451,7 +2479,7 @@ func OrderSubmit(lat:String,log:String) {
     }
     updateDateAndTime()
     
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"Borivali\",\"shippingAddress\":\"Borivali\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
     

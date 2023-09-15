@@ -28,6 +28,7 @@ struct MyOrdersScreen: View {
     @State private var CurrentData = ""
     @State private var NaviOrdeDetNiew = false
     @State private var OrderId:String = ""
+    @State private var Orderdate:String = ""
     @State private var Jiomoneypage = false
     @State private var navigateToHomepage = false
     @State private var isPopoverVisible = false
@@ -229,12 +230,14 @@ struct MyOrdersScreen: View {
                     .onTapGesture{
                         print(index)
                       OrderId = OrderPaymentDetails[index].OrderNo
+                      Orderdate =   OrderPaymentDetails[index].Order_Date
+                        
                         print(OrderId)
                         NaviOrdeDetNiew = true
                     }
                 }
                 .listStyle(PlainListStyle())
-                NavigationLink(destination: OrderDetView(OrderId:$OrderId), isActive: $NaviOrdeDetNiew) {
+                NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: $Orderdate), isActive: $NaviOrdeDetNiew) {
                                 EmptyView()
                             }
                 NavigationLink(destination: Jiomoney(), isActive: $Jiomoneypage) {
@@ -546,6 +549,7 @@ struct listProdDet: Any{
 struct OrderDetView:View{
     @State private var phase = 0.0
     @Binding var OrderId: String
+    @Binding var Orderdate: String
     @State private var SelectDet:[listProdDet]=[]
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -683,7 +687,7 @@ struct OrderDetView:View{
                         VStack{
                             VStack(spacing:-15){
                                 HStack{
-                                    Text("MUMBAI01-2023-2024-SO-95")
+                                    Text(OrderId)
                                         .font(.system(size: 15))
                                         .fontWeight(.bold)
                                     Spacer()
@@ -695,7 +699,7 @@ struct OrderDetView:View{
                                 }
                                 .padding(10)
                                 HStack{
-                                    Text("05/09/2023 10:13:38")
+                                    Text(Orderdate)
                                     Spacer()
                                 }
                                 .padding(10)
