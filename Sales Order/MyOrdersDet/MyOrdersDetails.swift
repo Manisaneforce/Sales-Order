@@ -24,6 +24,7 @@ struct MyOrdersDetails: View {
     @State private var Filterdate = false
     @State private var invoice:[getInvoice]=[]
     @State private var navigateToHomepage = false
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let currentDate = Date()
     let calendar = Calendar.current
@@ -40,7 +41,7 @@ struct MyOrdersDetails: View {
                         HStack {
                             
                             Button(action: {
-                                navigateToHomepage = true
+                                self.presentationMode.wrappedValue.dismiss()
                             })
                             {
                                 Image("backsmall")

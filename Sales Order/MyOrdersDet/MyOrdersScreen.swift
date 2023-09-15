@@ -34,6 +34,7 @@ struct MyOrdersScreen: View {
     @State private var SelMode: String = ""
     @State private var FromDate = ""
     @State private var ToDate = ""
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
     
     let currentDate = Date()
@@ -52,7 +53,7 @@ struct MyOrdersScreen: View {
                     HStack {
                         
                         Button(action: {
-                            navigateToHomepage = true
+                            self.presentationMode.wrappedValue.dismiss()
                         })
                         {
                             Image("backsmall")
@@ -546,6 +547,7 @@ struct OrderDetView:View{
     @State private var phase = 0.0
     @Binding var OrderId: String
     @State private var SelectDet:[listProdDet]=[]
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View{
         NavigationView{
@@ -561,7 +563,7 @@ struct OrderDetView:View{
                     HStack {
                         
                         Button(action: {
-                            
+                            self.presentationMode.wrappedValue.dismiss()
                         })
                         {
                             Image("backsmall")
