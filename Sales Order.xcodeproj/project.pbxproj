@@ -14,6 +14,10 @@
 		3801AE262A8C9A840069B136 /* Order.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE252A8C9A840069B136 /* Order.json */; };
 		3801AE282A8E17C80069B136 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE272A8E17C80069B136 /* APIClient.swift */; };
 		3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE292A8E551A0069B136 /* Phonering.json */; };
+		383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */; };
+		3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3838004B2AB9AE320058F546 /* GoogleService-Info.plist */; };
+		3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3838004E2AB9AFB30058F546 /* FirebaseAnalytics */; };
+		383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */; };
 		38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
 		384CB6F92A98A261009439E5 /* LoaderMsg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F82A98A261009439E5 /* LoaderMsg.swift */; };
@@ -80,6 +84,8 @@
 		3801AE252A8C9A840069B136 /* Order.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Order.json; path = ../../../UI/Order.json; sourceTree = "<group>"; };
 		3801AE272A8E17C80069B136 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		3801AE292A8E551A0069B136 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Phonering.json; path = ../../../UI/Phonering.json; sourceTree = "<group>"; };
+		383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Cloud Messaging.swift"; sourceTree = "<group>"; };
+		3838004B2AB9AE320058F546 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterFile.swift; sourceTree = "<group>"; };
 		384CB6F42A9608D4009439E5 /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
 		384CB6F82A98A261009439E5 /* LoaderMsg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderMsg.swift; sourceTree = "<group>"; };
@@ -129,7 +135,9 @@
 			files = (
 				387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */,
 				387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */,
+				3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */,
 				38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */,
+				383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +193,7 @@
 				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
 				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
+				383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -250,6 +259,7 @@
 				38EEBC5C2A7A255F00AEF032 /* ContentView.swift */,
 				38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */,
 				38EEBC5E2A7A256000AEF032 /* Assets.xcassets */,
+				3838004B2AB9AE320058F546 /* GoogleService-Info.plist */,
 				38EEBC602A7A256000AEF032 /* Preview Content */,
 				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
 				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
@@ -304,6 +314,8 @@
 				387E0E7A2A84F7C000FEACBA /* Alamofire */,
 				387E0E7D2A85F5CF00FEACBA /* SimpleToast */,
 				38A3AEC92A8A1EFF00A4C826 /* Lottie */,
+				3838004E2AB9AFB30058F546 /* FirebaseAnalytics */,
+				383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */,
 			);
 			productName = "Sales Order";
 			productReference = 38EEBC572A7A255F00AEF032 /* Sales Order.app */;
@@ -378,10 +390,10 @@
 			);
 			mainGroup = 38EEBC4E2A7A255F00AEF032;
 			packageReferences = (
-				38CFA2772A7BA49400FE5F51 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */,
 				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
 				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
 			projectDirPath = "";
@@ -412,6 +424,7 @@
 				38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */,
 				3801AE242A8C90970069B136 /* Msg.json in Resources */,
 				3801AE262A8C9A840069B136 /* Order.json in Resources */,
+				3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +476,7 @@
 				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
 				384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */,
 				38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */,
+				383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +823,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -833,17 +855,19 @@
 				minimumVersion = 3.1.6;
 			};
 		};
-		38CFA2772A7BA49400FE5F51 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3838004E2AB9AFB30058F546 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
 		387E0E7A2A84F7C000FEACBA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */;

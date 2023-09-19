@@ -936,6 +936,7 @@ struct Order: View {
         var Amount="0"
         TotalAmt.removeAll()
         SelectUOMN.removeAll()
+        TotalQty.removeAll()
         for item in FilterProduct{
            print(item)
             let id=String(format: "%@", item["ERP_Code"] as! CVarArg)
@@ -967,6 +968,17 @@ struct Order: View {
                 TotalQty.append(ZerQty)
             }
         }
+//        if filterItems.isEmpty{
+//            print("No data")
+//        }else{
+//            print("Data In")
+//            for items in filterItems{
+//              print(items)
+//                let Qty = String(items.Amt)
+//                TotalQty.append(Qty)
+//
+//            }
+//        }
         print(TotalQty)
         print(FilterProduct)
         print(SelectUOMN)
@@ -975,7 +987,7 @@ struct Order: View {
         items.removeAll()
         for index in 0..<FilterProduct.count {
             print(index)
-            print(FilterProduct)
+            print(filterItems)
             items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index] ))
             print(items)
         }

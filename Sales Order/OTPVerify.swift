@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import Alamofire
 
 @available(iOS 15.0, *)
 struct OTPVerify: View {
@@ -154,6 +155,41 @@ struct OTPVerify: View {
                     if item == otpdata as! Int {
                         print(item)
                         NavigteBoll = true
+                   // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
+                        let axn = "get/login"
+                        let apiKey: String = "\(axn)"
+                        let aFormData: [String: Any] = [
+                            "mobile":"9923125671",
+                            "deviceid":"deviceToken"
+                        ]
+                        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+                        let jsonString = String(data: jsonData!, encoding: .utf8)!
+                        let params: Parameters = [
+                            "data": jsonString
+                        ]
+                       print(params)
+                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+                            switch response.result {
+                            case .success(let value):
+                                if let json = value as? [String:AnyObject] {
+                                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                                        return
+                                    }
+                                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                        print("Error: Could print JSON in String")
+                                        return
+                                    }
+                                    
+                                    print(prettyPrintedJson)
+                                   
+                                   
+                                }
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                        
                     }else{
                         toststring = "Pls Enter Correct OTP"
                         showToast = true
