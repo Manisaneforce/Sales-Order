@@ -15,7 +15,7 @@ struct PaymentScreen: View {
     @State private var ToDate = Date()
     @State private var CalenderTit = ""
     @State private var navigateToHomepage = false
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         NavigationView{
             ZStack{
@@ -27,7 +27,17 @@ struct PaymentScreen: View {
                         .foregroundColor(ColorData.shared.HeaderColor)
                         .frame(height: 80)
                         HStack {
-                            
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            })
+                            {
+                                Image("backsmall")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.white)
+                                    .padding(.top,50)
+                                    .frame(width: 50)
+                                
+                            }
                             Text("PAYMENT LEDGER")
                                 .font(.system(size: 18))
                                 .fontWeight(.bold)
@@ -183,14 +193,7 @@ struct PaymentScreen: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button(action: {
-        self.presentationMode.wrappedValue.dismiss()
-        }) {
-            Image(systemName: "arrow.left")
-                .foregroundColor(.white)
-                .padding(.bottom,8)
-        })
+        .navigationBarHidden(true)
     
     }
     

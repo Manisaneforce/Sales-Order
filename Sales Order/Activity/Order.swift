@@ -703,7 +703,9 @@ struct Order: View {
                                 } else {
                                     print("UOMList not found or not in the expected format.")
                                 }
+                                print(filterItems)
                                 TexQty()
+                                print(items)
           
                             }) {
                                 
@@ -973,6 +975,7 @@ struct Order: View {
         items.removeAll()
         for index in 0..<FilterProduct.count {
             print(index)
+            print(FilterProduct)
             items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index] ))
             print(items)
         }

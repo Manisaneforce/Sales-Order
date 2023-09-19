@@ -204,6 +204,8 @@ struct MyOrdersScreen: View {
                                 .font(.system(size: 9))
                                 .foregroundColor(Color.red)
                             Spacer()
+                            let orderDetail = OrderPaymentDetails[index]
+                            if orderDetail.isPaid.isEmpty {
                             Button(action:{
                                 
                             }){
@@ -214,7 +216,7 @@ struct MyOrdersScreen: View {
                                     Text("Pay")
                                         .font(.system(size: 15))
                                         .foregroundColor(Color.white)
-                                     
+                                    
                                     
                                 }
                                 .frame(width: 50,height: 12)
@@ -224,6 +226,7 @@ struct MyOrdersScreen: View {
                                 }
                             }
                             .buttonStyle(PlainButtonStyle())
+                        }
                         }
                       
                     }
@@ -482,63 +485,6 @@ struct MyOrdersScreen_Previews: PreviewProvider {
     }
 }
 
-
-//struct CalendarView: View {
-//    @Binding var selectedDate: Date
-//    @Binding var isCalendarVisible: Bool
-//    @State private var temporarySelectedDate: Date
-//
-//    init(selectedDate: Binding<Date>, isCalendarVisible: Binding<Bool>) {
-//        _selectedDate = selectedDate
-//        _isCalendarVisible = isCalendarVisible
-//        _temporarySelectedDate = State(initialValue: selectedDate.wrappedValue)
-//    }
-//
-//    var body: some View {
-//        VStack {
-//            DatePicker("Select a date", selection: $temporarySelectedDate, displayedComponents: .date)
-//                .datePickerStyle(.graphical)
-//                .padding()
-//                .onAppear {
-//                    let dateFormatter = DateFormatter()
-//                    dateFormatter.dateFormat = "yyyy-MM-dd"
-//                    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//                    dateFormatter.timeZone = TimeZone.autoupdatingCurrent
-//                    temporarySelectedDate = dateFormatter.date(from: dateFormatter.string(from: selectedDate)) ?? selectedDate
-//                }
-//
-//            Button("Done") {
-//                selectedDate = temporarySelectedDate
-//                isCalendarVisible = false // Close the calendar when "Done" is tapped
-//                printSelectedDate(selectedDate)
-//            }
-//            .padding()
-//
-//            Text("Selected Date: \(formattedDate(date: selectedDate))")
-//                .font(.headline)
-//                .foregroundColor(.blue)
-//        }
-//        .onAppear{
-//            print(selectedDate)
-//        }
-//    }
-//
-//    func formattedDate(date: Date) -> String {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        return dateFormatter.string(from: date)
-//    }
-//
-//    func printSelectedDate(_ date: Date) {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        let formattedDate = dateFormatter.string(from: date)
-//        print("Selected Date: \(formattedDate)")
-//        selecteddate = String(formattedDate)
-//        print(selecteddate)
-//
-//    }
-//}
 struct listProdDet: Any{
     let Product_Name:String
     let Unit_Name : String
