@@ -424,5 +424,86 @@ struct MyOrdersDetails_Previews: PreviewProvider {
         MyOrdersDetails()
     }
 }
+ 
+struct TapBar: View {
+    @State private var currentTab: Int = 0
+    
+    var body: some View {
+        ZStack(alignment:.top){
+        TabView(selection: $currentTab) {
+            ORDER()
+                .tag(0)
+            INVOICE()
+                .tag(1)
+            ORDERVSINVOICE()
+                .tag(2)
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
+            TabBarView(currentTab: $currentTab)
+    }
+    }
+}
+struct TabBarView: View {
+    @Binding var currentTab: Int
+    @Namespace var namespace
+    var tabBarOptions: [String] = ["ORDER", "INVOICE", "ORDERVSINVOICE"]
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            ForEach(Array(zip(tabBarOptions.indices, tabBarOptions)), id: \.0) { index, name in
+                TabBarItem(currentTab: self.$currentTab, namespace: namespace.self, TabBarItemName: name, tab: index)
+            }
+        }
+//        .background(Color.gray)
+        //.frame(height: 80)
+        //.edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct TabBarItem: View {
+    @Binding var currentTab: Int
+    let namespace:Namespace.ID
+   // @Namespace var namespace
+    var TabBarItemName: String
+    var tab: Int
+    
+    var body: some View {
+        Button(action: {
+            currentTab = tab
+        }) {
+            VStack {
+                Spacer()
+                Text(TabBarItemName)
+                if currentTab == tab{
+                    Color.black
+                        .frame(height: 2)
+                        .matchedGeometryEffect(id: "underLine", in: namespace,
+                                               properties: .frame   )
+                }else{
+                    Color.clear.frame(height: 2)
+                }
+            }
+            .animation(.spring(),value: currentTab)
+        }
+        .buttonStyle(.plain)
+    }
+}
 
 
+struct ORDER:View{
+    var body: some View{
+        Text("ORDER")
+    }
+}
+
+struct INVOICE:View{
+    var body: some View{
+        Text("INVOICE")
+    }
+}
+
+struct ORDERVSINVOICE:View{
+    var body: some View{
+        Text("ORDER VS INVOICE")
+    }
+}

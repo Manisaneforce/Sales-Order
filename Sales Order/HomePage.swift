@@ -125,7 +125,7 @@ struct HomePage: View {
                             NavigationLink(destination:My_Profile()){
                                 DashboardItem(imageName: "resume", title: "My Profile")
                             }
-                            NavigationLink(destination:Feedback()){
+                            NavigationLink(destination:TapBar()){
                                 DashboardItem(imageName: "feedback", title: "Feedback")
                             }
                         }
