@@ -12,20 +12,23 @@ import Alamofire
 @available(iOS 15.0, *)
 struct OTPVerify: View {
    
-    @State private var phoneNumber: String = ""
-    @State private var phoneNumber2: String = ""
+//    @State private var phoneNumber: String = ""
+//    @State private var phoneNumber2: String = ""
     @State private var storedValue: String = ""
     @FocusState private var fieldFocus: Int?
     @State private var oldValue = ""
     @State private var showToast = false
     @State private var toststring = ""
     @State private var NavigteBoll = false
+    @State private var NotRegisterSc = false
+    @State private var Msg = ""
     @State private var showToasts = false
     @State private var timer: Timer?
     @State private var remainingTime = 5
     @State private var showResendButton = false
     
     @Binding var jsondata: Outputdata
+    //@Binding var phoneNumber:String
     let numberOffFields: Int
     @State var enterValue: [String]
     @State private var Value = ""
@@ -154,20 +157,21 @@ struct OTPVerify: View {
                     
                     if item == otpdata as! Int {
                         print(item)
-                        NavigteBoll = true
+                        
                    // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
                         let axn = "get/login"
                         let apiKey: String = "\(axn)"
-                        let aFormData: [String: Any] = [
-                            "mobile":"9923125671",
+                        let aFormData: [[String: Any]] = [[
+                            "mobile":"\(phoneNumber2)",
                             "deviceid":"deviceToken"
-                        ]
+                        ]]
                         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
                         let jsonString = String(data: jsonData!, encoding: .utf8)!
                         let params: Parameters = [
                             "data": jsonString
                         ]
                        print(params)
+                        print(phoneNumber2)
                         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
                             switch response.result {
                             case .success(let value):
@@ -182,6 +186,29 @@ struct OTPVerify: View {
                                     }
                                     
                                     print(prettyPrintedJson)
+                                    
+                                    if let jsonData = prettyPrintedJson.data(using: .utf8){
+                                        do{
+                                            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                                
+                                                
+                                                if let results = jsonObject["msg"] as? String {
+                                                    NotRegisterSc = true
+                                                    print(results)
+                                                    Msg = results
+                                                } else {
+                                                    
+                                                    let result = jsonObject["result"] as? [[String:Any]]
+                                                    print(result)
+                                                    NavigteBoll = true
+                                                }
+                                            }
+                                        } catch{
+                                            print("Error Data")
+                                        }
+                                    }
+                                   
+                                    
                                    
                                    
                                 }
@@ -244,6 +271,11 @@ struct OTPVerify: View {
                         EmptyView()
                     }
                 }
+                NavigationLink(
+                    destination: NotRegister(Msg: $Msg),isActive: $NotRegisterSc
+                ) {
+                    EmptyView()
+                }
                   
 //                .toast(isPresented: $showToast, message: "\(toststring)")
 //                                .padding(.top,-100)
@@ -271,12 +303,18 @@ struct OTPVerify: View {
 struct OTPVerify_Previews: PreviewProvider {
     static var previews: some View {
         OTPVerify(numberOffFields: 6, jsondata: .constant(Outputdata()))
-        NotRegister()
+      //  NotRegister()
     }
 }
 struct NotRegister: View {
+    @Binding var Msg:String
     var body: some View{
         LottieUIView(filename: "something_went_wrong").frame(width: 200,height: 200)
+        
+        Text(Msg)
+            .font(.system(size: 15))
+            .fontWeight(.semibold)
+            .padding(15)
        
         
     }

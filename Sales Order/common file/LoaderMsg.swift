@@ -14,7 +14,7 @@ struct LoaderMsg: View {
             Button(action:{
                 self.show.toggle()
             }) {
-                Text("Submite")
+                Text("Submit")
             }
             
             if self.show{
@@ -41,7 +41,7 @@ struct Loader : View {
         VStack{
           
             LottieUIView(filename: "order Submite").frame(width: 150,height: 150)
-            Text("Order Submite...").padding(.top)
+            Text("Order Submit...").padding(.top)
         }
         .padding(20)
         .background(Color.white)

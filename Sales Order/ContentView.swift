@@ -12,9 +12,10 @@ import Foundation
 struct Outputdata {
     var data: [String: AnyObject] = [:]
 }
+var phoneNumber2: String = ""
 struct ContentView: View {
     @State private var phoneNumber: String = ""
-    @State private var phoneNumber2: String = ""
+    //@State private var phoneNumber2: String = ""
     @State private var storedValue: String = ""
     @State private var isTextFieldHidden: Bool = false
     @State private var isTextFieldHidden2: Bool = true
@@ -100,6 +101,7 @@ struct ContentView: View {
                             // Limit the phone number to 10 characters
                             if newValue.count > 10 {
                                 phoneNumber = String(newValue.prefix(10))
+                               
                             }
                             // Remove non-numeric characters
                             phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
@@ -118,6 +120,8 @@ struct ContentView: View {
                         
                         let axn = "send/sms"
                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
+                        phoneNumber2 = phoneNumber
+                        print(phoneNumber2)
                         
                         AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
                             .validate(statusCode: 200 ..< 299)

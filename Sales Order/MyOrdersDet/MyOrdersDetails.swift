@@ -407,7 +407,7 @@ struct MyOrdersDetails: View {
                     
                     print("______________________prodGroup_______________")
                    
-                }
+                 }
             case .failure(let error):
                 print(error)
             }

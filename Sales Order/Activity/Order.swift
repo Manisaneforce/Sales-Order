@@ -1330,7 +1330,7 @@ struct Address:View{
                                 .frame(height: 50)
                             VStack{
                                 
-                                Text("Submite")
+                                Text("Submit")
                                     .foregroundColor(Color.white)
                                 
                             }
@@ -2127,7 +2127,7 @@ struct SelPrvOrder: View {
                                     Spacer()
                                     
                                     
-                                    Text("Submite")
+                                    Text("Submit")
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
                                         .font(.system(size: 17))
