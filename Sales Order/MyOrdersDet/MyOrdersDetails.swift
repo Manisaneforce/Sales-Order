@@ -13,7 +13,9 @@ struct getInvoice: Any{
     let Date:String
     let Order_Value:String
     let Product_Name:String
+    let Quantity:String
 }
+//var invoice:[getInvoice]=[]
 struct MyOrdersDetails: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
@@ -24,11 +26,15 @@ struct MyOrdersDetails: View {
     @State private var Filterdate = false
     @State private var invoice:[getInvoice]=[]
     @State private var navigateToHomepage = false
+    @State private var currentTab: Int = 0
+    @State private var HistoryInf:Bool = true
+    @State private var OrderDetialsView:Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let currentDate = Date()
     let calendar = Calendar.current
     var body: some View {
+        if HistoryInf{
         NavigationView{
             ZStack{
                 Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
@@ -62,8 +68,8 @@ struct MyOrdersDetails: View {
                             Spacer()
                         }
                         NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
-                                        EmptyView()
-                                    }
+                            EmptyView()
+                        }
                     }
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
@@ -136,83 +142,10 @@ struct MyOrdersDetails: View {
                     ZStack{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
-                        HStack(spacing:50){
-                            Text("ORDER")
-                                .foregroundColor(.white)
-                                .font(.system(size: 15))
-                            Text("INVOICE")
-                                .foregroundColor(.white)
-                                .font(.system(size: 15))
-                            Text("ORDER VS INVOICE")
-                                .foregroundColor(.white)
-                                .font(.system(size: 13))
-                        }
-                        .padding(10)
+                        TabBarView(currentTab: $currentTab)
                     }
                     .frame(height:40)
-                    ScrollView{
-                        ForEach(0..<invoice.count, id: \.self) { index in
-                        VStack{
-                            HStack{
-                                Text("Relivet Animal Health")
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                Spacer()
-                                Text("Pending")
-                                    .font(.system(size: 14))
-                                Image(systemName:"ellipsis.circle.fill")
-                                    .resizable()
-                                    .frame(width: 12,height: 12)
-                                    .foregroundColor(.red)
-                                
-                                
-                            }
-                            .padding(.leading,10)
-                            .padding(.trailing,10)
-                            VStack(spacing:6){
-                                HStack{
-                                    Text(invoice[index].OrderID)
-                                        .font(.system(size: 14))
-                                    Spacer()
-                                }
-                                .padding(.leading,10 )
-                                HStack{
-                                    Image(systemName: "calendar")
-                                        .resizable()
-                                        .frame(width: 10,height: 10)
-                                        .foregroundColor(.green)
-                                    Text(invoice[index].Date)
-                                        .font(.system(size: 13))
-                                    Spacer()
-                                }
-                                .padding(.leading,10)
-                            }
-                            HStack{
-                                Text("₹ \(invoice[index].Order_Value)")
-                                    .font(.system(size: 14))
-                                Spacer()
-                            }
-                            .padding(.leading,10)
-                            
-                            Rectangle()
-                                .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
-                                .foregroundColor(.gray)
-                                .frame(height: 2)
-                                .padding(10)
-                            HStack{
-                                Text(invoice[index].Product_Name)
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.gray)
-                                Spacer()
-                            }
-                                .padding(10)
-                            Rectangle()
-                                .frame(height: 1)
-                                .foregroundColor(.black)
-                                .padding(10)
-                        }
-                    }
-                }
+                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice)
                     Spacer()
                 }
                 .popover(isPresented: $isPopoverVisible) {
@@ -276,14 +209,14 @@ struct MyOrdersDetails: View {
                             
                             Text("Last 7 days")
                                 .onTapGesture{
-                                   
+                                    
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                     orderandinvoice()
                                     
-                                  
+                                    
                                 }
-                                
+                            
                             Divider()
                             Text("Last 30 days")
                                 .onTapGesture{
@@ -314,6 +247,14 @@ struct MyOrdersDetails: View {
             }
         }
         .navigationBarHidden(true)
+    }
+        if OrderDetialsView{
+            VStack{
+                AddSomeViewe(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView)
+            }
+        }
+        
+             
     }
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
@@ -379,10 +320,14 @@ struct MyOrdersDetails: View {
                                         let Order_Value = itemsdata["Order_Value"] as? Double
                                         let Date = itemsdata["Date"] as? String
                                         var OrderDetails = [String]()
+                                        var ProQty = [String]()
                                         if let Details = itemsdata["Details"] as? [[String: Any]]{
                                             for Proname in Details{
                                                 let Product_Name = Proname["Product_Name"] as? String
+                                                let Quantity = String((Proname["Quantity"] as? Int)!)
                                                 OrderDetails.append(Product_Name!)
+                                                ProQty.append(Quantity)
+                                                
                                             }
                                             
                                             
@@ -390,11 +335,15 @@ struct MyOrdersDetails: View {
                                             print("No data")
                                         }
                                         print(OrderDetails)
+                                        print(ProQty)
                                         let productNames = OrderDetails.joined(separator: ", ")
-                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value!), Product_Name: productNames))
+                                        let qty =  ProQty.joined(separator: ",")
+                                        print(qty)
+                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value!), Product_Name: productNames, Quantity: qty))
                                         
                                     }
                                     print(invoice)
+
                                     
                                 } else {
                                     print("Error: Couldn't extract HTML")
@@ -426,34 +375,37 @@ struct MyOrdersDetails_Previews: PreviewProvider {
 }
  
 struct TapBar: View {
-    @State private var currentTab: Int = 0
-    
+    @Binding var HistoryInf:Bool
+    @Binding var OrderDetialsView:Bool
+    @Binding var currentTab: Int
+    @Binding var invoice: [getInvoice]
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
-            ORDER()
+            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView)
                 .tag(0)
             INVOICE()
                 .tag(1)
-            ORDERVSINVOICE()
+            ORDERVSINVOICE(invoice: $invoice)
                 .tag(2)
         }
         .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
-            TabBarView(currentTab: $currentTab)
     }
     }
 }
 struct TabBarView: View {
     @Binding var currentTab: Int
     @Namespace var namespace
-    var tabBarOptions: [String] = ["ORDER", "INVOICE", "ORDERVSINVOICE"]
+    var tabBarOptions: [String] = ["ORDER", "INVOICE", "ORDER VS INVOICE"]
     
     var body: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 5) {
             ForEach(Array(zip(tabBarOptions.indices, tabBarOptions)), id: \.0) { index, name in
                 TabBarItem(currentTab: self.$currentTab, namespace: namespace.self, TabBarItemName: name, tab: index)
             }
+            
         }
+        .padding(.trailing,20)
 //        .background(Color.gray)
         //.frame(height: 80)
         //.edgesIgnoringSafeArea(.all)
@@ -474,8 +426,11 @@ struct TabBarItem: View {
             VStack {
                 Spacer()
                 Text(TabBarItemName)
+                    .font(.system(size: 12))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
                 if currentTab == tab{
-                    Color.black
+                    Color.white
                         .frame(height: 2)
                         .matchedGeometryEffect(id: "underLine", in: namespace,
                                                properties: .frame   )
@@ -489,10 +444,121 @@ struct TabBarItem: View {
     }
 }
 
-
+struct ViOredr:Any{
+   
+    let ProName:String
+    let Qty:String
+}
 struct ORDER:View{
+    @Binding var invoice: [getInvoice]
+    @Binding var HistoryInf:Bool
+    @Binding var OrderDetialsView:Bool
+    //@State private var View:[ViOredr]=[]
+    @State private var ProName = [String]()
+    @State private var Qty = [String]()
+    
     var body: some View{
-        Text("ORDER")
+        VStack{
+                                ScrollView{
+                                    ForEach(0..<invoice.count, id: \.self) { index in
+                                    VStack{
+                                        HStack{
+                                            Text("Relivet Animal Health")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                            Text("Pending")
+                                                .font(.system(size: 14))
+                                            Image(systemName:"ellipsis.circle.fill")
+                                                .resizable()
+                                                .frame(width: 12,height: 12)
+                                                .foregroundColor(.red)
+            
+            
+                                        }
+                                        .padding(.leading,10)
+                                        .padding(.trailing,10)
+                                        VStack(spacing:6){
+                                            HStack{
+                                                Text(invoice[index].OrderID)
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                            }
+                                            .padding(.leading,10 )
+                                            HStack{
+                                                Image(systemName: "calendar")
+                                                    .resizable()
+                                                    .frame(width: 10,height: 10)
+                                                    .foregroundColor(.green)
+                                                Text(invoice[index].Date)
+                                                    .font(.system(size: 13))
+                                                Spacer()
+                                            }
+                                            .padding(.leading,10)
+                                        }
+                                        HStack{
+                                            Text("₹ \(invoice[index].Order_Value)")
+                                                .font(.system(size: 14))
+                                            Spacer()
+                                            Text("View Order")
+                                                .onTapGesture {
+                                                    
+                                                    HistoryInf.toggle()
+                                                    OrderDetialsView.toggle()
+                                                   
+                                                   
+                                                    let productNames = invoice[index].Product_Name.split(separator: ",")
+                                                    let aFormData: [String] = productNames.map { String($0) }
+                                                    let NoOfQty = invoice[index].Quantity.split(separator: ",")
+                                                    let aFormDataQty:[String] = NoOfQty.map{
+                                                        String($0)
+                                                    }
+                                                       
+                                                    
+                                                    for character in aFormData {
+                                                        let trimmedCharacter = (character as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                                                        if let trimmedCharacter = trimmedCharacter {
+                                                            print(trimmedCharacter)
+                                                            ProName.append(trimmedCharacter)
+                                                        }
+                                                    }
+                                                    for items in aFormDataQty{
+                                                        let trimmedCharacter = (items as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                                                        if let trimmedCharacter = trimmedCharacter{
+                                                            print(trimmedCharacter)
+                                                            Qty.append(trimmedCharacter)
+                                                        }
+                                                    }
+                                                    
+                                                    print(ProName.count)
+                                                    print(Qty.count)
+                                
+                                                }
+                                               
+                                        }
+                                        .padding(.leading,10)
+                                        .padding(.trailing,10)
+            
+                                        Rectangle()
+                                            .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
+                                            .foregroundColor(.gray)
+                                            .frame(height: 2)
+                                            .padding(10)
+                                        HStack{
+                                            Text(invoice[index].Product_Name)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.gray)
+                                            Spacer()
+                                        }
+                                            .padding(10)
+                                        Rectangle()
+                                            .frame(height: 1)
+                                            .foregroundColor(.black)
+                                            .padding(10)
+                }
+              }
+        }
+        }
     }
 }
 
@@ -503,7 +569,115 @@ struct INVOICE:View{
 }
 
 struct ORDERVSINVOICE:View{
+    @Binding var invoice: [getInvoice]
     var body: some View{
-        Text("ORDER VS INVOICE")
+       
+        VStack{
+                                ScrollView{
+                                    ForEach(0..<invoice.count, id: \.self) { index in
+                                    VStack{
+                                        HStack{
+                                            Text("Relivet Animal Health")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                            Text("Pending")
+                                                .font(.system(size: 14))
+                                            Image(systemName:"ellipsis.circle.fill")
+                                                .resizable()
+                                                .frame(width: 12,height: 12)
+                                                .foregroundColor(.red)
+            
+            
+                                        }
+                                        .padding(.leading,10)
+                                        .padding(.trailing,10)
+                                        VStack(spacing:6){
+                                            HStack{
+                                                Text(invoice[index].OrderID)
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                            }
+                                            .padding(.leading,10 )
+                                            HStack{
+                                                Image(systemName: "calendar")
+                                                    .resizable()
+                                                    .frame(width: 10,height: 10)
+                                                    .foregroundColor(.green)
+                                                Text(invoice[index].Date)
+                                                    .font(.system(size: 13))
+                                                Spacer()
+                                            }
+                                            .padding(.leading,10)
+                                        }
+                                        HStack{
+                                            Text("₹ \(invoice[index].Order_Value)")
+                                                .font(.system(size: 14))
+                                            Spacer()
+                                        }
+                                        .padding(.leading,10)
+            
+                                        Rectangle()
+                                            .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
+                                            .foregroundColor(.gray)
+                                            .frame(height: 2)
+                                            .padding(10)
+                                        HStack{
+                                            Text(invoice[index].Product_Name)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.gray)
+                                            Spacer()
+                                        }
+                                            .padding(10)
+                                        Rectangle()
+                                            .frame(height: 1)
+                                            .foregroundColor(.black)
+                                            .padding(10)
+                }
+              }
+        }
+        }
+        }
+        }
+
+struct AddSomeViewe:View{
+    @Binding var HistoryInf:Bool
+    @Binding var OrderDetialsView:Bool
+//    @Binding var ProName : [String]
+//    @Binding var Qty : [String]
+    var body: some View{
+        NavigationView{
+        VStack{
+            ZStack{
+                Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .frame(height: 80)
+                HStack {
+                    
+                    Text("Order Details")
+                        .font(.system(size: 18))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                        .padding(.leading,50)
+                    Spacer()
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.red)
+                        .padding(.top,50)
+                        .padding(.trailing,15)
+                        .onTapGesture {
+                            HistoryInf.toggle()
+                            OrderDetialsView.toggle()
+                        }
+                }
+                
+            }
+            .edgesIgnoringSafeArea(.all)
+         
+            Spacer()
+        }
+    }
+        .navigationBarHidden(true)
+        
     }
 }
