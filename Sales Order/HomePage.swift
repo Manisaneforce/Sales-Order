@@ -119,7 +119,7 @@ struct HomePage: View {
                             NavigationLink(destination:PaymentScreen()){
                                 DashboardItem(imageName: "credit-card", title: "Payments")
                             }
-                            NavigationLink(destination:MyOrdersDetails()){
+                            NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
                                 DashboardItem(imageName: "business-report", title: "Reports")
                             }
                             NavigationLink(destination:My_Profile()){

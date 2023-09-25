@@ -121,7 +121,7 @@ struct Order: View {
                         .alert(isPresented: $showAlert) {
                             Alert(
                                 title: Text("Confirmation"),
-                                message: Text("Do you want cancel this order dreaft"),
+                                message: Text("Do you want cancel this order Draft"),
                                 primaryButton: .default(Text("OK")) {
                                     self.presentationMode.wrappedValue.dismiss()
                                 },
