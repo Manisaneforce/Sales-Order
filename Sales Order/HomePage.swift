@@ -14,7 +14,7 @@ import CoreLocation
 struct HomePage: View {
     @State private var currentDate = ""
     @State private var showAlert = false
-    @State private var navigateToContentView = false
+    @State private var CustSAVEDet:String = UserDefaults.standard.string(forKey: "CustDet") ?? ""
   
     var body: some View {
         NavigationView {
@@ -50,7 +50,7 @@ struct HomePage: View {
                                 
                                 VStack {
                                     Button(action: {
-                                        UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
+                                      
                                         
                                         showAlert = true
                                     }) {
@@ -65,18 +65,19 @@ struct HomePage: View {
                                         title: Text("Logout"),
                                         message: Text("Do you want to log out?"),
                                         primaryButton: .default(Text("OK")) {
-                                            navigateToContentView = true
+                                            UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
+                                            UserDefaults.standard.removeObject(forKey: "CustDet")
+                                            if let window = UIApplication.shared.windows.first {
+                                                window.rootViewController = UIHostingController(rootView: ContentView())
+                                            }
                                         },
                                         secondaryButton: .cancel()
                                     )
                                 }
-                                //Text("")
+                                
                             }
                             .padding(.top,50)
                             .padding(.trailing,16)
-                            NavigationLink(destination: ContentView(), isActive: $navigateToContentView) {
-                                            EmptyView()
-                                        }
                         }
                         
                     }
@@ -86,6 +87,46 @@ struct HomePage: View {
                     
                     
                     .onAppear() {
+                        print(CustSAVEDet)
+                        if let jsonData = CustSAVEDet.data(using: .utf8){
+                            do{
+                                if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                    
+                                      
+                                            if let result = jsonObject["result"] as? [[String:Any]], let firstResult = result.first {
+                                                print(firstResult)
+                                                let CusName = firstResult["CusName"] as? String
+                                                let StkID = firstResult["StkID"] as? String
+                                                let Addr = firstResult["Addr"] as? String
+                                                let StkMob = firstResult["StkMob"] as? String
+                                                let StkNm = firstResult["StkNm"] as? String
+                                                let StkAddr = firstResult["StkAddr"] as? String
+                                                let CusID = firstResult["CusID"] as? String
+                                                let ERP_Code = firstResult["ERP_Code"] as? String
+                                                let Mob = firstResult["Mob"] as? String
+                                                let Div = firstResult["Div"] as? Int
+                                                let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
+                                                print(Det)
+                                                CustDet.shared.CusId = CusID!
+                                                CustDet.shared.CusName = CusName!
+                                                CustDet.shared.StkID = StkID!
+                                                CustDet.shared.Addr = Addr!
+                                                CustDet.shared.StkMob = StkMob!
+                                                CustDet.shared.StkNm = StkNm!
+                                                CustDet.shared.StkAddr = StkAddr!
+                                                CustDet.shared.ERP_Code = ERP_Code!
+                                                CustDet.shared .Mob = Mob!
+                                                CustDet.shared.Div = Div!
+                                               
+                                               
+                                            }
+                                       
+                                   
+                                }
+                            } catch{
+                                print("Error Data")
+                            }
+                        }
                         GetCurrentLoction()
                         updateDate()
                     }
@@ -96,7 +137,7 @@ struct HomePage: View {
                      
                         VStack{
                             HStack{
-                                Text("Hi! Kartik Test")
+                                Text("Hi! \(CustDet.shared.CusName)")
                                     .font(.system(size: 18))
                                     .fontWeight(.semibold)
                                 Spacer()

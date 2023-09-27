@@ -78,14 +78,12 @@ struct My_Profile: View {
                             .frame(width: 56, height: 56)
                             .shadow(color: Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.18), radius: 9, x: 0, y: 4)
                         VStack(alignment: .leading,spacing:7){
-                            Text("Kartik Test")
-                                .font(
-                                    Font.custom("Roboto", size: 14)
-                                        .weight(.bold)
-                                )
+                            Text(CustDet.shared.CusName)
+                                .font(.system(size: 17))
+                                .fontWeight(.bold)
                                 .foregroundColor(Color(red: 0.18, green: 0.19, blue: 0.2))
                             
-                            Text("+91 93421 17731")
+                            Text("+91 \(CustDet.shared.Mob)")
                                 .font(
                                     Font.custom("Roboto", size: 12)
                                         .weight(.medium)
@@ -105,7 +103,7 @@ struct My_Profile: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(Color(red: 0.18, green: 0.19, blue: 0.2))
                             
-                            Text("Nadanam, Chennai - 600 018")
+                            Text(CustDet.shared.Addr)
                                 .foregroundColor(.gray)
                                 .font(.system(size: 14))
                             
@@ -414,7 +412,7 @@ struct My_Profile: View {
                         .onTapGesture {
                             if OpenMod == "Add"{
                                 if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=96"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=\(CustDet.shared.CusId)"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                                     AFdata in
                                     switch AFdata.result
                                     {
@@ -461,7 +459,6 @@ struct My_Profile: View {
                                             alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
                                                 return
                                             })
-                                            // Present the alert here
                                         }
                                     }
                                 }
@@ -615,7 +612,7 @@ struct My_Profile: View {
         .navigationBarHidden(true)
     }
     private func RetAddress(){
-        let axn = "get_ret_addresses&listedDrCode=96"
+        let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
         let apiKey = "\(axn)"
 
        

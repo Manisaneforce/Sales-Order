@@ -286,7 +286,7 @@ struct MyOrdersDetails: View {
         let axn = "get/orderandinvoice"
         let apiKey: String = "\(axn)"
         let aFormData: [String: Any] = [
-            "RetailId": "96",
+            "RetailId": "\(CustDet.shared.CusId)",
               "fdt": "\(FromDate)",
               "tdt": "\(ToDate)"
         ]
@@ -469,7 +469,7 @@ struct ORDER:View{
                                     ForEach(0..<invoice.count, id: \.self) { index in
                                     VStack{
                                         HStack{
-                                            Text("Relivet Animal Health")
+                                            Text(CustDet.shared.StkNm)
                                                 .font(.system(size: 14))
                                                 .fontWeight(.bold)
                                             Spacer()

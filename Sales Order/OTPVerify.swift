@@ -26,6 +26,8 @@ struct OTPVerify: View {
     @State private var timer: Timer?
     @State private var remainingTime = 5
     @State private var showResendButton = false
+    @State private var OtpView:Bool = true
+    @State private var NotReg:Bool = false
     
     @Binding var jsondata: Outputdata
     //@Binding var phoneNumber:String
@@ -41,16 +43,19 @@ struct OTPVerify: View {
     var body: some View {
         
         NavigationView {
-            ZStack {
-                VStack(spacing: 55) {
-                Image("logo_new")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 100)
-                    
-                    .padding(.top,180)
-                    Spacer()
-                   
+           
+                ZStack {
+                    if OtpView{
+                    VStack{
+                    VStack(spacing: 55) {
+                        Image("logo_new")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 250, height: 100)
+                        
+                            .padding(.top,180)
+                        Spacer()
+                        
                         Text("Welcome to ReliVet")
                             .font(.title)
                             .bold()
@@ -66,220 +71,252 @@ struct OTPVerify: View {
                             .foregroundColor(Color.gray)
                             .frame(width: 200, height: 150)
                         
-                           .padding(.top,-250)
-                  
-            
-                LottieUIView(filename: "OTP").frame(width: 200,height: 200)
-                    
-                        .padding(.top,-250)
-                
-                
-                Text("Enter your OTP")
-                    .font(.system(size: 17))
-                    .font(.title)
-                    .foregroundColor(Color.gray)
-                    .frame(width: 400, height: 120)
-                    .padding(.top,-150)
-                    
-                    Spacer(minLength: 250)
-                    
-                        .onAppear {
-                            startTimer()
-                        }
-                        .onDisappear {
-                            timer?.invalidate()
-                            timer = nil
-                        }
-                HStack{
-                    
-                    ForEach(0..<6, id: \.self) {index in
-                        TextField("", text: $enterValue[index], onEditingChanged:
-                                    { editing in
-                            if editing{
-                                oldValue = enterValue[index]
-                            }
-                            
-                        })
-                        .keyboardType(.numberPad)
-                        .frame(width: 42,height: 42)
-                        .background(Color.blue.opacity(0.1))
-                        .cornerRadius(5)
-                        .multilineTextAlignment(.center)
-                        .offset(y: 95)
-                        .focused($fieldFocus, equals: index)
-                        .tag(index)
-                        .onChange(of: enterValue[index]) { newValue in
-                            if enterValue[index].count > 1{
-                                let currentvalue = Array(enterValue[index])
-                                print(currentvalue)
-                                
-                                if currentvalue[0] == Character(oldValue){
-                                    enterValue[index]=String(enterValue[index].suffix(1))
-                                }else{
-                                    enterValue[index]=String(enterValue[index].prefix(1))
-                                }
-                            }
-                            
-                            if !newValue.isEmpty {
-                                if index == numberOffFields - 1{
-                                    fieldFocus = nil
-                                }else{
-                                    fieldFocus = (fieldFocus ?? 0) + 1
-                                }
-                            }else{
-                                fieldFocus = (fieldFocus ?? 0) - 1
-                            }
-                        }
-                    }
-                    
-                }
-                .padding(.top,-500)
-                
-                
-                Button(action: {
-                    print("JSON Data: \(jsondata.data)")
-                    let otpNumber = enterValue[0]+enterValue[1]+enterValue[2]+enterValue[3]+enterValue[4]+enterValue[5]
-                    print(otpNumber.count)
-                    let otpInt=Int(otpNumber)
-                    //print(otpInt!)
-                    let value: Int? = otpInt
-                    var item = 0
-                    if let unwrappedValue = value {
-                        item=unwrappedValue
+                            .padding(.top,-250)
                         
-                    } else {
-                        //Text("No value")
-                    }
-                    let otpdata = jsondata.data["otp"]
-                    print(item)
-                    print(otpdata as! Int)
-                    print(otpNumber.count >= 6)
-                    
-                    if item == otpdata as! Int {
-                        print(item)
                         
-                   // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
-                        let axn = "get/login"
-                        let apiKey: String = "\(axn)"
-                        let aFormData: [[String: Any]] = [[
-                            "mobile":"\(phoneNumber2)",
-                            "deviceid":"deviceToken"
-                        ]]
-                        let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-                        let jsonString = String(data: jsonData!, encoding: .utf8)!
-                        let params: Parameters = [
-                            "data": jsonString
-                        ]
-                       print(params)
-                        print(phoneNumber2)
-                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
-                            switch response.result {
-                            case .success(let value):
-                                if let json = value as? [String:AnyObject] {
-                                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                                        return
-                                    }
-                                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                        print("Error: Could print JSON in String")
-                                        return
+                        LottieUIView(filename: "OTP").frame(width: 200,height: 200)
+                        
+                            .padding(.top,-250)
+                        
+                        
+                        Text("Enter your OTP")
+                            .font(.system(size: 17))
+                            .font(.title)
+                            .foregroundColor(Color.gray)
+                            .frame(width: 400, height: 120)
+                            .padding(.top,-150)
+                        
+                        Spacer(minLength: 250)
+                        
+                            .onAppear {
+                                startTimer()
+                            }
+                            .onDisappear {
+                                timer?.invalidate()
+                                timer = nil
+                            }
+                        HStack{
+                            
+                            ForEach(0..<6, id: \.self) {index in
+                                TextField("", text: $enterValue[index], onEditingChanged:
+                                            { editing in
+                                    if editing{
+                                        oldValue = enterValue[index]
                                     }
                                     
-                                    print(prettyPrintedJson)
-                                    
-                                    if let jsonData = prettyPrintedJson.data(using: .utf8){
-                                        do{
-                                            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
-                                                
-                                                
-                                                if let results = jsonObject["msg"] as? String {
-                                                    NotRegisterSc = true
-                                                    print(results)
-                                                    Msg = results
-                                                } else {
-                                                    
-                                                    let result = jsonObject["result"] as? [[String:Any]]
-                                                    print(result)
-                                                    NavigteBoll = true
-                                                }
-                                            }
-                                        } catch{
-                                            print("Error Data")
+                                })
+                                .keyboardType(.numberPad)
+                                .frame(width: 42,height: 42)
+                                .background(Color.blue.opacity(0.1))
+                                .cornerRadius(5)
+                                .multilineTextAlignment(.center)
+                                .offset(y: 95)
+                                .focused($fieldFocus, equals: index)
+                                .tag(index)
+                                .onChange(of: enterValue[index]) { newValue in
+                                    if enterValue[index].count > 1{
+                                        let currentvalue = Array(enterValue[index])
+                                        print(currentvalue)
+                                        
+                                        if currentvalue[0] == Character(oldValue){
+                                            enterValue[index]=String(enterValue[index].suffix(1))
+                                        }else{
+                                            enterValue[index]=String(enterValue[index].prefix(1))
                                         }
                                     }
-                                   
                                     
-                                   
-                                   
+                                    if !newValue.isEmpty {
+                                        if index == numberOffFields - 1{
+                                            fieldFocus = nil
+                                        }else{
+                                            fieldFocus = (fieldFocus ?? 0) + 1
+                                        }
+                                    }else{
+                                        fieldFocus = (fieldFocus ?? 0) - 1
+                                    }
                                 }
-                            case .failure(let error):
-                                print(error)
                             }
+                            
                         }
+                        .padding(.top,-500)
                         
-                    }else{
-                        toststring = "Pls Enter Correct OTP"
-                        showToast = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            showToast = false
-                        }
-                    }
-                
-                }){
-                    Text("Verify")
-                        .frame(width: 300, height: 12)
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                    
-                }
-                .padding(.top,-400)
-                    
-                    if showResendButton {
+                        
                         Button(action: {
-//                            .onAppear{
-//                                APIClient()
-//                            }
-                            startTimer()
-                            showResendButton = false
-                        }) {
-                            Text("Resend")
+                            print("JSON Data: \(jsondata.data)")
+                            let otpNumber = enterValue[0]+enterValue[1]+enterValue[2]+enterValue[3]+enterValue[4]+enterValue[5]
+                            print(otpNumber.count)
+                            let otpInt=Int(otpNumber)
+                            //print(otpInt!)
+                            let value: Int? = otpInt
+                            var item = 0
+                            if let unwrappedValue = value {
+                                item=unwrappedValue
+                                
+                            } else {
+                                //Text("No value")
+                            }
+                            let otpdata = jsondata.data["otp"]
+                            print(item)
+                            print(otpdata as! Int)
+                            print(otpNumber.count >= 6)
+                            
+                            if item == otpdata as! Int {
+                                print(item)
+                                
+                                // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
+                                let axn = "get/login"
+                                let apiKey: String = "\(axn)"
+                                let aFormData: [[String: Any]] = [[
+                                    "mobile":"\(phoneNumber2)",
+                                    "deviceid":"deviceToken"
+                                ]]
+                                let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+                                let jsonString = String(data: jsonData!, encoding: .utf8)!
+                                let params: Parameters = [
+                                    "data": jsonString
+                                ]
+                                print(params)
+                                print(phoneNumber2)
+                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+                                    switch response.result {
+                                    case .success(let value):
+                                        if let json = value as? [String:AnyObject] {
+                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                return
+                                            }
+                                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                print("Error: Could print JSON in String")
+                                                return
+                                            }
+                                            
+                                            print(prettyPrintedJson)
+                                            if let jsonData = prettyPrintedJson.data(using: .utf8){
+                                                do{
+                                                    if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                                        
+                                                        
+                                                        if let results = jsonObject["msg"] as? String  {
+                                                            
+                                                            
+                                                            if results == "" {
+                                                                if let result = jsonObject["result"] as? [[String:Any]], let firstResult = result.first {
+                                                                    print(firstResult)
+                                                                    UserDefaults.standard.set(prettyPrintedJson, forKey: "CustDet")
+                                                                    UserDefaults.standard.set(prettyPrintedJson, forKey: "savedPhoneNumber")
+                                                                    let CusName = firstResult["CusName"] as? String
+                                                                    let StkID = firstResult["StkID"] as? String
+                                                                    let Addr = firstResult["Addr"] as? String
+                                                                    let StkMob = firstResult["StkMob"] as? String
+                                                                    let StkNm = firstResult["StkNm"] as? String
+                                                                    let StkAddr = firstResult["StkAddr"] as? String
+                                                                    let CusID = firstResult["CusID"] as? String
+                                                                    let ERP_Code = firstResult["ERP_Code"] as? String
+                                                                    let Mob = firstResult["Mob"] as? String
+                                                                    let Div = firstResult["Div"] as? Int
+                                                                    let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
+                                                                    print(Det)
+                                                                    CustDet.shared.CusId = CusID!
+                                                                    CustDet.shared.CusName = CusName!
+                                                                    CustDet.shared.StkID = StkID!
+                                                                    CustDet.shared.Addr = Addr!
+                                                                    CustDet.shared.StkMob = StkMob!
+                                                                    CustDet.shared.StkNm = StkNm!
+                                                                    CustDet.shared.StkAddr = StkAddr!
+                                                                    CustDet.shared.ERP_Code = ERP_Code!
+                                                                    CustDet.shared .Mob = Mob!
+                                                                    CustDet.shared.Div = Div!
+                                                                    CustDet.shared.Det = Det
+                                                                    print(CustDet.shared.CusName)
+                                                                    print(CustDet.shared.Det)
+                                                                    NavigteBoll = true
+                                                                }
+                                                            }else{
+                                                                OtpView.toggle()
+                                                                NotReg.toggle()
+                                                                print(results)
+                                                                Msg = results
+                                                            }
+                                                        }
+                                                    }
+                                                } catch{
+                                                    print("Error Data")
+                                                }
+                                            }
+                                            
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                }
+                                
+                            }else{
+                                toststring = "Pls Enter Correct OTP"
+                                showToast = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast = false
+                                }
+                            }
+                            
+                        }){
+                            Text("Verify")
+                                .frame(width: 300, height: 12)
                                 .font(.title)
-                                .frame(height: 20)
                                 .foregroundColor(.white)
                                 .padding()
                                 .background(Color.blue)
                                 .cornerRadius(10)
+                            
                         }
-                        .padding(.top, -400)
-                    } else {
-                        Text("OTP didn't receive? Resend the OTP  \(remainingTime) in seconds")
-                            .multilineTextAlignment(.center)
-                            .frame(width: 300)
+                        .padding(.top,-400)
+                        
+                        if showResendButton {
+                            Button(action: {
+                                //                            .onAppear{
+                                //                                APIClient()
+                                //                            }
+                                startTimer()
+                                showResendButton = false
+                            }) {
+                                Text("Resend")
+                                    .font(.title)
+                                    .frame(height: 20)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                            }
                             .padding(.top, -400)
+                        } else {
+                            Text("OTP didn't receive? Resend the OTP  \(remainingTime) in seconds")
+                                .multilineTextAlignment(.center)
+                                .frame(width: 300)
+                                .padding(.top, -400)
+                        }
+                        
+                        
+                        
                     }
-                     
-
-                
+                    if NavigteBoll {
+                        NavigationLink(
+                            destination: HomePage(),isActive: $NavigteBoll
+                        ) {
+                            EmptyView()
+                        }
+                    }
+                   
+                    
+                    //                .toast(isPresented: $showToast, message: "\(toststring)")
+                    //                                .padding(.top,-100)
+                }
             }
-                if NavigteBoll {
-                    NavigationLink(
-                        destination: HomePage(),isActive: $NavigteBoll
-                    ) {
-                        EmptyView()
+                    if NotReg{
+                        NotRegister(Msg: $Msg,OtpView: $OtpView,NotReg: $NotReg)
                     }
-                }
-                NavigationLink(
-                    destination: NotRegister(Msg: $Msg),isActive: $NotRegisterSc
-                ) {
-                    EmptyView()
-                }
-                  
-//                .toast(isPresented: $showToast, message: "\(toststring)")
-//                                .padding(.top,-100)
         }
+            
+                
+            
         
     }
       .navigationBarHidden(true)
@@ -308,13 +345,38 @@ struct OTPVerify_Previews: PreviewProvider {
 }
 struct NotRegister: View {
     @Binding var Msg:String
+    @Binding var OtpView:Bool
+    @Binding var NotReg:Bool
     var body: some View{
-        LottieUIView(filename: "something_went_wrong").frame(width: 200,height: 200)
-        
-        Text(Msg)
-            .font(.system(size: 15))
-            .fontWeight(.semibold)
-            .padding(15)
+        VStack{
+            LottieUIView(filename: "something_went_wrong").frame(width: 200,height: 200)
+            
+            Text(Msg)
+                .font(.system(size: 15))
+                .fontWeight(.semibold)
+                .padding(15)
+                .cornerRadius(5)
+            
+            ZStack{
+                Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    
+                Text("Close")
+                    .font(.system(size: 17))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+            }
+            .frame(height: 40)
+            .padding(.horizontal,30)
+            
+            .onTapGesture {
+                if let window = UIApplication.shared.windows.first {
+                    window.rootViewController = UIHostingController(rootView: ContentView())
+                }
+                
+            }
+        }
        
         
     }

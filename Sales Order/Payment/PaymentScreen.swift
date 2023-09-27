@@ -43,7 +43,7 @@ struct PaymentScreen: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
-                                .padding(.leading,50)
+                                //.padding(.leading,50)
                             Spacer()
                         }
                         

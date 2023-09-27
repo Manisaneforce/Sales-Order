@@ -47,7 +47,7 @@ var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
 var ShpingAddress = ""
-var BillingAddress = "Borivali"
+var BillingAddress = CustDet.shared.Addr
 var isChecked = false
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 struct Order: View {
@@ -149,7 +149,7 @@ struct Order: View {
                 VStack(alignment: .leading, spacing: 6) {
                     VStack(spacing:5){
                         HStack{
-                            Text("DR. INGOLE")
+                            Text(CustDet.shared.CusName)
                                 .font(.system(size: 15))
                             Spacer()
                         }
@@ -159,7 +159,7 @@ struct Order: View {
                             //                                .frame(width: 20, height: 20)
                             //                                .background(Color.blue)
                             //                                .cornerRadius(10)
-                            Text("9923125671")
+                            Text(CustDet.shared.Mob)
                                 .font(.system(size: 15))
                                 .fontWeight(.semibold)
                                 Spacer()
@@ -1582,7 +1582,7 @@ func prodGroup(completion: @escaping (String) -> Void) {
     let apiKey = "\(axn)"
     
     let aFormData: [String: Any] = [
-        "CusID":"9","Stk":"3"
+        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
     ]
     print(aFormData)
     let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -1630,7 +1630,7 @@ func prodTypes(completi: @escaping (String) -> Void) {
     let apiKey = "\(axn)"
     
     let aFormData: [String: Any] = [
-        "CusID":"9","Stk":"3"
+        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
     ]
     print(aFormData)
     let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -1678,7 +1678,7 @@ func prodCate(prodcatedata: @escaping (String) -> Void) {
     let apiKey = "\(axn)"
     
     let aFormData: [String: Any] = [
-        "CusID":"9","Stk":"3"
+        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
     ]
     print(aFormData)
     let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -1725,7 +1725,7 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
     let apiKey = "\(axn)"
     
     let aFormData: [String: Any] = [
-        "CusID":"9","Stk":"3"
+        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
     ]
     print(aFormData)
     let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
@@ -2165,7 +2165,6 @@ struct SelPrvOrder: View {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         OrderSubmit(lat: sLocationlat, log: sLocationlong)
                                         GetLoction.toggle()
-                                        isActive = true
                                     }
                                 }
                             },
@@ -2173,9 +2172,6 @@ struct SelPrvOrder: View {
                         )
                     }
                 }
-                NavigationLink(destination: HomePage(), isActive: $isActive) {
-                                    EmptyView()
-                                }
                 if GetLoction{
                     ZStack{
                     Color.black.opacity(0.5)
@@ -2265,6 +2261,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         {
 
             let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
+            print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
@@ -2494,7 +2491,7 @@ func OrderSubmit(lat:String,log:String) {
     }
     updateDateAndTime()
     
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"96\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"96\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"3\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"96\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
     
@@ -2503,7 +2500,7 @@ func OrderSubmit(lat:String,log:String) {
     ]
     
     print(params)
-    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"save/salescalls"+"&divisionCode=227"+"&Sf_code=96", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"save/salescalls"+"&divisionCode=\(CustDet.shared.Div)"+"&Sf_code=\(CustDet.shared.CusId)", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
     AFdata in
     switch AFdata.result
     {
@@ -2515,10 +2512,10 @@ func OrderSubmit(lat:String,log:String) {
             
            print(json)
             UIApplication.shared.windows.first?.makeKeyAndVisible()
-
-            NavigationLink(destination: HomePage()) {
-                              EmptyView()
-                          }
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = UIHostingController(rootView: HomePage())
+            }
+                            
             VisitData.shared.clear()
         }
         

@@ -93,7 +93,7 @@ struct ContentView: View {
                         .frame(width: 325)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.blue, lineWidth: 2)
+                                .stroke(ColorData.shared.HeaderColor, lineWidth: 2)
                         )
                         .offset(y: 100)
                         .keyboardType(.numberPad)
@@ -140,7 +140,6 @@ struct ContentView: View {
                                         
                                         print(prettyPrintedJson)
                                         jsondata.data = json
-                                        UserDefaults.standard.set(prettyPrintedJson, forKey: "savedPhoneNumber")
                                         
                                         let mobileNumber = json["mobile"] as? String ?? ""
                                         if mobileNumber.count < 10 {
@@ -178,7 +177,7 @@ struct ContentView: View {
                             .font(.system(size: 18))
                             .multilineTextAlignment(.center)
                             .frame(width: 325, height: 40)
-                            .background(Color.blue)
+                            .background(ColorData.shared.HeaderColor)
                             .cornerRadius(10)
                     }
                     .toast(isPresented: $showToast, message: "\(ShowTost)")
