@@ -35,6 +35,7 @@ struct MyOrdersScreen: View {
     @State private var SelMode: String = ""
     @State private var FromDate = ""
     @State private var ToDate = ""
+    @State private var TotalVal:String = ""
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
     
@@ -222,6 +223,7 @@ struct MyOrdersScreen: View {
                                 .frame(width: 50,height: 12)
                                 .onTapGesture{
                                     OrderId = OrderPaymentDetails[index].OrderNo
+                                    
                                     PaymentHTML()
                                 }
                             }
@@ -232,6 +234,7 @@ struct MyOrdersScreen: View {
                     }
                     .onTapGesture{
                         print(index)
+                    TotalVal = OrderPaymentDetails[index].Order_Value
                       OrderId = OrderPaymentDetails[index].OrderNo
                       Orderdate =   OrderPaymentDetails[index].Order_Date
                         
@@ -240,7 +243,7 @@ struct MyOrdersScreen: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: $Orderdate), isActive: $NaviOrdeDetNiew) {
+                NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: $Orderdate, TotalVal: $TotalVal), isActive: $NaviOrdeDetNiew) {
                                 EmptyView()
                             }
                 NavigationLink(destination: Jiomoney(), isActive: $Jiomoneypage) {
@@ -422,7 +425,7 @@ struct MyOrdersScreen: View {
         return startDate ?? currentDate
     }
     func OrderDetailsTriger(){
-        let axn = "get/orderlst&sfCode=96&fromdate=\(FromDate)&todate=\(ToDate)"
+        let axn = "get/orderlst&sfCode=\(CustDet.shared.CusId)&fromdate=\(FromDate)&todate=\(ToDate)"
       
         let apiKey = "\(axn)"
     
@@ -498,6 +501,7 @@ struct OrderDetView:View{
     @Binding var Orderdate: String
     @State private var SelectDet:[listProdDet]=[]
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var TotalVal:String
     
     var body: some View{
         NavigationView{
@@ -561,7 +565,7 @@ struct OrderDetView:View{
                         .shadow(radius: 5)
                     VStack(spacing:-12){
                         HStack(){
-                            Text("Relivate Animale Health")
+                            Text(CustDet.shared.StkNm)
                                 .font(.system(size: 14))
                                 .fontWeight(.bold)
                             Spacer()
@@ -573,7 +577,7 @@ struct OrderDetView:View{
                         HStack{
                             Image(systemName: "phone.circle.fill")
                                 .foregroundColor(Color.blue)
-                            Text("99")
+                            Text(CustDet.shared.StkMob)
                             Spacer()
                         }
                         .padding(10)
@@ -591,7 +595,7 @@ struct OrderDetView:View{
                                 }
                                 .padding(10)
                                 HStack{
-                                    Text("Kartike Test")
+                                    Text(CustDet.shared.CusName)
                                         .font(.system(size: 13))
                                         .fontWeight(.bold)
                                     Spacer()
@@ -600,14 +604,14 @@ struct OrderDetView:View{
                                 HStack{
                                     Image(systemName: "phone.circle.fill")
                                         .foregroundColor(Color.blue)
-                                    Text("9342117731")
+                                    Text(CustDet.shared.Mob)
                                         .font(.system(size: 13))
                                         .foregroundColor(.gray)
                                     Spacer()
                                 }
                                 .padding(10)
                                 HStack{
-                                    Text("Borivali")
+                                    Text(CustDet.shared.Addr)
                                         .font(.system(size: 13))
                                         .foregroundColor(.gray)
                                     Spacer()
@@ -842,7 +846,7 @@ struct OrderDetView:View{
                                     .fontWeight(.bold)
                                 Spacer()
                                 
-                                Text("220.64")
+                                Text(TotalVal)
                                     .font(.system(size: 16))
                                     .fontWeight(.bold)
                                 

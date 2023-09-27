@@ -115,9 +115,11 @@ struct Order: View {
                             Image("backsmall")
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
+                                .padding(.top,50)
+                                .frame(width: 50)
                         }
                         
-                        .offset(x: -120, y: 25)
+                        
                         .alert(isPresented: $showAlert) {
                             Alert(
                                 title: Text("Confirmation"),
@@ -128,16 +130,14 @@ struct Order: View {
                                 secondaryButton: .cancel()
                             )
                         }
-                        NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
-                                        EmptyView()
-                                    }
+                  
                         
                         Text("Order")
-                            .font(.system(size: 25))
+                            .font(.system(size: 22))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding(.top, 50)
-                            .offset(x: -20)
+                            .padding(.top,50)
+                        Spacer()
                     }
                     
                 }

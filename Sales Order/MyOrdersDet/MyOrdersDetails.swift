@@ -16,6 +16,8 @@ struct getInvoice: Any{
     let Quantity:String
 }
 //var invoice:[getInvoice]=[]
+var value:String = ""
+var Orderdate:String = ""
 struct MyOrdersDetails: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
@@ -30,6 +32,7 @@ struct MyOrdersDetails: View {
     @State private var HistoryInf:Bool = true
     @State private var OrderDetialsView:Bool = false
     @State var OrderId = ""
+    @State var Totalval = value
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let currentDate = Date()
@@ -253,8 +256,7 @@ struct MyOrdersDetails: View {
     }
         if OrderDetialsView{
             VStack{
-                //AddSomeViewe(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView)
-                OrderDetView(OrderId: $OrderId, Orderdate: $OrderId)
+                OrderDetView(OrderId: $OrderId, Orderdate: .constant(Orderdate), TotalVal: .constant(value) )
             }
         }
         
@@ -462,6 +464,7 @@ struct ORDER:View{
     @State private var ProName = [String]()
     @State private var Qty = [String]()
     @Binding var OrderId:String
+    @State private var Totalval:String = ""
     
     var body: some View{
         VStack{
@@ -509,7 +512,10 @@ struct ORDER:View{
                                             Text("View Order")
                                                 .foregroundColor(.blue)
                                                 .onTapGesture {
+                                                    Totalval=invoice[index].Order_Value
+                                                    value = Totalval
                                                     OrderId = invoice[index].OrderID
+                                                    Orderdate = invoice[index].Date
                                                     HistoryInf.toggle()
                                                     OrderDetialsView.toggle()
                                                    
