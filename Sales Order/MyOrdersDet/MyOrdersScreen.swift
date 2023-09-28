@@ -8,6 +8,7 @@
 import SwiftUI
 import Alamofire
 import UIKit
+import PDFKit
 struct OrderDetails: Any{
     let OrderNo : String
     let No_Of_items : String
@@ -19,6 +20,8 @@ struct OrderDetails: Any{
 }
 var selecteddate = ""
 var html:String = ""
+var OrderNo:String = ""
+var OrdDate:String = ""
 struct MyOrdersScreen: View {
     @State private var Filterdate = false
     @State private var isCalendarVisible = false
@@ -212,7 +215,7 @@ struct MyOrdersScreen: View {
                             }){
                                 ZStack{
                                     Rectangle()
-                                        .foregroundColor(Color.blue)
+                                        .foregroundColor(ColorData.shared.HeaderColor)
                                         .cornerRadius(10)
                                     Text("Pay")
                                         .font(.system(size: 15))
@@ -236,7 +239,9 @@ struct MyOrdersScreen: View {
                         print(index)
                     TotalVal = OrderPaymentDetails[index].Order_Value
                       OrderId = OrderPaymentDetails[index].OrderNo
+                        OrderNo = OrderId
                       Orderdate =   OrderPaymentDetails[index].Order_Date
+                        OrdDate = Orderdate
                         
                         print(OrderId)
                         NaviOrdeDetNiew = true
@@ -502,6 +507,8 @@ struct OrderDetView:View{
     @State private var SelectDet:[listProdDet]=[]
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var TotalVal:String
+    @State private var isShowingSheet = false
+    @State private var PagHeight:Int = 800
     
     var body: some View{
         NavigationView{
@@ -548,6 +555,12 @@ struct OrderDetView:View{
                                 .resizable()
                                 .frame(width: 20,height: 20)
                                 .foregroundColor(Color.white)
+                                .onTapGesture {
+                                   // isShowingSheet.toggle()
+                                    let pdfData = generatePDF()
+                                                    saveAndSharePDF(pdfData)
+                                }
+                             
                             
                             Text("")
                         }
@@ -777,7 +790,10 @@ struct OrderDetView:View{
                                     }
                                 }
                                 
-                                
+                                .onAppear{
+                                    PagHeight += 50
+                                }
+                
                                 
                                 
                             }
@@ -862,8 +878,219 @@ struct OrderDetView:View{
     }
         .navigationBarHidden(true)
     }
-    
-}
+    func generatePDF() -> Data {
+        // Define a page size (8.5x11 inches in points)
+        
+        let pageSize = CGSize(width: 612, height: PagHeight)
+        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
+        
+        let pdfData = renderer.pdfData { (context) in
+            // Begin PDF page
+            context.beginPage()
+            
+            // Define font and size for title and text
+            let titleFont = UIFont.boldSystemFont(ofSize: 20.0)
+            let textFont = UIFont.systemFont(ofSize: 12.0)
+            let textId = UIFont.systemFont(ofSize: 12.0)
+            let ComFont = UIFont.systemFont(ofSize: 12.0)
+            let Bill = UIFont.systemFont(ofSize: 15.0)
+            
+            // Define title and text
+            let title = "ORDER SUMMARY"
+            let text = CustDet.shared.StkNm
+            let Mob = "MOB: \(CustDet.shared.StkMob)"
+            let BillTo = "BILL TO :"
+            let BillName = CustDet.shared.CusName
+            let BillMob = CustDet.shared.Mob
+            let BillAddres = CustDet.shared.Addr
+            let OredId = "Order No: \(OrderNo)"
+            let BillDate = "Date :\(OrdDate)"
+            let Item = "Item"
+            let Uom = "UOM"
+            let Qty = "Qty"
+            let Price = "Price"
+            let Total = "Total"
+            let SubTotal = "Sub Total"
+            let SubTotalAmt = TotalVal
+            let TotalItem = "Total Item"
+            var CountOfOrder = ""
+            var TotalQty = "Total Qty"
+            var TotaCountOfQty = "0"
+            let NetAmt = "NET AMOUNT"
+            let TotalNetAmt = "₹\(TotalVal)"
+            
+            
+            // Draw title
+            let titleAttributes = [NSAttributedString.Key.font: titleFont]
+            let titleRect = CGRect(x: 210, y: 50, width: 512, height: 50)
+            title.draw(in: titleRect, withAttributes: titleAttributes)
+            
+            // Draw text
+            let textAttributes = [NSAttributedString.Key.font: textFont]
+            let textRect = CGRect(x: 50, y: 100, width: 512, height: 50)
+            text.draw(in: textRect, withAttributes: textAttributes)
+            
+            let MobAttributes = [NSAttributedString.Key.font:ComFont]
+            let MobRect = CGRect(x: 50, y: 120, width: 512, height: 50)
+            Mob.draw(in:MobRect,withAttributes: MobAttributes)
+            
+            let BilHedAt = [NSAttributedString.Key.font:Bill]
+            let BillHedRec = CGRect(x: 50, y: 140, width: 512, height: 50)
+            BillTo.draw(in:BillHedRec,withAttributes: BilHedAt)
+            
+            let stkNameAt = [NSAttributedString.Key.font:ComFont]
+            let StkName = CGRect(x: 50, y: 160, width: 512, height: 50)
+            BillName.draw(in:StkName,withAttributes: stkNameAt)
+            
+            let stkMonat = [NSAttributedString.Key.font:ComFont]
+            let StkMob = CGRect(x: 50, y: 180, width: 512, height: 50)
+            BillMob.draw(in:StkMob,withAttributes: stkMonat)
+            
+            let StkAddAt = [NSAttributedString.Key.font:ComFont]
+            let StkAddrs = CGRect(x: 50, y: 200, width: 512, height: 50)
+            BillAddres.draw(in:StkAddrs,withAttributes: StkAddAt)
+            
+            let OrdIdAt = [NSAttributedString.Key.font:ComFont]
+            let OrdsID = CGRect(x: 50, y: 220, width: 512, height: 50)
+            OredId.draw(in:OrdsID,withAttributes: OrdIdAt)
+            
+            let OrdDateAt = [NSAttributedString.Key.font:ComFont]
+            let Date = CGRect(x: 50, y: 240, width: 512, height: 50)
+            BillDate.draw(in:Date,withAttributes: OrdDateAt)
+        
+            let UperLine = UIGraphicsGetCurrentContext()
+            UperLine?.setLineWidth(1.0)
+            UperLine?.move(to: CGPoint(x: 0, y: 260))
+            UperLine?.addLine(to: CGPoint(x: 700, y: 260))
+            //LowLine?.addLine(to: CGPoint(x: 562, y: 280))
+            UperLine?.strokePath()
+           
+            let ItemAt = [NSAttributedString.Key.font:ComFont]
+            let ItemRe = CGRect(x: 50, y: 268, width: 512, height: 50)
+            Item.draw(in:ItemRe,withAttributes: ItemAt)
+            let UomRe = CGRect(x: 260, y: 268, width: 512, height: 50)
+            Uom.draw(in:UomRe,withAttributes: ItemAt)
+            let QtyRe = CGRect(x: 345, y: 268, width: 512, height: 50)
+            Qty.draw(in:QtyRe,withAttributes: ItemAt)
+            let PricRe = CGRect(x: 415, y: 268, width: 512, height: 50)
+            Price.draw(in:PricRe,withAttributes: ItemAt)
+            let TotalRe = CGRect(x: 500, y: 268, width: 512, height: 50)
+            Total.draw(in:TotalRe,withAttributes: ItemAt)
+            
+        
+            let LowLine = UIGraphicsGetCurrentContext()
+            LowLine?.setLineWidth(1.0)
+            LowLine?.move(to: CGPoint(x: 0, y: 290))
+            LowLine?.addLine(to: CGPoint(x: 700, y: 290))
+            LowLine?.strokePath()
+            
+          
+            var yOffset = 270 // Starting y-coordinate
+            
+            for orderIndex in 0..<SelectDet.count {
+                yOffset += 50
+                let TotatNoofQty = Int(SelectDet[orderIndex].New_Qty)! + Int(TotaCountOfQty)!
+                TotaCountOfQty = String(TotatNoofQty)
+                
+                let Count = orderIndex + 1
+                CountOfOrder = String(Count)
+                 let NoOfPro = "\(Count)."
+                let orderNoAttributes = [NSAttributedString.Key.font: textFont]
+                let NoOfInd = CGRect(x: 20, y: yOffset, width: 512, height: 50)
+                NoOfPro.draw(in:NoOfInd,withAttributes:orderNoAttributes )
+                
+                let ProName = SelectDet[orderIndex].Product_Name
+                let orderNoRect = CGRect(x: 50, y: yOffset, width: 512, height: 50)
+                ProName.draw(in: orderNoRect, withAttributes: orderNoAttributes)
+                 // Increase y-coordinate for next OrderNo
+            
+                let Uom = SelectDet[orderIndex].Unit_Name
+                let UomRect = CGRect(x: 260, y: yOffset, width: 512, height: 50)
+                Uom.draw(in: UomRect, withAttributes: orderNoAttributes)
+            
+                let Qty = SelectDet[orderIndex].New_Qty
+                let QtyRect = CGRect(x: 345, y: yOffset, width: 512, height: 50)
+                Qty.draw(in: QtyRect, withAttributes: orderNoAttributes)
+                
+                let Prce = SelectDet[orderIndex].BillRate
+                let PriRect = CGRect(x: 415, y: yOffset, width: 512, height: 50)
+                Prce.draw(in:PriRect,withAttributes: orderNoAttributes)
+                
+                let Total = SelectDet[orderIndex].value
+                let TotalRect = CGRect(x: 500, y: yOffset, width: 512, height: 50)
+                Total.draw(in:TotalRect,withAttributes: orderNoAttributes)
+                
+                   }
+            print(TotaCountOfQty)
+ 
+            let context = UIGraphicsGetCurrentContext()
+                   context?.setLineWidth(1.0)
+                   context?.move(to: CGPoint(x: 0, y: yOffset+50))
+                   context?.addLine(to: CGPoint(x: 700, y: yOffset+50))
+                   context?.strokePath()
+            
+            let SuTotalRe = CGRect(x: 50, y: yOffset+70, width: 512, height: 50)
+            SubTotal.draw(in:SuTotalRe,withAttributes: ItemAt)
+            let SubTotalAmtRe = CGRect(x: 400, y: yOffset+70, width: 512, height: 50)
+            SubTotalAmt.draw(in:SubTotalAmtRe,withAttributes: ItemAt)
+            let TotalItemRe = CGRect(x: 50, y: yOffset+100, width: 512, height: 50)
+            TotalItem.draw(in:TotalItemRe,withAttributes: ItemAt)
+            let CountOfRe = CGRect(x: 400, y: yOffset+100, width: 512, height: 50)
+            CountOfOrder.draw(in:CountOfRe,withAttributes: ItemAt)
+            let TotalQtyRe = CGRect(x: 50, y: yOffset+130, width: 512, height: 50)
+            TotalQty.draw(in:TotalQtyRe,withAttributes: ItemAt)
+            let TotalCotQty = CGRect(x: 400, y: yOffset+130, width: 512, height: 50)
+            TotaCountOfQty.draw(in:TotalCotQty,withAttributes: ItemAt)
+            
+            let SubTotalUpLine = UIGraphicsGetCurrentContext()
+            SubTotalUpLine?.setLineWidth(1.0)
+            SubTotalUpLine?.move(to: CGPoint(x: 0, y: yOffset+150))
+            SubTotalUpLine?.addLine(to: CGPoint(x: 700, y: yOffset+150))
+            SubTotalUpLine?.strokePath()
+            
+            
+            let NetAmtRe = CGRect(x: 50, y: yOffset+160, width: 512, height: 50)
+            NetAmt.draw(in:NetAmtRe,withAttributes: ItemAt)
+            
+            let TotNetAmtRe = CGRect(x: 400, y: yOffset+160, width: 512, height: 50)
+            TotalNetAmt.draw(in:TotNetAmtRe,withAttributes: ItemAt)
+            
+            
+            
+            let SubTotalDwnLine = UIGraphicsGetCurrentContext()
+            SubTotalDwnLine?.setLineWidth(1.0)
+            SubTotalDwnLine?.move(to: CGPoint(x: 0, y: yOffset+190))
+            SubTotalDwnLine?.addLine(to: CGPoint(x: 700, y: yOffset+190))
+            SubTotalDwnLine?.strokePath()
+            
+            
+            
+            
+            
+     
+        }
+        return pdfData
+    }
+
+
+        
+        func saveAndSharePDF(_ data: Data) {
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("temp.pdf")
+            do {
+                try data.write(to: tempURL)
+                let activityViewController = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+                UIApplication.shared.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+            } catch {
+                print("Error saving PDF: \(error)")
+            }
+        }
+        
+        func renderViewToImage(view: UIViewController) -> UIImage {
+            let renderer = UIGraphicsImageRenderer(bounds: view.view.bounds)
+            return renderer.image { context in
+                view.view.layer.render(in: context.cgContext)
+            }
+        }}
 
 
 class CustomPrintFormatter: UIPrintFormatter {
@@ -891,3 +1118,8 @@ func printDocument() {
 
     printController.present(animated: true, completionHandler: nil)
 }
+
+
+
+
+
