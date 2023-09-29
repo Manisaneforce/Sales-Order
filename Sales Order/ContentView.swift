@@ -69,9 +69,11 @@ struct ContentView: View {
                     .onAppear {
                             print("Saved Value  \(userEmail)")
                         if userEmail.isEmpty{
-                            HomePageNvigater = false
+                            //HomePageNvigater = false
                         }else{
-                           HomePageNvigater = true
+                            if let window = UIApplication.shared.windows.first {
+                                window.rootViewController = UIHostingController(rootView: HomePage())
+                            }
                         }
                       
 

@@ -264,7 +264,7 @@ struct OTPVerify: View {
                                 .font(.title)
                                 .foregroundColor(.white)
                                 .padding()
-                                .background(Color.blue)
+                                .background(ColorData.shared.HeaderColor)
                                 .cornerRadius(10)
                             
                         }
@@ -278,12 +278,12 @@ struct OTPVerify: View {
                                 startTimer()
                                 showResendButton = false
                             }) {
-                                Text("Resend")
-                                    .font(.title)
-                                    .frame(height: 20)
+                                Text("Resend OTP")
+                                    .font(.system(size: 18))
+                                    .frame(height: 15)
                                     .foregroundColor(.white)
                                     .padding()
-                                    .background(Color.blue)
+                                    .background(ColorData.shared.HeaderColor)
                                     .cornerRadius(10)
                             }
                             .padding(.top, -400)

@@ -68,7 +68,8 @@ struct Order: View {
     @State private var prodofcat = [String]()
     @State private var prodCate: String = ""
     @State private var selectedIndices: Set<Int> = []
-    @State private var selectedIndex: Int? = nil
+    @State private var selectedIndex: Int? = 0
+    @State private var SubselectedIndex:Int? = 0
     @State private var SelectId:Int = 0
     @State private var ProSelectID:Int = 0
     @State private var proDetsID = [Int]()
@@ -221,7 +222,6 @@ struct Order: View {
                                             
                                         }
                                     }
-                            
                         }
                     }
                         
@@ -231,12 +231,15 @@ struct Order: View {
                     Divider()
                         .frame(height: 10)
                     Text(prettyPrintedJson)
-                        .font(.system(size: 15))
-                        .frame(width: 80,height: 25)
+                        .fontWeight(.semibold)
+                        .font(.system(size: 12))
+                        //.frame(width: 80,height: 25)
+                        .padding(.horizontal,10)
+                        .padding(.vertical,5)
                         .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 7)
-                                .stroke(Color.blue, lineWidth: 2)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
                         )
                         .padding(.horizontal, 12)
                     
@@ -249,9 +252,12 @@ struct Order: View {
                                     Allprod.removeAll()
                                     TotalQty.removeAll()
                                     if selectedIndex == index {
-                                        selectedIndex = nil
+                                        selectedIndex = index
+                                        SubselectedIndex = 0
+                                        
                                     } else {
                                         selectedIndex = index
+                                        SubselectedIndex = 0
                                     }
                                     print("Clicked button at index: \(index)")
                                     self.OrderprodCate(at: index)
@@ -259,12 +265,19 @@ struct Order: View {
                                 }) {
                                     
                                     Text(prodTypes2[index])
-                                        .foregroundColor(.white)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 5)
-                                        .background(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
-                                        .cornerRadius(10)
+                                        .font(.system(size: 12))
+                                        //.background(selectedIndex == index ? ColorData.shared.HeaderColor : Color.white)
+                                        //.cornerRadius(10)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
+                                        )
                                 }
+                                .cornerRadius(10)
                             }
                         }
                         .padding(.horizontal, 10)
@@ -281,16 +294,25 @@ struct Order: View {
                                     print("If Select data")
                                     print("Clicked button at index: \(index)")
                                     self.OrderprodDets(at: index)
+                                    if SubselectedIndex == index {
+                                        SubselectedIndex = index
+                                    } else {
+                                        SubselectedIndex = index
+                                    }
                                     
                                 }) {
                                     Text(prodofcat[index])
-                                        .font(.system(size: 15))
-                                        .frame(width: 150,height: 25)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 5)
+                                        .font(.system(size: 12))
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 7)
-                                                .stroke(Color.blue, lineWidth: 2)
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
                                         )
                                 }
+                                .cornerRadius(10)
                             }
                             
                         }
