@@ -38,7 +38,7 @@ struct EdditeAddres : Any{
     let stateCode: Int
     
 }
-var GetingAddress:[EdditeAddres]=[]
+
 
 var lstPrvOrder: [AnyObject] = []
 var lblTotAmt:String = "0.0"
@@ -95,6 +95,7 @@ struct Order: View {
     @State private var items: [TotAmt] = []
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var SelMod = ""
+   
 
     var body: some View {
         
@@ -922,7 +923,7 @@ struct Order: View {
                     print(Arry)
                     print(Allprod)
                     TexQty()
-                    GetingListAddress()
+                    //GetingListAddress()
                     loadImage(at: 0)
                 }
             } catch{
@@ -998,7 +999,7 @@ struct Order: View {
         print(filterItems)
     }
     
-    
+ 
 }
 
 struct Order_Previews: PreviewProvider {
@@ -1032,6 +1033,10 @@ struct Address:View{
     @Binding var SelMod: String
     @State private var OpenMod = ""
     @State private var Editid:Int = 0
+    @State private var GetingAddress:[EdditeAddres]=[]
+    @State private var ToastMessage:String = ""
+    @State private var ShowToastMes:String = String()
+    @State private var showToast:Bool = false
  
     var body: some View{
         ZStack{
@@ -1055,6 +1060,7 @@ struct Address:View{
                 
                 print(GetingAddress)
             }
+            .onAppear{GetingListAddress()}
             List(0..<GetingAddress.count, id: \.self) { index in
                 if #available(iOS 15.0, *) {
                     ZStack{
@@ -1126,7 +1132,7 @@ struct Address:View{
                                                         print("Error: Could print JSON in String")
                                                         return
                                                     }
-                                                    
+                                                    GetingAddress.remove(at: index)
                                                     print(prettyPrintedJson)
                                         
                                                 }
@@ -1157,6 +1163,8 @@ struct Address:View{
                 .frame(width: 50, height: 50)
                 .foregroundColor(ColorData.shared.HeaderColor)
                 .onTapGesture {
+                    AddressTextInpute = ""
+                    selectedstate = "Select State"
                     OpenMod = "Add"
                     clickPlusButton.toggle()
                     EditeAddressHed = "Add New Address"
@@ -1337,35 +1345,15 @@ struct Address:View{
                         }
                         .onTapGesture {
                             if OpenMod == "Add"{
-                            
-                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=96"+"&address=\(AddressTextInpute)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-                                AFdata in
-                                switch AFdata.result
-                                {
-                                    
-                                case .success(let value):
-                                    print(value)
-                                    if let json = value as? [String: Any] {
-                                        
-                                        print(json)
-                                        ClickStateButton.toggle()
-                                        UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                        
+                                if validateForm() == false {
+                                    showToast.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        showToast.toggle()
                                     }
-                                    
-                                case .failure(let error):
-                                    
-                                    let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                                        return
-                                    })
-                                    
+                                    return
                                 }
-                            }
-                        }
-                            if OpenMod == "Edit"{
-                            
-                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"update_ret_address"+"&id=\(Editid)"+"&listedDrCode=96"+"&address=\(AddressTextInpute)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                                if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=\(CustDet.shared.CusId)"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
                                     AFdata in
                                     switch AFdata.result
                                     {
@@ -1375,7 +1363,9 @@ struct Address:View{
                                         if let json = value as? [String: Any] {
                                             
                                             print(json)
-                                            ClickStateButton.toggle()
+                                            GetingListAddress()
+                                            clickPlusButton.toggle()
+                                            
                                             UIApplication.shared.windows.first?.makeKeyAndVisible()
                                             
                                         }
@@ -1389,6 +1379,43 @@ struct Address:View{
                                         
                                     }
                                 }
+                            }
+                        }
+                            if OpenMod == "Edit"{
+                                if validateForm() == false {
+                                    showToast.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        showToast.toggle()
+                                    }
+                                    return
+                                }
+                                if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"update_ret_address"+"&id=\(Editid)"+"&listedDrCode=\(CustDet.shared.CusId)"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                                    AFdata in
+                                    switch AFdata.result
+                                    {
+                                        
+                                    case .success(let value):
+                                        print(value)
+                                        if let json = value as? [String: Any] {
+                                            
+                                            print(json)
+                                            GetingListAddress()
+                                            clickPlusButton.toggle()
+                                            UIApplication.shared.windows.first?.makeKeyAndVisible()
+                                            
+                                        }
+                                        
+                                    case .failure(let error):
+                                        
+                                        let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                                        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                                            return
+                                        })
+                                        
+                                    }
+                                }
+                            }
                             }
                     }
                         
@@ -1465,10 +1492,9 @@ struct Address:View{
                 .padding(20)
                 
             }
+                
     }
-            
-        
-        
+        .toast(isPresented: $showToast, message: "\(ShowToastMes)")
     }
     
     private func GetCurrentLoction(){
@@ -1498,53 +1524,64 @@ struct Address:View{
             print (errMsg)
         })
     }
-    
-}
+    func GetingListAddress(){
+        let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
+        let apiKey = "\(axn)"
 
-
-func GetingListAddress(){
-    let axn = "get_ret_addresses&listedDrCode=96"
-    let apiKey = "\(axn)"
-
-   
-    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [String:AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                    GetingAddress.removeAll()
-                    if let jsonData = prettyPrintedJson.data(using: .utf8),
-                       let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-                       let responseArray = json["response"] as? [[String: Any]] {
-                        print(responseArray)
-                        for AddressItem in responseArray {
-                            if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
-                                 GetingAddress.append(EdditeAddres(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
-                               
+       
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                        GetingAddress.removeAll()
+                        if let jsonData = prettyPrintedJson.data(using: .utf8),
+                           let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                           let responseArray = json["response"] as? [[String: Any]] {
+                            print(responseArray)
+                            for AddressItem in responseArray {
+                                if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
+                                     GetingAddress.append(EdditeAddres(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
+                                   
+                                }
                             }
                         }
+                        print(GetingAddress)
+                        
+                       
+            
                     }
-                    print(GetingAddress)
-                    
-                   
-        
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
             }
+    }
+    func validateForm() -> Bool{
+        if selectedstate == "Select State"{
+            ShowToastMes = "Select State"
+            return false
         }
+        if AddressTextInpute == ""{
+            ShowToastMes = "Enter Address"
+            return false
+        }
+        return true
+    }
 }
+
+
+
 
 struct SearchBar: View {
     @Binding var text: String

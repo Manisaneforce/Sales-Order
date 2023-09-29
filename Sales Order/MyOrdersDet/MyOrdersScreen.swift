@@ -1075,7 +1075,7 @@ struct OrderDetView:View{
 
         
         func saveAndSharePDF(_ data: Data) {
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("temp.pdf")
+            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(OrderNo).pdf")
             do {
                 try data.write(to: tempURL)
                 let activityViewController = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)

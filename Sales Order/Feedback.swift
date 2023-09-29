@@ -10,9 +10,9 @@ import SwiftUI
 struct Feedback: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var AddressTextInpute:String = ""
-    @State private var isCheckedMarkYes = false
-    @State private var isCheckedMarkNo = true
+    @State private var isCheckedMarks: [Bool] = [false, false, false]
     @State private var Para:[String]=["1. Is the delivery of the material as per your order?","2. Is there any issue you would like to report?","3. is there any Material Damage / Expired?"]
+
     var body: some View {
         NavigationView{
             VStack{
@@ -23,29 +23,25 @@ struct Feedback: View {
                     HStack {
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
-                        })
-                        {
+                        }) {
                             Image("backsmall")
                                 .renderingMode(.template)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                                 .frame(width: 50)
-                            
                         }
                         Text("FEEDBACK / COMPLAINT FORM")
                             .font(.system(size: 18))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.top,50)
-                        //.padding(.leading,8)
-                        
-                        
                         Spacer()
                     }
-                    
                 }
                 .edgesIgnoringSafeArea(.top)
-                VStack{
+                .frame(maxWidth: .infinity)
+                .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                
                 ForEach(0..<3, id: \.self) { index in
                     VStack{
                         VStack{
@@ -59,22 +55,20 @@ struct Feedback: View {
                             
                             HStack{
                                 HStack{
-                                    Image(systemName: isCheckedMarkYes ? "checkmark.square.fill" : "square")
-                                        .foregroundColor(isCheckedMarkYes ? .blue : .blue)
+                                    Image(systemName: isCheckedMarks[index] ? "checkmark.square.fill" : "square")
+                                        .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
                                         .onTapGesture {
-                                            isCheckedMarkYes.toggle()
-                                            isCheckedMarkNo.toggle()
+                                            isCheckedMarks[index].toggle()
                                         }
                                     Text("Yes")
                                         .font(.system(size: 14))
                                         .fontWeight(.semibold)
                                 }
                                 HStack{
-                                    Image(systemName: isCheckedMarkNo ? "checkmark.square.fill" : "square")
-                                        .foregroundColor(isCheckedMarkNo ? .blue : .blue)
+                                    Image(systemName: isCheckedMarks[index] ? "square" : "checkmark.square.fill")
+                                        .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
                                         .onTapGesture {
-                                            isCheckedMarkYes.toggle()
-                                            isCheckedMarkNo.toggle()
+                                            isCheckedMarks[index].toggle()
                                         }
                                     Text("No")
                                         .font(.system(size: 14))
@@ -86,6 +80,7 @@ struct Feedback: View {
                         }
                     }
                 }
+                
                 HStack{
                     Text("4. For any other information/ to share Your feedback here")
                         .font(.system(size: 14))
@@ -94,6 +89,7 @@ struct Feedback: View {
                 }
                 .padding(.leading,10)
                 .padding(.trailing,10)
+                
                 TextEditor(text: $AddressTextInpute)
                     .padding(10)
                     .frame(height:140)
@@ -109,26 +105,30 @@ struct Feedback: View {
                             .padding(10)
                     )
                 
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(ColorData.shared.HeaderColor)
-                        .frame(height:40)
-                        .cornerRadius(10)
-                    VStack{
-                        Text("SUBMIT")
-                            .foregroundColor(.white)
-                            .fontWeight(.bold)
-                            .font(.system(size: 15))
+                Button(action: {
+                    // Add your submit action here
+                }) {
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height:40)
+                            .cornerRadius(10)
+                        VStack{
+                            Text("SUBMIT")
+                                .foregroundColor(.white)
+                                .fontWeight(.bold)
+                                .font(.system(size: 15))
+                        }
                     }
+                    .padding(10)
                 }
-                .padding(10)
-            }
-                .padding(.top,-50)
+                
                 Spacer()
-               
             }
+           
         }
         .navigationBarHidden(true)
     }
 }
+
 

@@ -441,7 +441,7 @@ struct My_Profile: View {
                         }
                             if OpenMod == "Edit"{
                                 if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                                    let urlString = APIClient.shared.BaseURL + APIClient.shared.DBURL + "update_ret_address" + "&id=\(Editid)" + "&listedDrCode=96" + "&address=\(encodedAddress)"
+                                    let urlString = APIClient.shared.BaseURL + APIClient.shared.DBURL + "update_ret_address" + "&id=\(Editid)" + "&listedDrCode=\(CustDet.shared.CusId)" + "&address=\(encodedAddress)"
 
                                     AF.request(urlString, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { AFdata in
                                         switch AFdata.result {
@@ -644,7 +644,6 @@ struct My_Profile: View {
                                 }
                             }
                         }
-                        print(GetingAddress)
                         
                        
             
