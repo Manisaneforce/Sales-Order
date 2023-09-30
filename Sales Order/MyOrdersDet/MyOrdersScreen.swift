@@ -1090,7 +1090,8 @@ struct OrderDetView:View{
             return renderer.image { context in
                 view.view.layer.render(in: context.cgContext)
             }
-        }}
+        }
+}
 
 
 class CustomPrintFormatter: UIPrintFormatter {

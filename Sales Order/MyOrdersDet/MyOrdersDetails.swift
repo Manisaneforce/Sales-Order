@@ -33,6 +33,7 @@ struct MyOrdersDetails: View {
     @State private var OrderDetialsView:Bool = false
     @State var OrderId = ""
     @State var Totalval = value
+    @State private var isHiden:Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let currentDate = Date()
@@ -87,6 +88,7 @@ struct MyOrdersDetails: View {
                         ToDate = fromDate
                         orderandinvoice()
                     }
+                   // if !isHiden{
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -142,6 +144,7 @@ struct MyOrdersDetails: View {
                         .padding(10)
                     }
                     .frame(height: 60)
+               // }
                     
                     ZStack{
                         Rectangle()
@@ -151,7 +154,7 @@ struct MyOrdersDetails: View {
                     .frame(height:40)
                     .padding(.leading,2)
                     .padding(.trailing,2)
-                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId)
+                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden)
                     Spacer()
                 }
                 .popover(isPresented: $isPopoverVisible) {
@@ -386,10 +389,11 @@ struct TapBar: View {
     @Binding var currentTab: Int
     @Binding var invoice: [getInvoice]
     @Binding var OrderId: String
+    @Binding var isHiden:Bool
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
-            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId)
+            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden)
                 .tag(0)
             INVOICE()
                 .tag(1)
@@ -465,11 +469,37 @@ struct ORDER:View{
     @State private var Qty = [String]()
     @Binding var OrderId:String
     @State private var Totalval:String = ""
+    @Binding var isHiden:Bool
+    @State private var values = 0
+    
     
     var body: some View{
         VStack{
                                 ScrollView{
                                     ForEach(0..<invoice.count, id: \.self) { index in
+                                        GeometryReader { reader -> AnyView in
+                                                        let yAxis = reader.frame(in: .global).minY
+                                                        
+                                                        if yAxis < 0 && !isHiden {
+                                                            DispatchQueue.main.async {
+                                                                withAnimation { isHiden = true }
+                                                                values += 1
+                                                            }
+                                                        }
+                                                        
+                                                        if yAxis > 0 && isHiden {
+                                                            DispatchQueue.main.async {
+                                                                withAnimation { isHiden = false }
+                                                                values -= 1
+                                                            }
+                                                        }
+                                                        
+                                                        return AnyView(
+                                                            Text("")
+                                                                .frame(width: 0, height: 0)
+                                                        )
+                                                    }
+                                                    .frame(width: 0, height: 0)
                                     VStack{
                                         HStack{
                                             Text(CustDet.shared.StkNm)

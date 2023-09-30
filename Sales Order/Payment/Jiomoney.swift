@@ -54,6 +54,7 @@ struct WebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             // Inject JavaScript code after 2 seconds
+            print(webView.url as Any)
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 let script = "document.getElementById('myButton').click();"
                 webView.evaluateJavaScript(script, completionHandler: nil)

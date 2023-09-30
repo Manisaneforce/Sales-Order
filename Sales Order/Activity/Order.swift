@@ -232,6 +232,7 @@ struct Order: View {
                         .frame(height: 10)
                     Text(prettyPrintedJson)
                         .fontWeight(.semibold)
+                        .foregroundColor(ColorData.shared.HeaderColor)
                         .font(.system(size: 12))
                         //.frame(width: 80,height: 25)
                         .padding(.horizontal,10)
