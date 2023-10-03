@@ -31,6 +31,7 @@ class VisitData{
     var PayValue: String = ""
     
     var ProductCart: [AnyObject] = []
+    var lstPrvOrder:[AnyObject] = []
     
     func clear(){
         WorkType = ""

@@ -40,15 +40,14 @@ struct EdditeAddres : Any{
 }
 
 
-var lstPrvOrder: [AnyObject] = []
 var lblTotAmt:String = "0.0"
+var lblTotAmt2:String = String()
 var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
 var ShpingAddress = ""
 var BillingAddress = CustDet.shared.Addr
-var isChecked = false
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 struct Order: View {
     @State private var clickeindex:Int = 0
@@ -96,6 +95,8 @@ struct Order: View {
     @State private var items: [TotAmt] = []
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var SelMod = ""
+    @State private var isChecked:Bool = false
+    @State private var lstPrvOrder: [AnyObject] = []
    
 
     var body: some View {
@@ -611,6 +612,7 @@ struct Order: View {
                     }else{
                         
                         SelPrvOrderNavigte = true
+                        VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
                     }
                     
                 }) {
@@ -756,7 +758,7 @@ struct Order: View {
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $ADDaddress, content: {
-            Address(ADDaddress: $ADDaddress, SelMod: $SelMod)
+            Address(ADDaddress: $ADDaddress, SelMod: $SelMod, isChecked: $isChecked)
             
         })
     }
@@ -1060,126 +1062,130 @@ struct Address:View{
     @State private var ToastMessage:String = ""
     @State private var ShowToastMes:String = String()
     @State private var showToast:Bool = false
+    @Binding var isChecked:Bool
  
     var body: some View{
         ZStack{
-        VStack{
-            Text("")
-                .font(.system(size: 20))
-            Text("Select Address")
-                .font(.system(size: 20))
-                .font(.headline)
-                .fontWeight(.bold)
-            Divider()
-            ZStack{
-                Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
-                Text("Borivali")
+            VStack{
+                Text("")
+                    .font(.system(size: 20))
+                Text("Select Address")
+                    .font(.system(size: 20))
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Divider()
+                ZStack{
+                    Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
+                    Text("Borivali")
                     
                     //.frame(width: 50, height: 50)
-            }
-            .frame(width: 350,height: 50)
-            .cornerRadius(10)
-            .onAppear{
-                
-                print(GetingAddress)
-            }
-            .onAppear{GetingListAddress()}
-            List(0..<GetingAddress.count, id: \.self) { index in
-                if #available(iOS 15.0, *) {
-                    ZStack{
-                        Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
-                        HStack(){
-                            Text(GetingAddress[index].address)
-                                .frame(height: 50)
-                                .offset(x:10)
-                                .onTapGesture {
-                                    if SelMod == "SA"{
-                                        ShpingAddress = GetingAddress[index].address
-                                        print(ShpingAddress)
-                                        if isChecked == true{
-                                            
-                                        }else{
-                                            ShpingAddress = BillingAddress
-                                           
-                                        }
-                                    }
-                                    if SelMod == "BA"{
-                                        BillingAddress = GetingAddress[index].address
-                                        
-                                    }
-                                    ADDaddress = false
-                                    
-                                }
-                            Spacer()
-                            Image(systemName: "pencil" )
-                                .foregroundColor(Color(.blue))
-                                .frame(width: 30)
-                                .onTapGesture {
-                                    Editid = GetingAddress[index].id
-                                    clickPlusButton.toggle()
-                                    OpenMod = "Edit"
-                                    EditeAddressHed = "Edite Address"
-                                    //EditState = GetingAddress[index].address
-                                    EditeAddres = GetingAddress[index].address
-                                    AddressTextInpute = EditeAddres
-                                    
-                                    
-                                    
-                                }
-                            Image(systemName: "trash.fill")
-                                .foregroundColor(Color.red)
-                                .frame(width: 50, height: 30)
-                                .onTapGesture {
-                                    
-                                    let getid = GetingAddress[index].id
-                                    let listedDrCode = GetingAddress[index].listedDrCode
-                                    print(getid)
-                                    
-                                    let axn = "delete_ret_address&id=\(getid)&listedDrCode=\(listedDrCode)"
-                                  //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
-                                    let apiKey = "\(axn)"
-                                    
-                                    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                        .validate(statusCode: 200 ..< 299)
-                                        .responseJSON { response in
-                                            switch response.result {
-                                            case .success(let value):
-                                                print(value)
-                                     
-                                                if let json = value as? [String:AnyObject] {
-                                                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                        return
-                                                    }
-                                                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                        print("Error: Could print JSON in String")
-                                                        return
-                                                    }
-                                                    GetingAddress.remove(at: index)
-                                                    print(prettyPrintedJson)
-                                        
-                                                }
-                                            case .failure(let error):
-                                                print(error)
+                }
+                .frame(width: 350,height: 50)
+                .cornerRadius(10)
+                .onAppear{
+                    
+                    print(GetingAddress)
+                }
+                .onAppear{GetingListAddress()}
+                ScrollView{
+                ForEach(0..<GetingAddress.count, id: \.self) { index in
+                    if #available(iOS 15.0, *) {
+                        ZStack{
+                            Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
+                            HStack(){
+                                Text(GetingAddress[index].address)
+                                    .padding(.horizontal,10)
+                                    .padding(.vertical,5)
+                                    .onTapGesture {
+                                        if SelMod == "SA"{
+                                            ShpingAddress = GetingAddress[index].address
+                                            print(ShpingAddress)
+                                            if isChecked == true{
+                                                
+                                            }else{
+                                                ShpingAddress = BillingAddress
+                                                
                                             }
                                         }
-                                }
+                                        if SelMod == "BA"{
+                                            BillingAddress = GetingAddress[index].address
+                                            
+                                        }
+                                        ADDaddress = false
+                                        
+                                    }
+                                Spacer()
+                                Image(systemName: "pencil" )
+                                    .foregroundColor(Color(.blue))
+                                    .frame(width: 30)
+                                    .onTapGesture {
+                                        Editid = GetingAddress[index].id
+                                        clickPlusButton.toggle()
+                                        OpenMod = "Edit"
+                                        EditeAddressHed = "Edite Address"
+                                        //EditState = GetingAddress[index].address
+                                        EditeAddres = GetingAddress[index].address
+                                        AddressTextInpute = EditeAddres
+                                        
+                                        
+                                        
+                                    }
+                                Image(systemName: "trash.fill")
+                                    .foregroundColor(Color.red)
+                                    .frame(width: 50, height: 30)
+                                    .onTapGesture {
+                                        
+                                        let getid = GetingAddress[index].id
+                                        let listedDrCode = GetingAddress[index].listedDrCode
+                                        print(getid)
+                                        
+                                        let axn = "delete_ret_address&id=\(getid)&listedDrCode=\(listedDrCode)"
+                                        //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
+                                        let apiKey = "\(axn)"
+                                        
+                                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                            .validate(statusCode: 200 ..< 299)
+                                            .responseJSON { response in
+                                                switch response.result {
+                                                case .success(let value):
+                                                    print(value)
+                                                    
+                                                    if let json = value as? [String:AnyObject] {
+                                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                            return
+                                                        }
+                                                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                            print("Error: Could print JSON in String")
+                                                            return
+                                                        }
+                                                        GetingAddress.remove(at: index)
+                                                        print(prettyPrintedJson)
+                                                        
+                                                    }
+                                                case .failure(let error):
+                                                    print(error)
+                                                }
+                                            }
+                                    }
+                            }
+                            
                         }
+                        .cornerRadius(10)
+                        
+                        
+                        
+                        .listRowSeparator(.hidden)
+                    } else {
                         
                     }
-                    .cornerRadius(10)
-                    
-                    
-                    
-                    .listRowSeparator(.hidden)
-                } else {
-                    
                 }
+                .padding(.horizontal,10)
+                .listStyle(PlainListStyle())
+                .padding(.vertical, 5)
+                //.background(Color.white)
+                .background(Color.white)
             }
-            .listStyle(PlainListStyle())
-            .padding(.vertical, 5)
-            //.background(Color.white)
-            .background(Color.white)
             Spacer()
             Image(systemName: "plus.circle.fill")
                 .resizable()
@@ -1870,7 +1876,7 @@ struct SelPrvOrder: View {
           let  qtys = (items["Qty"] as? String)!
             qty.append(qtys)
         }
-        print(lstPrvOrder.count)
+        print(VisitData.shared.lstPrvOrder.count)
         print(VisitData.shared.ProductCart.count)
         print(qty)
         
@@ -1922,9 +1928,9 @@ struct SelPrvOrder: View {
                             }
                         }
                         .onAppear{
-                            print(lstPrvOrder)
+                            print(VisitData.shared.lstPrvOrder)
                             var ProSelectID = [String]()
-                            for itemID in lstPrvOrder{
+                            for itemID in VisitData.shared.lstPrvOrder{
                                 let id =  itemID["id"] as! String
                                 ProSelectID.append(id)
                             }
@@ -1946,7 +1952,7 @@ struct SelPrvOrder: View {
                                 }
                                 
                                 
-                                for PrvOrderData in lstPrvOrder{
+                                for PrvOrderData in VisitData.shared.lstPrvOrder{
                                     print(PrvOrderData)
                                     let RelID = PrvOrderData["id"] as? String
                                     let Uomnm = PrvOrderData["UOMNm"] as? String
@@ -2335,8 +2341,8 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         
     }
     print(VisitData.shared.ProductCart)
-    lstPrvOrder = VisitData.shared.ProductCart
-    selectitemCount = lstPrvOrder.count
+    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
+    selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
 
@@ -2427,19 +2433,19 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
-    print(lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder)
     
-   lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-        print(lstPrvOrder)
+    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+        print(VisitData.shared.lstPrvOrder)
         if (Cart["SalQty"] as! Double) > 0 {
             print(Cart["SalQty"] as! Double)
             return true
         }
         return false
     })
-    if lstPrvOrder.count>0 {
-        for i in 0...lstPrvOrder.count-1 {
-            let item: AnyObject = lstPrvOrder[i]
+    if VisitData.shared.lstPrvOrder.count>0 {
+        for i in 0...VisitData.shared.lstPrvOrder.count-1 {
+            let item: AnyObject = VisitData.shared.lstPrvOrder[i]
             totAmt = totAmt + (item["NetVal"] as! Double)
             print(totAmt)
             print(item["NetVal"] as! Double)
@@ -2448,8 +2454,8 @@ func updateOrderValues(refresh:Int){
 
         }
     }
-  //  lblTotAmt = String(format: "Rs. %.02f", totAmt)
-    lblTotAmt = String(totAmt)
+    lblTotAmt = String(format: "Rs. %.02f", totAmt)
+    lblTotAmt2 = String(totAmt)
     print(totAmt)
     if(refresh == 1){
      
@@ -2457,37 +2463,37 @@ func updateOrderValues(refresh:Int){
 
 }
 func deleteItem(at index: Int) {
-    print(lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder)
     print(VisitData.shared.ProductCart)
     var ids = [String]()
     var id = ""
-    for allid in lstPrvOrder{
+    for allid in VisitData.shared.lstPrvOrder{
         ids.append(allid["id"] as! String)
     }
     id = ids[index]
     print(ids)
     print(id)
-    lstPrvOrder.remove(at: index)
+    VisitData.shared.lstPrvOrder.remove(at: index)
     VisitData.shared.ProductCart.removeAll(where: { (item) in
         if item["id"] as! String == id {
             return true
         }
         return false
     })
-    print(lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder)
     print(VisitData.shared.ProductCart)
     updateOrderValues(refresh: 1)
 }
 
 func OrderSubmit(lat:String,log:String) {
     
-    print(lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder)
   print(lat)
     print(log)
     
     var sPItems:String = ""
-    for i in 0..<lstPrvOrder.count {
-        guard let item = lstPrvOrder[i] as? [String: Any],
+    for i in 0..<VisitData.shared.lstPrvOrder.count {
+        guard let item = VisitData.shared.lstPrvOrder[i] as? [String: Any],
               let id = item["id"] as? String else {
             continue
         }
@@ -2551,7 +2557,7 @@ func OrderSubmit(lat:String,log:String) {
     }
     updateDateAndTime()
     
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt2)\",\"No_Of_items\":\"\(VisitData.shared.ProductCart.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
     

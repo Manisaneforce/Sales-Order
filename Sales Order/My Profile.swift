@@ -487,11 +487,13 @@ struct My_Profile: View {
                         
                         Divider()
                         List(0..<List_State.count,id: \.self){index in
-                            Text(List_State[index].title)
-                                .onTapGesture {
-                                    selectedstateText = List_State[index].title
-                                    SelectSatae.toggle()
-                                }
+                            Button(action:{
+                                selectedstateText = List_State[index].title
+                                SelectSatae.toggle()
+                            })
+                            {
+                                Text(List_State[index].title)
+                            }
                            
                         }
                         .listStyle(PlainListStyle())

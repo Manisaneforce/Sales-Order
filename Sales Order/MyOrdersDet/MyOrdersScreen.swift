@@ -147,7 +147,7 @@ struct MyOrdersScreen: View {
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 40)
                     HStack{
-                        Text("Descrition")
+                        Text("Description")
                             .foregroundColor(Color.white)
                             .font(.system(size: 16))
                         Spacer()
@@ -317,7 +317,7 @@ struct MyOrdersScreen: View {
                     }
                     VStack{
                         
-                        Text("Last 7 days")
+                        Text("                                  Last 7 days                                  ")
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
@@ -326,7 +326,7 @@ struct MyOrdersScreen: View {
                             }
                             
                         Divider()
-                        Text("Last 30 days")
+                        Text("                                  Last 30 days                                  ")
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
