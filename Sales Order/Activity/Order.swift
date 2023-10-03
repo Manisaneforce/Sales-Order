@@ -97,320 +97,322 @@ struct Order: View {
     @State private var SelMod = ""
     @State private var isChecked:Bool = false
     @State private var lstPrvOrder: [AnyObject] = []
+    @State private var OredSc:Bool = true
+    @State private var SelPrvSc:Bool = false
    
 
     var body: some View {
-        
+        if OredSc{
         NavigationView {
             ZStack{
-            VStack(spacing: 0) {
-                
-                ZStack(alignment: .top) {
-                    Rectangle()
-                        .foregroundColor(ColorData.shared.HeaderColor)
-                        .frame(height: 80)
+                VStack(spacing: 0) {
                     
-                    HStack {
-                        Button(action: {
-                            showAlert = true
-                        })
-                        {
-                            Image("backsmall")
-                                .renderingMode(.template)
+                    ZStack(alignment: .top) {
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
+                        
+                        HStack {
+                            Button(action: {
+                                showAlert = true
+                            })
+                            {
+                                Image("backsmall")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.white)
+                                    .padding(.top,50)
+                                    .frame(width: 50)
+                            }
+                            
+                            
+                            .alert(isPresented: $showAlert) {
+                                Alert(
+                                    title: Text("Confirmation"),
+                                    message: Text("Do you want cancel this order Draft"),
+                                    primaryButton: .default(Text("OK")) {
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    },
+                                    secondaryButton: .cancel()
+                                )
+                            }
+                            
+                            
+                            Text("Order")
+                                .font(.system(size: 22))
+                                .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
-                                .frame(width: 50)
+                            Spacer()
                         }
                         
-                        
-                        .alert(isPresented: $showAlert) {
-                            Alert(
-                                title: Text("Confirmation"),
-                                message: Text("Do you want cancel this order Draft"),
-                                primaryButton: .default(Text("OK")) {
-                                    self.presentationMode.wrappedValue.dismiss()
-                                },
-                                secondaryButton: .cancel()
-                            )
-                        }
-                  
-                        
-                        Text("Order")
-                            .font(.system(size: 22))
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .padding(.top,50)
-                        Spacer()
                     }
+                    //.cornerRadius(5)
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                     
-                }
-                //.cornerRadius(5)
-                .edgesIgnoringSafeArea(.top)
-                .frame(maxWidth: .infinity)
-                .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                
-                VStack(alignment: .leading, spacing: 6) {
-                    VStack(spacing:5){
-                        HStack{
-                            Text(CustDet.shared.CusName)
-                                .font(.system(size: 15))
-                            Spacer()
-                        }
-                        HStack {
-                            //                            Image("SubmittedCalls")
-                            //                                .resizable()
-                            //                                .frame(width: 20, height: 20)
-                            //                                .background(Color.blue)
-                            //                                .cornerRadius(10)
-                            Text(CustDet.shared.Mob)
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
+                    VStack(alignment: .leading, spacing: 6) {
+                        VStack(spacing:5){
+                            HStack{
+                                Text(CustDet.shared.CusName)
+                                    .font(.system(size: 15))
                                 Spacer()
-                        }
-                        HStack{
-                            Text("Billing Address:")
-                                .font(.system(size: 12))
-                            Text(BillingAddress)
-                                .font(.system(size: 12))
-                            Spacer()
-                          
+                            }
+                            HStack {
+                                //                            Image("SubmittedCalls")
+                                //                                .resizable()
+                                //                                .frame(width: 20, height: 20)
+                                //                                .background(Color.blue)
+                                //                                .cornerRadius(10)
+                                Text(CustDet.shared.Mob)
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                            HStack{
+                                Text("Billing Address:")
+                                    .font(.system(size: 12))
+                                Text(BillingAddress)
+                                    .font(.system(size: 12))
+                                Spacer()
+                                
                                 Image(systemName: "pencil" )
                                     .foregroundColor(Color(.blue))
                                     .frame(width: 20)
                                     .onTapGesture {
                                         ADDaddress.toggle()
                                         SelMod = "BA"
-                                      
-                                      
+                                        
+                                        
                                     }
-                                  
+                                
+                                
+                            }
                             
-                        }
-                        
-                        HStack {
-                            
-                            Image(systemName: isChecked ? "square" : "checkmark.square.fill")
-                                .foregroundColor(isChecked ? .blue : .blue)
-                                .onTapGesture {
-                                    isChecked.toggle()
-                                    if isChecked == true{
-                                        SameAddrssmark = false
-                                    }else{
-                                        ShpingAddress = BillingAddress
-                                        SameAddrssmark = true
-                                    }
-                                }
-                            Text("Shipping Address same As Billing Address")
-                                .font(.system(size: 12))
-                            Spacer()
-                        }
-                        if !SameAddrssmark{
-                        HStack{
-                            Text("Shipping Address:")
-                                .font(.system(size: 12))
-                            Text(ShpingAddress)
-                                .font(.system(size: 12))
-                            Spacer()
-                                Image(systemName: "pencil")
-                                    .foregroundColor(Color(.blue))
-                                    .frame(width: 20)
+                            HStack {
+                                
+                                Image(systemName: isChecked ? "square" : "checkmark.square.fill")
+                                    .foregroundColor(isChecked ? .blue : .blue)
                                     .onTapGesture {
-                                        SelMod = "SA"
-                                        ADDaddress.toggle()
+                                        isChecked.toggle()
                                         if isChecked == true{
+                                            SameAddrssmark = false
                                         }else{
                                             ShpingAddress = BillingAddress
-                                            
+                                            SameAddrssmark = true
                                         }
                                     }
-                        }
-                    }
-                        
-                    }
-                    .padding(.horizontal, 12)
-                    
-                    Divider()
-                        .frame(height: 10)
-                    Text(prettyPrintedJson)
-                        .fontWeight(.semibold)
-                        .foregroundColor(ColorData.shared.HeaderColor)
-                        .font(.system(size: 12))
-                        //.frame(width: 80,height: 25)
-                        .padding(.horizontal,10)
-                        .padding(.vertical,5)
-                        .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
-                        )
-                        .padding(.horizontal, 12)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(prodTypes2.indices, id: \.self) { index in
-                                Button(action: {
-                                    prodofcat.removeAll()
-                                    proDetsID.removeAll()
-                                    Allprod.removeAll()
-                                    TotalQty.removeAll()
-                                    if selectedIndex == index {
-                                        selectedIndex = index
-                                        SubselectedIndex = 0
-                                        
-                                    } else {
-                                        selectedIndex = index
-                                        SubselectedIndex = 0
-                                    }
-                                    print("Clicked button at index: \(index)")
-                                    self.OrderprodCate(at: index)
-                                    
-                                }) {
-                                    
-                                    Text(prodTypes2[index])
-                                        .fontWeight(.bold)
-                                        .foregroundColor(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 5)
+                                Text("Shipping Address same As Billing Address")
+                                    .font(.system(size: 12))
+                                Spacer()
+                            }
+                            if !SameAddrssmark{
+                                HStack{
+                                    Text("Shipping Address:")
                                         .font(.system(size: 12))
+                                    Text(ShpingAddress)
+                                        .font(.system(size: 12))
+                                    Spacer()
+                                    Image(systemName: "pencil")
+                                        .foregroundColor(Color(.blue))
+                                        .frame(width: 20)
+                                        .onTapGesture {
+                                            SelMod = "SA"
+                                            ADDaddress.toggle()
+                                            if isChecked == true{
+                                            }else{
+                                                ShpingAddress = BillingAddress
+                                                
+                                            }
+                                        }
+                                }
+                            }
+                            
+                        }
+                        .padding(.horizontal, 12)
+                        
+                        Divider()
+                            .frame(height: 10)
+                        Text(prettyPrintedJson)
+                            .fontWeight(.semibold)
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .font(.system(size: 12))
+                        //.frame(width: 80,height: 25)
+                            .padding(.horizontal,10)
+                            .padding(.vertical,5)
+                            .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
+                            )
+                            .padding(.horizontal, 12)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(prodTypes2.indices, id: \.self) { index in
+                                    Button(action: {
+                                        prodofcat.removeAll()
+                                        proDetsID.removeAll()
+                                        Allprod.removeAll()
+                                        TotalQty.removeAll()
+                                        if selectedIndex == index {
+                                            selectedIndex = index
+                                            SubselectedIndex = 0
+                                            
+                                        } else {
+                                            selectedIndex = index
+                                            SubselectedIndex = 0
+                                        }
+                                        print("Clicked button at index: \(index)")
+                                        self.OrderprodCate(at: index)
+                                        
+                                    }) {
+                                        
+                                        Text(prodTypes2[index])
+                                            .fontWeight(.bold)
+                                            .foregroundColor(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 5)
+                                            .font(.system(size: 12))
                                         //.background(selectedIndex == index ? ColorData.shared.HeaderColor : Color.white)
                                         //.cornerRadius(10)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
-                                        )
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(selectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
+                                            )
+                                    }
+                                    .cornerRadius(10)
                                 }
-                                .cornerRadius(10)
+                            }
+                            .padding(.horizontal, 10)
+                            
+                        }
+                        Divider()
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack{
+                                ForEach(prodofcat.indices, id: \.self) { index in
+                                    Button(action:{
+                                        imgdataURL.removeAll()
+                                        Arry.removeAll()
+                                        Allprod.removeAll()
+                                        print("If Select data")
+                                        print("Clicked button at index: \(index)")
+                                        self.OrderprodDets(at: index)
+                                        if SubselectedIndex == index {
+                                            SubselectedIndex = index
+                                        } else {
+                                            SubselectedIndex = index
+                                        }
+                                        
+                                    }) {
+                                        Text(prodofcat[index])
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 5)
+                                            .font(.system(size: 12))
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
+                                            )
+                                    }
+                                    .cornerRadius(10)
+                                }
+                                
                             }
                         }
                         .padding(.horizontal, 10)
                         
+                        
                     }
-                    Divider()
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack{
-                            ForEach(prodofcat.indices, id: \.self) { index in
-                                Button(action:{
-                                    imgdataURL.removeAll()
-                                    Arry.removeAll()
-                                    Allprod.removeAll()
-                                    print("If Select data")
-                                    print("Clicked button at index: \(index)")
-                                    self.OrderprodDets(at: index)
-                                    if SubselectedIndex == index {
-                                        SubselectedIndex = index
-                                    } else {
-                                        SubselectedIndex = index
+                    //.padding(.top,0)
+                    .onAppear {
+                        
+                        prodGroup { jsonString in
+                            if let jsonData = jsonString.data(using: .utf8) {
+                                do {
+                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]],
+                                       let firstItem = jsonArray.first {
+                                        let textname = firstItem["name"] as? String ?? ""
+                                        print("Name: \(textname)")
+                                        prettyPrintedJson = textname
                                     }
-                                    
-                                }) {
-                                    Text(prodofcat[index])
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 5)
-                                        .font(.system(size: 12))
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .stroke(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
-                                        )
+                                } catch {
+                                    print("Error parsing JSON: \(error)")
                                 }
-                                .cornerRadius(10)
-                            }
-                            
-                        }
-                    }
-                    .padding(.horizontal, 10)
-             
-                    
-                }
-                //.padding(.top,0)
-                .onAppear {
-                    
-                    prodGroup { jsonString in
-                        if let jsonData = jsonString.data(using: .utf8) {
-                            do {
-                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]],
-                                   let firstItem = jsonArray.first {
-                                    let textname = firstItem["name"] as? String ?? ""
-                                    print("Name: \(textname)")
-                                    prettyPrintedJson = textname
-                                }
-                            } catch {
-                                print("Error parsing JSON: \(error)")
                             }
                         }
-                    }
-                    Sales_Order.prodTypes { json in
-                        if let jsonData = json.data(using: .utf8) {
-                            do {
-                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                    var prodTypes1 = [String]()
-                                    var Typofid = [Int]()
-                                    for item in jsonArray {
-                                        if let textName = item["name"] as? String , let typid = item["id"] as? Int {
-                                            prodTypes1.append(textName)
-                                            Typofid.append(typid)
+                        Sales_Order.prodTypes { json in
+                            if let jsonData = json.data(using: .utf8) {
+                                do {
+                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                        var prodTypes1 = [String]()
+                                        var Typofid = [Int]()
+                                        for item in jsonArray {
+                                            if let textName = item["name"] as? String , let typid = item["id"] as? Int {
+                                                prodTypes1.append(textName)
+                                                Typofid.append(typid)
+                                            }
                                         }
+                                        print(prodTypes1)
+                                        print(Typofid)
+                                        prodTypes2 = prodTypes1
+                                        prodTypes3 = Typofid
+                                        print(json)
                                     }
-                                    print(prodTypes1)
-                                    print(Typofid)
-                                    prodTypes2 = prodTypes1
-                                    prodTypes3 = Typofid
-                                    print(json)
+                                } catch {
+                                    print("Error parsing JSON: \(error)")
                                 }
-                            } catch {
-                                print("Error parsing JSON: \(error)")
                             }
+                            self.OrderprodCate(at: 0)
                         }
-                        self.OrderprodCate(at: 0)
+                        
+                        Sales_Order.prodDets{
+                            json in
+                            print(json)
+                        }
+                        TexQty()
+                        ShpingAddress = BillingAddress
+                        
                     }
                     
-                    Sales_Order.prodDets{
-                        json in
-                        print(json)
-                    }
-                    TexQty()
-                    ShpingAddress = BillingAddress
+                    //NavigationView {
                     
-                }
-                
-                //NavigationView {
-                
-                List(0 ..< Allprod.count, id: \.self) { index in
-                    if #available(iOS 15.0, *) {
-                        HStack {
-                            if let uiImage = uiImage {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 75, height: 75)
-                                    .cornerRadius(4)
-                            } else {
-                                Text("Image loading...")
-                                    .font(.system(size: 14))
-                                   // .onAppear{ loadImage(at: index) }
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 5) {
-                                // Text(Arry[index])
-                                Text(Allprod[index].ProName)
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 14))
-                                    .lineLimit(2)
-                                    .minimumScaleFactor(0.5)
-                                Text(Allprod[index].ProID)
-                                    .font(.system(size: 13))
-                                    .foregroundColor(.secondary)
-                                HStack {
-                                    //Text("MRP ₹\(nubers[index])")
-                                    Text("MRP 0")
-                                    .font(.system(size: 13))
-                                    Spacer()
-                                    Text("Price: \(Allprod[index].ProMRP)")
-                                    .font(.system(size: 13))
-                                    .fontWeight(.semibold)
+                    List(0 ..< Allprod.count, id: \.self) { index in
+                        if #available(iOS 15.0, *) {
+                            HStack {
+                                if let uiImage = uiImage {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 75, height: 75)
+                                        .cornerRadius(4)
+                                } else {
+                                    Text("Image loading...")
+                                        .font(.system(size: 14))
+                                    // .onAppear{ loadImage(at: index) }
                                 }
-                                HStack {
+                                
+                                VStack(alignment: .leading, spacing: 5) {
+                                    // Text(Arry[index])
+                                    Text(Allprod[index].ProName)
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 14))
+                                        .lineLimit(2)
+                                        .minimumScaleFactor(0.5)
+                                    Text(Allprod[index].ProID)
+                                        .font(.system(size: 13))
+                                        .foregroundColor(.secondary)
+                                    HStack {
+                                        //Text("MRP ₹\(nubers[index])")
+                                        Text("MRP 0")
+                                            .font(.system(size: 13))
+                                        Spacer()
+                                        Text("Price: \(Allprod[index].ProMRP)")
+                                            .font(.system(size: 13))
+                                            .fontWeight(.semibold)
+                                    }
+                                    HStack {
                                         VStack{
                                             Text(filterItems[index].SelectUom)
                                                 .padding(.vertical, 6)
@@ -426,255 +428,257 @@ struct Order: View {
                                                     clickeindex=index
                                                     allUomlist.removeAll()
                                                     isShowingPopUp.toggle()
-                                                  let FilterUnite =  FilterProduct[index]
+                                                    let FilterUnite =  FilterProduct[index]
                                                     print(FilterUnite)
-                                        
+                                                    
                                                     if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
                                                         print(uomLists)
                                                         self.lstOfUnitList(at: index, filterUnite: uomLists)
-                                                      } else {
-                                                          print("UOMList not found or not in the expected format.")
-                                                      }
+                                                    } else {
+                                                        print("UOMList not found or not in the expected format.")
+                                                    }
+                                                    
+                                                }
+                                        }
+                                        
+                                        
+                                        
+                                        Spacer()
+                                        HStack {
+                                            Button(action: {
+                                                if filterItems[index].Amt > 0 {
+                                                    filterItems[index].Amt -= 1
+                                                }
+                                                let proditem = Allprod[index]
+                                                print(proditem)
+                                                let FilterProduct = Allprod[index].Unit_Typ_Product
+                                                print(FilterProduct)
+                                                let id = proditem.ProID
                                                 
+                                                let selectproduct = $FilterProduct[index] as? AnyObject
+                                                print(selectproduct as Any)
+                                                let  sQty = String(filterItems[index].Amt)
+                                                print(sQty)
+                                                print(Allprod[index].ProID)
+                                                
+                                                let Ids = Allprod[index].ProID
+                                                print(Ids as Any)
+                                                
+                                                let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                                    
+                                                    if (Cart["id"] as! String) == Ids {
+                                                        return true
+                                                    }
+                                                    return false
+                                                })
+                                                var selUOMConv: String = "1"
+                                                
+                                                if(items.count>0){
+                                                    selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                                    let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                    let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                    filterItems[index].TotAmt=String(TotalAmount)
+                                                } else{
+                                                    
+                                                    selUOMConv=String(filterItems[index].Amt)
+                                                    print(selUOMConv)
+                                                    let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                    let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                    filterItems[index].TotAmt=String(TotalAmount)
                                                 }
-                                        }
-                                    
-                                    
-                                    
-                                    Spacer()
-                                    HStack {
-                                        Button(action: {
-                                            if filterItems[index].Amt > 0 {
-                                                filterItems[index].Amt -= 1
+                                                
+                                                minusQty(sQty: sQty, SelectProd: FilterProduct)
+                                                
+                                            }) {
+                                                Text("-")
+                                                    .font(.system(size: 15))
+                                                    .fontWeight(.bold)
                                             }
-                                            let proditem = Allprod[index]
-                                            print(proditem)
-                                            let FilterProduct = Allprod[index].Unit_Typ_Product
-                                            print(FilterProduct)
-                                            let id = proditem.ProID
+                                            .buttonStyle(PlainButtonStyle())
                                             
-                                            let selectproduct = $FilterProduct[index] as? AnyObject
-                                            print(selectproduct as Any)
-                                            let  sQty = String(filterItems[index].Amt)
-                                            print(sQty)
-                                            print(Allprod[index].ProID)
-
-                                            let Ids = Allprod[index].ProID
-                                            print(Ids as Any)
-
-                                            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-
-                                                if (Cart["id"] as! String) == Ids {
-                                                    return true
-                                                }
-                                                return false
-                                            })
-                                            var selUOMConv: String = "1"
-
-                                            if(items.count>0){
-                                                selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
-                                               let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
-                                                filterItems[index].TotAmt=String(TotalAmount)
-                                            } else{
-
-                                              selUOMConv=String(filterItems[index].Amt)
-                                              print(selUOMConv)
-                                                let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                 let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
-                                                filterItems[index].TotAmt=String(TotalAmount)
-                                          }
-                                            
-                                            minusQty(sQty: sQty, SelectProd: FilterProduct)
-                                            
-                                        }) {
-                                            Text("-")
-                                                .font(.system(size: 15))
+                                            Text("\(filterItems[index].Amt)")
                                                 .fontWeight(.bold)
-                                        }
-                                        .buttonStyle(PlainButtonStyle())
-                                        
-                                        Text("\(filterItems[index].Amt)")
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 15))
-                                            .foregroundColor(Color.black)
-                                        
-                                        Button(action: {
-                                            filterItems[index].Amt += 1
-                                            print(lstPrvOrder)
-                                            print(filterItems[index].Amt)
+                                                .font(.system(size: 15))
+                                                .foregroundColor(Color.black)
                                             
-                                            let proditem = Allprod[index]
-                                            print(proditem)
-                                            let FilterProduct = Allprod[index].Unit_Typ_Product
-                                            print(FilterProduct)
-                                            
-                                            let selectproduct = $FilterProduct[index] as? AnyObject
-                                            print(selectproduct as Any)
-                                            let  sQty = String(filterItems[index].Amt)
-                                            print(sQty)
-                                            
-                                            print(Allprod[index].ProID)
-
-                                            let Ids = Allprod[index].ProID
-                                            print(Ids as Any)
-
-                                            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-
-                                                if (Cart["id"] as! String) == Ids {
-                                                    return true
+                                            Button(action: {
+                                                filterItems[index].Amt += 1
+                                                print(lstPrvOrder)
+                                                print(filterItems[index].Amt)
+                                                
+                                                let proditem = Allprod[index]
+                                                print(proditem)
+                                                let FilterProduct = Allprod[index].Unit_Typ_Product
+                                                print(FilterProduct)
+                                                
+                                                let selectproduct = $FilterProduct[index] as? AnyObject
+                                                print(selectproduct as Any)
+                                                let  sQty = String(filterItems[index].Amt)
+                                                print(sQty)
+                                                
+                                                print(Allprod[index].ProID)
+                                                
+                                                let Ids = Allprod[index].ProID
+                                                print(Ids as Any)
+                                                
+                                                let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                                    
+                                                    if (Cart["id"] as! String) == Ids {
+                                                        return true
+                                                    }
+                                                    return false
+                                                })
+                                                var selUOMConv: String = "1"
+                                                
+                                                if(items.count>0){
+                                                    selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                                    let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                    let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                    filterItems[index].TotAmt=String(TotalAmount)
+                                                } else{
+                                                    
+                                                    selUOMConv=String(filterItems[index].Amt)
+                                                    print(selUOMConv)
+                                                    let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                    let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
+                                                    filterItems[index].TotAmt=String(TotalAmount)
                                                 }
-                                                return false
-                                            })
-                                            var selUOMConv: String = "1"
-
-                                            if(items.count>0){
-                                                selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
-                                               let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
-                                                filterItems[index].TotAmt=String(TotalAmount)
-                                            } else{
-
-                                              selUOMConv=String(filterItems[index].Amt)
-                                              print(selUOMConv)
-                                                let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                 let TotalAmount = Double(Allprod[index].ProMRP)! * Double(uom)
-                                                filterItems[index].TotAmt=String(TotalAmount)
-                                          }
-                                            
-                                            
-                                            addQty(sQty: sQty, SelectProd: FilterProduct)
-                                            
-                               
-                                            
-                                        }) {
-                                            Text("+")                          .font(.system(size: 15))
-                                            .fontWeight(.bold)
+                                                
+                                                
+                                                addQty(sQty: sQty, SelectProd: FilterProduct)
+                                                
+                                                
+                                                
+                                            }) {
+                                                Text("+")                          .font(.system(size: 15))
+                                                    .fontWeight(.bold)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                         }
-                                        .buttonStyle(PlainButtonStyle())
+                                        .padding(.vertical, 6)
+                                        .padding(.horizontal, 20)
+                                        .background(Color.gray.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.gray, lineWidth: 2)
+                                        )
+                                        .foregroundColor(Color.blue)
                                     }
-                                    .padding(.vertical, 6)
-                                    .padding(.horizontal, 20)
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(10)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.gray, lineWidth: 2)
-                                    )
-                                    .foregroundColor(Color.blue)
-                                }
-                                
-                                HStack {
-                                    Text("Free : 0")
-                                        .font(.system(size: 14))
                                     
+                                    HStack {
+                                        Text("Free : 0")
+                                            .font(.system(size: 14))
                                         
-                                    Spacer()
-                                    Text("₹0.00")
-                                    .font(.system(size: 14))
-                                    .fontWeight(.semibold)
+                                        
+                                        Spacer()
+                                        Text("₹0.00")
+                                            .font(.system(size: 14))
+                                            .fontWeight(.semibold)
+                                    }
+                                    Divider()
+                                    HStack {
+                                        Text("Total Qty: \(filterItems[index].Amt)")
+                                            .font(.system(size: 14))
+                                            .fontWeight(.semibold)
+                                        Spacer()
+                                        let totalvalue = nubers[0]
+                                        Text(filterItems[index].TotAmt)
+                                            .font(.system(size: 14))
+                                            .fontWeight(.semibold)
+                                    }
+                                    
                                 }
-                                Divider()
-                                HStack {
-                                    Text("Total Qty: \(filterItems[index].Amt)")
-                                        .font(.system(size: 14))
-                                        .fontWeight(.semibold)
-                                    Spacer()
-                                    let totalvalue = nubers[0]
-                                    Text(filterItems[index].TotAmt)
-                                        .font(.system(size: 14))
-                                        .fontWeight(.semibold)
-                                }
-                              
+                                .padding(.vertical, 5)
+                                
                             }
-                            .padding(.vertical, 5)
-                           
+                            
+                            
+                            
+                            //.listRowSeparator(.hidden)
+                        } else {
+                            // Fallback on earlier versions
                         }
-                        
-                        
-                      
-                        //.listRowSeparator(.hidden)
-                    } else {
-                        // Fallback on earlier versions
                     }
-                }
-                .listStyle(PlainListStyle())
-                
-                
-                
-                Button(action: {
-                    if lblTotAmt=="0.0"{
-                        ShowTost="Cart is Empty"
-                        showToast = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            showToast = false
+                    .listStyle(PlainListStyle())
+                    
+                    
+                    
+                    Button(action: {
+                        if lblTotAmt=="0.0"{
+                            ShowTost="Cart is Empty"
+                            showToast = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                showToast = false
+                            }
+                        }else{
+                            
+                            //SelPrvOrderNavigte = true
+                            OredSc.toggle()
+                            SelPrvSc.toggle()
+                            VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
                         }
-                    }else{
                         
-                        SelPrvOrderNavigte = true
-                        VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
+                    }) {
+                        ZStack(alignment: .top) {
+                            Rectangle()
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                                .frame(height: 70)
+                            
+                            
+                            HStack {
+                                
+                                Image(systemName: "cart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 30))
+                                    .frame(width: 60,height: 40)
+                                
+                                Text("Item: \(VisitData.shared.ProductCart.count)")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                Text("Qty : 0")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                
+                            }
+                            HStack{
+                                
+                                Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(.white)
+                                    .offset(x:30)
+                                
+                                Spacer()
+                                
+                                Text("PROCEED")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 17))
+                                    .multilineTextAlignment(.center)
+                                    .offset(x:-40,y:-10)
+                                
+                                
+                            }
+                            .offset(y:40)
+                            
+                        }
+                        //.cornerRadius(5)
+                        .edgesIgnoringSafeArea(.bottom)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
                     }
                     
-                }) {
-                    ZStack(alignment: .top) {
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 70)
-                        
-                        
-                        HStack {
-                            
-                            Image(systemName: "cart.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 30))
-                                .frame(width: 60,height: 40)
-                            
-                            Text("Item: \(VisitData.shared.ProductCart.count)")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            Text("Qty : 0")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            Spacer()
-                            
-                            
-                        }
-                        HStack{
-                            
-                            Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
-                                .font(.system(size: 15))
-                                .fontWeight(.heavy)
-                                .foregroundColor(.white)
-                                .offset(x:30)
-                            
-                            Spacer()
-                            
-                            Text("PROCEED")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .font(.system(size: 17))
-                                .multilineTextAlignment(.center)
-                                .offset(x:-40,y:-10)
-                            
-                            
-                        }
-                        .offset(y:40)
-                        
+                    NavigationLink(destination: SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc), isActive: $SelPrvOrderNavigte) {
+                        EmptyView()
                     }
-                    //.cornerRadius(5)
-                    .edgesIgnoringSafeArea(.bottom)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0 ))
+                    
                 }
-                
-                NavigationLink(destination: SelPrvOrder(), isActive: $SelPrvOrderNavigte) {
-                    EmptyView()
-                }
-                
-            }
-            .padding(.top, 10)
+                .padding(.top, 10)
                 
                 
                 if isShowingPopUp {
@@ -709,32 +713,32 @@ struct Order: View {
                         
                         List(0 ..< allUomlist.count, id: \.self) { index in
                             VStack {
-                            Button(action: {
-                                isShowingPopUp.toggle()
-                                 SelectItem = allUomlist[index].UomName
-                                let UOMNAME = allUomlist[index].UomName
-                                print(SelectItem)
-                                let FilterUnite =  FilterProduct[index]
-                                  print(FilterUnite)
-                                  let uomList = FilterUnite["UOMList"] as? [[String: Any]]
-                                  
-                                  
-                                if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
-                                    if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
-                                        print(uomLists2)
-                                        self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
+                                Button(action: {
+                                    isShowingPopUp.toggle()
+                                    SelectItem = allUomlist[index].UomName
+                                    let UOMNAME = allUomlist[index].UomName
+                                    print(SelectItem)
+                                    let FilterUnite =  FilterProduct[index]
+                                    print(FilterUnite)
+                                    let uomList = FilterUnite["UOMList"] as? [[String: Any]]
+                                    
+                                    
+                                    if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
+                                        if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
+                                            print(uomLists2)
+                                            self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
+                                        } else {
+                                            print("Invalid index or data")
+                                        }
                                     } else {
-                                        print("Invalid index or data")
+                                        print("UOMList not found or not in the expected format.")
                                     }
-                                } else {
-                                    print("UOMList not found or not in the expected format.")
-                                }
-                                print(filterItems)
-                                TexQty()
-                                print(items)
-          
-                            }) {
-                                
+                                    print(filterItems)
+                                    TexQty()
+                                    print(items)
+                                    
+                                }) {
+                                    
                                     Text(allUomlist[index].UomName)
                                     Text("1x\(allUomlist[index].UomConv)")
                                 }
@@ -749,11 +753,11 @@ struct Order: View {
                     .cornerRadius(10)
                     .padding(20)
                 }
-                    
-        }
+                
+            }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
             
-           
+            
             
         }
         .navigationBarHidden(true)
@@ -761,6 +765,10 @@ struct Order: View {
             Address(ADDaddress: $ADDaddress, SelMod: $SelMod, isChecked: $isChecked)
             
         })
+    }
+        if SelPrvSc{
+            SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc)
+        }
     }
     
     private func lstOfUnitList(at index: Int,filterUnite:[[String:Any]]){
@@ -1019,9 +1027,10 @@ struct Order: View {
         }
         
         print(items)
+        print(items)
         filterItems = items
         print(FilterProduct.count)
-        print(filterItems)
+        print(filterItems.count)
     }
     
  
@@ -1030,7 +1039,7 @@ struct Order: View {
 struct Order_Previews: PreviewProvider {
     static var previews: some View {
         Order()
-        SelPrvOrder()
+       // SelPrvOrder()
         //Address()
     }
 }
@@ -1866,8 +1875,12 @@ struct SelPrvOrder: View {
     @State private var OrderSubStatus = ""
     @State private var isActive: Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var OredSc:Bool
+    @Binding var SelPrvSc:Bool
     
-    init() {
+    init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>) {
+        self._OredSc = OredSc
+        self._SelPrvSc = SelPrvSc
         var items: [FilterItem] = []
         print(selectitemCount)
         var qty=[String]()
@@ -1919,7 +1932,9 @@ struct SelPrvOrder: View {
                                 .font(.system(size: 20))
                             
                             Button(action:{
-                                OrderNavigte = true
+                                //OrderNavigte = true
+                                OredSc.toggle()
+                                SelPrvSc.toggle()
                                 
                             }){
                                 Text("+ Add Product")
@@ -2341,7 +2356,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         
     }
     print(VisitData.shared.ProductCart)
-    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
+    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+        if (Cart["SalQty"] as! Double) > 0 {
+            return true
+        }
+        return false
+    })
+
+    print(VisitData.shared.lstPrvOrder.count)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
@@ -2386,7 +2408,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
         print(selNetWt)
         
     }
-
+  
     updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
 
 }
@@ -2425,7 +2447,6 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
          print(selNetWt)
      }
 
-
      updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
 }
 
@@ -2438,7 +2459,6 @@ func updateOrderValues(refresh:Int){
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
         print(VisitData.shared.lstPrvOrder)
         if (Cart["SalQty"] as! Double) > 0 {
-            print(Cart["SalQty"] as! Double)
             return true
         }
         return false
@@ -2487,7 +2507,7 @@ func deleteItem(at index: Int) {
 
 func OrderSubmit(lat:String,log:String) {
     
-    print(VisitData.shared.lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder.count)
   print(lat)
     print(log)
     
