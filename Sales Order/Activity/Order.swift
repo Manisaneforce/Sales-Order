@@ -48,6 +48,7 @@ var selUOMNm: String = ""
 var currentDateTime = ""
 var ShpingAddress = ""
 var BillingAddress = CustDet.shared.Addr
+var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 struct Order: View {
     @State private var clickeindex:Int = 0
@@ -371,8 +372,11 @@ struct Order: View {
                             json in
                             print(json)
                         }
+                        
+                        
                         TexQty()
                         ShpingAddress = BillingAddress
+                        
                         
                     }
                     
@@ -488,6 +492,7 @@ struct Order: View {
                                                 }
                                                 
                                                 minusQty(sQty: sQty, SelectProd: FilterProduct)
+                                                Qtycount()
                                                 
                                             }) {
                                                 Text("-")
@@ -546,6 +551,7 @@ struct Order: View {
                                                 
                                                 
                                                 addQty(sQty: sQty, SelectProd: FilterProduct)
+                                                Qtycount()
                                                 
                                                 
                                                 
@@ -605,7 +611,7 @@ struct Order: View {
                     
                     
                     Button(action: {
-                        if lblTotAmt=="0.0"{
+                        if VisitData.shared.lstPrvOrder.count == 0{
                             ShowTost="Cart is Empty"
                             showToast = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -616,7 +622,7 @@ struct Order: View {
                             //SelPrvOrderNavigte = true
                             OredSc.toggle()
                             SelPrvSc.toggle()
-                            VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
+                            //VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
                         }
                         
                     }) {
@@ -633,11 +639,11 @@ struct Order: View {
                                     .font(.system(size: 30))
                                     .frame(width: 60,height: 40)
                                 
-                                Text("Item: \(VisitData.shared.ProductCart.count)")
+                                Text("Item: \(VisitData.shared.lstPrvOrder.count)")
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
-                                Text("Qty : 0")
+                                Text("Qty : \(TotalQtyData)")
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -921,13 +927,15 @@ struct Order: View {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
                     let itemsWithTypID3 = jsonArray.filter { ($0["cateid"] as? Int) == ProSelectID }
-                    
+                  
                     if !itemsWithTypID3.isEmpty {
+                        Allprod.removeAll()
                         for item in itemsWithTypID3 {
                             print(itemsWithTypID3)
                            // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             print(FilterProduct.count)
+                            
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 print(proname)
@@ -1027,12 +1035,12 @@ struct Order: View {
         }
         
         print(items)
-        print(items)
+        print(Allprod)
+        
         filterItems = items
         print(FilterProduct.count)
         print(filterItems.count)
     }
-    
  
 }
 
@@ -1874,6 +1882,8 @@ struct SelPrvOrder: View {
     @State private var GetLoction = false
     @State private var OrderSubStatus = ""
     @State private var isActive: Bool = false
+    @State private var ShowTost = ""
+    @State private var showToast = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
@@ -1885,7 +1895,7 @@ struct SelPrvOrder: View {
         print(selectitemCount)
         var qty=[String]()
         
-        for items in VisitData.shared.ProductCart {
+        for items in VisitData.shared.lstPrvOrder {
           let  qtys = (items["Qty"] as? String)!
             qty.append(qtys)
         }
@@ -1893,10 +1903,11 @@ struct SelPrvOrder: View {
         print(VisitData.shared.ProductCart.count)
         print(qty)
         
-        for index in 0..<VisitData.shared.ProductCart.count {
+        for index in 0..<VisitData.shared.lstPrvOrder.count {
             print(index)
             items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
         }
+        print(items)
         self._filterItems = State(initialValue: items)
     }
 
@@ -1945,6 +1956,7 @@ struct SelPrvOrder: View {
                         .onAppear{
                             print(VisitData.shared.lstPrvOrder)
                             var ProSelectID = [String]()
+                            print(VisitData.shared.lstPrvOrder.count)
                             for itemID in VisitData.shared.lstPrvOrder{
                                 let id =  itemID["id"] as! String
                                 ProSelectID.append(id)
@@ -2010,7 +2022,7 @@ struct SelPrvOrder: View {
                                 
                                 
                                 
-                                print(AllPrvprod)
+                                print(AllPrvprod.count)
                             }
                             
                         }
@@ -2070,6 +2082,7 @@ struct SelPrvOrder: View {
                                                                         for item in itemsWithTypID3 {
                                                                             let Qty = String(filterItems[index].quantity)
                                                                             minusQty(sQty: Qty, SelectProd: item)
+                                                                            Qtycount()
                                                                             
                                                                         }
                                                                     } else {
@@ -2104,6 +2117,7 @@ struct SelPrvOrder: View {
                                                                         for item in itemsWithTypID3 {
                                                                             let Qty = String(filterItems[index].quantity)
                                                                             addQty(sQty: Qty, SelectProd: item)
+                                                                            Qtycount()
                                                                             
                                                                         }
                                                                     } else {
@@ -2174,7 +2188,15 @@ struct SelPrvOrder: View {
                         Button(action:{
                             
                             //getLocation()
-                            showAlert = true
+                            if VisitData.shared.lstPrvOrder.count == 0{
+                                ShowTost="Cart is Empty"
+                                showToast = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast = false
+                                }
+                            }else{
+                                showAlert = true
+                            }
                             
                         }) {
                             
@@ -2186,11 +2208,11 @@ struct SelPrvOrder: View {
                                         .font(.system(size: 30))
                                         .frame(width: 60,height: 40)
                                     
-                                    Text("Item: \(VisitData.shared.ProductCart.count)")
+                                    Text("Item: \(VisitData.shared.lstPrvOrder.count)")
                                         .font(.system(size: 14))
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
-                                    Text("Qty : 0")
+                                    Text("Qty : \(TotalQtyData)")
                                         .font(.system(size: 14))
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
@@ -2275,6 +2297,7 @@ struct SelPrvOrder: View {
                 }
             }
         }
+            .toast(isPresented: $showToast, message: "\(ShowTost)")
     }
         .navigationBarHidden(true)
       
@@ -2356,13 +2379,16 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         
     }
     print(VisitData.shared.ProductCart)
-    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+    var lstPrv:[AnyObject] = []
+    lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
             return true
         }
         return false
     })
-
+    print(lstPrv.count)
+    print(lstPrv)
+    VisitData.shared.lstPrvOrder = lstPrv
     print(VisitData.shared.lstPrvOrder.count)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
@@ -2454,7 +2480,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
-    print(VisitData.shared.lstPrvOrder)
+    print(VisitData.shared.lstPrvOrder.count)
     
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
         print(VisitData.shared.lstPrvOrder)
@@ -2463,6 +2489,7 @@ func updateOrderValues(refresh:Int){
         }
         return false
     })
+    print(VisitData.shared.lstPrvOrder.count)
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
@@ -2474,6 +2501,7 @@ func updateOrderValues(refresh:Int){
 
         }
     }
+    print(VisitData.shared.lstPrvOrder.count)
     lblTotAmt = String(format: "Rs. %.02f", totAmt)
     lblTotAmt2 = String(totAmt)
     print(totAmt)
@@ -2627,5 +2655,24 @@ func updateDateAndTime() {
     }
 }
 
+
+
+func Qtycount() {
+    var qtysdata = [Int]()
+    qtysdata.removeAll()
+    for items in VisitData.shared.lstPrvOrder {
+        if let qtyString = items["Qty"] as? String, let qty = Int(qtyString) {
+            print(qty)
+            qtysdata.append(qty)
+            //TotalQtyData += qty
+        }
+        
+    }
+    print(qtysdata)
+    let sum = qtysdata.reduce(0, +)
+    print(sum) // Output: 3
+    TotalQtyData = sum
+    print(TotalQtyData)
+}
 
 
