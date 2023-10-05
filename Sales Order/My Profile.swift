@@ -152,15 +152,20 @@ struct My_Profile: View {
                                     .padding(.top,20)
                                     .padding(.bottom,20)
                                 Spacer()
-                                Image("Group 2")
-                                    .frame(width: 12, height: 4)
-                                    .onTapGesture {
-                                        ClickIndex = index
-                                        Editid = RetAddressData[index].id
-                                        AddressTextInpute = RetAddressData[index].address
-                                        listedDrCode = RetAddressData[index].listedDrCode
-                                        actionButton.toggle()
-                                    }
+                                Button(action:{
+                                    ClickIndex = index
+                                    Editid = RetAddressData[index].id
+                                    AddressTextInpute = RetAddressData[index].address
+                                    listedDrCode = RetAddressData[index].listedDrCode
+                                    actionButton.toggle()
+                                } )
+                                {
+                                    Image("Group 2")
+                                        //.resizable()
+                                        .frame(width: 30, height: 40)
+                                        //.background(Color.red)
+                                }
+//
                             }
                             .padding(.leading,10)
                             .padding(.trailing,30)

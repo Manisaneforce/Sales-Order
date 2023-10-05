@@ -68,7 +68,7 @@ struct MyOrdersScreen: View {
                                 .frame(width: 50)
                             
                         }
-                        Text("MY ORDER")
+                        Text("MY ORDERS")
                             .font(.system(size: 18))
                             .fontWeight(.bold)
                             .foregroundColor(.white)

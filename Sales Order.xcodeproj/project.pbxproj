@@ -643,6 +643,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
@@ -681,6 +682,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";

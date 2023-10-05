@@ -137,19 +137,19 @@ struct HomePage: View {
                      
                         VStack{
                             HStack{
-                                Text("Hi! \(CustDet.shared.CusName)")
+                                Text("Greetings \(CustDet.shared.CusName)")
                                     .font(.system(size: 18))
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
-                            .padding(.leading,40)
+                            .padding(.leading,15)
                             .padding(7)
                             .onAppear{
                               
                             }
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
                             NavigationLink(destination: Order()){
-                                DashboardItem(imageName: "package", title: "Order")
+                                DashboardItem(imageName: "package", title: "New Order")
                                 
                             }
                             
@@ -158,7 +158,7 @@ struct HomePage: View {
                                 DashboardItem(imageName: "features", title: "My Orders")
                             }
                             NavigationLink(destination:PaymentScreen()){
-                                DashboardItem(imageName: "credit-card", title: "Payments")
+                                DashboardItem(imageName: "credit-card", title: "Payment Ledger")
                             }
                             NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
                                 DashboardItem(imageName: "business-report", title: "Reports")
@@ -167,7 +167,7 @@ struct HomePage: View {
                                 DashboardItem(imageName: "resume", title: "My Profile")
                             }
                             NavigationLink(destination:Feedback()){
-                                DashboardItem(imageName: "feedback", title: "Feedback")
+                                DashboardItem(imageName: "feedback", title: "Reach Out")
                             }
                         }
                     }

@@ -2562,7 +2562,7 @@ func deleteItem(at index: Int) {
     print(VisitData.shared.ProductCart)
     updateOrderValues(refresh: 1)
 }
-
+//9167497578
 func OrderSubmit(lat:String,log:String) {
     
     print(VisitData.shared.lstPrvOrder.count)
