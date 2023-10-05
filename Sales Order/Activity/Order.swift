@@ -30,6 +30,8 @@ struct TotAmt: Identifiable {
     var Amt: Int
     var TotAmt:String
     var SelectUom:String
+    var ConvRate:String
+    var NetValu:String
 }
 struct EdditeAddres : Any{
     let listedDrCode:String
@@ -37,6 +39,11 @@ struct EdditeAddres : Any{
     let id : Int
     let stateCode: Int
     
+}
+struct editUom:Any{
+    let Uon:String
+    let UomConv:String
+    let NetValu:String
 }
 
 
@@ -92,7 +99,7 @@ struct Order: View {
     @State private var SameAddrssmark = true
     @State private var TotalQty = [String]()
     @State private var TotalAmt = [String]()
-    @State private var SelectUOMN = [String]()
+    @State private var SelectUOMN:[editUom] = []
     @State private var items: [TotAmt] = []
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var SelMod = ""
@@ -412,7 +419,7 @@ struct Order: View {
                                         Text("MRP 0")
                                             .font(.system(size: 13))
                                         Spacer()
-                                        Text("Price: \(Allprod[index].ProMRP)")
+                                        Text("Price: \(filterItems[index].ConvRate)")
                                             .font(.system(size: 13))
                                             .fontWeight(.semibold)
                                     }
@@ -493,6 +500,7 @@ struct Order: View {
                                                 
                                                 minusQty(sQty: sQty, SelectProd: FilterProduct)
                                                 Qtycount()
+                                                TexQty()
                                                 
                                             }) {
                                                 Text("-")
@@ -552,8 +560,7 @@ struct Order: View {
                                                 
                                                 addQty(sQty: sQty, SelectProd: FilterProduct)
                                                 Qtycount()
-                                                
-                                                
+                                                TexQty()
                                                 
                                             }) {
                                                 Text("+")                          .font(.system(size: 15))
@@ -589,7 +596,7 @@ struct Order: View {
                                             .fontWeight(.semibold)
                                         Spacer()
                                         let totalvalue = nubers[0]
-                                        Text(filterItems[index].TotAmt)
+                                        Text(filterItems[index].NetValu)
                                             .font(.system(size: 14))
                                             .fontWeight(.semibold)
                                     }
@@ -939,9 +946,12 @@ struct Order: View {
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 print(proname)
+                                print(Proid)
+                                print(MRP)
                                 print(sUoms)
                                 print(sUomNms)
                                 print(Uomname)
+                                print(item)
                                 
                                 
                                 
@@ -979,7 +989,9 @@ struct Order: View {
         TotalAmt.removeAll()
         SelectUOMN.removeAll()
         TotalQty.removeAll()
+        var loopCounter = 0
         for item in FilterProduct{
+            loopCounter += 1
            print(item)
             let id=String(format: "%@", item["ERP_Code"] as! CVarArg)
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
@@ -995,16 +1007,23 @@ struct Order: View {
                 print(items)
                 Amount = String((items[0]["Value"] as? Double)!)
                 let Uom = items[0]["UOMNm"] as? String
-                SelectUOMN.append(Uom!)
+                let NetValue = String((items[0]["NetVal"] as? Double)!)
+                let UonConvRate = Int((items[0]["UOMConv"] as?String)!)! * Int((items[0]["Rate"] as? Double)!)
+                print(UonConvRate)
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(UonConvRate), NetValu: NetValue))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
+                print(TotalAmt)
                 
                 TotalQty.append(Qty)
             }else{
+                print(loopCounter - 1)
+                let Cout:Int = loopCounter - 1
                 print(FilterProduct)
                 let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
-                SelectUOMN.append(UomQty!)
+                let Rate = FilterProduct[Cout]["Rate"] as? String
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0"))
                 let ZerQty = "0"
                 TotalAmt.append(ZerQty)
                 TotalQty.append(ZerQty)
@@ -1030,7 +1049,7 @@ struct Order: View {
         for index in 0..<FilterProduct.count {
             print(index)
             print(filterItems)
-            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index] ))
+            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu ))
             print(items)
         }
         
@@ -1039,7 +1058,7 @@ struct Order: View {
         
         filterItems = items
         print(FilterProduct.count)
-        print(filterItems.count)
+        print(filterItems)
     }
  
 }
@@ -1491,11 +1510,15 @@ struct Address:View{
                     
                     Divider()
                     List(0..<Getstates.count,id: \.self){index in
-                        Text(Getstates[index].title)
-                            .onTapGesture {
-                                selectedstate = Getstates[index].title
-                                ClickStateButton.toggle()
-                            }
+                        Button(action:{
+                            selectedstate = Getstates[index].title
+                            ClickStateButton.toggle()
+                        })
+                        {
+     
+                            
+                            Text(Getstates[index].title)
+                        }
                        
                     }
                     .listStyle(PlainListStyle())
@@ -2335,12 +2358,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     print(sQty)
     print(refresh)
     print(ProdItem)
-    let TotQty: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
-    print(TotQty)
+    let TotQty2: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
+    let TotQty: Double = Double((sQty as NSString).intValue)
+ 
     let source: String = (ProdItem["Rate"] as? String)!
     let Rate: Double = Double(source)!
+    print(ProdItem)
     print(Rate)
-    let ItmValue: Double = (TotQty*Rate)
+    let ItmValue: Double = (TotQty2*Rate)
     print(ItmValue)
     
     
@@ -2363,7 +2388,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-
             let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
@@ -2375,8 +2399,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
-      
-        
     }
     print(VisitData.shared.ProductCart)
     var lstPrv:[AnyObject] = []
@@ -2489,7 +2511,7 @@ func updateOrderValues(refresh:Int){
         }
         return false
     })
-    print(VisitData.shared.lstPrvOrder.count)
+    print(VisitData.shared.lstPrvOrder)
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
