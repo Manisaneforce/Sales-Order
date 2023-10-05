@@ -596,7 +596,7 @@ struct Order: View {
                                             .fontWeight(.semibold)
                                         Spacer()
                                         let totalvalue = nubers[0]
-                                        Text(filterItems[index].NetValu)
+                                        Text(filterItems[index].TotAmt)
                                             .font(.system(size: 14))
                                             .fontWeight(.semibold)
                                     }
@@ -1010,7 +1010,8 @@ struct Order: View {
                 let NetValue = String((items[0]["NetVal"] as? Double)!)
                 let UonConvRate = Int((items[0]["UOMConv"] as?String)!)! * Int((items[0]["Rate"] as? Double)!)
                 print(UonConvRate)
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(UonConvRate), NetValu: NetValue))
+                let RateNewConv = Int((items[0]["Rate"] as? Double)!)
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(RateNewConv), NetValu: NetValue))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1024,8 +1025,9 @@ struct Order: View {
                 let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
                 let Rate = FilterProduct[Cout]["Rate"] as? String
                 SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0"))
+                let ZeroAmt = "0.0"
                 let ZerQty = "0"
-                TotalAmt.append(ZerQty)
+                TotalAmt.append(ZeroAmt)
                 TotalQty.append(ZerQty)
             }
         }
@@ -2360,11 +2362,16 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     print(ProdItem)
     let TotQty2: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
     let TotQty: Double = Double((sQty as NSString).intValue)
- 
-    let source: String = (ProdItem["Rate"] as? String)!
-    let Rate: Double = Double(source)!
+    var source: Int = Int()
+    var OrgRate:Double = Double()
+    if let ConvRate = ProdItem["Rate"] as? String{
+        OrgRate = Double(ConvRate)!
+        source = Int(Double(ConvRate)!) * Int(sUomConv)!
+    }
+    let Rate: Double = Double(source)
     print(ProdItem)
-    print(Rate)
+   
+    print(OrgRate)
     let ItmValue: Double = (TotQty2*Rate)
     print(ItmValue)
     
@@ -2388,14 +2395,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": Rate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
+            let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": Rate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": ItmValue];
+        let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
@@ -2515,6 +2522,7 @@ func updateOrderValues(refresh:Int){
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
+            print(item["NetVal"] as! Double)
             totAmt = totAmt + (item["NetVal"] as! Double)
             print(totAmt)
             print(item["NetVal"] as! Double)
@@ -2598,7 +2606,7 @@ func OrderSubmit(lat:String,log:String) {
                sPItems = sPItems + " \"Product_Qty\":" + (String(format: "%.0f", item["SalQty"] as? Double ?? 0.0)) + ","
                sPItems = sPItems + " \"Product_Total_Qty\": \(Product_Total_Qty),"
                sPItems = sPItems + " \"Product_RegularQty\": 0,"
-               sPItems = sPItems + " \"Product_Amount\":" + (String(format: "%.2f", item["Rate"] as! Double)) + ","
+               sPItems = sPItems + " \"Product_Amount\":" + (String(format: "%.2f", item["NetVal"] as! Double)) + ","
                sPItems = sPItems + " \"Rate\": \"\(item["Rate"] as! Double)\","
                sPItems = sPItems + " \"free\": 0,"
                sPItems = sPItems + " \"dis\": \"" + productQty + "\","
