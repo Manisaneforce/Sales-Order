@@ -1131,9 +1131,14 @@ struct Address:View{
                         ZStack{
                             Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
                             HStack(){
-                                Text(GetingAddress[index].address)
-                                    .padding(.horizontal,10)
-                                    .padding(.vertical,5)
+                                HStack{
+                                    Text(GetingAddress[index].address)
+                                        .padding(.horizontal,10)
+                                        .padding(.vertical,5)
+                                    Spacer()
+                                    //Text("")
+                                }
+                                .background(Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00))
                                     .onTapGesture {
                                         if SelMod == "SA"{
                                             ShpingAddress = GetingAddress[index].address
