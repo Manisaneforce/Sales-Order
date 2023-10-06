@@ -1011,7 +1011,7 @@ struct Order: View {
                 let UonConvRate = Int((items[0]["UOMConv"] as?String)!)! * Int((items[0]["Rate"] as? Double)!)
                 print(UonConvRate)
                 let RateNewConv = Int((items[0]["Rate"] as? Double)!)
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(RateNewConv), NetValu: NetValue))
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(UonConvRate), NetValu: NetValue))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1209,6 +1209,7 @@ struct Address:View{
                             }
                             
                         }
+                        .padding(.vertical,1)
                         .cornerRadius(10)
                         
                         
@@ -1912,28 +1913,14 @@ struct SelPrvOrder: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
+    @State private var items: [FilterItem] = []
     
     init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>) {
         self._OredSc = OredSc
         self._SelPrvSc = SelPrvSc
-        var items: [FilterItem] = []
+       
         print(selectitemCount)
-        var qty=[String]()
-        
-        for items in VisitData.shared.lstPrvOrder {
-          let  qtys = (items["Qty"] as? String)!
-            qty.append(qtys)
-        }
-        print(VisitData.shared.lstPrvOrder.count)
-        print(VisitData.shared.ProductCart.count)
-        print(qty)
-        
-        for index in 0..<VisitData.shared.lstPrvOrder.count {
-            print(index)
-            items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
-        }
-        print(items)
-        self._filterItems = State(initialValue: items)
+    
     }
 
    
@@ -1979,77 +1966,7 @@ struct SelPrvOrder: View {
                             }
                         }
                         .onAppear{
-                            print(VisitData.shared.lstPrvOrder)
-                            var ProSelectID = [String]()
-                            print(VisitData.shared.lstPrvOrder.count)
-                            for itemID in VisitData.shared.lstPrvOrder{
-                                let id =  itemID["id"] as! String
-                                ProSelectID.append(id)
-                            }
-                            print(ProSelectID)
-                            print(Allproddata)
-                            if let jsonData = Allproddata.data(using: .utf8) {
-                                do {
-                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                        print(jsonArray)
-                                        for RelID in ProSelectID {
-                                            if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
-                                                FilterItem.append(selectedPro)
-                                            }
-                                        }
-                                        
-                                    }
-                                } catch {
-                                    print("Error is \(error)")
-                                }
-                                
-                                
-                                for PrvOrderData in VisitData.shared.lstPrvOrder{
-                                    print(PrvOrderData)
-                                    let RelID = PrvOrderData["id"] as? String
-                                    let Uomnm = PrvOrderData["UOMNm"] as? String
-                                    let Qty = PrvOrderData["Qty"] as? String
-                                    let totAmt = PrvOrderData["NetVal"] as? Double
-                                    print(totAmt as Any)
-                                    
-                                    do {
-                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                            print(jsonArray)
-                                            if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
-                                                print(selectedPro)
-                                                
-                                                
-                                                let url = selectedPro["PImage"] as? String
-                                                let name  = selectedPro["name"] as? String
-                                                let Proid = selectedPro["ERP_Code"] as? String
-                                                let rate = selectedPro["Rate"] as? String
-                                                let Uom = PrvOrderData["UOMConv"] as? String
-                                                var result:Double = 0.0
-                                                if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
-                                                    result = rateValue * uomValue
-                                                    print(result) // This will be a Double value
-                                                } else {
-                                                    print("Invalid input values")
-                                                }
-                                                
-                                                
-                                                
-                                                AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
-                                            }
-                                            
-                                            
-                                        }
-                                    } catch {
-                                        print("Error is \(error)")
-                                    }
-                                }
-                                
-                                
-                                
-                                
-                                print(AllPrvprod.count)
-                            }
-                            
+                            prvDet()
                         }
                         
                         Divider()
@@ -2084,6 +2001,7 @@ struct SelPrvOrder: View {
                                                 Button(action: {
                                                     deleteItem(at: index)
                                                     AllPrvprod.remove(at: index)
+                                                    prvDet()
                                                     print(AllPrvprod)
                                                 }) {
                                                     Image(systemName: "trash.fill")
@@ -2108,6 +2026,8 @@ struct SelPrvOrder: View {
                                                                             let Qty = String(filterItems[index].quantity)
                                                                             minusQty(sQty: Qty, SelectProd: item)
                                                                             Qtycount()
+                                                                             prvDet()
+                                                                            
                                                                             
                                                                         }
                                                                     } else {
@@ -2143,6 +2063,7 @@ struct SelPrvOrder: View {
                                                                             let Qty = String(filterItems[index].quantity)
                                                                             addQty(sQty: Qty, SelectProd: item)
                                                                             Qtycount()
+                                                                            prvDet()
                                                                             
                                                                         }
                                                                     } else {
@@ -2340,6 +2261,100 @@ struct SelPrvOrder: View {
             print (errMsg)
             //self.LoadingDismiss()
         })
+    }
+    func prvDet(){
+        
+        print(VisitData.shared.lstPrvOrder)
+        var ProSelectID = [String]()
+        print(VisitData.shared.lstPrvOrder.count)
+        for itemID in VisitData.shared.lstPrvOrder{
+            let id =  itemID["id"] as! String
+            ProSelectID.append(id)
+        }
+        print(ProSelectID)
+        print(Allproddata)
+        AllPrvprod.removeAll()
+        items.removeAll()
+        if let jsonData = Allproddata.data(using: .utf8) {
+            do {
+                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                    print(jsonArray)
+                    for RelID in ProSelectID {
+                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                            FilterItem.append(selectedPro)
+                        }
+                    }
+                    
+                }
+            } catch {
+                print("Error is \(error)")
+            }
+            
+            
+            for PrvOrderData in VisitData.shared.lstPrvOrder{
+                print(PrvOrderData)
+                let RelID = PrvOrderData["id"] as? String
+                let Uomnm = PrvOrderData["UOMNm"] as? String
+                let Qty = PrvOrderData["Qty"] as? String
+                let totAmt = PrvOrderData["NetVal"] as? Double
+                print(totAmt as Any)
+                
+                do {
+                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                        print(jsonArray)
+                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                            print(selectedPro)
+                            
+                            
+                            let url = selectedPro["PImage"] as? String
+                            let name  = selectedPro["name"] as? String
+                            let Proid = selectedPro["ERP_Code"] as? String
+                            let rate = selectedPro["Rate"] as? String
+                            let Uom = PrvOrderData["UOMConv"] as? String
+                            var result:Double = 0.0
+                            if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
+                                result = rateValue * uomValue
+                                print(result) // This will be a Double value
+                            } else {
+                                print("Invalid input values")
+                            }
+                            
+                            
+                            
+                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
+                        }
+                        
+                        
+                    }
+                } catch {
+                    print("Error is \(error)")
+                }
+            }
+            
+            
+            var qty=[String]()
+            
+            for items in VisitData.shared.lstPrvOrder {
+              let  qtys = (items["Qty"] as? String)!
+                qty.append(qtys)
+            }
+            print(VisitData.shared.lstPrvOrder.count)
+            print(VisitData.shared.ProductCart.count)
+            print(qty)
+            
+            for index in 0..<VisitData.shared.lstPrvOrder.count {
+                print(index)
+                items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
+            }
+            print(items.count)
+            filterItems = items
+            
+            print(AllPrvprod.count)
+            print(VisitData.shared.lstPrvOrder.count)
+            print(filterItems.count)
+            print(filterItems)
+        }
+        
     }
 }
 

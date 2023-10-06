@@ -11,11 +11,14 @@ struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
     @State private var SelMode: String = ""
-    @State private var FromDate = Date()
-    @State private var ToDate = Date()
+    @State private var FromDate = ""
+    @State private var ToDate = ""
     @State private var CalenderTit = ""
     @State private var navigateToHomepage = false
+    @State private var Filterdate = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    let currentDate = Date()
+    let calendar = Calendar.current
     var body: some View {
         NavigationView{
             ZStack{
@@ -51,7 +54,12 @@ struct PaymentScreen: View {
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                    
+                    .onAppear{
+                        let fromDate = String(dateFormatter.string(from:selectedDate))
+                        print(fromDate)
+                        FromDate = fromDate
+                        ToDate = fromDate
+                    }
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -59,7 +67,7 @@ struct PaymentScreen: View {
                                 .shadow(radius: 5)
                             
                             HStack {
-                                Text(dateFormatter.string(from: FromDate))
+                                Text(FromDate)
                                  
                                 
                                 Image(systemName: "calendar")
@@ -82,7 +90,7 @@ struct PaymentScreen: View {
                                 .fill(Color.white)
                                 .shadow(radius: 5)
                             HStack {
-                                Text(dateFormatter.string(from: ToDate))
+                                Text(ToDate)
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
                             }
@@ -99,6 +107,9 @@ struct PaymentScreen: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(Color.blue)
+                        }
+                        .onTapGesture {
+                            Filterdate.toggle()
                         }
                      
                         .padding(10)
@@ -191,25 +202,99 @@ struct PaymentScreen: View {
                     }
                     
                 }
+                if Filterdate{
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                           // Filterdate.toggle()
+                        }
+                    VStack{
+                        ZStack{
+                            Rectangle()
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                                .frame(height: 50)
+                            VStack{
+                                Text("Select Quick Dates")
+                                    .font(.system(size: 20))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.white)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                        VStack{
+                            VStack{
+                                
+                                Text("Last 7 days")
+                                 
+                            }
+                            .frame(width: 320)
+                            .background(Color.white)
+                                .onTapGesture{
+                                    
+                                    Filterdate.toggle()
+                                    FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                    
+                                }
+                            
+                            Divider()
+                            VStack{
+                                Text("Last 30 days")
+                            }
+                            .frame(width: 320)
+                            .background(Color.white)
+                                .onTapGesture{
+                                    Filterdate.toggle()
+                                    FromDate = (formattedDate(date: calculateStartDate(for: 30)))
+                                }
+                        }
+                        Spacer()
+                        ZStack{
+                            Rectangle()
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                                .frame(height: 50)
+                            VStack{
+                                Text("Close")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(Color.white)
+                            }
+                        }
+                        .onTapGesture {
+                            Filterdate.toggle()
+                        }
+                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(20)
+                }
             }
         }
         .navigationBarHidden(true)
     
     }
     
+
+    private func calculateStartDate(for days: Int) -> Date {
+         let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
+         return startDate ?? currentDate
+     }
+    private  func Selectdate(){
+          if SelMode == "DOF"{
+              FromDate=dateFormatter.string(from: selectedDate)
+          }
+          if SelMode == "DOT"{
+              ToDate = dateFormatter.string(from: selectedDate)
+          }
+      }
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
           formatter.dateFormat = "yyyy-MM-dd"
           return formatter
       }
-    private  func Selectdate(){
-          if SelMode == "DOF"{
-              FromDate = selectedDate
-          }
-          if SelMode == "DOT"{
-              ToDate = selectedDate
-          }
-      }
+    func formattedDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: date)
+    }
 }
 struct PaymentScreen_Previews: PreviewProvider {
     static var previews: some View {

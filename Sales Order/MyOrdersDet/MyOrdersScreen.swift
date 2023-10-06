@@ -305,7 +305,7 @@ struct MyOrdersScreen: View {
                 VStack{
                     ZStack{
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 50)
                         VStack{
                             Text("Select Quick Dates")
@@ -316,8 +316,11 @@ struct MyOrdersScreen: View {
                         }
                     }
                     VStack{
-                        
-                        Text("                                  Last 7 days                                  ")
+                        VStack{
+                            Text("Last 7 days")
+                        }
+                        .frame(width: 320)
+                        .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
@@ -326,7 +329,11 @@ struct MyOrdersScreen: View {
                             }
                             
                         Divider()
-                        Text("                                  Last 30 days                                  ")
+                        VStack{
+                            Text("Last 30 days")
+                        }
+                        .frame(width: 320)
+                        .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Filterdate.toggle()
@@ -338,7 +345,7 @@ struct MyOrdersScreen: View {
                     Spacer()
                     ZStack{
                         Rectangle()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 50)
                         VStack{
                             Text("Close")

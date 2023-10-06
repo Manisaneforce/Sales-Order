@@ -215,11 +215,13 @@ struct MyOrdersDetails: View {
                             }
                         }
                         VStack{
-                            HStack{
+                            VStack{
                                 
-                                Text("                                  Last 7 days                                  ")
+                                Text("Last 7 days")
                                  
                             }
+                            .frame(width: 320)
+                            .background(Color.white)
                                 .onTapGesture{
                                     
                                     Filterdate.toggle()
@@ -230,7 +232,11 @@ struct MyOrdersDetails: View {
                                 }
                             
                             Divider()
-                            Text("                                  Last 30 days                                  ")
+                            VStack{
+                                Text("Last 30 days")
+                            }
+                            .frame(width: 320)
+                            .background(Color.white)
                                 .onTapGesture{
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 30)))

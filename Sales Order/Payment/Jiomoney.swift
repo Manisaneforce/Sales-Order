@@ -12,10 +12,41 @@ import WebKit
 struct Jiomoney: View {
     
     
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
         NavigationView{
-            WebView(htmlString: html)
+            VStack(spacing:0){
+                ZStack{
+                    Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .frame(height: 80)
+                    HStack {
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        })
+                        {
+                            Image("backsmall")
+                                .renderingMode(.template)
+                                .foregroundColor(.white)
+                                .padding(.top,50)
+                                .frame(width: 50)
+                            
+                        }
+                        Text("Payment Gateway")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top,50)
+                            //.padding(.leading,50)
+                        Spacer()
+                    }
+                    
+                }
+                .edgesIgnoringSafeArea(.top)
+                .frame(maxWidth: .infinity)
+                .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                WebView(htmlString: html)
+            }
         }
         .navigationBarHidden(true)
            
