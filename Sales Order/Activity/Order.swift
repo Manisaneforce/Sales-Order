@@ -622,7 +622,7 @@ struct Order: View {
                                         
                                     }
                                     .padding(.vertical, 5)
-                                    
+                                     
                                 }
                             }
                             .overlay(
@@ -635,9 +635,6 @@ struct Order: View {
                         .padding(.horizontal,10)
                     }
                 }
-                    
-                    
-                    
                     Button(action: {
                         if VisitData.shared.lstPrvOrder.count == 0{
                             ShowTost="Cart is Empty"
@@ -646,11 +643,8 @@ struct Order: View {
                                 showToast = false
                             }
                         }else{
-                            
-                            //SelPrvOrderNavigte = true
                             OredSc.toggle()
                             SelPrvSc.toggle()
-                            //VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
                         }
                         
                     }) {
@@ -1154,11 +1148,15 @@ struct Address:View{
                 Divider()
                 ZStack{
                     Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
-                    Text("Borivali")
+                    Text(CustDet.shared.Addr)
+                        .font(.system(size: 14))
+                        .fontWeight(.semibold)
+                        .padding(.horizontal,10)
+                        .padding(.vertical,5)
                     
                     //.frame(width: 50, height: 50)
                 }
-                .frame(width: 350,height: 50)
+                .frame(width: 350,height: 60)
                 .cornerRadius(10)
                 .onAppear{
                     
@@ -1688,8 +1686,7 @@ struct Address:View{
         if selectedstate == "Select State"{
             ShowToastMes = "Select State"
             return false
-        }
-        if AddressTextInpute == ""{
+        } else if AddressTextInpute == ""{
             ShowToastMes = "Enter Address"
             return false
         }
@@ -2019,7 +2016,7 @@ struct SelPrvOrder: View {
                             ForEach(AllPrvprod.indices, id: \.self) { index in
                                 VStack{
                                     HStack{
-                                        Image("sanlogo")
+                                        Image("logo_new")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 75,height: 75)

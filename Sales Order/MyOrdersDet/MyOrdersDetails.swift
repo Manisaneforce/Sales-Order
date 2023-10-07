@@ -335,7 +335,7 @@ struct MyOrdersDetails: View {
                                         print(itemsdata)
                                         let Status = itemsdata["Status"] as? String
                                         let OrderID = itemsdata["OrderID"] as? String
-                                        let Order_Value = itemsdata["Order_Value"] as? Double
+                                        let Order_Value = String(format: "Rs. %.02f", (itemsdata["Order_Value"] as? Double)!)
                                         let Date = itemsdata["Date"] as? String
                                         var OrderDetails = [String]()
                                         var ProQty = [String]()
@@ -357,7 +357,7 @@ struct MyOrdersDetails: View {
                                         let productNames = OrderDetails.joined(separator: ", ")
                                         let qty =  ProQty.joined(separator: ",")
                                         print(qty)
-                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value!), Product_Name: productNames, Quantity: qty))
+                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty))
                                         
                                     }
                                     print(invoice)

@@ -194,9 +194,6 @@ struct HomePage: View {
                         .frame(height:220)
                 }
                     
-                    
-                    
-                    
                     Spacer()
                     VStack{
                         Image("logo_new")

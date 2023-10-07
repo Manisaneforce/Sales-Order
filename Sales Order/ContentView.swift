@@ -41,169 +41,176 @@ struct ContentView: View {
     var body: some View {
        
         NavigationView {
-            ZStack {
-               
-                Image("logo_new")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 100)
-                    .offset(y: -310)
-                
-                Text("Welcome to ReliVet")
-                    .font(.title)
-                    .bold()
-                    .font(.system(size: 24))
-                    .foregroundColor(Color.gray)
-                    .frame(width: 300, height: 300)
-                    .offset(y: -190)
-                
-                Text("Sign in to continue")
-                    .font(.system(size: 20))
-                    .font(.title)
-                    .foregroundColor(Color.gray)
-                    .frame(width: 200, height: 150)
-                    .offset(y: -160)
-                
-                LottieUIView(filename: "mobile_number").frame(width: 180,height: 180)
-                    .offset(y: -60)
-                    .onAppear {
-                            print("Saved Value  \(userEmail)")
-                        if userEmail.isEmpty{
-                            //HomePageNvigater = false
-                        }else{
-                            if let window = UIApplication.shared.windows.first {
-                                window.rootViewController = UIHostingController(rootView: HomePage())
-                            }
-                        }
-                      
-
+            ZStack{
+                ScrollView(showsIndicators: false){
+                VStack{
+                    
+                    Image("logo_new")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 250, height: 100)
+                    
+                    VStack{
+                        Text("Welcome to ReliVet")
+                            .font(.title)
+                            .bold()
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.gray)
+                        
+                        
+                        Text("Sign in to continue")
+                            .font(.system(size: 20))
+                            .font(.title)
+                            .foregroundColor(Color.gray)
                     }
-             
-                if  !Mobilnumber{
+                    .padding(.top,40)
+                    
+                    
+                    LottieUIView(filename: "mobile_number").frame(width: 150,height: 150)
+                        .onAppear {
+                            print("Saved Value  \(userEmail)")
+                            if userEmail.isEmpty{
+                                //HomePageNvigater = false
+                            }else{
+                                if let window = UIApplication.shared.windows.first {
+                                    window.rootViewController = UIHostingController(rootView: HomePage())
+                                }
+                            }
+                            
+                            
+                        }
+                    
                     Text("Enter your registered mobile number")
                         .font(.system(size: 17))
                         .font(.title)
                         .foregroundColor(Color.gray)
-                        .frame(width: 400, height: 120)
-                        .offset(y: 50)
-                }
-                if !isTextFieldHidden {
+                        .padding(.bottom,30)
+                    
+                    
                     TextField("Mobile Number", text: $phoneNumber)
-                       // .border(Color.blue, width: 2)
-                        .cornerRadius(10)
+                    // .border(Color.blue, width: 2)
+                        .cornerRadius(5)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 325)
+                    
                         .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(ColorData.shared.HeaderColor, lineWidth: 2)
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
                         )
-                        .offset(y: 100)
+                        .padding(.horizontal,15)
                         .keyboardType(.numberPad)
                         .onChange(of: phoneNumber, perform: { newValue in
                             // Limit the phone number to 10 characters
                             if newValue.count > 10 {
                                 phoneNumber = String(newValue.prefix(10))
-                               
+                                
                             }
                             // Remove non-numeric characters
                             phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
                             //UserDefaults.standard.set(phoneNumber, forKey: "savedPhoneNumber")
                         })
-                }
-                
-
-                if #available(iOS 15.0, *) {
-                    //NavigationLink(destination: OTPVerify(numberOffFields: 6)){
-                    Button(action: {
-                       // var StoragePhoneNumber = ""
-                        
-                        
-                        
-                        
-                        let axn = "send/sms"
-                        let apiKey = "\(axn)&mobile=\(phoneNumber)"
-                        phoneNumber2 = phoneNumber
-                        print(phoneNumber2)
-                        
-                        AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
-                            .validate(statusCode: 200 ..< 299)
-                            .responseJSON { response in
-                                switch response.result {
-                                case .success(let value):
-                                    if let json = value as? [String: AnyObject] {
-                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                                            return
-                                        }
-                                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                            print("Error: Could print JSON in String")
-                                            return
-                                        }
-                                        
-                                        print(prettyPrintedJson)
-                                        jsondata.data = json
-                                        
-                                        let mobileNumber = json["mobile"] as? String ?? ""
-                                        if mobileNumber.count < 10 {
-                                            // If the mobile number is less than 10 characters
-                                            print(json["result"] as? String ?? "")
-                                            ShowTost = (json["result"] as? String ?? "")
-                                            showToast = true
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                showToast = false
-                                            }
-                                        } else {
-                                            NavigteBoll = true
-                                            // If the mobile number is 10 characters or more
-                                            print(json["msg"] as? String ?? "")
-                                            ShowTost = json["msg"] as? String ?? ""
-                                            showToast = true
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                showToast = false
-                                            }
-                                           
-                                        }
-                                        
-
-                                 
-                                    }
-                                case .failure(let error):
-                                    print(error)
-                                }
-                            }
-                    }) {
-                        Text("SEND OTP")
-                            //.font(.title)
-                            .fontWeight(.heavy)
-                            .foregroundColor(.white)
-                            .font(.system(size: 18))
-                            .multilineTextAlignment(.center)
-                            .frame(width: 325, height: 40)
-                            .background(ColorData.shared.HeaderColor)
-                            .cornerRadius(10)
-                    }
-                    .toast(isPresented: $showToast, message: "\(ShowTost)")
-                    .offset(y: 150)
                     
-            }
-                if NavigteBoll {
+                    
+                    
                     if #available(iOS 15.0, *) {
-                        NavigationLink(
-                            destination: OTPVerify(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
-                            isActive: $NavigteBoll
-                        ) {
-                            EmptyView()
+                        ZStack{
+                            Rectangle()
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                                .frame(height: 40)
+                                .cornerRadius(2)
+                            Button(action: {
+                                
+                                let axn = "send/sms"
+                                let apiKey = "\(axn)&mobile=\(phoneNumber)"
+                                phoneNumber2 = phoneNumber
+                                print(phoneNumber2)
+                                
+                                AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                    .validate(statusCode: 200 ..< 299)
+                                    .responseJSON { response in
+                                        switch response.result {
+                                        case .success(let value):
+                                            if let json = value as? [String: AnyObject] {
+                                                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                    print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                    return
+                                                }
+                                                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                    print("Error: Could print JSON in String")
+                                                    return
+                                                }
+                                                
+                                                print(prettyPrintedJson)
+                                                jsondata.data = json
+                                                
+                                                let mobileNumber = json["mobile"] as? String ?? ""
+                                                if mobileNumber.count < 10 {
+                                                    // If the mobile number is less than 10 characters
+                                                    print(json["result"] as? String ?? "")
+                                                    ShowTost = (json["result"] as? String ?? "")
+                                                    showToast = true
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                        showToast = false
+                                                    }
+                                                } else {
+                                                    NavigteBoll = true
+                                                    // If the mobile number is 10 characters or more
+                                                    print(json["msg"] as? String ?? "")
+                                                    ShowTost = json["msg"] as? String ?? ""
+                                                    showToast = true
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                        showToast = false
+                                                    }
+                                                    
+                                                }
+                                                
+                                                
+                                                
+                                            }
+                                        case .failure(let error):
+                                            print(error)
+                                        }
+                                    }
+                            }) {
+                                Text("SEND OTP")
+                                //.font(.title)
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 18))
+                                    .multilineTextAlignment(.center)
+                                //.frame(width: 325, height: 40)
+                                    .background(ColorData.shared.HeaderColor)
+                                    .cornerRadius(10)
+                            }
                         }
-                    } else {
-                        // Handle non-iOS 15 case if needed
+                        .padding(15)
+                        
+                        
                     }
+                    if NavigteBoll {
+                        if #available(iOS 15.0, *) {
+                            NavigationLink(
+                                destination: OTPVerify(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
+                                isActive: $NavigteBoll
+                            ) {
+                                EmptyView()
+                            }
+                        } else {
+                            // Handle non-iOS 15 case if needed
+                        }
+                    }
+                    NavigationLink(destination: HomePage(), isActive: $HomePageNvigater) {
+                        EmptyView()
+                    }
+                    
+                    Spacer()
                 }
-                NavigationLink(destination: HomePage(), isActive: $HomePageNvigater) {
-                    EmptyView()
+            }
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .onTapGesture {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
-                
-            
         }
+            .toast(isPresented: $showToast, message: "\(ShowTost)")
            
     }
         .navigationBarHidden(true)
