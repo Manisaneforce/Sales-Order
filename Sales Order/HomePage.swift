@@ -38,7 +38,7 @@ struct HomePage: View {
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                             
-                                 Spacer()
+                            Spacer()
                             HStack(spacing:30){
                                 Text(currentDate)
                                     .font(.system(size: 15))
@@ -50,7 +50,7 @@ struct HomePage: View {
                                 
                                 VStack {
                                     Button(action: {
-                                      
+                                        
                                         
                                         showAlert = true
                                     }) {
@@ -92,36 +92,36 @@ struct HomePage: View {
                             do{
                                 if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
                                     
-                                      
-                                            if let result = jsonObject["result"] as? [[String:Any]], let firstResult = result.first {
-                                                print(firstResult)
-                                                let CusName = firstResult["CusName"] as? String
-                                                let StkID = firstResult["StkID"] as? String
-                                                let Addr = firstResult["Addr"] as? String
-                                                let StkMob = firstResult["StkMob"] as? String
-                                                let StkNm = firstResult["StkNm"] as? String
-                                                let StkAddr = firstResult["StkAddr"] as? String
-                                                let CusID = firstResult["CusID"] as? String
-                                                let ERP_Code = firstResult["ERP_Code"] as? String
-                                                let Mob = firstResult["Mob"] as? String
-                                                let Div = firstResult["Div"] as? Int
-                                                let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
-                                                print(Det)
-                                                CustDet.shared.CusId = CusID!
-                                                CustDet.shared.CusName = CusName!
-                                                CustDet.shared.StkID = StkID!
-                                                CustDet.shared.Addr = Addr!
-                                                CustDet.shared.StkMob = StkMob!
-                                                CustDet.shared.StkNm = StkNm!
-                                                CustDet.shared.StkAddr = StkAddr!
-                                                CustDet.shared.ERP_Code = ERP_Code!
-                                                CustDet.shared .Mob = Mob!
-                                                CustDet.shared.Div = Div!
-                                               
-                                               
-                                            }
-                                       
-                                   
+                                    
+                                    if let result = jsonObject["result"] as? [[String:Any]], let firstResult = result.first {
+                                        print(firstResult)
+                                        let CusName = firstResult["CusName"] as? String
+                                        let StkID = firstResult["StkID"] as? String
+                                        let Addr = firstResult["Addr"] as? String
+                                        let StkMob = firstResult["StkMob"] as? String
+                                        let StkNm = firstResult["StkNm"] as? String
+                                        let StkAddr = firstResult["StkAddr"] as? String
+                                        let CusID = firstResult["CusID"] as? String
+                                        let ERP_Code = firstResult["ERP_Code"] as? String
+                                        let Mob = firstResult["Mob"] as? String
+                                        let Div = firstResult["Div"] as? Int
+                                        let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
+                                        print(Det)
+                                        CustDet.shared.CusId = CusID!
+                                        CustDet.shared.CusName = CusName!
+                                        CustDet.shared.StkID = StkID!
+                                        CustDet.shared.Addr = Addr!
+                                        CustDet.shared.StkMob = StkMob!
+                                        CustDet.shared.StkNm = StkNm!
+                                        CustDet.shared.StkAddr = StkAddr!
+                                        CustDet.shared.ERP_Code = ERP_Code!
+                                        CustDet.shared .Mob = Mob!
+                                        CustDet.shared.Div = Div!
+                                        
+                                        
+                                    }
+                                    
+                                    
                                 }
                             } catch{
                                 print("Error Data")
@@ -130,11 +130,12 @@ struct HomePage: View {
                         GetCurrentLoction()
                         updateDate()
                     }
+                    VStack{
                     ZStack{
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.white)
                             .shadow(radius: 4)
-                     
+                        
                         VStack{
                             HStack{
                                 Text("Greetings \(CustDet.shared.CusName)")
@@ -145,46 +146,67 @@ struct HomePage: View {
                             .padding(.leading,15)
                             .padding(7)
                             .onAppear{
-                              
-                            }
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
-                            NavigationLink(destination: Order()){
-                                DashboardItem(imageName: "package", title: "New Order")
                                 
                             }
-                            
-                            // NavigationLink(destination: UpdateLocation()) {
-                            NavigationLink(destination:MyOrdersScreen()){
-                                DashboardItem(imageName: "features", title: "My Orders")
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
+                                NavigationLink(destination: Order()){
+                                    DashboardItem(imageName: "package", title: "New Order")
+                                    
+                                }
+                                
+                                // NavigationLink(destination: UpdateLocation()) {
+                                NavigationLink(destination:MyOrdersScreen()){
+                                    DashboardItem(imageName: "features", title: "My Orders")
+                                }
+                                NavigationLink(destination:PaymentScreen()){
+                                    DashboardItem(imageName: "credit-card", title: "Payment Ledger")
+                                }
+                                NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
+                                    DashboardItem(imageName: "business-report", title: "Reports")
+                                }
+                                NavigationLink(destination:My_Profile()){
+                                    DashboardItem(imageName: "resume", title: "My Profile")
+                                }
+                                NavigationLink(destination:Feedback()){
+                                    DashboardItem(imageName: "feedback", title: "Reach Out")
+                                }
                             }
-                            NavigationLink(destination:PaymentScreen()){
-                                DashboardItem(imageName: "credit-card", title: "Payment Ledger")
-                            }
-                            NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
-                                DashboardItem(imageName: "business-report", title: "Reports")
-                            }
-                            NavigationLink(destination:My_Profile()){
-                                DashboardItem(imageName: "resume", title: "My Profile")
-                            }
-                            NavigationLink(destination:Feedback()){
-                                DashboardItem(imageName: "feedback", title: "Reach Out")
-                            }
+                        
                         }
-                    }
                     }
                     .padding(10)
                     .frame(height:200)
+                        
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.white)
+                                .shadow(radius: 4)
+                            VStack{
+                                Image("Banner 1")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .cornerRadius(10)
+                                    .padding(.vertical,2)
+                            }
+                            
+                        }
+                        .padding(10)
+                        .frame(height:220)
+                }
                     
                     
                     
                     
                     Spacer()
-//                    SliderAd()
-//                        .frame(height: 150)
-//                        .foregroundColor(Color.blue)
-//                        .offset()
+                    VStack{
+                        Image("logo_new")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width:150,height: 100)
+                            .background(Color(red: 0.87, green: 0.90, blue: 0.91))
+                    }
                 }
-                //.frame(minHeight: geometry.size.height)
+                
                 
             }
         }
