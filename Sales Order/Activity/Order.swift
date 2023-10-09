@@ -607,6 +607,28 @@ struct Order: View {
                                                 .fontWeight(.semibold)
                                         }
                                         .padding(.trailing,10)
+                                        HStack {
+                                            Text("Disc : 0")
+                                                .font(.system(size: 14))
+                                            
+                                            
+                                            Spacer()
+                                            Text("₹0.00")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.trailing,10)
+                                        HStack {
+                                            Text("TAX : 0")
+                                                .font(.system(size: 14))
+                                            
+                                            
+                                            Spacer()
+                                            Text("₹0.00")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.trailing,10)
                                         Divider()
                                         HStack {
                                             Text("Total Qty: \(filterItems[index].Amt)")
@@ -634,6 +656,7 @@ struct Order: View {
                         .cornerRadius(10)
                         .padding(.horizontal,10)
                     }
+                        
                 }
                     Button(action: {
                         if VisitData.shared.lstPrvOrder.count == 0{
@@ -913,6 +936,7 @@ struct Order: View {
     private func OrderprodCate(at index: Int){
         SelectId = prodTypes3[index]
         print(SelectId)
+        prodofcat.removeAll()
         Sales_Order.prodCate { json in
             print(json)
             if let jsonData = json.data(using: .utf8) {
@@ -2071,7 +2095,7 @@ struct SelPrvOrder: View {
                                             Spacer()
                                         }
                                         HStack{
-                                            Text("₹\(AllPrvprod[index].ProMRP)")
+                                            Text("₹\(String(format: "%.2f", Double(AllPrvprod[index].ProMRP)!))")
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                             Spacer()
@@ -2117,6 +2141,7 @@ struct SelPrvOrder: View {
                                                         .fontWeight(.bold)
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
+                                                
                                                 Text("\(filterItems[index].quantity)")
                                                     .fontWeight(.bold)
                                                     .foregroundColor(Color.black)
@@ -2152,9 +2177,11 @@ struct SelPrvOrder: View {
                                                     Text("+")
                                                         .font(.headline)
                                                         .fontWeight(.bold)
+                                                    
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
                                             }
+                                            .frame(width: 60)
                                             .padding(.vertical, 4)
                                             .padding(.horizontal, 15)
                                             .background(Color.gray.opacity(0.2))
@@ -2184,7 +2211,7 @@ struct SelPrvOrder: View {
                                             
                                             
                                             Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
-                                                .font(.system(size: 14))
+                                                .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                             
                                         }
@@ -2207,7 +2234,7 @@ struct SelPrvOrder: View {
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                             Spacer()
-                                        Text("₹\(lblTotAmt)")
+                                        Text("\(lblTotAmt)")
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                         }

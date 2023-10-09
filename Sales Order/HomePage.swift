@@ -20,7 +20,7 @@ struct HomePage: View {
         NavigationView {
            // GeometryReader { geometry in
             ZStack{
-                Color(red: 0.87, green: 0.90, blue: 0.91)
+                Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05)
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack(spacing:22){
@@ -200,11 +200,8 @@ struct HomePage: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width:150,height: 100)
-                            .background(Color(red: 0.87, green: 0.90, blue: 0.91))
                     }
                 }
-                
-                
             }
         }
         .navigationBarHidden(true)
