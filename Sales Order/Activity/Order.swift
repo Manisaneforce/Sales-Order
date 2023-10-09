@@ -1969,8 +1969,8 @@ struct SelPrvOrder: View {
     var body: some View {
         NavigationView{
             ZStack{
-                //            Color.gray.opacity(0.2)
-                //                .edgesIgnoringSafeArea(.all)
+                Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
+                    .edgesIgnoringSafeArea(.all)
                 VStack{
                     VStack(spacing:10){
                         ZStack{
@@ -1991,182 +1991,285 @@ struct SelPrvOrder: View {
                         .frame(maxWidth: .infinity)
                         
                         
-                        HStack(spacing: 200){
-                            Text("Items")
-                                .fontWeight(.bold)
-                                .font(.system(size: 20))
-                            
-                            Button(action:{
-                                //OrderNavigte = true
-                                OredSc.toggle()
-                                SelPrvSc.toggle()
-                                
-                            }){
-                                Text("+ Add Product")
-                                    .foregroundColor(Color.orange)
-                                
-                            }
-                        }
-                        .onAppear{
-                            prvDet()
-                        }
+                     
                         
                         Divider()
-                        ScrollView{
-                            ForEach(AllPrvprod.indices, id: \.self) { index in
-                                VStack{
-                                    HStack{
-                                        Image("logo_new")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 75,height: 75)
-                                            .padding(.leading,10)
-                                        Spacer()
-                                        VStack{
-                                            HStack{
-                                                Text(AllPrvprod[index].ProName)
-                                                    .font(.system(size: 14))
-                                                    .fontWeight(.semibold)
-                                                    .padding(.leading,10)
-                                                Spacer()
-                                            }
-                                            HStack{
-                                                Text(AllPrvprod[index].Uomnm)
-                                                Spacer()
-                                                Text("Rs: \(AllPrvprod[index].ProMRP)")
-                                                    .font(.system(size: 12))
-                                                    .fontWeight(.semibold)
-                                            }
-                                            .padding(.leading,10)
-                                            .padding(.trailing,12)
-                                            HStack{
-                                                Button(action: {
-                                                    deleteItem(at: index)
-                                                    AllPrvprod.remove(at: index)
-                                                    prvDet()
-                                                    print(AllPrvprod)
-                                                }) {
-                                                    Image(systemName: "trash.fill")
-                                                        .foregroundColor(Color.red)
-                                                }
-                                                .buttonStyle(PlainButtonStyle())
-                                                Spacer()
-                                                HStack{
-                                                    Button(action:{
-                                                        if filterItems[index].quantity > 0 {
-                                                            filterItems[index].quantity -= 1
-                                                        }
-                                                        let ProId = AllPrvprod[index].ProID
-                                                        if let jsonData = Allproddata.data(using: .utf8){
-                                                            do{
-                                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                                    print(jsonArray)
-                                                                    let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-                                                                    
-                                                                    if !itemsWithTypID3.isEmpty {
-                                                                        for item in itemsWithTypID3 {
-                                                                            let Qty = String(filterItems[index].quantity)
-                                                                            minusQty(sQty: Qty, SelectProd: item)
-                                                                            Qtycount()
-                                                                             prvDet()
-                                                                            
-                                                                            
-                                                                        }
-                                                                    } else {
-                                                                        print("No data with TypID")
-                                                                    }
-                                                                    
-                                                                }
-                                                            } catch{
-                                                                print("Data is error\(error)")
-                                                            }
-                                                        }
-                                                    }){
-                                                        Text("-")
-                                                            .font(.headline)
-                                                            .fontWeight(.bold)
-                                                    }
-                                                    .buttonStyle(PlainButtonStyle())
-                                                    Text("\(filterItems[index].quantity)")
-                                                        .fontWeight(.bold)
-                                                        .foregroundColor(Color.black)
-                                                    Button(action:{
-                                                        filterItems[index].quantity += 1
-                                                        print(AllPrvprod[index].ProID)
-                                                        let ProId = AllPrvprod[index].ProID
-                                                        if let jsonData = Allproddata.data(using: .utf8){
-                                                            do{
-                                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                                                    print(jsonArray)
-                                                                    let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
-                                                                    
-                                                                    if !itemsWithTypID3.isEmpty {
-                                                                        for item in itemsWithTypID3 {
-                                                                            let Qty = String(filterItems[index].quantity)
-                                                                            addQty(sQty: Qty, SelectProd: item)
-                                                                            Qtycount()
-                                                                            prvDet()
-                                                                            
-                                                                        }
-                                                                    } else {
-                                                                        print("No data with TypID")
-                                                                    }
-                                                                    
-                                                                }
-                                                            } catch{
-                                                                print("Data is error\(error)")
-                                                            }
-                                                        }
-                                                    }){
-                                                        Text("+")
-                                                            .font(.headline)
-                                                            .fontWeight(.bold)
-                                                    }
-                                                    .buttonStyle(PlainButtonStyle())
-                                                }
-                                                .padding(.vertical, 4)
-                                                .padding(.horizontal, 15)
-                                                .background(Color.gray.opacity(0.2))
-                                                .cornerRadius(10)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.gray, lineWidth: 2)
-                                                )
-                                                .foregroundColor(Color.blue)
-                                            }
-                                            .padding(.leading,10)
-                                            .padding(.trailing,10)
-                                            .padding(.top,-5)
-                                            Divider()
-                                                .padding(5)
-                                            
-                                            HStack{
-                                                Text("Total")
-                                                    .font(.system(size: 14))
-                                                    .fontWeight(.semibold)
-                                                Spacer()
-                                                Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
-                                                    .font(.system(size: 14))
-                                                    .fontWeight(.semibold)
-                                            }
-                                            .padding(.leading,10)
-                                            .padding(.trailing,10)
-                                        }
-                                        
-                                    }
-                                    Rectangle()
-                                        .frame(height: 1)
-                                        .foregroundColor(.gray)
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.white)
+                                .shadow(radius: 5)
+                            
+                            VStack{
+                            HStack(){
+                                Text("Items")
+                                    .fontWeight(.bold)
+                                    .font(.system(size: 20))
+                                Spacer()
+                                Button(action:{
+                                    //OrderNavigte = true
+                                    OredSc.toggle()
+                                    SelPrvSc.toggle()
                                     
+                                }){
+                                    Text("+ Add Product")
+                                        .foregroundColor(Color.orange)
                                     
                                 }
                             }
+                            .padding(10)
+                            .onAppear{
+                                prvDet()
+                            }
+                                Rectangle()
+                                    .foregroundColor(.black)
+                                    .frame(height: 1)
+                                    .padding(.horizontal,10)
+                                
+                                HStack{
+                                    VStack{
+                                        Text("SKC")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                        Text("Rate")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                    }
+                                    Spacer()
+                                    
+                                    Text("UOM")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.bold)
+                                    Spacer(minLength: 5)
+                                    Text("Qty")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.bold)
+                                    Spacer(minLength: -5)
+                                    Text("TAX")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.bold)
+                                    Spacer(minLength: 5)
+                                    Text("Total")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.bold)
+                                    //Spacer(minLength: 5)
+                                    
+                                }
+                                .padding(.horizontal,10)
+                                Rectangle()
+                                    .foregroundColor(.black)
+                                    .frame(height: 1)
+                                    .padding(.horizontal,10)
+                                
+                            ScrollView{
+                                ForEach(AllPrvprod.indices, id: \.self) { index in
+                                    VStack{
+                                        HStack{
+                                            Text(AllPrvprod[index].ProName)
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                                .padding(.leading,10)
+                                            Spacer()
+                                        }
+                                        HStack{
+                                            Text("₹\(AllPrvprod[index].ProMRP)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            
+                                            Text(AllPrvprod[index].Uomnm)
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer(minLength: 5)
+                                            
+                                            HStack{
+                                                Button(action:{
+                                                    if filterItems[index].quantity > 0 {
+                                                        filterItems[index].quantity -= 1
+                                                    }
+                                                    let ProId = AllPrvprod[index].ProID
+                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                        do{
+                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                                print(jsonArray)
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                
+                                                                if !itemsWithTypID3.isEmpty {
+                                                                    for item in itemsWithTypID3 {
+                                                                        let Qty = String(filterItems[index].quantity)
+                                                                        minusQty(sQty: Qty, SelectProd: item)
+                                                                        Qtycount()
+                                                                        prvDet()
+                                                                        
+                                                                        
+                                                                    }
+                                                                } else {
+                                                                    print("No data with TypID")
+                                                                }
+                                                                
+                                                            }
+                                                        } catch{
+                                                            print("Data is error\(error)")
+                                                        }
+                                                    }
+                                                }){
+                                                    Text("-")
+                                                        .font(.headline)
+                                                        .fontWeight(.bold)
+                                                }
+                                                .buttonStyle(PlainButtonStyle())
+                                                Text("\(filterItems[index].quantity)")
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(Color.black)
+                                                    .font(.system(size: 14))
+                                                Button(action:{
+                                                    filterItems[index].quantity += 1
+                                                    print(AllPrvprod[index].ProID)
+                                                    let ProId = AllPrvprod[index].ProID
+                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                        do{
+                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                                print(jsonArray)
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                
+                                                                if !itemsWithTypID3.isEmpty {
+                                                                    for item in itemsWithTypID3 {
+                                                                        let Qty = String(filterItems[index].quantity)
+                                                                        addQty(sQty: Qty, SelectProd: item)
+                                                                        Qtycount()
+                                                                        prvDet()
+                                                                        
+                                                                    }
+                                                                } else {
+                                                                    print("No data with TypID")
+                                                                }
+                                                                
+                                                            }
+                                                        } catch{
+                                                            print("Data is error\(error)")
+                                                        }
+                                                    }
+                                                }){
+                                                    Text("+")
+                                                        .font(.headline)
+                                                        .fontWeight(.bold)
+                                                }
+                                                .buttonStyle(PlainButtonStyle())
+                                            }
+                                            .padding(.vertical, 4)
+                                            .padding(.horizontal, 15)
+                                            .background(Color.gray.opacity(0.2))
+                                            .cornerRadius(10)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(Color.gray, lineWidth: 2)
+                                            )
+                                            .foregroundColor(Color.blue)
+                                            Spacer(minLength: 3)
+                                            //Remove Button
+                                            Button(action: {
+                                                deleteItem(at: index)
+                                                AllPrvprod.remove(at: index)
+                                                prvDet()
+                                                print(AllPrvprod)
+                                            }) {
+                                                Image(systemName: "trash.fill")
+                                                    .foregroundColor(Color.red)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                            Spacer(minLength: 5)
+                                            
+                                            Text("00.0")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            
+                                            
+                                            Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
+                                                .font(.system(size: 14))
+                                                .fontWeight(.semibold)
+                                            
+                                        }
+                                        .padding(.horizontal,10)
+                                    }
+                                }
+                                VStack{
+                                    HStack{
+                                        Text("PRICE DETAILS")
+                                            .foregroundColor(.gray)
+                                            .font(.system(size: 14))
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal,10)
+                                    Divider()
+                                        .padding(.horizontal,10)
+                                    VStack{
+                                        HStack{
+                                         Text("Price(\(VisitData.shared.lstPrvOrder.count)items)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                        Text("₹\(lblTotAmt)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.horizontal,10)
+                                        HStack{
+                                            Text("Total Qty")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            Text("\(TotalQtyData)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                        }.padding(.horizontal,10)
+                                        HStack{
+                                            Text("GST 10%")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            Text("000.00")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.horizontal,10)
+                                        HStack{
+                                            Text("GST 18%")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            Text("000.00")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.horizontal,10)
+                                        
+                                        Rectangle()
+                                            .frame(height: 1)
+                                            .padding(.horizontal,10)
+                                        
+                                        HStack{
+                                            Text("TO PAY")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            Text("\(lblTotAmt)")
+                                                .font(.system(size: 12))
+                                                .fontWeight(.semibold)
+                                        }
+                                        .padding(.horizontal,10)
+                                        Rectangle()
+                                            .frame(height: 1)
+                                            .padding(.horizontal,10)
+                                    }
+                                }
+                                .padding(.top,30)
+                            }
                         }
                     }
+                        .padding(.horizontal,6)
+                        .padding(.bottom,30)
+                    }
                     .edgesIgnoringSafeArea(.top)
-                    
-                    
-                    
+                   
                     Spacer()
                     ZStack{
                         Rectangle()
@@ -2732,7 +2835,6 @@ func OrderSubmit(lat:String,log:String) {
     }
 }
     
-  
 }
 func updateDateAndTime() {
     let formatter = DateFormatter()
@@ -2743,8 +2845,6 @@ func updateDateAndTime() {
         currentDateTime = formatter.string(from: Date())
     }
 }
-
-
 
 func Qtycount() {
     var qtysdata = [Int]()
