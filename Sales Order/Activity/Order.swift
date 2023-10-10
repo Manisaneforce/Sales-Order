@@ -113,6 +113,8 @@ struct Order: View {
         if OredSc{
         NavigationView {
             ZStack{
+                Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05)
+                    .edgesIgnoringSafeArea(.all)
                 VStack(spacing: 0) {
                     
                     ZStack(alignment: .top) {
@@ -147,7 +149,6 @@ struct Order: View {
                                     secondaryButton: .cancel()
                                 )
                             }
-                            
                             
                             Text("Order")
                                 .font(.system(size: 22))

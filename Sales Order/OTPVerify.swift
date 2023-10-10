@@ -68,11 +68,16 @@ struct OTPVerify: View {
                             
                             LottieUIView(filename: "OTP").frame(width: 200,height: 200)
                             
+                            Text("+91\(phoneNumber2)")
+                                .font(.system(size: 17))
+                                .font(.title)
+                                .foregroundColor(Color.gray)
                             Text("Enter your OTP")
                                 .font(.system(size: 17))
                                 .font(.title)
                                 .foregroundColor(Color.gray)
-                                .padding(.bottom,30)
+                                .padding(.bottom,25)
+                          
                             
                                 .onAppear {
                                     startTimer()
@@ -259,10 +264,8 @@ struct OTPVerify: View {
                             
                             if showResendButton {
                                 Button(action: {
-                                    //                            .onAppear{
-                                    //                                APIClient()
-                                    //                            }
                                     startTimer()
+                                    OtpReSend()
                                     showResendButton = false
                                 }) {
                                     Text("Resend OTP")
@@ -272,6 +275,7 @@ struct OTPVerify: View {
                                 }
                             } else {
                                 Text("OTP didn't receive? Resend the OTP  \(remainingTime) in seconds")
+                                    .padding(.horizontal,10)
                                     .multilineTextAlignment(.center)
                             }
                             
@@ -289,6 +293,9 @@ struct OTPVerify: View {
                // .ignoresSafeArea(.keyboard, edges: .bottom)
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+                .onAppear {
+                    UIScrollView.appearance().bounces = false
                 }
                  
         }
@@ -368,5 +375,33 @@ struct NotRegister: View {
     }
 }
 
-
+func OtpReSend(){
+    
+    let axn = "send/sms"
+    let apiKey = "\(axn)&mobile=\(phoneNumber2)"
+   
+    
+    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String: AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+               
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+}
 

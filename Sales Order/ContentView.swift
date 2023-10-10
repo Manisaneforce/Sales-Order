@@ -209,6 +209,9 @@ struct ContentView: View {
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+                .onAppear {
+                    UIScrollView.appearance().bounces = false
+                }
         }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
            
@@ -249,7 +252,6 @@ struct AddNewView: View {
                     .font(.title)
                     .foregroundColor(Color.gray)
                 
-                    
             }
         }
     }
