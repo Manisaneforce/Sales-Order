@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EC4D95DC001D6144D6D4296 /* libPods-Sales OrderUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */; };
 		3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE1A2A8A52070069B136 /* LottieUIURL.swift */; };
 		3801AE202A8C8A830069B136 /* OTP.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE1F2A8C8A830069B136 /* OTP.json */; };
 		3801AE222A8C8BD70069B136 /* Call.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE212A8C8BD70069B136 /* Call.json */; };
@@ -53,6 +54,8 @@
 		38EEBC782A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */; };
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
 		38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */ = {isa = PBXBuildFile; fileRef = 38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */; };
+		7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */; };
+		E5F4656E514EFC0040E6C8CD /* libPods-Sales OrderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +76,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		042E340FFEA5A0148593BA9A /* Pods-Sales Order.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales Order.debug.xcconfig"; path = "Target Support Files/Pods-Sales Order/Pods-Sales Order.debug.xcconfig"; sourceTree = "<group>"; };
+		0B005EB0D9C5857691C5B1DE /* Pods-Sales OrderUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sales OrderUITests/Pods-Sales OrderUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3801AE1A2A8A52070069B136 /* LottieUIURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIURL.swift; sourceTree = "<group>"; };
 		3801AE1F2A8C8A830069B136 /* OTP.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = OTP.json; path = ../../../UI/OTP.json; sourceTree = "<group>"; };
 		3801AE212A8C8BD70069B136 /* Call.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Call.json; path = ../../../UI/Call.json; sourceTree = "<group>"; };
@@ -118,6 +124,12 @@
 		38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = something_went_wrong.json; path = ../../../../Downloads/something_went_wrong.json; sourceTree = "<group>"; };
+		4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales Order.release.xcconfig"; path = "Target Support Files/Pods-Sales Order/Pods-Sales Order.release.xcconfig"; sourceTree = "<group>"; };
+		A8870ADAAC2AE985DA866047 /* Pods-Sales OrderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderTests.debug.xcconfig"; path = "Target Support Files/Pods-Sales OrderTests/Pods-Sales OrderTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales Order.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5F77EA1EA074D85D162126C /* Pods-Sales OrderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderUITests.release.xcconfig"; path = "Target Support Files/Pods-Sales OrderUITests/Pods-Sales OrderUITests.release.xcconfig"; sourceTree = "<group>"; };
+		F290E58552D1B36F11B1A801 /* Pods-Sales OrderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderTests.release.xcconfig"; path = "Target Support Files/Pods-Sales OrderTests/Pods-Sales OrderTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +142,7 @@
 				3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */,
 				38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */,
 				383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */,
+				7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5F4656E514EFC0040E6C8CD /* libPods-Sales OrderTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,12 +158,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EC4D95DC001D6144D6D4296 /* libPods-Sales OrderUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		094860FF6A041F3A67586A6F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				042E340FFEA5A0148593BA9A /* Pods-Sales Order.debug.xcconfig */,
+				508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */,
+				A8870ADAAC2AE985DA866047 /* Pods-Sales OrderTests.debug.xcconfig */,
+				F290E58552D1B36F11B1A801 /* Pods-Sales OrderTests.release.xcconfig */,
+				0B005EB0D9C5857691C5B1DE /* Pods-Sales OrderUITests.debug.xcconfig */,
+				D5F77EA1EA074D85D162126C /* Pods-Sales OrderUITests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		3801AE1E2A8C8A700069B136 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +251,8 @@
 				38EEBC6A2A7A256000AEF032 /* Sales OrderTests */,
 				38EEBC742A7A256000AEF032 /* Sales OrderUITests */,
 				38EEBC582A7A255F00AEF032 /* Products */,
+				094860FF6A041F3A67586A6F /* Pods */,
+				C939F5FB31966F6577BD538C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -282,6 +313,16 @@
 			path = "Sales OrderUITests";
 			sourceTree = "<group>";
 		};
+		C939F5FB31966F6577BD538C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */,
+				308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */,
+				4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -289,9 +330,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38EEBC7B2A7A256000AEF032 /* Build configuration list for PBXNativeTarget "Sales Order" */;
 			buildPhases = (
+				3071ED3DAC28FDB346C991C3 /* [CP] Check Pods Manifest.lock */,
 				38EEBC532A7A255F00AEF032 /* Sources */,
 				38EEBC542A7A255F00AEF032 /* Frameworks */,
 				38EEBC552A7A255F00AEF032 /* Resources */,
+				CBE16A47D75B52A3F0921B94 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -313,6 +356,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38EEBC7E2A7A256000AEF032 /* Build configuration list for PBXNativeTarget "Sales OrderTests" */;
 			buildPhases = (
+				D3C04CB5DF5FEF3CA2D96414 /* [CP] Check Pods Manifest.lock */,
 				38EEBC632A7A256000AEF032 /* Sources */,
 				38EEBC642A7A256000AEF032 /* Frameworks */,
 				38EEBC652A7A256000AEF032 /* Resources */,
@@ -331,6 +375,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 38EEBC812A7A256000AEF032 /* Build configuration list for PBXNativeTarget "Sales OrderUITests" */;
 			buildPhases = (
+				92989CFB587B4F23A53CF81A /* [CP] Check Pods Manifest.lock */,
 				38EEBC6D2A7A256000AEF032 /* Sources */,
 				38EEBC6E2A7A256000AEF032 /* Frameworks */,
 				38EEBC6F2A7A256000AEF032 /* Resources */,
@@ -378,10 +423,10 @@
 			);
 			mainGroup = 38EEBC4E2A7A255F00AEF032;
 			packageReferences = (
-				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */,
-				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
-				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */,
+				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */,
+				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */,
+				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
 			projectDirPath = "";
@@ -431,6 +476,92 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3071ED3DAC28FDB346C991C3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sales Order-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		92989CFB587B4F23A53CF81A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sales OrderUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CBE16A47D75B52A3F0921B94 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sales Order/Pods-Sales Order-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sales Order/Pods-Sales Order-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sales Order/Pods-Sales Order-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3C04CB5DF5FEF3CA2D96414 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sales OrderTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		38EEBC532A7A255F00AEF032 /* Sources */ = {
@@ -615,6 +746,7 @@
 		};
 		38EEBC7C2A7A256000AEF032 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 042E340FFEA5A0148593BA9A /* Pods-Sales Order.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -654,6 +786,7 @@
 		};
 		38EEBC7D2A7A256000AEF032 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -693,6 +826,7 @@
 		};
 		38EEBC7F2A7A256000AEF032 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8870ADAAC2AE985DA866047 /* Pods-Sales OrderTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -713,6 +847,7 @@
 		};
 		38EEBC802A7A256000AEF032 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F290E58552D1B36F11B1A801 /* Pods-Sales OrderTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -733,6 +868,7 @@
 		};
 		38EEBC822A7A256000AEF032 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B005EB0D9C5857691C5B1DE /* Pods-Sales OrderUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -751,6 +887,7 @@
 		};
 		38EEBC832A7A256000AEF032 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5F77EA1EA074D85D162126C /* Pods-Sales OrderUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -809,7 +946,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -817,7 +954,7 @@
 				minimumVersion = 10.0.0;
 			};
 		};
-		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -825,7 +962,7 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
+		387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sanzaru/SimpleToast.git";
 			requirement = {
@@ -833,7 +970,7 @@
 				minimumVersion = 0.7.2;
 			};
 		};
-		38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+		38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -846,27 +983,27 @@
 /* Begin XCSwiftPackageProductDependency section */
 		3838004E2AB9AFB30058F546 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseAnalytics;
 		};
 		383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
 			productName = FirebaseAnalyticsSwift;
 		};
 		387E0E7A2A84F7C000FEACBA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */;
 			productName = Alamofire;
 		};
 		387E0E7D2A85F5CF00FEACBA /* SimpleToast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */;
+			package = 387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */;
 			productName = SimpleToast;
 		};
 		38A3AEC92A8A1EFF00A4C826 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			package = 38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */;
 			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */

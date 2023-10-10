@@ -27,3 +27,9 @@ class CustDet{
     var StkID:String = ""
     var StkMob:String = ""
 }
+
+class DashboardBaner{
+    static var shared = DashboardBaner()
+    
+    var ImgUrl = [String]()
+}

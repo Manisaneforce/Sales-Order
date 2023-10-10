@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Jiopay_pg_uat
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false

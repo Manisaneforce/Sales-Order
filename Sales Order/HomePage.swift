@@ -10,11 +10,14 @@
 import SwiftUI
 import Combine
 import CoreLocation
+import Alamofire
 
 struct HomePage: View {
     @State private var currentDate = ""
     @State private var showAlert = false
     @State private var CustSAVEDet:String = UserDefaults.standard.string(forKey: "CustDet") ?? ""
+    @State private var currentPage = 0
+    let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
   
     var body: some View {
         NavigationView {
@@ -129,6 +132,7 @@ struct HomePage: View {
                         }
                         GetCurrentLoction()
                         updateDate()
+                        DashBoradImg()
                     }
                     VStack{
                     ZStack{
@@ -138,7 +142,7 @@ struct HomePage: View {
                         
                         VStack{
                             HStack{
-                                Text("Greetings \(CustDet.shared.CusName)")
+                                Text("Greetings Dr.\(CustDet.shared.CusName)")
                                     .font(.system(size: 18))
                                     .fontWeight(.semibold)
                                 Spacer()
@@ -180,15 +184,10 @@ struct HomePage: View {
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.white)
-                                .shadow(radius: 4)
-                            VStack{
-                                Image("Banner 1")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .cornerRadius(10)
-                                    .padding(.vertical,2)
-                            }
-                            
+                                .shadow(radius: 5)
+                            Image("Banner 1")
+                                .resizable()
+                                .cornerRadius(10)
                         }
                         .padding(10)
                         .frame(height:220)
@@ -291,4 +290,50 @@ struct NextScreen: View {
         Text("My Orders")
     }
 }
- 
+
+func DashBoradImg(){
+    let axn = "get_ad_images"
+    
+    
+    
+    let apiKey: String = "\(axn)"
+    
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+        switch response.result {
+        case .success(let value):
+            if let json = value as? [String:AnyObject] {
+                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                    print("Error: Cannot convert JSON object to Pretty JSON data")
+                    return
+                }
+                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                    print("Error: Could print JSON in String")
+                    return
+                }
+                print(prettyPrintedJson)
+                DashboardBaner.shared.ImgUrl.removeAll()
+                if let data = prettyPrintedJson.data(using: .utf8) {
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            if let response = json["response"] as? [[String: Any]] {
+                                print(response)
+                                for item in response{
+                                    let url = item["url"] as? String
+                                    DashboardBaner.shared.ImgUrl.append(url!)
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Error parsing JSON: \(error)")
+                    }
+                } else {
+                    print("Invalid JSON string")
+                }
+                print(DashboardBaner.shared.ImgUrl)
+            }
+        case .failure(let error):
+            print(error)
+        }
+        
+    }
+}

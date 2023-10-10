@@ -12,7 +12,7 @@ struct Feedback: View {
     @State private var AddressTextInpute:String = ""
     @State private var isCheckedMarks: [Bool] = [false, false, false]
     @State private var scrollOffset: CGFloat = 0.0
-    @State private var Para:[String]=["1. Is the delivery of the material as per your order?","2. Is there any issue you would like to report?","3. is there any Material Damage / Expired?"]
+    @State private var Para:[String]=["1. How satisfied are you with the ReliVet App?","2. Is there any issue you would like to report?","3. is there any Material Damage / Expired?"]
 
     var body: some View {
         NavigationView{
