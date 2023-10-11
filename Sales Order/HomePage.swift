@@ -171,7 +171,7 @@ struct HomePage: View {
                                 NavigationLink(destination:My_Profile()){
                                     DashboardItem(imageName: "resume", title: "My Profile")
                                 }
-                                NavigationLink(destination:Feedback()){
+                                NavigationLink(destination:ReachOut()){
                                     DashboardItem(imageName: "feedback", title: "Reach Out")
                                 }
                             }
@@ -219,7 +219,6 @@ struct HomePage: View {
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             print(sLocation)
             lazy var geocoder = CLGeocoder()
-            var sAddress: String = ""
 //            geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
 //                if(placemarks != nil){
 //                    if(placemarks!.count>0){

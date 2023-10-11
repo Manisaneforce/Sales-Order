@@ -13,6 +13,8 @@ struct Feedback: View {
     @State private var isCheckedMarks: [Bool] = [false, false, false]
     @State private var scrollOffset: CGFloat = 0.0
     @State private var Para:[String]=["1. How satisfied are you with the ReliVet App?","2. Is there any issue you would like to report?","3. is there any Material Damage / Expired?"]
+    @Binding var FeedbackSc:Bool
+    @Binding var CurrentSc:Bool
 
     var body: some View {
         NavigationView{
@@ -23,7 +25,8 @@ struct Feedback: View {
                         .frame(height: 80)
                     HStack {
                         Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
+                            FeedbackSc.toggle()
+                            CurrentSc.toggle()
                         }) {
                             Image("backsmall")
                                 .renderingMode(.template)
@@ -170,5 +173,133 @@ struct ViewOffsetKey: PreferenceKey {
 
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = nextValue()
+    }
+}
+
+struct ReachOut:View{
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State private var FeedbackSc:Bool = false
+    @State private var CurrentSc:Bool = true
+    var body: some View{
+        if CurrentSc{
+        NavigationView{
+            ZStack{
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
+                        HStack {
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Image("backsmall")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.white)
+                                    .padding(.top,50)
+                                    .frame(width: 50)
+                            }
+                            Text("Reach Out")
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.top,50)
+                            Spacer()
+                        }
+                    }
+                    .edgesIgnoringSafeArea(.top)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                    VStack {
+                        //                    Rectangle()
+                        //                        .foregroundColor(.clear)
+                        //                        .frame(height: 0.3)
+                        //                        .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                        //                        .padding(8)
+                        
+                        HStack {
+                            Image("Group7")
+                                .frame(width: 32, height: 32)
+                            Text("About us")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .padding(.leading,8)
+                            Spacer()
+                            Image("back")
+                        }
+                        .padding(.leading,10)
+                        .padding(.trailing,20)
+                        
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(height: 0.3)
+                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                            .padding(8)
+                        Button(action:{
+                            FeedbackSc.toggle()
+                            CurrentSc.toggle()
+                        })
+                        {
+                            HStack {
+                                Image("Group 8")
+                                    .frame(width: 32, height: 32)
+                                Text("Feedback")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
+                                    .padding(.leading,8)
+                                Spacer()
+                                Image("back")
+                            }
+                        }
+                        .padding(.leading,10)
+                        .padding(.trailing,20)
+                        
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(height: 0.3)
+                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                            .padding(8)
+                        HStack {
+                            Image("Group 9")
+                                .frame(width: 32, height: 32)
+                            Text("Privacy Policy")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .padding(.leading,8)
+                            Spacer()
+                            Image("back")
+                        }
+                        .padding(.leading,10)
+                        .padding(.trailing,20)
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(height: 0.3)
+                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                            .padding(8)
+                        HStack {
+                            Image("Group 10")
+                                .frame(width: 32, height: 32)
+                            Text("Refund Policy")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .padding(.leading,8)
+                            
+                            Spacer()
+                            Image("back")
+                            
+                        }
+                        .padding(.leading,10)
+                        .padding(.trailing,20)
+                    }
+                    Spacer()
+                }
+            }
+        }
+        .navigationBarHidden(true)
+    }
+        if FeedbackSc{
+            Feedback(FeedbackSc: $FeedbackSc, CurrentSc: $CurrentSc)
+        }
     }
 }

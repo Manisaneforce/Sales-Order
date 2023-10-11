@@ -173,83 +173,8 @@ struct My_Profile: View {
                         .padding(.leading,7)
                         .padding(.trailing,7)
                     }
-                    
-                    
-                    VStack {
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(height: 0.3)
-                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
-                            .padding(8)
-                        
-                        HStack {
-                            Image("Group7")
-                                .frame(width: 32, height: 32)
-                            Text("About us")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            Spacer()
-                            Image("back")
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,20)
-                        
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(height: 0.3)
-                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
-                            .padding(8)
-                        HStack {
-                            Image("Group 8")
-                                .frame(width: 32, height: 32)
-                            Text("Feedback")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            Spacer()
-                            Image("back")
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,20)
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(height: 0.3)
-                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
-                            .padding(8)
-                        HStack {
-                            Image("Group 9")
-                                .frame(width: 32, height: 32)
-                            Text("Privacy Policy")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            Spacer()
-                            Image("back")
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,20)
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(height: 0.3)
-                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
-                            .padding(8)
-                        HStack {
-                            Image("Group 10")
-                                .frame(width: 32, height: 32)
-                            Text("Refund Policy")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            
-                            Spacer()
-                            Image("back")
-                            
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,20)
-                    }
                 }
+              
                 Spacer()
             }
                 if AddNewAddres{
