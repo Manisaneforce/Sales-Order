@@ -110,7 +110,7 @@ struct HomePage: View {
                                         let Div = firstResult["Div"] as? Int
                                         let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
                                         print(Det)
-                                        CustDet.shared.CusId = CusID!
+                                        CustDet.shared.CusId = CusID!//Sf_Code
                                         CustDet.shared.CusName = CusName!
                                         CustDet.shared.StkID = StkID!
                                         CustDet.shared.Addr = Addr!

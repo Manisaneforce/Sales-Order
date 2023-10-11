@@ -381,7 +381,7 @@ func OtpReSend(){
     let apiKey = "\(axn)&mobile=\(phoneNumber2)"
    
     
-    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
         .validate(statusCode: 200 ..< 299)
         .responseJSON { response in
             switch response.result {

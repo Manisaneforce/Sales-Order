@@ -57,6 +57,7 @@ var ShpingAddress = ""
 var BillingAddress = CustDet.shared.Addr
 var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
+var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
 struct Order: View {
     @State private var clickeindex:Int = 0
     @State private var IndexToAmt:String = ""
@@ -389,6 +390,7 @@ struct Order: View {
                         
                         TexQty()
                         ShpingAddress = BillingAddress
+                        SchemeDet()
                         
                         
                     }
@@ -1115,7 +1117,37 @@ struct Order: View {
         print(FilterProduct.count)
         print(filterItems)
     }
- 
+    
+    func SchemeDet(){
+        let axn = "get/Scheme"
+        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&rSF=\(CustDet.shared.CusId)&sfCode=\(CustDet.shared.CusId)&State_Code=15&desig=MGR"
+       
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DB_native_Scheme + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                        UserDefaults.standard.set(prettyPrintedJson, forKey: "Schemes_Master")
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        
+        
+    }
 }
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -2565,6 +2597,12 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     let ItmValue: Double = (TotQty2*Rate)
     print(ItmValue)
     
+//    let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
+//        if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
+//            return true
+//        }
+//        return false
+//    })
     
     let Scheme: Double = 0
     let FQ : Int32 = 0
