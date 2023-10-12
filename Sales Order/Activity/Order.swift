@@ -58,6 +58,7 @@ var BillingAddress = CustDet.shared.Addr
 var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
+
 struct Order: View {
     @State private var clickeindex:Int = 0
     @State private var IndexToAmt:String = ""
@@ -495,8 +496,8 @@ struct Order: View {
                                                     print(Ids as Any)
                                                     
                                                     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                                                        
-                                                        if (Cart["id"] as! String) == Ids {
+                                                        print(Cart)
+                                                        if (Cart["Pcode"] as! String) == Ids {
                                                             return true
                                                         }
                                                         return false
@@ -555,7 +556,7 @@ struct Order: View {
                                                     
                                                     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
                                                         
-                                                        if (Cart["id"] as! String) == Ids {
+                                                        if (Cart["Pcode"] as! String) == Ids {
                                                             return true
                                                         }
                                                         return false
@@ -862,14 +863,15 @@ struct Order: View {
 
                lProdItem = Allprods[index].Unit_Typ_Product
             print(lProdItem)
-                selectProd = String(format: "%@",lProdItem["ERP_Code"] as! CVarArg)
+        print(VisitData.shared.ProductCart)
+                selectProd = String(format: "%@",lProdItem["id"] as! CVarArg)
         print(selectProd)
                 selNetWt = String(format: "%@", lProdItem["product_netwt"] as! CVarArg)
           // }
             let ConvQty=String(format: "%@", UOMNAME["CnvQty"] as! CVarArg)
             print(ConvQty)
            let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (item) in
-                if item["id"] as! String == selectProd {
+                if item["Pcode"] as! String == selectProd {
                     return true
                 }
                 return false
@@ -986,7 +988,7 @@ struct Order: View {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
                     let itemsWithTypID3 = jsonArray.filter { ($0["cateid"] as? Int) == ProSelectID }
-                  
+                  print(itemsWithTypID3)
                     if !itemsWithTypID3.isEmpty {
                         Allprods.removeAll()
                         for item in itemsWithTypID3 {
@@ -995,7 +997,7 @@ struct Order: View {
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             print(FilterProduct.count)
                             
-                            if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["ERP_Code"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
+                            if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 print(proname)
                                 print(Proid)
@@ -1045,10 +1047,11 @@ struct Order: View {
         for item in FilterProduct{
             loopCounter += 1
            print(item)
-            let id=String(format: "%@", item["ERP_Code"] as! CVarArg)
+            print(VisitData.shared.ProductCart)
+            let id=String(format: "%@", item["id"] as! CVarArg)
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
                 
-                if Cart["id"] as! String == id {
+                if Cart["Pcode"] as! String == id {
                     return true
                 }
                 return false
@@ -2148,7 +2151,7 @@ struct SelPrvOrder: View {
                                                         do{
                                                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                                 print(jsonArray)
-                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["id"] as? String) == ProId }
                                                                 
                                                                 if !itemsWithTypID3.isEmpty {
                                                                     for item in itemsWithTypID3 {
@@ -2187,7 +2190,7 @@ struct SelPrvOrder: View {
                                                         do{
                                                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                                 print(jsonArray)
-                                                                let itemsWithTypID3 = jsonArray.filter { ($0["ERP_Code"] as? String) == ProId }
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["id"] as? String) == ProId }
                                                                 
                                                                 if !itemsWithTypID3.isEmpty {
                                                                     for item in itemsWithTypID3 {
@@ -2485,7 +2488,9 @@ struct SelPrvOrder: View {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
                     for RelID in ProSelectID {
-                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                        print(RelID)
+                        //Changes
+                        if let selectedPro = jsonArray.first(where: { ($0["id"] as! String) == RelID }) {
                             FilterItem.append(selectedPro)
                         }
                     }
@@ -2498,7 +2503,7 @@ struct SelPrvOrder: View {
             
             for PrvOrderData in VisitData.shared.lstPrvOrder{
                 print(PrvOrderData)
-                let RelID = PrvOrderData["id"] as? String
+                let RelID = PrvOrderData["Pcode"] as? String
                 let Uomnm = PrvOrderData["UOMNm"] as? String
                 let Qty = PrvOrderData["Qty"] as? String
                 let totAmt = PrvOrderData["NetVal"] as? Double
@@ -2507,13 +2512,13 @@ struct SelPrvOrder: View {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                         print(jsonArray)
-                        if let selectedPro = jsonArray.first(where: { ($0["ERP_Code"] as! String) == RelID }) {
+                        if let selectedPro = jsonArray.first(where: { ($0["id"] as! String) == RelID }) {
                             print(selectedPro)
                             
                             
                             let url = selectedPro["PImage"] as? String
                             let name  = selectedPro["name"] as? String
-                            let Proid = selectedPro["ERP_Code"] as? String
+                            let Proid = selectedPro["id"] as? String
                             let rate = selectedPro["Rate"] as? String
                             let Uom = PrvOrderData["UOMConv"] as? String
                             var result:Double = 0.0
@@ -2551,7 +2556,7 @@ struct SelPrvOrder: View {
                 print(index)
                 items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
             }
-            print(items.count)
+            print(items)
             filterItems = items
             
             print(AllPrvprod.count)
@@ -2588,49 +2593,97 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
        let UomQty = Double(sUomConv) {
         OrgRate = Double(ConvRate) ?? 0.00
         source = OrgRate * UomQty
+        print(OrgRate)
+        print(UomQty)
     }
     let Source1 = String(format: "%.02f", source)
     let Rate: Double = Double(Source1)!
     print(ProdItem)
    
     print(OrgRate)
-    let ItmValue: Double = (TotQty2*Rate)
+    var ItmValue: Double = (TotQty*Rate)
     print(ItmValue)
     
-//    let Schemes: [AnyObject] = lstSchemList.filter ({ (item) in
-//        if item["PCode"] as! String == id && (item["Scheme"] as! NSString).doubleValue <= TotQty {
-//            return true
-//        }
-//        return false
-//    })
     
-    let Scheme: Double = 0
-    let FQ : Int32 = 0
-    let OffQty: Int = 0
-    let OffProd: String = ""
-    let OffProdNm: String = ""
-    let Schmval: String = ""
-    let Disc: String = ""
+    var Scheme: Double = 0
+    var FQ : Int32 = 0
+    var OffQty: Int = 0
+    var OffProd: String = ""
+    var OffProdNm: String = ""
+    var Schmval: String = ""
+    var Disc: String = ""
+    var PCODE: String = ""
     
-   
-
+    if let Code = ProdItem["id"] as? String{
+        PCODE = Code
+    }
+    var lstSchemListdata:[AnyObject] = []
+    if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
+        lstSchemListdata = list;
+        print(lstSchemListdata)
+    }
+    
+    var Schemes: [AnyObject] = lstSchemListdata.filter ({ (item) in
+        print(item)
+        print(PCODE)
+        print(TotQty2)
+        
+        if item["PCode"] as! String == PCODE && (item["Scheme"] as! NSString).doubleValue <= TotQty2 {
+            return true
+        }
+        return false
+    })
+    if(Schemes.count>1){Schemes.remove(at: 0)}
+    print(Schemes)
+    if(Schemes.count>0){
+        Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
+        FQ = (Schemes[0]["FQ"] as! NSString).intValue
+        let SchmQty: Double
+        if(Schemes[0]["pkg"] as! String == "Y"){
+            SchmQty=Double(Int(TotQty / Scheme))
+        } else {
+            SchmQty = (TotQty / Scheme)
+        }
+        OffQty = Int(SchmQty * Double(FQ))
+        OffProd = Schemes[0]["OffProd"] as! String
+        OffProdNm = Schemes[0]["OffProdNm"] as! String
+        
+        var dis: Double = 0;
+        Disc = Schemes[0]["Disc"] as! String
+        if (Disc != "") {
+            print(ItmValue)
+            dis = ItmValue * (Double(Disc)! / 100);
+            print(dis)
+        }
+        Schmval = String(format: "%.02f", dis);
+        ItmValue = ItmValue - dis;
+        print(ItmValue)
+    }
+    
+    print(Scheme)
+    print(FQ)
+    print(OffQty)
+    print(OffProd)
+    print(OffProdNm)
+    print(Schmval)
+    print(Disc)
     if items.count>0 {
         print(VisitData.shared.ProductCart)
         if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
-            if item["id"] as! String == id {
+            if item["Pcode"] as! String == PCODE {
                 return true
             }
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
+            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
+        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
@@ -2657,12 +2710,12 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
     print(sQty)
     print(SelectProd)
   
-    let Ids = SelectProd["ERP_Code"] as? String
+    let Ids = SelectProd["id"] as? String
     print(Ids as Any)
-    
+    print(VisitData.shared.ProductCart)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
         
-        if (Cart["id"] as! String) == Ids {
+        if (Cart["Pcode"] as! String) == Ids {
             return true
         }
         return false
@@ -2700,12 +2753,12 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
      print(sQty)
      print(SelectProd)
    
-     let Ids = SelectProd["ERP_Code"] as? String
+     let Ids = SelectProd["id"] as? String
      print(Ids as Any)
      
      let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
          
-         if Cart["id"] as! String == Ids {
+         if Cart["Pcode"] as! String == Ids {
              return true
          }
          return false
@@ -2810,7 +2863,7 @@ func OrderSubmit(lat:String,log:String) {
             do {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     prodItems = jsonArray.filter { product in
-                        if let prodId = product["ERP_Code"] as? String {
+                        if let prodId = product["id"] as? String {
                             return prodId == id
                         }
                         return false

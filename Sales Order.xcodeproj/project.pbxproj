@@ -45,6 +45,7 @@
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
 		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
 		38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */; };
+		38DC8F562AD7D23200EFD572 /* GlobalFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */; };
 		38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */; };
 		38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC5C2A7A255F00AEF032 /* ContentView.swift */; };
 		38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBC5E2A7A256000AEF032 /* Assets.xcassets */; };
@@ -112,6 +113,7 @@
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerify.swift; sourceTree = "<group>"; };
+		38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunc.swift; sourceTree = "<group>"; };
 		38EEBC572A7A255F00AEF032 /* Sales Order.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sales Order.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderApp.swift; sourceTree = "<group>"; };
 		38EEBC5C2A7A255F00AEF032 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -175,7 +177,6 @@
 				0B005EB0D9C5857691C5B1DE /* Pods-Sales OrderUITests.debug.xcconfig */,
 				D5F77EA1EA074D85D162126C /* Pods-Sales OrderUITests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -213,6 +214,7 @@
 				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
 				383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */,
+				38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -423,10 +425,10 @@
 			);
 			mainGroup = 38EEBC4E2A7A255F00AEF032;
 			packageReferences = (
-				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */,
-				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */,
-				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */,
-				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
+				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */,
+				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
+				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
 			projectDirPath = "";
@@ -588,6 +590,7 @@
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
+				38DC8F562AD7D23200EFD572 /* GlobalFunc.swift in Sources */,
 				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
 				384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */,
 				38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */,
@@ -946,7 +949,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
+		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -954,7 +957,7 @@
 				minimumVersion = 10.0.0;
 			};
 		};
-		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */ = {
+		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -962,7 +965,7 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */ = {
+		387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sanzaru/SimpleToast.git";
 			requirement = {
@@ -970,7 +973,7 @@
 				minimumVersion = 0.7.2;
 			};
 		};
-		38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */ = {
+		38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -983,27 +986,27 @@
 /* Begin XCSwiftPackageProductDependency section */
 		3838004E2AB9AFB30058F546 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
 		383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsSwift;
 		};
 		387E0E7A2A84F7C000FEACBA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire.git" */;
+			package = 387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		387E0E7D2A85F5CF00FEACBA /* SimpleToast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast.git" */;
+			package = 387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */;
 			productName = SimpleToast;
 		};
 		38A3AEC92A8A1EFF00A4C826 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios.git" */;
+			package = 38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
