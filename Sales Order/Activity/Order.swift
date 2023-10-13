@@ -45,7 +45,11 @@ struct editUom:Any{
     let UomConv:String
     let NetValu:String
 }
-
+struct GroupId:Any{
+    let name:String
+    let id:String
+    let ProdGrp_Sl_No:String
+}
 
 var lblTotAmt:String = "0.0"
 var lblTotAmt2:String = String()
@@ -71,12 +75,13 @@ struct Order: View {
     @State private var nubers = [15,555,554,54]
     @State private var isPopupVisible = false
     @State private var selectedItem: String = ""
-    @State private var prettyPrintedJson: String = ""
+    @State private var prettyPrintedJson:[GroupId] = []
     @State private var prodTypes2 = [String]()
     @State private var prodTypes3 = [Int]()
     @State private var prodofcat = [String]()
     @State private var prodCate: String = ""
     @State private var selectedIndices: Set<Int> = []
+    @State private var selectedGorup:Int? = 0
     @State private var selectedIndex: Int? = 0
     @State private var SubselectedIndex:Int? = 0
     @State private var SelectId:Int = 0
@@ -248,19 +253,39 @@ struct Order: View {
                         
                         Divider()
                             .frame(height: 10)
-                        Text(prettyPrintedJson)
-                            .fontWeight(.semibold)
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .font(.system(size: 12))
-                        //.frame(width: 80,height: 25)
-                            .padding(.horizontal,10)
-                            .padding(.vertical,5)
-                            .foregroundColor(Color(#colorLiteral(red: 0.2901960784, green: 0.2901960784, blue: 0.2901960784, alpha: 1)))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
-                            )
-                            .padding(.horizontal, 12)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack{
+                                ForEach(prettyPrintedJson.indices, id: \.self) { index in
+                                    Button(action:{
+                                        print(prettyPrintedJson[index].id)
+                                        
+                                        
+                                        if selectedGorup == index {
+                                            selectedGorup = index
+                                            
+                                        } else {
+                                            selectedGorup = index
+                                        }
+                                     OrderProdTyp()
+                                    })
+                                    {
+                                        Text(prettyPrintedJson[index].name)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(selectedGorup == index ? ColorData.shared.HeaderColor : Color.gray)
+                                            .font(.system(size: 12))
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical,5)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .stroke(selectedGorup == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
+                                            )
+                                    }
+                                    .cornerRadius(10)
+                            }
+                        }
+                            
+                            .padding(.horizontal, 10)
+                    }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
@@ -346,42 +371,26 @@ struct Order: View {
                         
                         prodGroup { jsonString in
                             if let jsonData = jsonString.data(using: .utf8) {
+                                prettyPrintedJson.removeAll()
                                 do {
-                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]],
-                                       let firstItem = jsonArray.first {
+                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                                       for firstItem in jsonArray {
+                                        print(jsonArray)
                                         let textname = firstItem["name"] as? String ?? ""
+                                        let ProGroID = String((firstItem["id"] as? Int)!)
+                                        let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
+                                        
                                         print("Name: \(textname)")
-                                        prettyPrintedJson = textname
+                                        prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
                                     }
+                                }
                                 } catch {
                                     print("Error parsing JSON: \(error)")
                                 }
+                                print(prettyPrintedJson)
                             }
                         }
-                        Sales_Order.prodTypes { json in
-                            if let jsonData = json.data(using: .utf8) {
-                                do {
-                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                                        var prodTypes1 = [String]()
-                                        var Typofid = [Int]()
-                                        for item in jsonArray {
-                                            if let textName = item["name"] as? String , let typid = item["id"] as? Int {
-                                                prodTypes1.append(textName)
-                                                Typofid.append(typid)
-                                            }
-                                        }
-                                        print(prodTypes1)
-                                        print(Typofid)
-                                        prodTypes2 = prodTypes1
-                                        prodTypes3 = Typofid
-                                        print(json)
-                                    }
-                                } catch {
-                                    print("Error parsing JSON: \(error)")
-                                }
-                            }
-                            self.OrderprodCate(at: 0)
-                        }
+                        OrderProdTyp()
                         
                         Sales_Order.prodDets{
                             json in
@@ -521,6 +530,7 @@ struct Order: View {
                                                     minusQty(sQty: sQty, SelectProd: FilterProduct)
                                                     Qtycount()
                                                     TexQty()
+                                                    //OfferDet()
                                                     
                                                 }) {
                                                     Text("-")
@@ -579,8 +589,10 @@ struct Order: View {
                                                     
                                                     
                                                     addQty(sQty: sQty, SelectProd: FilterProduct)
+                                                    OfferDet()
                                                     Qtycount()
                                                     TexQty()
+                                                    
                                                     
                                                 }) {
                                                     Text("+")                          .font(.system(size: 15))
@@ -825,6 +837,7 @@ struct Order: View {
             SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc)
         }
     }
+
     
     private func lstOfUnitList(at index: Int,filterUnite:[[String:Any]]){
        print(filterUnite)
@@ -938,6 +951,37 @@ struct Order: View {
         print(uiImages.count)
         print(uiImages)
        }
+    private func OrderProdTyp(){
+        
+        Sales_Order.prodTypes { json in
+            if let jsonData = json.data(using: .utf8) {
+                do {
+                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                        var prodTypes1 = [String]()
+                        var Typofid = [Int]()
+                        print(jsonArray)
+                        let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup!) }
+                        print(jsonArrays)
+                        for item in jsonArrays {
+                          
+                            if let textName = item["name"] as? String , let typid = item["id"] as? Int {
+                                prodTypes1.append(textName)
+                                Typofid.append(typid)
+                            }
+                        }
+                        print(prodTypes1)
+                        print(Typofid)
+                        prodTypes2 = prodTypes1
+                        prodTypes3 = Typofid
+                        print(json)
+                    }
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+            }
+            self.OrderprodCate(at: 0)
+        }
+    }
     private func OrderprodCate(at index: Int){
         SelectId = prodTypes3[index]
         print(SelectId)
@@ -952,13 +996,14 @@ struct Order: View {
                         
                         
                         let itemsWithTypID3 = jsonArray.filter { ($0["TypID"] as? Int) == SelectId }
-                        
+                        print(itemsWithTypID3)
                         if !itemsWithTypID3.isEmpty {
                             for item in itemsWithTypID3 {
                                 print(itemsWithTypID3)
                                 
                                 if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
                                     print(procat)
+                                    print(proDetID)
                                     
                                     prodofcat.append(procat)
                                     proDetsID.append(proDetID)
@@ -991,8 +1036,9 @@ struct Order: View {
                   print(itemsWithTypID3)
                     if !itemsWithTypID3.isEmpty {
                         Allprods.removeAll()
+                        print(itemsWithTypID3.count)
                         for item in itemsWithTypID3 {
-                            print(itemsWithTypID3)
+                            
                            // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             print(FilterProduct.count)
@@ -2981,6 +3027,23 @@ func Qtycount() {
     print(sum) // Output: 3
     TotalQtyData = sum
     print(TotalQtyData)
+}
+func OfferDet(){
+    print(VisitData.shared.lstPrvOrder)
+
+    for item in VisitData.shared.lstPrvOrder {
+        if let dictionary = item as? [String: Any] {
+            let id = String(format: "%@", dictionary["id"] as! CVarArg)
+            print(id)
+            let items = VisitData.shared.ProductCart.filter { Cart in
+                return Cart["id"] as! String == id
+            }
+            print(items.count)
+        }
+        else {
+            print("Error: Unable to cast item to [String: Any]")
+        }
+    }
 }
 
 
