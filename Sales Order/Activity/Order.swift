@@ -32,6 +32,10 @@ struct TotAmt: Identifiable {
     var SelectUom:String
     var ConvRate:String
     var NetValu:String
+    var Free : String
+    var Freeprdname : String
+    var Dis : String
+    var DisVal : String
 }
 struct EdditeAddres : Any{
     let listedDrCode:String
@@ -44,6 +48,10 @@ struct editUom:Any{
     let Uon:String
     let UomConv:String
     let NetValu:String
+    let Disc : String
+    let Disvalue: String
+    let freeQty: String
+    let OffProdNm: String
 }
 struct GroupId:Any{
     let name:String
@@ -114,6 +122,7 @@ struct Order: View {
     @State private var lstPrvOrder: [AnyObject] = []
     @State private var OredSc:Bool = true
     @State private var SelPrvSc:Bool = false
+    @State private var Disc:Bool = true
    
 
     var body: some View {
@@ -589,10 +598,8 @@ struct Order: View {
                                                     
                                                     
                                                     addQty(sQty: sQty, SelectProd: FilterProduct)
-                                                    OfferDet()
                                                     Qtycount()
                                                     TexQty()
-                                                    
                                                     
                                                 }) {
                                                     Text("+")                          .font(.system(size: 15))
@@ -611,40 +618,49 @@ struct Order: View {
                                             .foregroundColor(Color.blue)
                                         }
                                         .padding(.trailing,10)
+                                        if filterItems[index].Free != "0" {
+                                        HStack {
+                                            Text("Free : \(filterItems[index].Free)")
+                                                .font(.system(size: 14))
+                                            
+                                            if filterItems[index].Freeprdname != ""{
+                                                
+                                                Text("(\(filterItems[index].Freeprdname))")
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            
+                                            Spacer()
+                                        }
+                                        .padding(.trailing,10)
+                                    }
                                         
-                                        HStack {
-                                            Text("Free : 0")
-                                                .font(.system(size: 14))
-                                            
-                                            
-                                            Spacer()
-                                            Text("₹0.00")
-                                                .font(.system(size: 14))
-                                                .fontWeight(.semibold)
+                                        if filterItems[index].Dis != "" {
+                                            HStack {
+                                                Text("Disc : \(filterItems[index].Dis)")
+                                                    .font(.system(size: 14))
+                                                
+                                                
+                                                Spacer()
+                                                Text("₹\(filterItems[index].DisVal)")
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            .padding(.trailing,10)
                                         }
-                                        .padding(.trailing,10)
-                                        HStack {
-                                            Text("Disc : 0")
-                                                .font(.system(size: 14))
                                             
-                                            
-                                            Spacer()
-                                            Text("₹0.00")
-                                                .font(.system(size: 14))
-                                                .fontWeight(.semibold)
-                                        }
-                                        .padding(.trailing,10)
-                                        HStack {
-                                            Text("TAX : 0")
-                                                .font(.system(size: 14))
-                                            
-                                            
-                                            Spacer()
-                                            Text("₹0.00")
-                                                .font(.system(size: 14))
-                                                .fontWeight(.semibold)
-                                        }
-                                        .padding(.trailing,10)
+                                            HStack {
+                                                Text("TAX : 0")
+                                                    .font(.system(size: 14))
+                                                
+                                                
+                                                Spacer()
+                                                Text("₹0.00")
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            .padding(.trailing,10)
+                                        
                                         Divider()
                                         HStack {
                                             Text("Total Qty: \(filterItems[index].Amt)")
@@ -1102,6 +1118,10 @@ struct Order: View {
                 }
                 return false
             })
+            var FreeQty = ""
+            var FreePrd = ""
+            var Dis = ""
+            var DisVal = ""
             if items.count>0 {
                  Qty = (items[0]["Qty"] as? String)!
                 print(items[0]["Qty"] as? String as Any)
@@ -1115,7 +1135,11 @@ struct Order: View {
                 let rate = String(format: "₹ %.02f", UonConvRate)
                 let RateNewConv = (items[0]["Rate"] as? Double)!
                 print(RateNewConv)
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2))
+                Dis = (items[0]["Disc"] as? String)!
+                DisVal = (items[0]["DisVal"] as? String)!
+                FreeQty = String((items[0]["FQ"] as? Int)!)
+                FreePrd = (items[0]["OffProdNm"] as? String)!
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1128,24 +1152,14 @@ struct Order: View {
                 print(FilterProduct)
                 let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
                 let Rate = FilterProduct[Cout]["Rate"] as? String
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0"))
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: ""))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
                 TotalQty.append(ZerQty)
             }
         }
-//        if filterItems.isEmpty{
-//            print("No data")
-//        }else{
-//            print("Data In")
-//            for items in filterItems{
-//              print(items)
-//                let Qty = String(items.Amt)
-//                TotalQty.append(Qty)
-//
-//            }
-//        }
+
         print(TotalQty)
         print(FilterProduct)
         print(SelectUOMN)
@@ -1155,7 +1169,7 @@ struct Order: View {
         for index in 0..<FilterProduct.count {
             print(index)
             print(filterItems)
-            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu ))
+            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue ))
             print(items)
         }
         
@@ -1197,6 +1211,7 @@ struct Order: View {
         
         
     }
+
 }
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -3028,22 +3043,4 @@ func Qtycount() {
     TotalQtyData = sum
     print(TotalQtyData)
 }
-func OfferDet(){
-    print(VisitData.shared.lstPrvOrder)
-
-    for item in VisitData.shared.lstPrvOrder {
-        if let dictionary = item as? [String: Any] {
-            let id = String(format: "%@", dictionary["id"] as! CVarArg)
-            print(id)
-            let items = VisitData.shared.ProductCart.filter { Cart in
-                return Cart["id"] as! String == id
-            }
-            print(items.count)
-        }
-        else {
-            print("Error: Unable to cast item to [String: Any]")
-        }
-    }
-}
-
 

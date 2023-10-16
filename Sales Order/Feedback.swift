@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WebKit
 
 struct Feedback: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -180,6 +181,9 @@ struct ReachOut:View{
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var FeedbackSc:Bool = false
     @State private var CurrentSc:Bool = true
+    @State private var ReachOutView:Bool = false
+    @State private var AppBarTit:String = ""
+    @State private var Url:String = ""
     var body: some View{
         if CurrentSc{
         NavigationView{
@@ -216,16 +220,24 @@ struct ReachOut:View{
                         //                        .frame(height: 0.3)
                         //                        .background(Color(red: 0.18, green: 0.19, blue: 0.2))
                         //                        .padding(8)
-                        
-                        HStack {
-                            Image("Group7")
-                                .frame(width: 32, height: 32)
-                            Text("About us")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            Spacer()
-                            Image("back")
+                        Button(action: {
+                            AppBarTit = "About Us"
+                            Url = "https://rad.salesjump.in/server/rad/about.pdf"
+                            CurrentSc.toggle()
+                            ReachOutView.toggle()
+                        })
+                        {
+                            HStack {
+                                Image("Group7")
+                                    .frame(width: 32, height: 32)
+                                Text("About us")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
+                                    .padding(.leading,8)
+                                Spacer()
+                                Image("back")
+                            }
                         }
                         .padding(.leading,10)
                         .padding(.trailing,20)
@@ -260,15 +272,23 @@ struct ReachOut:View{
                             .frame(height: 0.3)
                             .background(Color(red: 0.18, green: 0.19, blue: 0.2))
                             .padding(8)
-                        HStack {
-                            Image("Group 9")
-                                .frame(width: 32, height: 32)
-                            Text("Privacy Policy")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            Spacer()
-                            Image("back")
+                        Button(action:{
+                            AppBarTit = "Privacy Policy"
+                            Url = "https://rad.salesjump.in/server/rad/privacy.pdf"
+                            CurrentSc.toggle()
+                            ReachOutView.toggle()
+                        }) {
+                            HStack {
+                                Image("Group 9")
+                                    .frame(width: 32, height: 32)
+                                Text("Privacy Policy")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
+                                    .padding(.leading,8)
+                                Spacer()
+                                Image("back")
+                            }
                         }
                         .padding(.leading,10)
                         .padding(.trailing,20)
@@ -277,17 +297,26 @@ struct ReachOut:View{
                             .frame(height: 0.3)
                             .background(Color(red: 0.18, green: 0.19, blue: 0.2))
                             .padding(8)
-                        HStack {
-                            Image("Group 10")
-                                .frame(width: 32, height: 32)
-                            Text("Refund Policy")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .padding(.leading,8)
-                            
-                            Spacer()
-                            Image("back")
-                            
+                        Button(action: {
+                            AppBarTit = "Refund Policy"
+                            Url = "https://rad.salesjump.in/server/rad/refund.pdf"
+                            CurrentSc.toggle()
+                            ReachOutView.toggle()
+                        })
+                        {
+                            HStack {
+                                Image("Group 10")
+                                    .frame(width: 32, height: 32)
+                                Text("Refund Policy")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
+                                    .padding(.leading,8)
+                                
+                                Spacer()
+                                Image("back")
+                                
+                            }
                         }
                         .padding(.leading,10)
                         .padding(.trailing,20)
@@ -301,5 +330,70 @@ struct ReachOut:View{
         if FeedbackSc{
             Feedback(FeedbackSc: $FeedbackSc, CurrentSc: $CurrentSc)
         }
+        if ReachOutView{
+            Sales_Order.ReachOutView(ReachOutView: $ReachOutView, CurrentSc: $CurrentSc,AppBarTit: $AppBarTit,Url: $Url)
+        }
+    }
+}
+
+struct ReachOutView:View{
+    @Binding var ReachOutView:Bool
+    @Binding var CurrentSc:Bool
+    @Binding var AppBarTit:String
+    @Binding var Url:String
+    var body: some View{
+        NavigationView{
+        VStack{
+            ZStack{
+                Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .frame(height: 80)
+                HStack {
+                    Button(action: {
+                        ReachOutView.toggle()
+                        CurrentSc.toggle()
+                    })
+                    {
+                        Image("backsmall")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                            .padding(.top,50)
+                            .frame(width: 50)
+                        
+                    }
+                    Text(AppBarTit)
+                        .font(.system(size: 18))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                    Spacer()
+                }
+                
+            }
+            .edgesIgnoringSafeArea(.top)
+            .frame(maxWidth: .infinity)
+            .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+            
+            WebViews(urlString: Url)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        }
+    }
+        .navigationBarHidden(true)
+    }
+}
+struct WebViews: UIViewRepresentable {
+    let urlString: String
+    
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        if let url = URL(string: urlString) {
+            let request = URLRequest(url: url)
+            webView.load(request)
+        }
+        return webView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // Update the view if needed
     }
 }
