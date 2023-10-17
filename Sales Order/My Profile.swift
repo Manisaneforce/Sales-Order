@@ -37,6 +37,8 @@ struct My_Profile: View {
     @State private var listedDrCode = ""
     @State private var ClickIndex = Int()
     @State private var ShowTost = ""
+    @State private var ontap_Educational_Details:Bool = false
+    @State private var Ontap_Registration_certificate:Bool = false
     var body: some View {
         NavigationView{
             ZStack{
@@ -172,6 +174,215 @@ struct My_Profile: View {
                         }
                         .padding(.leading,7)
                         .padding(.trailing,7)
+                    }
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                        .padding(10)
+                    
+                    VStack{
+                        HStack{
+                            Image("documents")
+                                .resizable()
+                                .frame(width: 20,height: 20)
+                            Text("My documents")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image("back")
+                            
+                        }
+                        .padding(.horizontal,20)
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
+                        VStack{
+                            Button(action: {
+                                ontap_Educational_Details.toggle()
+                            })
+                            {
+                            HStack{
+                                ZStack{
+                                    //                                Rectangle()
+                                    //                                  .foregroundColor(.clear)
+                                    //                                  .frame(width: 32, height: 32)
+                                    //                                  .background(Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.1))
+                                    //                                  .cornerRadius(4)
+                                    HStack{
+                                        Image("Educational Details")
+                                            .resizable()
+                                            .frame(width: 22,height: 22)
+                                            .foregroundColor(.black)
+                                        Text("Educational Details")
+                                            .font(.system(size: 14))
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.black)
+                                    }
+                                    
+                                }
+                                Spacer()
+                                if (ontap_Educational_Details == true) {
+                                    Image(systemName: "chevron.down")
+                                        .foregroundColor(.black)
+                                   } else {
+                                       Image("back")
+                                   }
+                                
+                            }
+                        }
+                            if ontap_Educational_Details{
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(.clear)
+                                    .background(Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05))
+                                    .cornerRadius(4)
+                                VStack(spacing: 10){
+                                    HStack{
+                                        Text("UG Degree certificate")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        Text("PG Degree certificate")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                    }
+                                }
+                                .padding(.horizontal,10)
+                                .padding(.vertical,15)
+                            }
+                            .padding(.horizontal,20)
+                            .padding(.vertical,5)
+                        }
+                        }
+                        
+                        .padding(.horizontal,20)
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
+                        VStack{
+                            Button(action: {
+                                Ontap_Registration_certificate.toggle()
+                            })
+                            {
+                                HStack{
+                                    Image("Registration certificate")
+                                        .resizable()
+                                        .frame(width: 20,height: 20)
+                                    Text("Valid Registration certificate")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.black)
+                                    Spacer()
+                                    if (Ontap_Registration_certificate == true) {
+                                        
+                                        Image(systemName: "chevron.down")
+                                            .foregroundColor(.black)
+                                       } else {
+                                           Image("back")
+                                       }
+                                }
+                                .padding(.horizontal,20)
+                            }
+                            if Ontap_Registration_certificate{
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(.clear)
+                                    .background(Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05))
+                                    .cornerRadius(4)
+                                VStack(spacing: 10){
+                                    HStack{
+                                        Text("State Veterinary Council")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        Text("Veterinary Council of India (VCI)")
+                                            .font(.system(size: 12))
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                    }
+                                }
+                                .padding(.horizontal,10)
+                                .padding(.vertical,15)
+                            }
+                            .padding(.horizontal,20)
+                            .padding(.vertical,5)
+                        }
+                        }
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
+                        
+                        HStack{
+                            Image("PAN card")
+                                .resizable()
+                                .frame(width: 20,height: 20)
+                            Text("PAN card")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image("back")
+                            
+                        }
+                        .padding(.horizontal,20)
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
+                        HStack{
+                            Image("GST Number & Documen")
+                                .resizable()
+                                .frame(width: 20,height: 20)
+                            Text("GST Number & Document")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image("back")
+                            
+                        }
+                        .padding(.horizontal,20)
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
+                        
+                    
+                    }
+                    VStack{
+                        HStack{
+                            Image("Drug License:s copies or self-declaratio")
+                                .resizable()
+                                .frame(width: 20,height: 20)
+                            Text("Drug License/s copies or self-declaration")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image("back")
+
+                        }
+                        .padding(.horizontal,20)
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                            .padding(10)
                     }
                 }
               

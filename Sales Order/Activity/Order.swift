@@ -456,9 +456,25 @@ struct Order: View {
                                             Text("MRP 0")
                                                 .font(.system(size: 13))
                                             Spacer()
-                                            Text("Price: \(filterItems[index].ConvRate)")
-                                                .font(.system(size: 13))
-                                                .fontWeight(.semibold)
+                                            HStack{
+                                                if filterItems[index].Dis != "" {
+                                                Text("OFF:\(filterItems[index].Dis)%")
+                                                    .font(.system(size: 12))
+                                                    .foregroundColor(.green)
+                                                
+                                                ZStack{
+                                                    Text("₹\(filterItems[index].DisVal)")
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(.gray)
+                                                    Rectangle()
+                                                        .frame(width: 50,height: 1)
+                                                        .foregroundColor(.gray)
+                                                }
+                                            }
+                                                Text("Price: \(filterItems[index].ConvRate)")
+                                                    .font(.system(size: 13))
+                                                    .fontWeight(.semibold)
+                                            }
                                         }
                                         .padding(.trailing,10)
                                         HStack {
@@ -635,19 +651,19 @@ struct Order: View {
                                         .padding(.trailing,10)
                                     }
                                         
-                                        if filterItems[index].Dis != "" {
-                                            HStack {
-                                                Text("Disc : \(filterItems[index].Dis)")
-                                                    .font(.system(size: 14))
-                                                
-                                                
-                                                Spacer()
-                                                Text("₹\(filterItems[index].DisVal)")
-                                                    .font(.system(size: 14))
-                                                    .fontWeight(.semibold)
-                                            }
-                                            .padding(.trailing,10)
-                                        }
+//                                        if filterItems[index].Dis != "" {
+//                                            HStack {
+//                                                Text("Disc : \(filterItems[index].Dis)")
+//                                                    .font(.system(size: 14))
+//
+//
+//                                                Spacer()
+//                                                Text("₹\(filterItems[index].DisVal)")
+//                                                    .font(.system(size: 14))
+//                                                    .fontWeight(.semibold)
+//                                            }
+//                                            .padding(.trailing,10)
+//                                        }
                                             
                                             HStack {
                                                 Text("TAX : 0")
