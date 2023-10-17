@@ -57,17 +57,14 @@ struct My_Profile: View {
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                                 .frame(width: 50)
-                            
                         }
                         Text("MY PROFILE")
                             .font(.system(size: 18))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(.top,50)
-                        
                         Spacer()
                     }
-                    
                 }
                 .edgesIgnoringSafeArea(.top)
                 .edgesIgnoringSafeArea(.leading)
@@ -143,7 +140,6 @@ struct My_Profile: View {
                         ZStack{
                             Rectangle()
                                 .foregroundColor(.clear)
-                            //.frame( height: 46)
                                 .background(Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05))
                                 .cornerRadius(4)
                             HStack{
@@ -163,11 +159,8 @@ struct My_Profile: View {
                                 } )
                                 {
                                     Image("Group 2")
-                                        //.resizable()
                                         .frame(width: 30, height: 40)
-                                        //.background(Color.red)
                                 }
-//
                             }
                             .padding(.leading,10)
                             .padding(.trailing,30)
@@ -362,8 +355,6 @@ struct My_Profile: View {
                             .frame(height: 1)
                             .foregroundColor(.gray)
                             .padding(10)
-                        
-                    
                     }
                     VStack{
                         HStack{
@@ -480,15 +471,6 @@ struct My_Profile: View {
                                             }
                                             
                                             print(prettyPrintedJson)
-                                            
-                                            
-                                            print("______________________prodGroup_______________")
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
                                         }
                                     case .failure(let error):
                                         print(error)
@@ -502,11 +484,8 @@ struct My_Profile: View {
                             Spacer()
                         }
                         HStack(spacing:180){
-                            //TextField("Enter full address with pincode",text: $AddressTextInpute)
                             TextEditor(text: $AddressTextInpute)
-                            
                                 .frame(width: 310,height: 100)
-                            // .padding()
                                 .overlay(
                                     Text("Enter full address with pincode")
                                         .foregroundColor(Color.gray)
@@ -518,8 +497,6 @@ struct My_Profile: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(ColorData.shared.HeaderColor,lineWidth: 2)
                         )
-                        
-                        
                         HStack{
                             Spacer()
                             Image(systemName: "location.circle.fill")
@@ -547,7 +524,6 @@ struct My_Profile: View {
                                 
                                 Text("Submit")
                                     .foregroundColor(Color.white)
-                                
                             }
                         }
                         .onTapGesture {
@@ -635,7 +611,6 @@ struct My_Profile: View {
                             {
                                 Text(List_State[index].title)
                             }
-                           
                         }
                         .listStyle(PlainListStyle())
                         
@@ -643,11 +618,8 @@ struct My_Profile: View {
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 60)
-                          
                                 Text("Close")
                                     .foregroundColor(Color.white)
-                                    
-                            
                         }
                         .onTapGesture {
                             SelectSatae.toggle()
@@ -675,7 +647,6 @@ struct My_Profile: View {
                     .background(Color.white)
                     .cornerRadius(10)
                     .padding(20)
-                    
                 }
                 if actionButton{
                     Color.black.opacity(0.5)
@@ -690,7 +661,6 @@ struct My_Profile: View {
                             .padding(.top,25)
                             .padding(.bottom,25)
                             .padding(.leading,10)
-                        
                         HStack{
                             Text("Edit")
                                 .font(.system(size: 14))
@@ -703,7 +673,6 @@ struct My_Profile: View {
                             OpenMod = "Edit"
                             actionButton.toggle()
                             AddNewAddres.toggle()
-                            
                         }
                         HStack{
                             Text("Delete")
@@ -711,21 +680,15 @@ struct My_Profile: View {
                                 .fontWeight(.semibold)
                                 .padding(15)
                             Spacer()
-
                         }
                         .onTapGesture {
-                            
                             let axn = "delete_ret_address&id=\(Editid)&listedDrCode=\(listedDrCode)"
-                          //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
                             let apiKey = "\(axn)"
-                            
                             AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
                                 .validate(statusCode: 200 ..< 299)
                                 .responseJSON { response in
                                     switch response.result {
                                     case .success(let value):
-                                        print(value)
-                             
                                         if let json = value as? [String:AnyObject] {
                                             guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                                                 print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -757,8 +720,6 @@ struct My_Profile: View {
     private func RetAddress(){
         let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
         let apiKey = "\(axn)"
-
-       
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
@@ -787,9 +748,6 @@ struct My_Profile: View {
                                 }
                             }
                         }
-                        
-                       
-            
                     }
                 case .failure(let error):
                     print(error)
