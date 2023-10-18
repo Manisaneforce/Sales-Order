@@ -1,0 +1,790 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1071DF5F26AFAC929827C456173B4343 /* Jiopay-pg-uat-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DDF12564BAF3E9AED3644401B92FD5 /* Jiopay-pg-uat-dummy.m */; };
+		738C1D74666DFFEE641F7305CD5B42AE /* Pods-Sales OrderTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D292D1744EEC68D14B9D8856868DA01 /* Pods-Sales OrderTests-dummy.m */; };
+		8435F91847FA4D4372C120E5564B03A0 /* Pods-Sales OrderUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3857BDD1CDD3AC9A30FE1BC871B1245B /* Pods-Sales OrderUITests-dummy.m */; };
+		BB615292239E3D7C35B0B93429279F16 /* Pods-Sales Order-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D663DCF172FE3640B535C568D5372703 /* Pods-Sales Order-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		BD0E356E26F6C8A636DDC6C28E002707 /* JioPayPGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D5FCA749010FB7A49BAEB35E34F37B /* JioPayPGViewController.swift */; };
+		D15A204FEF083EFCF7B313C43C85833B /* Jiopay-pg-uat-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B94D9742A3BBD6614257D3DEF5F2640 /* Jiopay-pg-uat-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EF8DED118216EC3C80337177348DA399 /* Pods-Sales Order-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDEE1FC5DEBF55ACE811927F70FEC45 /* Pods-Sales Order-dummy.m */; };
+		FD98F7B74742B67CDAEC57DD788ED202 /* Jiopay_pg.h in Headers */ = {isa = PBXBuildFile; fileRef = 138BBC572C634A67AEEC9BF464C766A8 /* Jiopay_pg.h */; settings = {ATTRIBUTES = (Project, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		582F76E0DE43AD73BCCA1D7E20C87FE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05158E7D493A074561C940D0CFFD8A29;
+			remoteInfo = "Jiopay-pg-uat";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0E66CD5241750925CAF1D12C30C290F4 /* JioPayPGViewController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = JioPayPGViewController.xib; path = "Jiopay-pg-uat/JioPayPGViewController.xib"; sourceTree = "<group>"; };
+		0F696D28FE3C0DB4A87F552E7D10EB47 /* Pods-Sales Order */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Sales Order"; path = "libPods-Sales Order.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		138BBC572C634A67AEEC9BF464C766A8 /* Jiopay_pg.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Jiopay_pg.h; path = "Jiopay-pg-uat/Jiopay_pg.h"; sourceTree = "<group>"; };
+		15D5FCA749010FB7A49BAEB35E34F37B /* JioPayPGViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JioPayPGViewController.swift; path = "Jiopay-pg-uat/JioPayPGViewController.swift"; sourceTree = "<group>"; };
+		1AD9F4B2D5BC12E51A89CA03EAC9C79C /* Pods-Sales Order-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sales Order-acknowledgements.plist"; sourceTree = "<group>"; };
+		2CDEE1FC5DEBF55ACE811927F70FEC45 /* Pods-Sales Order-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sales Order-dummy.m"; sourceTree = "<group>"; };
+		33DDF12564BAF3E9AED3644401B92FD5 /* Jiopay-pg-uat-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Jiopay-pg-uat-dummy.m"; sourceTree = "<group>"; };
+		3549103D8404A7A339F17980316A6EB5 /* Pods-Sales OrderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales OrderTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3857BDD1CDD3AC9A30FE1BC871B1245B /* Pods-Sales OrderUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sales OrderUITests-dummy.m"; sourceTree = "<group>"; };
+		3A613F98FC6F50F2F973EBB85343A3E3 /* Pods-Sales OrderUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sales OrderUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		3B94D9742A3BBD6614257D3DEF5F2640 /* Jiopay-pg-uat-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jiopay-pg-uat-umbrella.h"; sourceTree = "<group>"; };
+		3DE087179434354D102CE37BCFEC6807 /* Jiopay-pg-uat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Jiopay-pg-uat.release.xcconfig"; sourceTree = "<group>"; };
+		3E6D6A003FF7EDFAE1A35596F1788BC9 /* Pods-Sales OrderUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales OrderUITests.release.xcconfig"; sourceTree = "<group>"; };
+		434EC4C8AD1810216A752BE99511E0D8 /* Jiopay-pg-uat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Jiopay-pg-uat.debug.xcconfig"; sourceTree = "<group>"; };
+		4938E4B2CA81414EF466D87A6462BBAE /* Pods-Sales OrderTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sales OrderTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		4D95AD49FBEB723803200C79812ED2AC /* Jiopay-pg-uat-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jiopay-pg-uat-prefix.pch"; sourceTree = "<group>"; };
+		4ED7A72C4066B14263D9D156A7B5C228 /* Pods-Sales Order.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Sales Order.modulemap"; sourceTree = "<group>"; };
+		596C5B3DFA431611112610EA7CB0FD6C /* Pods-Sales Order.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales Order.debug.xcconfig"; sourceTree = "<group>"; };
+		5D292D1744EEC68D14B9D8856868DA01 /* Pods-Sales OrderTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Sales OrderTests-dummy.m"; sourceTree = "<group>"; };
+		5EB521B2BBA8AE4F57075E0EA2F83192 /* Pods-Sales OrderUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Sales OrderUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		6EDF8FBA0B82DEB0A11E5F13E0696A58 /* Pods-Sales OrderTests */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Sales OrderTests"; path = "libPods-Sales OrderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A93ED9754EC4DEDDFF2FAE0DA7B0A96 /* Pods-Sales OrderUITests */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Sales OrderUITests"; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CD4F05FF086654408F8A1D1CD81F130 /* Pods-Sales Order-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sales Order-acknowledgements.markdown"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		B03D5FD7992184100E46BF6561E400C6 /* Jiopay-pg-uat */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Jiopay-pg-uat"; path = "libJiopay-pg-uat.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B152A7804E3D61C1F5017AC535CDECA1 /* Pods-Sales OrderTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sales OrderTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		BF7C095E7A2E4B2352C755F01499C254 /* Pods-Sales Order-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sales Order-resources.sh"; sourceTree = "<group>"; };
+		D2FF436A3527D574A83250E04821F812 /* Pods-Sales OrderUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales OrderUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		D663DCF172FE3640B535C568D5372703 /* Pods-Sales Order-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Sales Order-umbrella.h"; sourceTree = "<group>"; };
+		DBB9B912DAC8AD3BF0B4C6E9CD5BACC1 /* Pods-Sales OrderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales OrderTests.release.xcconfig"; sourceTree = "<group>"; };
+		ED29B06DD151C7BDAF600BB98DBD32A2 /* Pods-Sales Order.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Sales Order.release.xcconfig"; sourceTree = "<group>"; };
+		FAD9B2939C56A93D46C8650A215E5AC2 /* Jiopay-pg-uat.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Jiopay-pg-uat.modulemap"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1936CD7411BED47FD1A6CAABFA8DB01C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E66FC03C053E348280FB24C09DAF74C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DF877DA2D2FC18DC6A38039CB1102D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		858D9D04AE6DACD8A98DC7E63D203772 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04E50A20A67D704776ADC7AD7C553A5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B03D5FD7992184100E46BF6561E400C6 /* Jiopay-pg-uat */,
+				0F696D28FE3C0DB4A87F552E7D10EB47 /* Pods-Sales Order */,
+				6EDF8FBA0B82DEB0A11E5F13E0696A58 /* Pods-Sales OrderTests */,
+				8A93ED9754EC4DEDDFF2FAE0DA7B0A96 /* Pods-Sales OrderUITests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0B9804124EAB132AE2FABF761FD7C7B2 /* Pods-Sales OrderUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3A613F98FC6F50F2F973EBB85343A3E3 /* Pods-Sales OrderUITests-acknowledgements.markdown */,
+				5EB521B2BBA8AE4F57075E0EA2F83192 /* Pods-Sales OrderUITests-acknowledgements.plist */,
+				3857BDD1CDD3AC9A30FE1BC871B1245B /* Pods-Sales OrderUITests-dummy.m */,
+				D2FF436A3527D574A83250E04821F812 /* Pods-Sales OrderUITests.debug.xcconfig */,
+				3E6D6A003FF7EDFAE1A35596F1788BC9 /* Pods-Sales OrderUITests.release.xcconfig */,
+			);
+			name = "Pods-Sales OrderUITests";
+			path = "Target Support Files/Pods-Sales OrderUITests";
+			sourceTree = "<group>";
+		};
+		33B96E062196C437E4D8105DF8E1C7EC /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAD9B2939C56A93D46C8650A215E5AC2 /* Jiopay-pg-uat.modulemap */,
+				33DDF12564BAF3E9AED3644401B92FD5 /* Jiopay-pg-uat-dummy.m */,
+				4D95AD49FBEB723803200C79812ED2AC /* Jiopay-pg-uat-prefix.pch */,
+				3B94D9742A3BBD6614257D3DEF5F2640 /* Jiopay-pg-uat-umbrella.h */,
+				434EC4C8AD1810216A752BE99511E0D8 /* Jiopay-pg-uat.debug.xcconfig */,
+				3DE087179434354D102CE37BCFEC6807 /* Jiopay-pg-uat.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Jiopay-pg-uat";
+			sourceTree = "<group>";
+		};
+		5A07AAD0FA77671BDD6EB24A12D120F3 /* Jiopay-pg-uat */ = {
+			isa = PBXGroup;
+			children = (
+				138BBC572C634A67AEEC9BF464C766A8 /* Jiopay_pg.h */,
+				15D5FCA749010FB7A49BAEB35E34F37B /* JioPayPGViewController.swift */,
+				C3A4E8D0967011E6C6B996AC3E8C37CF /* Resources */,
+				33B96E062196C437E4D8105DF8E1C7EC /* Support Files */,
+			);
+			path = "Jiopay-pg-uat";
+			sourceTree = "<group>";
+		};
+		8DA1FF88436DCD3DCE716F1BC0A72CBF /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				9499653A601DB8E9B06DBCA7E587ADC4 /* Pods-Sales Order */,
+				9AEF195E97A990AE4002DE8BF4B4423B /* Pods-Sales OrderTests */,
+				0B9804124EAB132AE2FABF761FD7C7B2 /* Pods-Sales OrderUITests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		8DFCDD2846F9CEE75AFE78616AADC76B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5A07AAD0FA77671BDD6EB24A12D120F3 /* Jiopay-pg-uat */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9499653A601DB8E9B06DBCA7E587ADC4 /* Pods-Sales Order */ = {
+			isa = PBXGroup;
+			children = (
+				4ED7A72C4066B14263D9D156A7B5C228 /* Pods-Sales Order.modulemap */,
+				9CD4F05FF086654408F8A1D1CD81F130 /* Pods-Sales Order-acknowledgements.markdown */,
+				1AD9F4B2D5BC12E51A89CA03EAC9C79C /* Pods-Sales Order-acknowledgements.plist */,
+				2CDEE1FC5DEBF55ACE811927F70FEC45 /* Pods-Sales Order-dummy.m */,
+				BF7C095E7A2E4B2352C755F01499C254 /* Pods-Sales Order-resources.sh */,
+				D663DCF172FE3640B535C568D5372703 /* Pods-Sales Order-umbrella.h */,
+				596C5B3DFA431611112610EA7CB0FD6C /* Pods-Sales Order.debug.xcconfig */,
+				ED29B06DD151C7BDAF600BB98DBD32A2 /* Pods-Sales Order.release.xcconfig */,
+			);
+			name = "Pods-Sales Order";
+			path = "Target Support Files/Pods-Sales Order";
+			sourceTree = "<group>";
+		};
+		9AEF195E97A990AE4002DE8BF4B4423B /* Pods-Sales OrderTests */ = {
+			isa = PBXGroup;
+			children = (
+				B152A7804E3D61C1F5017AC535CDECA1 /* Pods-Sales OrderTests-acknowledgements.markdown */,
+				4938E4B2CA81414EF466D87A6462BBAE /* Pods-Sales OrderTests-acknowledgements.plist */,
+				5D292D1744EEC68D14B9D8856868DA01 /* Pods-Sales OrderTests-dummy.m */,
+				3549103D8404A7A339F17980316A6EB5 /* Pods-Sales OrderTests.debug.xcconfig */,
+				DBB9B912DAC8AD3BF0B4C6E9CD5BACC1 /* Pods-Sales OrderTests.release.xcconfig */,
+			);
+			name = "Pods-Sales OrderTests";
+			path = "Target Support Files/Pods-Sales OrderTests";
+			sourceTree = "<group>";
+		};
+		C3A4E8D0967011E6C6B996AC3E8C37CF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0E66CD5241750925CAF1D12C30C290F4 /* JioPayPGViewController.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D89477F20FB1DE18A04690586D7808C4 /* Frameworks */,
+				8DFCDD2846F9CEE75AFE78616AADC76B /* Pods */,
+				04E50A20A67D704776ADC7AD7C553A5E /* Products */,
+				8DA1FF88436DCD3DCE716F1BC0A72CBF /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		996DFA272F9865BC916CF720B0B10483 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC937F8025B990626B132A8958CE4E41 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF2956523753EC914575C9D1B7CB9CAA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB615292239E3D7C35B0B93429279F16 /* Pods-Sales Order-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F73AF0E14961FB535E120DD899DC04CA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D15A204FEF083EFCF7B313C43C85833B /* Jiopay-pg-uat-umbrella.h in Headers */,
+				FD98F7B74742B67CDAEC57DD788ED202 /* Jiopay_pg.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		05158E7D493A074561C940D0CFFD8A29 /* Jiopay-pg-uat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9C11B6DF9E21C22238F41B0D1858035 /* Build configuration list for PBXNativeTarget "Jiopay-pg-uat" */;
+			buildPhases = (
+				F73AF0E14961FB535E120DD899DC04CA /* Headers */,
+				564C1FC47DA0C0AEC017517E85AF8137 /* Sources */,
+				858D9D04AE6DACD8A98DC7E63D203772 /* Frameworks */,
+				92086E16FBC8AAE90A4054C53EF002D2 /* Copy generated compatibility header */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Jiopay-pg-uat";
+			productName = "Jiopay-pg-uat";
+			productReference = B03D5FD7992184100E46BF6561E400C6 /* Jiopay-pg-uat */;
+			productType = "com.apple.product-type.library.static";
+		};
+		0F7C39CFF569235971CDD03DF65EBD06 /* Pods-Sales Order */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4254208337EA1CC6E257C8A86F20F6E4 /* Build configuration list for PBXNativeTarget "Pods-Sales Order" */;
+			buildPhases = (
+				CF2956523753EC914575C9D1B7CB9CAA /* Headers */,
+				62760D5E49D7B43DE6AC2B76D6D343BF /* Sources */,
+				6DF877DA2D2FC18DC6A38039CB1102D1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DFAC5695E38ABB473616C62FEFC7596A /* PBXTargetDependency */,
+			);
+			name = "Pods-Sales Order";
+			productName = "Pods-Sales Order";
+			productReference = 0F696D28FE3C0DB4A87F552E7D10EB47 /* Pods-Sales Order */;
+			productType = "com.apple.product-type.library.static";
+		};
+		49AEC812767C3C525A9C7CED94E53AD5 /* Pods-Sales OrderUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A567A488862DF0616E36AE07B35D5900 /* Build configuration list for PBXNativeTarget "Pods-Sales OrderUITests" */;
+			buildPhases = (
+				996DFA272F9865BC916CF720B0B10483 /* Headers */,
+				C550C7C58D95B00DF68ADC4BAF7FF98F /* Sources */,
+				1936CD7411BED47FD1A6CAABFA8DB01C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Sales OrderUITests";
+			productName = "Pods-Sales OrderUITests";
+			productReference = 8A93ED9754EC4DEDDFF2FAE0DA7B0A96 /* Pods-Sales OrderUITests */;
+			productType = "com.apple.product-type.library.static";
+		};
+		DE6272D95FEFF9334BA0E1AAB29F1C37 /* Pods-Sales OrderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0018FB49AC07888F6189FFC4E99FE246 /* Build configuration list for PBXNativeTarget "Pods-Sales OrderTests" */;
+			buildPhases = (
+				BC937F8025B990626B132A8958CE4E41 /* Headers */,
+				1936A5C03DBB33E25CD51C120D1E31E1 /* Sources */,
+				1E66FC03C053E348280FB24C09DAF74C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Sales OrderTests";
+			productName = "Pods-Sales OrderTests";
+			productReference = 6EDF8FBA0B82DEB0A11E5F13E0696A58 /* Pods-Sales OrderTests */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 04E50A20A67D704776ADC7AD7C553A5E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				05158E7D493A074561C940D0CFFD8A29 /* Jiopay-pg-uat */,
+				0F7C39CFF569235971CDD03DF65EBD06 /* Pods-Sales Order */,
+				DE6272D95FEFF9334BA0E1AAB29F1C37 /* Pods-Sales OrderTests */,
+				49AEC812767C3C525A9C7CED94E53AD5 /* Pods-Sales OrderUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		92086E16FBC8AAE90A4054C53EF002D2 /* Copy generated compatibility header */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h",
+				"${PODS_ROOT}/Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat.modulemap",
+				"${PODS_ROOT}/Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat-umbrella.h",
+			);
+			name = "Copy generated compatibility header";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap",
+				"${BUILT_PRODUCTS_DIR}/Jiopay-pg-uat-umbrella.h",
+				"${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "COMPATIBILITY_HEADER_PATH=\"${BUILT_PRODUCTS_DIR}/Swift Compatibility Header/${PRODUCT_MODULE_NAME}-Swift.h\"\nMODULE_MAP_PATH=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_MODULE_NAME}.modulemap\"\n\nditto \"${DERIVED_SOURCES_DIR}/${PRODUCT_MODULE_NAME}-Swift.h\" \"${COMPATIBILITY_HEADER_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat.modulemap\" \"${MODULE_MAP_PATH}\"\nditto \"${PODS_ROOT}/Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat-umbrella.h\" \"${BUILT_PRODUCTS_DIR}\"\nprintf \"\\n\\nmodule ${PRODUCT_MODULE_NAME}.Swift {\\n  header \\\"${COMPATIBILITY_HEADER_PATH}\\\"\\n  requires objc\\n}\\n\" >> \"${MODULE_MAP_PATH}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1936A5C03DBB33E25CD51C120D1E31E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				738C1D74666DFFEE641F7305CD5B42AE /* Pods-Sales OrderTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		564C1FC47DA0C0AEC017517E85AF8137 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1071DF5F26AFAC929827C456173B4343 /* Jiopay-pg-uat-dummy.m in Sources */,
+				BD0E356E26F6C8A636DDC6C28E002707 /* JioPayPGViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		62760D5E49D7B43DE6AC2B76D6D343BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF8DED118216EC3C80337177348DA399 /* Pods-Sales Order-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C550C7C58D95B00DF68ADC4BAF7FF98F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8435F91847FA4D4372C120E5564B03A0 /* Pods-Sales OrderUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DFAC5695E38ABB473616C62FEFC7596A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Jiopay-pg-uat";
+			target = 05158E7D493A074561C940D0CFFD8A29 /* Jiopay-pg-uat */;
+			targetProxy = 582F76E0DE43AD73BCCA1D7E20C87FE4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		006E8EDDD032A717F524777D2B05DDB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 434EC4C8AD1810216A752BE99511E0D8 /* Jiopay-pg-uat.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/Jiopay-pg-uat/Jiopay-pg-uat-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MODULEMAP_FILE = "Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = Jiopay_pg_uat;
+				PRODUCT_NAME = "Jiopay-pg-uat";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		10831AB8E5ED8B8D1C838207498354E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3549103D8404A7A339F17980316A6EB5 /* Pods-Sales OrderTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3B1B93A48FB59377F3406AA9B111554B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 596C5B3DFA431611112610EA7CB0FD6C /* Pods-Sales Order.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Sales Order/Pods-Sales Order.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4BC7450F9457737EE3E637BA155B56F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		62E29ED31EDEADD0DF29406942196213 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2FF436A3527D574A83250E04821F812 /* Pods-Sales OrderUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		A781A9CDACAA95FAF892AF9828E5D59E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E6D6A003FF7EDFAE1A35596F1788BC9 /* Pods-Sales OrderUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AFBE1959C7A7B62166C059980D11EE99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBB9B912DAC8AD3BF0B4C6E9CD5BACC1 /* Pods-Sales OrderTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CA5A5D0ED6BF5095BAE056BAD3FBE8DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ED29B06DD151C7BDAF600BB98DBD32A2 /* Pods-Sales Order.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Sales Order/Pods-Sales Order.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E6619EB12764145E32AF8D1AAABF352C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3DE087179434354D102CE37BCFEC6807 /* Jiopay-pg-uat.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/Jiopay-pg-uat/Jiopay-pg-uat-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MODULEMAP_FILE = "Headers/Public/Jiopay_pg_uat/Jiopay-pg-uat.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = Jiopay_pg_uat;
+				PRODUCT_NAME = "Jiopay-pg-uat";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0018FB49AC07888F6189FFC4E99FE246 /* Build configuration list for PBXNativeTarget "Pods-Sales OrderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10831AB8E5ED8B8D1C838207498354E5 /* Debug */,
+				AFBE1959C7A7B62166C059980D11EE99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4254208337EA1CC6E257C8A86F20F6E4 /* Build configuration list for PBXNativeTarget "Pods-Sales Order" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B1B93A48FB59377F3406AA9B111554B /* Debug */,
+				CA5A5D0ED6BF5095BAE056BAD3FBE8DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BC7450F9457737EE3E637BA155B56F7 /* Debug */,
+				8B5A46FF8D3C1289CDEE3BAFACABCD2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A567A488862DF0616E36AE07B35D5900 /* Build configuration list for PBXNativeTarget "Pods-Sales OrderUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62E29ED31EDEADD0DF29406942196213 /* Debug */,
+				A781A9CDACAA95FAF892AF9828E5D59E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9C11B6DF9E21C22238F41B0D1858035 /* Build configuration list for PBXNativeTarget "Jiopay-pg-uat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				006E8EDDD032A717F524777D2B05DDB8 /* Debug */,
+				E6619EB12764145E32AF8D1AAABF352C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

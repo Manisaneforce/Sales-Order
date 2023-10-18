@@ -1,0 +1,16 @@
+PODS:
+  - Jiopay-pg-uat (0.0.20)
+
+DEPENDENCIES:
+  - Jiopay-pg-uat (~> 0.0.19)
+
+SPEC REPOS:
+  trunk:
+    - Jiopay-pg-uat
+
+SPEC CHECKSUMS:
+  Jiopay-pg-uat: 7e0adaab83c6579c43515c825f36e0940fbe0164
+
+PODFILE CHECKSUM: 7242b1eaca6aff8aa4933d19912f599248991bd4
+
+COCOAPODS: 1.13.0

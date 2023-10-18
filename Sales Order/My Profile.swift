@@ -744,10 +744,9 @@ struct My_Profile: View {
                             for AddressItem in responseArray {
                                 if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
                                     RetAddressData.append(AddAddress(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
-                                   
                                 }
                             }
-                        }
+                        }         
                     }
                 case .failure(let error):
                     print(error)

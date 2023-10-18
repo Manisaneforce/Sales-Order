@@ -1,0 +1,6 @@
+module Pods_Sales_Order {
+  umbrella header "Pods-Sales Order-umbrella.h"
+
+  export *
+  module * { export * }
+}

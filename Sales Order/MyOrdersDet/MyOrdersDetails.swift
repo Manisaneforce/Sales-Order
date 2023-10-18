@@ -61,10 +61,7 @@ struct MyOrdersDetails: View {
                                     .foregroundColor(.white)
                                     .padding(.top,50)
                                     .frame(width: 50)
-                                
                             }
-                            
-                            
                             Text("History Info")
                                 .font(.system(size: 18))
                                 .fontWeight(.bold)
@@ -88,7 +85,6 @@ struct MyOrdersDetails: View {
                         ToDate = fromDate
                         orderandinvoice()
                     }
-                   // if !isHiden{
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -102,7 +98,6 @@ struct MyOrdersDetails: View {
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
                             }
-                            
                         }
                         .onTapGesture {
                             SelMode = "DOF"
@@ -111,8 +106,6 @@ struct MyOrdersDetails: View {
                             
                         }
                         .padding(10)
-                        
-                        //.padding(10)
                         
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
@@ -144,8 +137,7 @@ struct MyOrdersDetails: View {
                         .padding(10)
                     }
                     .frame(height: 60)
-               // }
-                    
+              
                     ZStack{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
@@ -271,8 +263,6 @@ struct MyOrdersDetails: View {
                 OrderDetView(OrderId: $OrderId, Orderdate: .constant(Orderdate), TotalVal: .constant(value) )
             }
         }
-        
-             
     }
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
@@ -347,8 +337,6 @@ struct MyOrdersDetails: View {
                                                 ProQty.append(Quantity)
                                                 
                                             }
-                                            
-                                            
                                         }else{
                                             print("No data")
                                         }
@@ -358,11 +346,9 @@ struct MyOrdersDetails: View {
                                         let qty =  ProQty.joined(separator: ",")
                                         print(qty)
                                         invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty))
-                                        
                                     }
                                     print(invoice)
 
-                                    
                                 } else {
                                     print("Error: Couldn't extract HTML")
                                 }
@@ -371,9 +357,6 @@ struct MyOrdersDetails: View {
                             print("Error Data")
                         }
                     }
-                    
-                    print("______________________prodGroup_______________")
-                   
                  }
             case .failure(let error):
                 print(error)
@@ -435,7 +418,6 @@ struct TabBarView: View {
 struct TabBarItem: View {
     @Binding var currentTab: Int
     let namespace:Namespace.ID
-   // @Namespace var namespace
     var TabBarItemName: String
     var tab: Int
     
@@ -473,15 +455,12 @@ struct ORDER:View{
     @Binding var invoice: [getInvoice]
     @Binding var HistoryInf:Bool
     @Binding var OrderDetialsView:Bool
-    //@State private var View:[ViOredr]=[]
     @State private var ProName = [String]()
     @State private var Qty = [String]()
     @Binding var OrderId:String
     @State private var Totalval:String = ""
     @Binding var isHiden:Bool
     @State private var values = 0
-    
-    
     var body: some View{
         VStack{
                                 ScrollView{
@@ -565,8 +544,7 @@ struct ORDER:View{
                                                     let aFormDataQty:[String] = NoOfQty.map{
                                                         String($0)
                                                     }
-                                                       
-                                                    
+                                                 
                                                     for character in aFormData {
                                                         let trimmedCharacter = (character as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
                                                         if let trimmedCharacter = trimmedCharacter {
@@ -586,7 +564,6 @@ struct ORDER:View{
                                                     print(Qty.count)
                                 
                                                 }
-                                               
                                         }
                                         .padding(.leading,10)
                                         .padding(.trailing,10)
@@ -608,8 +585,6 @@ struct ORDER:View{
                                             .foregroundColor(.black)
                                             .padding(10)
                 }
-                                        
-                                        
               }
         }
         }
@@ -688,13 +663,11 @@ struct ORDERVSINVOICE:View{
                                                 
                                             }
                                             .padding(.leading,10)
-                                            //Spacer()
                                             Rectangle()
                                                 .frame(width: 0.7)
                                                 .foregroundColor(.gray)
                                                 .padding(.bottom,10)
                                                 .padding(.top,10)
-                                            //Spacer()
                                             VStack{
                                                 HStack{
                                                     
@@ -715,7 +688,6 @@ struct ORDERVSINVOICE:View{
                                             .foregroundColor(.black)
                                             .padding(.leading,10)
                                             .padding(.trailing,10)
-                  
               }
         }
         }
@@ -725,8 +697,6 @@ struct ORDERVSINVOICE:View{
 struct AddSomeViewe:View{
     @Binding var HistoryInf:Bool
     @Binding var OrderDetialsView:Bool
-//    @Binding var ProName : [String]
-//    @Binding var Qty : [String]
     var body: some View{
         NavigationView{
         VStack{

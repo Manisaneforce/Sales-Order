@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Jiopay_pg_uat
+//import Jiopay_pg_uat
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
@@ -303,3 +303,31 @@ struct PaymentScreen_Previews: PreviewProvider {
     }
 }
 
+struct SkeletonLoader: View {
+    @State private var animation = false
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 8)
+            .fill(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.5), Color.gray.opacity(0.3)]), startPoint: .leading, endPoint: .trailing))
+            .frame(width: 100, height: 10)
+            .overlay(
+                GeometryReader { geometry in
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(LinearGradient(gradient: Gradient(colors: [.clear, .white, .clear]), startPoint: .top, endPoint: .bottom))
+                        .mask(
+                            Rectangle()
+                                .frame(width: geometry.size.width * 0.3, height: geometry.size.height)
+                                .offset(x: animation ? geometry.size.width : -geometry.size.width)
+                        )
+                        .offset(x: animation ? geometry.size.width : -geometry.size.width)
+                        .animation(
+                            Animation.linear(duration: 1.2)
+                                .repeatForever(autoreverses: false)
+                        )
+                }
+            )
+            .onAppear {
+                self.animation.toggle()
+            }
+    }
+}

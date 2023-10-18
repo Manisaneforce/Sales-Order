@@ -120,8 +120,7 @@ struct HomePage: View {
                                         CustDet.shared.ERP_Code = ERP_Code!
                                         CustDet.shared .Mob = Mob!
                                         CustDet.shared.Div = Div!
-                                        
-                                        
+                
                                     }
                                     
                                     

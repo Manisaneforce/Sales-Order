@@ -1,0 +1,6 @@
+module Jiopay_pg_uat {
+  umbrella header "Jiopay-pg-uat-umbrella.h"
+
+  export *
+  module * { export * }
+}

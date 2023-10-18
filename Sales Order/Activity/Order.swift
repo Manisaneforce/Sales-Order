@@ -418,26 +418,16 @@ struct Order: View {
                     ScrollView(showsIndicators: false){
                         ForEach(0 ..< Allprods.count, id: \.self) { index in
                             ZStack{
-//                                Rectangle()
-//                                    .foregroundColor(.white)
+                                Rectangle()
+                                    .foregroundColor(.white)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.gray, lineWidth: 1)
+                                    )
                                     
                                 HStack {
                                     VStack{
-                                        if let uiImage = uiImages[safe: index] {
-                                            Image(uiImage: uiImage)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 75, height: 75)
-                                                .cornerRadius(4)
-                                        } else {
-                                            //Text("Image loading...")
-                                            Image("logo_new")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 75, height: 75)
-                                                //.font(.system(size: 14))
-                                        }
-
+                                        RemoteImageView(url: Allprods[index].ImgURL)
                                     }
                                     .padding(.horizontal,5)
                                     
@@ -453,8 +443,10 @@ struct Order: View {
                                             .foregroundColor(.secondary)
                                         HStack {
                                             //Text("MRP ₹\(nubers[index])")
-                                            Text("MRP 0")
-                                                .font(.system(size: 13))
+                                            
+                                                Text("MRP:0")
+                                                    .font(.system(size: 13))
+                                            
                                             Spacer()
                                             HStack{
                                                 if filterItems[index].Dis != "" {
@@ -694,14 +686,10 @@ struct Order: View {
                                     .padding(.vertical, 5)
                                      
                                 }
+                                .cornerRadius(10)
                             }
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1)
-                            )
-                            
+                            .cornerRadius(10)
                         }
-                        .cornerRadius(10)
                         .padding(.horizontal,10)
                     }
                         
@@ -870,7 +858,6 @@ struct Order: View {
         }
     }
 
-    
     private func lstOfUnitList(at index: Int,filterUnite:[[String:Any]]){
        print(filterUnite)
         autoreleasepool {
@@ -952,37 +939,6 @@ struct Order: View {
         }
     }
     
-    private func loadImage(at index : Int) {
-        print(uiImages.count)
-        uiImages.removeAll()
-        
-        for item in 0..<Allprods.count {
-            let getdata = Allprods[item].ImgURL
-            print(getdata)
-
-            if let imageUrl = URL(string: getdata) {
-                URLSession.shared.dataTask(with: imageUrl) { data, response, error in
-                    if let error = error {
-                        print("Error fetching image: \(error)")
-                        return
-                    }
-
-                    if let data = data, let uiImage = UIImage(data: data) {
-                        DispatchQueue.main.async {
-                            self.uiImages.append(uiImage)
-                            print(uiImage)
-                        }
-                    }
-                }.resume()
-            } else {
-                print("Invalid URL: \(getdata)")
-            }
-        }
-
-
-        print(uiImages.count)
-        print(uiImages)
-       }
     private func OrderProdTyp(){
         
         Sales_Order.prodTypes { json in
@@ -1070,33 +1026,14 @@ struct Order: View {
                         Allprods.removeAll()
                         print(itemsWithTypID3.count)
                         for item in itemsWithTypID3 {
-                            
-                           // FilterProduct = itemsWithTypID3.map { $0 as AnyObject }
                             FilterProduct = itemsWithTypID3  as [AnyObject]
-                            print(FilterProduct.count)
-                            
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
-                                print(proname)
-                                print(Proid)
-                                print(MRP)
-                                print(sUoms)
-                                print(sUomNms)
-                                print(Uomname)
-                                print(item)
-                                
-                                
-                                
                                 Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
-                                
-                                
                                 
                                 let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                 imgdataURL.append(inputText)
                                 Arry.append(proname)
-                                print(imgdataURL)
-                                
-                                
                             }
                         }
                     } else {
@@ -1107,7 +1044,6 @@ struct Order: View {
                     print(Allprods)
                     TexQty()
                     //GetingListAddress()
-                    loadImage(at: 0)
                 }
             } catch{
                 print("Data is error\(error)")
@@ -1235,7 +1171,25 @@ extension Collection {
     }
 }
 
-
+struct RemoteImageView: View {
+    let url: String
+    
+    var body: some View {
+        let modifiedUrlString = url.replacingOccurrences(of: " ", with: "%20")
+        print(modifiedUrlString)
+        if let imageURL = URL(string: modifiedUrlString), let imageData = try? Data(contentsOf: imageURL), let uiImage = UIImage(data: imageData) {
+            return Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 75, height: 75)
+        } else {
+            return Image("logo_new")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 75, height: 75)
+        }
+    }
+}
 struct Order_Previews: PreviewProvider {
     static var previews: some View {
         Order()
