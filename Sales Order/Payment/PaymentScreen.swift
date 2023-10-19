@@ -331,3 +331,70 @@ struct SkeletonLoader: View {
             }
     }
 }
+
+
+struct Loader: View {
+    @State private var isLoading = true
+
+    var body: some View {
+        List {
+            ForEach(0..<5, id: \.self) { index in
+                if isLoading {
+                    ShimmeringSkeletonRow()
+                        .transition(.opacity)
+                } else {
+                    DataRow(index: index)
+                }
+            }
+            .onAppear {
+                // Simulate loading delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        isLoading = false
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ShimmeringSkeletonRow: View {
+    @State private var isShimmering = false
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 8)
+            .foregroundColor(Color.gray.opacity(0.3))
+            .frame(height: 50)
+            .padding(.vertical, 5)
+            .padding(.horizontal, 10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .mask(RoundedRectangle(cornerRadius: 8))
+                    .opacity(isShimmering ? 1 : 0)
+                    .animation(
+                        Animation.linear(duration: 1)
+                            .repeatForever(autoreverses: false)
+                    )
+                    .onAppear {
+                        self.isShimmering = true
+                    }
+            )
+    }
+}
+
+struct DataRow: View {
+    var index: Int
+
+    var body: some View {
+        Text("Row \(index)")
+            .font(.title)
+            .padding()
+    }
+}

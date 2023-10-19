@@ -132,6 +132,8 @@ struct HomePage: View {
                         GetCurrentLoction()
                         updateDate()
                         DashBoradImg()
+                        Prod_Sch_Det()
+                        prod_Tax_Det()
                     }
                     VStack{
                     ZStack{

@@ -36,6 +36,8 @@ struct TotAmt: Identifiable {
     var Freeprdname : String
     var Dis : String
     var DisVal : String
+    var Tax_Val: String
+    var TaxAmt:String
 }
 struct EdditeAddres : Any{
     let listedDrCode:String
@@ -52,6 +54,7 @@ struct editUom:Any{
     let Disvalue: String
     let freeQty: String
     let OffProdNm: String
+    let Tax_Amt : String
 }
 struct GroupId:Any{
     let name:String
@@ -70,6 +73,7 @@ var BillingAddress = CustDet.shared.Addr
 var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
+var lstTax:String = UserDefaults.standard.string(forKey: "Tax_Master") ?? ""
 
 struct Order: View {
     @State private var clickeindex:Int = 0
@@ -409,9 +413,6 @@ struct Order: View {
                         
                         TexQty()
                         ShpingAddress = BillingAddress
-                        SchemeDet()
-                        
-                        
                     }
                     
                     //NavigationView {
@@ -446,7 +447,6 @@ struct Order: View {
                                             
                                                 Text("MRP:0")
                                                     .font(.system(size: 13))
-                                            
                                             Spacer()
                                             HStack{
                                                 if filterItems[index].Dis != "" {
@@ -599,7 +599,7 @@ struct Order: View {
                                                         
                                                         selUOMConv=String(filterItems[index].Amt)
                                                         print(selUOMConv)
-                                                        let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
                                                         let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
                                                         filterItems[index].TotAmt=String(TotalAmount)
                                                     }
@@ -658,12 +658,12 @@ struct Order: View {
 //                                        }
                                             
                                             HStack {
-                                                Text("TAX : 0")
+                                                Text("TAX:\(filterItems[index].Tax_Val)")
                                                     .font(.system(size: 14))
                                                 
                                                 
                                                 Spacer()
-                                                Text("₹0.00")
+                                                Text("₹\(filterItems[index].TaxAmt)")
                                                     .font(.system(size: 14))
                                                     .fontWeight(.semibold)
                                             }
@@ -712,13 +712,16 @@ struct Order: View {
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 70)
                             
-                            
+                            VStack{
                             HStack {
                                 
                                 Image(systemName: "cart.fill")
+                                    .resizable()
+                                    .frame(width: 20,height: 20)
                                     .foregroundColor(.white)
-                                    .font(.system(size: 30))
-                                    .frame(width: 60,height: 40)
+                                    .padding(.horizontal,5)
+                                    .padding(.top,5)
+                                
                                 
                                 Text("Item: \(VisitData.shared.lstPrvOrder.count)")
                                     .font(.system(size: 14))
@@ -732,27 +735,29 @@ struct Order: View {
                                 
                                 
                             }
+                            .padding(.horizontal,10)
                             HStack{
                                 
                                 Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
-                                    .font(.system(size: 15))
+                                    .font(.system(size: 13))
                                     .fontWeight(.heavy)
                                     .foregroundColor(.white)
-                                    .offset(x:30)
                                 
                                 Spacer()
                                 
                                 Text("PROCEED")
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
-                                    .font(.system(size: 17))
+                                    .font(.system(size: 15))
                                     .multilineTextAlignment(.center)
-                                    .offset(x:-40,y:-10)
+                                
                                 
                                 
                             }
-                            .offset(y:40)
-                            
+                            .padding(.leading,15)
+                            .padding(.trailing,20)
+                        }
+                    
                         }
                         //.cornerRadius(5)
                         .edgesIgnoringSafeArea(.bottom)
@@ -1057,19 +1062,42 @@ struct Order: View {
         TotalAmt.removeAll()
         SelectUOMN.removeAll()
         TotalQty.removeAll()
+        var Tax_value = [String]()
+        Tax_value.removeAll()
         var loopCounter = 0
         for item in FilterProduct{
             loopCounter += 1
            print(item)
             print(VisitData.shared.ProductCart)
             let id=String(format: "%@", item["id"] as! CVarArg)
+            print(id)
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                
+                print(Cart)
                 if Cart["Pcode"] as! String == id {
                     return true
                 }
                 return false
             })
+            // Tax Validation
+            var lstTaxDetails:[String:AnyObject] = [:]
+            if let taxlist = GlobalFunc.convertToDictionary(text: lstTax) as? [String:AnyObject] {
+                lstTaxDetails = taxlist;
+            }
+           // print(lstTaxDetails)
+            if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>] {
+                var NewData: [Dictionary<String, Any>] = TaxData
+                let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == id }
+                print(itemsWithTypID3)
+                if let firstDict = itemsWithTypID3.first,
+                   let taxName = firstDict["Tax_name"] as? String {
+                    print(taxName) // This will print: "12 %"
+                    Tax_value.append(taxName)
+                }else{
+                    Tax_value.append("0 %")
+                }
+            } else {
+                print("Error: 'Data' is not a valid array of dictionaries")
+            }
             var FreeQty = ""
             var FreePrd = ""
             var Dis = ""
@@ -1091,7 +1119,12 @@ struct Order: View {
                 DisVal = (items[0]["DisVal"] as? String)!
                 FreeQty = String((items[0]["FQ"] as? Int)!)
                 FreePrd = (items[0]["OffProdNm"] as? String)!
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd))
+                let TaxAmt = (items[0]["Tax_Amt"] as? String)!
+                print(Dis)
+                print(DisVal)
+                print(FreeQty)
+                print(TaxAmt)
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd, Tax_Amt: TaxAmt))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1104,7 +1137,7 @@ struct Order: View {
                 print(FilterProduct)
                 let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
                 let Rate = FilterProduct[Cout]["Rate"] as? String
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: ""))
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
@@ -1118,10 +1151,14 @@ struct Order: View {
         print(TotalAmt)
         
         items.removeAll()
+        print(FilterProduct.count)
+        print(Tax_value.count)
         for index in 0..<FilterProduct.count {
             print(index)
-            print(filterItems)
-            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue ))
+            
+            print(FilterProduct.count)
+            print(Tax_value.count)
+            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt ))
             print(items)
         }
         
@@ -1132,38 +1169,7 @@ struct Order: View {
         print(FilterProduct.count)
         print(filterItems)
     }
-    
-    func SchemeDet(){
-        let axn = "get/Scheme"
-        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&rSF=\(CustDet.shared.CusId)&sfCode=\(CustDet.shared.CusId)&State_Code=15&desig=MGR"
-       
-        
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DB_native_Scheme + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
-            .validate(statusCode: 200 ..< 299)
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    if let json = value as? [AnyObject] {
-                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                            return
-                        }
-                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                            print("Error: Could print JSON in String")
-                            return
-                        }
-                        
-                        print(prettyPrintedJson)
-                        UserDefaults.standard.set(prettyPrintedJson, forKey: "Schemes_Master")
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        
-        
-    }
-
+ 
 }
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -2010,6 +2016,71 @@ func prodDets(proddetsdata: @escaping (String) -> Void) {
         }
     
 }
+func Prod_Sch_Det(){
+    let axn = "get/Scheme"
+    let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&rSF=\(CustDet.shared.CusId)&sfCode=\(CustDet.shared.CusId)&State_Code=15&desig=MGR"
+   
+    
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DB_native_Scheme + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    
+                    print(prettyPrintedJson)
+                    UserDefaults.standard.set(prettyPrintedJson, forKey: "Schemes_Master")
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+}
+func prod_Tax_Det(){
+    let axn = "get/producttaxdetails"
+    let apiKey = "\(axn)"
+    let aFormData: [String: Any] = [
+        "distributorid" : "\(CustDet.shared.StkID)",
+        "retailorId" : "\(CustDet.shared.CusId)",
+        "divisionCode" : "\(CustDet.shared.Div)"
+    ]
+    print(aFormData)
+    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
+    let jsonString = String(data: jsonData!, encoding: .utf8)!
+    let params: Parameters = [
+        "data": jsonString
+    ]
+    print(params)
+    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
+        .validate(statusCode: 200 ..< 299)
+        .responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String:AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    UserDefaults.standard.set(prettyPrintedJson, forKey: "Tax_Master")
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+}
 
 
 struct PrvProddata: Any {
@@ -2020,6 +2091,9 @@ struct PrvProddata: Any {
     let Uomnm : String
     let Qty: String
     let totAmt:Double
+    let Tax_Val:String
+    let Tax_Dis_Amt:String
+    let Disc:String
 }
 
 struct FilterItem: Identifiable {
@@ -2043,6 +2117,8 @@ struct SelPrvOrder: View {
     @State private var isActive: Bool = false
     @State private var ShowTost = ""
     @State private var showToast = false
+    @State private var GST12 = ""
+    @State private var GST18 = ""
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
@@ -2160,16 +2236,25 @@ struct SelPrvOrder: View {
                                                 .fontWeight(.semibold)
                                                 .padding(.leading,10)
                                             Spacer()
+                                            if (AllPrvprod[index].Disc != ""){
+                                                Text("OFF:\(AllPrvprod[index].Disc)%")
+                                                    .font(.system(size: 11))
+                                                    .fontWeight(.semibold)
+                                                    .padding(.trailing,10)
+                                                    .foregroundColor(.green)
+                                            }
                                         }
                                         HStack{
                                             Text("₹\(String(format: "%.2f", Double(AllPrvprod[index].ProMRP)!))")
-                                                .font(.system(size: 12))
+                                                .font(.system(size: 11))
                                                 .fontWeight(.semibold)
+                                                .frame(width: 50)
                                             Spacer()
                                             
                                             Text(AllPrvprod[index].Uomnm)
-                                                .font(.system(size: 12))
+                                                .font(.system(size: 11))
                                                 .fontWeight(.semibold)
+                                                .frame(width: 50)
                                             Spacer(minLength: 5)
                                             
                                             HStack{
@@ -2272,18 +2357,22 @@ struct SelPrvOrder: View {
                                             .buttonStyle(PlainButtonStyle())
                                             Spacer(minLength: 5)
                                             
-                                            Text("00.0")
-                                                .font(.system(size: 12))
+                                            Text(AllPrvprod[index].Tax_Val)
+                                                .font(.system(size: 11))
                                                 .fontWeight(.semibold)
+                                                .frame(width: 50)
                                             
                                             
-                                            Text("₹\(Double(AllPrvprod[index].ProMRP)! * Double(filterItems[index].quantity), specifier: "%.2f")")
-                                                .font(.system(size: 12))
+                                            Text("₹\(AllPrvprod[index].Tax_Dis_Amt)")
+                                                .font(.system(size: 11))
                                                 .fontWeight(.semibold)
+                                                .frame(width: 50)
                                             
                                         }
                                         .padding(.horizontal,10)
                                     }
+                                    Divider()
+                                        .padding(.horizontal,10)
                                 }
                                 VStack{
                                     HStack{
@@ -2297,11 +2386,11 @@ struct SelPrvOrder: View {
                                         .padding(.horizontal,10)
                                     VStack{
                                         HStack{
-                                         Text("Price(\(VisitData.shared.lstPrvOrder.count)items)")
+                                            Text("Price(\(VisitData.shared.lstPrvOrder.count)items)")
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                             Spacer()
-                                        Text("\(lblTotAmt)")
+                                            Text("\(lblTotAmt)")
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                         }
@@ -2315,26 +2404,30 @@ struct SelPrvOrder: View {
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                         }.padding(.horizontal,10)
-                                        HStack{
-                                            Text("GST 10%")
-                                                .font(.system(size: 12))
-                                                .fontWeight(.semibold)
-                                            Spacer()
-                                            Text("000.00")
-                                                .font(.system(size: 12))
-                                                .fontWeight(.semibold)
+                                        if (GST12 != "0.0"){
+                                            HStack{
+                                                Text("GST 12%")
+                                                    .font(.system(size: 12))
+                                                    .fontWeight(.semibold)
+                                                Spacer()
+                                                Text(GST12)
+                                                    .font(.system(size: 12))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            .padding(.horizontal,10)
                                         }
-                                        .padding(.horizontal,10)
+                                        if (GST18 != "0.0"){
                                         HStack{
                                             Text("GST 18%")
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                             Spacer()
-                                            Text("000.00")
+                                            Text(GST18)
                                                 .font(.system(size: 12))
                                                 .fontWeight(.semibold)
                                         }
                                         .padding(.horizontal,10)
+                                    }
                                         
                                         Rectangle()
                                             .frame(height: 1)
@@ -2353,6 +2446,7 @@ struct SelPrvOrder: View {
                                         Rectangle()
                                             .frame(height: 1)
                                             .padding(.horizontal,10)
+                                            .padding(.bottom,10)
                                     }
                                 }
                                 .padding(.top,30)
@@ -2369,7 +2463,6 @@ struct SelPrvOrder: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 100)
-                        
                         Button(action:{
                             
                             //getLocation()
@@ -2385,13 +2478,15 @@ struct SelPrvOrder: View {
                             
                         }) {
                             
-                            VStack(spacing:-1){
-                                HStack (){
+                            VStack{
+                                HStack{
                                     
                                     Image(systemName: "cart.fill")
+                                        .resizable()
+                                        .frame(width: 20,height: 20)
                                         .foregroundColor(.white)
-                                        .font(.system(size: 30))
-                                        .frame(width: 60,height: 40)
+                                        .padding(.horizontal,5)
+                                        .padding(.top,5)
                                     
                                     Text("Item: \(VisitData.shared.lstPrvOrder.count)")
                                         .font(.system(size: 14))
@@ -2405,32 +2500,31 @@ struct SelPrvOrder: View {
                                     Spacer()
                                     
                                 }
+                                .padding(.horizontal,10)
                                 HStack{
                                     
                                     Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
-                                        .font(.system(size: 15))
+                                        .font(.system(size: 13))
                                         .fontWeight(.heavy)
                                         .foregroundColor(.white)
-                                        .padding(.leading,10)
                                     Spacer()
                                     
                                     
                                     Text("Submit")
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
-                                        .font(.system(size: 17))
+                                        .font(.system(size: 15))
                                         .multilineTextAlignment(.center)
-                                        .padding(.trailing,20)
-                                        //.padding(.bottom,20)
-                                        
+                                    
                                     
                                     
                                 }
-                                .padding(.leading,10)
-                                .padding(.trailing,10)
-                                Spacer()
-                            }
+                                .padding(.leading,15)
+                                .padding(.trailing,20)
+                            }.padding(.bottom,45)
                         }
+                    
+                        
                     }
                     .frame(maxWidth: .infinity,maxHeight: 40 )
                     .edgesIgnoringSafeArea(.bottom)
@@ -2531,13 +2625,33 @@ struct SelPrvOrder: View {
                 print("Error is \(error)")
             }
             
+            print(VisitData.shared.lstPrvOrder)
+            let totalTaxForGST18 = VisitData.shared.lstPrvOrder
+                .filter { $0["Tax_Type"] as? String == "GST 18%" }
+                .compactMap { Double($0["Tax_Amt"] as? String ?? "0.0") }
+                .reduce(0, +)
+
+            print("Total Tax Amount for GST 18%: \(totalTaxForGST18)")
+            GST18 = String(totalTaxForGST18)
             
+            let totalTaxForGST12 = VisitData.shared.lstPrvOrder
+                .filter { $0["Tax_Type"] as? String == "GST 12%" }
+                .compactMap { Double($0["Tax_Amt"] as? String ?? "0.0") }
+                .reduce(0, +)
+
+            print("Total Tax Amount for GST 12%: \(totalTaxForGST12)")
+            GST12 = String(totalTaxForGST12)
             for PrvOrderData in VisitData.shared.lstPrvOrder{
                 print(PrvOrderData)
                 let RelID = PrvOrderData["Pcode"] as? String
                 let Uomnm = PrvOrderData["UOMNm"] as? String
                 let Qty = PrvOrderData["Qty"] as? String
                 let totAmt = PrvOrderData["NetVal"] as? Double
+                let TaxAmt = PrvOrderData["Tax_Amt"] as? String
+                let Net_Val = String(format: "%.02f",(PrvOrderData["NetVal"] as? Double)!)
+                let Disc = PrvOrderData["Disc"] as? String
+                print(Disc)
+                print(Net_Val)
                 print(totAmt as Any)
                 
                 do {
@@ -2562,7 +2676,7 @@ struct SelPrvOrder: View {
                             
                             
                             
-                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!))
+                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!))
                         }
                         
                         
@@ -2644,6 +2758,11 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     var Schmval: String = ""
     var Disc: String = ""
     var PCODE: String = ""
+    var Tax_Amt: Double = 0
+    var Tax_Amt_Conv: String = ""
+    var Tax_Type: String = ""
+    
+    
     
     if let Code = ProdItem["id"] as? String{
         PCODE = Code
@@ -2698,6 +2817,40 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     print(OffProdNm)
     print(Schmval)
     print(Disc)
+    let Netvalue = (TotQty*Rate)
+    print(Netvalue)
+    var Disc_With_NetVal:Double = 0.00
+   
+    if Schmval != ""{
+        Disc_With_NetVal=(Double(Netvalue)-Double(Schmval)!)
+    }else{
+        Disc_With_NetVal=(TotQty*Rate)
+    }
+    print(Disc_With_NetVal)
+    
+    var lstTaxDetails:[String:AnyObject] = [:]
+    if let taxlist = GlobalFunc.convertToDictionary(text: lstTax) as? [String:AnyObject] {
+        lstTaxDetails = taxlist;
+    }
+    print(lstTaxDetails)
+    if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>] {
+        let NewData: [Dictionary<String, Any>] = TaxData
+        let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == PCODE }
+        print(itemsWithTypID3)
+        if let firstDict = itemsWithTypID3.first,
+           let taxName = firstDict["Tax_Val"] as? Int, let TaxType = firstDict["Tax_Type"] as? String {
+            print(taxName) // This will print: "12 %"
+            Tax_Type = TaxType
+            print(Tax_Type)
+            Tax_Amt = Disc_With_NetVal * (Double(taxName) / 100);
+            Tax_Amt_Conv = String(format: "%.02f",Tax_Amt)
+            Disc_With_NetVal = (Disc_With_NetVal + Tax_Amt)
+        }
+    } else {
+        print("Error: 'Data' is not a valid array of dictionaries")
+    }
+    print(Tax_Amt)
+    
     if items.count>0 {
         print(VisitData.shared.ProductCart)
         if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
@@ -2707,14 +2860,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
+            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": (TotQty*Rate)];
+        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)

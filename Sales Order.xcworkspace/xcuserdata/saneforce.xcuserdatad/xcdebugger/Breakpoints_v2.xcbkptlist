@@ -7,47 +7,127 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4D24EEE9-D31F-43E6-A2F1-20874DAF1675"
+            uuid = "EDC65D35-9A18-4EFB-876A-60A0236B7D79"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sales Order/Activity/Order.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1179"
-            endingLineNumber = "1179"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "2645"
+            endingLineNumber = "2645"
+            landmarkName = "prvDet()"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "4D24EEE9-D31F-43E6-A2F1-20874DAF1675 - c5e5059253525c0b"
+                  uuid = "EDC65D35-9A18-4EFB-876A-60A0236B7D79 - 15a3c0c415510048"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Sales_Order.RemoteImageView.body.getter : some"
+                  symbolName = "Sales_Order.SelPrvOrder.prvDet() -&gt; ()"
                   moduleName = "Sales Order"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1179"
-                  endingLineNumber = "1179"
-                  offsetFromSymbolStart = "772">
+                  startingLineNumber = "2635"
+                  endingLineNumber = "2635"
+                  offsetFromSymbolStart = "12160">
                </Location>
                <Location
-                  uuid = "4D24EEE9-D31F-43E6-A2F1-20874DAF1675 - c5e5059253525c0b"
+                  uuid = "EDC65D35-9A18-4EFB-876A-60A0236B7D79 - 15a3c0c415510048"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Sales_Order.RemoteImageView.body.getter : some"
+                  symbolName = "Sales_Order.SelPrvOrder.prvDet() -&gt; ()"
                   moduleName = "Sales Order"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1179"
-                  endingLineNumber = "1179"
-                  offsetFromSymbolStart = "856">
+                  startingLineNumber = "2635"
+                  endingLineNumber = "2635"
+                  offsetFromSymbolStart = "12752">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7DE911FD-2BA8-4F18-B855-5778A890776F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2628"
+            endingLineNumber = "2628"
+            landmarkName = "prvDet()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C4006D78-73A9-4651-97DF-1E62916B3923"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2634"
+            endingLineNumber = "2634"
+            landmarkName = "prvDet()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E1633D46-96FE-4925-8A3B-E0F63C1848DE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2642"
+            endingLineNumber = "2642"
+            landmarkName = "prvDet()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E1633D46-96FE-4925-8A3B-E0F63C1848DE - 15a3c0c415510025"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sales_Order.SelPrvOrder.prvDet() -&gt; ()"
+                  moduleName = "Sales Order"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2632"
+                  endingLineNumber = "2632"
+                  offsetFromSymbolStart = "9688">
+               </Location>
+               <Location
+                  uuid = "E1633D46-96FE-4925-8A3B-E0F63C1848DE - 15a3c0c415510025"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sales_Order.SelPrvOrder.prvDet() -&gt; ()"
+                  moduleName = "Sales Order"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2632"
+                  endingLineNumber = "2632"
+                  offsetFromSymbolStart = "10280">
                </Location>
             </Locations>
          </BreakpointContent>
