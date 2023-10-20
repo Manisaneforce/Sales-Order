@@ -127,7 +127,8 @@ struct Order: View {
     @State private var OredSc:Bool = true
     @State private var SelPrvSc:Bool = false
     @State private var Disc:Bool = true
-   
+    @State private var isLoading = true
+    @State private var isManiView:Bool = false
 
     var body: some View {
         if OredSc{
@@ -271,7 +272,7 @@ struct Order: View {
                                 ForEach(prettyPrintedJson.indices, id: \.self) { index in
                                     Button(action:{
                                         print(prettyPrintedJson[index].id)
-                                        
+                                        isLoading = true
                                         
                                         if selectedGorup == index {
                                             selectedGorup = index
@@ -279,7 +280,7 @@ struct Order: View {
                                         } else {
                                             selectedGorup = index
                                         }
-                                     OrderProdTyp()
+                                        OrderProdTyp()
                                     })
                                     {
                                         Text(prettyPrintedJson[index].name)
@@ -294,11 +295,11 @@ struct Order: View {
                                             )
                                     }
                                     .cornerRadius(10)
+                                }
                             }
-                        }
                             
                             .padding(.horizontal, 10)
-                    }
+                        }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
@@ -308,6 +309,7 @@ struct Order: View {
                                         proDetsID.removeAll()
                                         Allprods.removeAll()
                                         TotalQty.removeAll()
+                                        isLoading = true
                                         if selectedIndex == index {
                                             selectedIndex = index
                                             SubselectedIndex = 0
@@ -342,320 +344,339 @@ struct Order: View {
                         }
                         Divider()
                         VStack{
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack{
-                                ForEach(prodofcat.indices, id: \.self) { index in
-                                    Button(action:{
-                                        imgdataURL.removeAll()
-                                        Arry.removeAll()
-                                        Allprods.removeAll()
-                                        print("If Select data")
-                                        print("Clicked button at index: \(index)")
-                                        self.OrderprodDets(at: index)
-                                        if SubselectedIndex == index {
-                                            SubselectedIndex = index
-                                        } else {
-                                            SubselectedIndex = index
-                                        }
-                                        
-                                    }) {
-                                        Text(prodofcat[index])
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
-                                            .padding(.horizontal, 10)
-                                            .padding(.vertical, 5)
-                                            .font(.system(size: 12))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
-                                            )
-                                    }
-                                    .cornerRadius(10)
-                                }
-                                
-                            }
-                        }
-                        .padding(.horizontal, 10)
-                        
-                        
-                    }
-                    //.padding(.top,0)
-                    .onAppear {
-                        
-                        prodGroup { jsonString in
-                            if let jsonData = jsonString.data(using: .utf8) {
-                                prettyPrintedJson.removeAll()
-                                do {
-                                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
-                                       for firstItem in jsonArray {
-                                        print(jsonArray)
-                                        let textname = firstItem["name"] as? String ?? ""
-                                        let ProGroID = String((firstItem["id"] as? Int)!)
-                                        let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
-                                        
-                                        print("Name: \(textname)")
-                                        prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
-                                    }
-                                }
-                                } catch {
-                                    print("Error parsing JSON: \(error)")
-                                }
-                                print(prettyPrintedJson)
-                            }
-                        }
-                        OrderProdTyp()
-                        
-                        Sales_Order.prodDets{
-                            json in
-                            print(json)
-                        }
-                        
-                        
-                        TexQty()
-                        ShpingAddress = BillingAddress
-                    }
-                    
-                    //NavigationView {
-                    ScrollView(showsIndicators: false){
-                        ForEach(0 ..< Allprods.count, id: \.self) { index in
-                            ZStack{
-                                Rectangle()
-                                    .foregroundColor(.white)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.gray, lineWidth: 1)
-                                    )
-                                    
-                                HStack {
-                                    VStack{
-                                        RemoteImageView(url: Allprods[index].ImgURL)
-                                    }
-                                    .padding(.horizontal,5)
-                                    
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        // Text(Arry[index])
-                                        Text(Allprods[index].ProName)
-                                            .fontWeight(.semibold)
-                                            .font(.system(size: 14))
-                                            .lineLimit(2)
-                                            .minimumScaleFactor(0.5)
-                                        Text(Allprods[index].ProID)
-                                            .font(.system(size: 13))
-                                            .foregroundColor(.secondary)
-                                        HStack {
-                                            //Text("MRP ₹\(nubers[index])")
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack{
+                                    ForEach(prodofcat.indices, id: \.self) { index in
+                                        Button(action:{
+                                            imgdataURL.removeAll()
+                                            Arry.removeAll()
+                                            Allprods.removeAll()
+                                            isLoading = true
+                                            print("If Select data")
+                                            print("Clicked button at index: \(index)")
+                                            self.OrderprodDets(at: index)
+                                            if SubselectedIndex == index {
+                                                SubselectedIndex = index
+                                            } else {
+                                                SubselectedIndex = index
+                                            }
                                             
+                                        }) {
+                                            Text(prodofcat[index])
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 5)
+                                                .font(.system(size: 12))
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(SubselectedIndex == index ? ColorData.shared.HeaderColor : Color.gray, lineWidth: 2)
+                                                )
+                                        }
+                                        .cornerRadius(10)
+                                    }
+                                    
+                                }
+                            }
+                            .padding(.horizontal, 10)
+                            
+                            
+                        }
+                        //.padding(.top,0)
+                        .onAppear {
+                            
+                            prodGroup { jsonString in
+                                if let jsonData = jsonString.data(using: .utf8) {
+                                    prettyPrintedJson.removeAll()
+                                    do {
+                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                                            for firstItem in jsonArray {
+                                                print(jsonArray)
+                                                let textname = firstItem["name"] as? String ?? ""
+                                                let ProGroID = String((firstItem["id"] as? Int)!)
+                                                let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
+                                                
+                                                print("Name: \(textname)")
+                                                prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
+                                            }
+                                        }
+                                    } catch {
+                                        print("Error parsing JSON: \(error)")
+                                    }
+                                    print(prettyPrintedJson)
+                                }
+                            }
+                            OrderProdTyp()
+                            
+                            Sales_Order.prodDets{
+                                json in
+                                print(json)
+                            }
+                            
+                            
+                            TexQty()
+                            ShpingAddress = BillingAddress
+                        }
+                        
+                        //NavigationView {
+                        if isLoading{
+                            ScrollView(showsIndicators: false){
+                                ForEach(0 ..< Allprods.count, id: \.self) { index in
+                                    ShimmeringSkeletonRow()
+                                        .transition(.opacity)
+                                        .onAppear{
+                                            
+                                            
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                                    withAnimation {
+                                        isLoading = false
+                                    }
+                                }}
+                                 
+                                }
+                            }
+                        }else{
+                        ScrollView(showsIndicators: false){
+                            ForEach(0 ..< Allprods.count, id: \.self) { index in
+                                ZStack{
+                                    Rectangle()
+                                        .foregroundColor(.white)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.gray, lineWidth: 1)
+                                        )
+                                    
+                                    HStack {
+                                        VStack{
+                                            RemoteImageView(url: Allprods[index].ImgURL, isLoading: $isLoading)
+                                            
+                                        }
+                                        .padding(.horizontal,5)
+                                        
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            // Text(Arry[index])
+                                            Text(Allprods[index].ProName)
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 14))
+                                                .lineLimit(2)
+                                                .minimumScaleFactor(0.5)
+                                            Text(Allprods[index].ProID)
+                                                .font(.system(size: 13))
+                                                .foregroundColor(.secondary)
+                                            HStack {
+                                                //Text("MRP ₹\(nubers[index])")
+                                                
                                                 Text("MRP:0")
                                                     .font(.system(size: 13))
-                                            Spacer()
-                                            HStack{
-                                                if filterItems[index].Dis != "" {
-                                                Text("OFF:\(filterItems[index].Dis)%")
-                                                    .font(.system(size: 12))
-                                                    .foregroundColor(.green)
-                                                
-                                                ZStack{
-                                                    Text("₹\(filterItems[index].DisVal)")
-                                                        .font(.system(size: 12))
-                                                        .foregroundColor(.gray)
-                                                    Rectangle()
-                                                        .frame(width: 50,height: 1)
-                                                        .foregroundColor(.gray)
+                                                Spacer()
+                                                HStack{
+                                                    if filterItems[index].Dis != "" {
+                                                        Text("OFF:\(filterItems[index].Dis)%")
+                                                            .font(.system(size: 12))
+                                                            .foregroundColor(.green)
+                                                        
+                                                        ZStack{
+                                                            Text("₹\(filterItems[index].DisVal)")
+                                                                .font(.system(size: 12))
+                                                                .foregroundColor(.gray)
+                                                            Rectangle()
+                                                                .frame(width: 50,height: 1)
+                                                                .foregroundColor(.gray)
+                                                        }
+                                                    }
+                                                    Text("Price: \(filterItems[index].ConvRate)")
+                                                        .font(.system(size: 13))
+                                                        .fontWeight(.semibold)
                                                 }
                                             }
-                                                Text("Price: \(filterItems[index].ConvRate)")
-                                                    .font(.system(size: 13))
-                                                    .fontWeight(.semibold)
-                                            }
-                                        }
-                                        .padding(.trailing,10)
-                                        HStack {
-                                            VStack{
-                                                Text(filterItems[index].SelectUom)
-                                                    .padding(.vertical, 6)
-                                                    .font(.system(size: 14))
-                                                    .padding(.horizontal, 20)
-                                                    .background(Color.gray.opacity(0.2))
-                                                    .cornerRadius(10)
-                                                    .overlay(
-                                                        RoundedRectangle(cornerRadius: 10)
-                                                            .stroke(Color.gray, lineWidth: 2)
-                                                    )
-                                                    .onTapGesture {
-                                                        clickeindex=index
-                                                        allUomlist.removeAll()
-                                                        isShowingPopUp.toggle()
-                                                        let FilterUnite =  FilterProduct[index]
-                                                        print(FilterUnite)
-                                                        
-                                                        if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
-                                                            print(uomLists)
-                                                            self.lstOfUnitList(at: index, filterUnite: uomLists)
-                                                        } else {
-                                                            print("UOMList not found or not in the expected format.")
-                                                        }
-                                                        
-                                                    }
-                                            }
-                                            
-                                            
-                                            
-                                            Spacer()
+                                            .padding(.trailing,10)
                                             HStack {
-                                                Button(action: {
-                                                    if filterItems[index].Amt > 0 {
-                                                        filterItems[index].Amt -= 1
-                                                    }
-                                                    let proditem = Allprods[index]
-                                                    print(proditem)
-                                                    let FilterProduct = Allprods[index].Unit_Typ_Product
-                                                    print(FilterProduct)
-                                                    let id = proditem.ProID
-                                                    
-                                                    let selectproduct = $FilterProduct[index] as? AnyObject
-                                                    print(selectproduct as Any)
-                                                    let  sQty = String(filterItems[index].Amt)
-                                                    print(sQty)
-                                                    print(Allprods[index].ProID)
-                                                    
-                                                    let Ids = Allprods[index].ProID
-                                                    print(Ids as Any)
-                                                    
-                                                    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                                                        print(Cart)
-                                                        if (Cart["Pcode"] as! String) == Ids {
-                                                            return true
+                                                VStack{
+                                                    Text(filterItems[index].SelectUom)
+                                                        .padding(.vertical, 6)
+                                                        .font(.system(size: 14))
+                                                        .padding(.horizontal, 20)
+                                                        .background(Color.gray.opacity(0.2))
+                                                        .cornerRadius(10)
+                                                        .overlay(
+                                                            RoundedRectangle(cornerRadius: 10)
+                                                                .stroke(Color.gray, lineWidth: 2)
+                                                        )
+                                                        .onTapGesture {
+                                                            clickeindex=index
+                                                            allUomlist.removeAll()
+                                                            isShowingPopUp.toggle()
+                                                            let FilterUnite =  FilterProduct[index]
+                                                            print(FilterUnite)
+                                                            
+                                                            if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
+                                                                print(uomLists)
+                                                                self.lstOfUnitList(at: index, filterUnite: uomLists)
+                                                            } else {
+                                                                print("UOMList not found or not in the expected format.")
+                                                            }
+                                                            
                                                         }
-                                                        return false
-                                                    })
-                                                    var selUOMConv: String = "1"
-                                                    
-                                                    if(items.count>0){
-                                                        selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
-                                                        let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                        let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
-                                                        filterItems[index].TotAmt=String(TotalAmount)
-                                                    } else{
-                                                        
-                                                        selUOMConv=String(filterItems[index].Amt)
-                                                        print(selUOMConv)
-                                                        let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                        let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
-                                                        filterItems[index].TotAmt=String(TotalAmount)
-                                                    }
-                                                    
-                                                    minusQty(sQty: sQty, SelectProd: FilterProduct)
-                                                    Qtycount()
-                                                    TexQty()
-                                                    //OfferDet()
-                                                    
-                                                }) {
-                                                    Text("-")
-                                                        .font(.system(size: 15))
-                                                        .fontWeight(.bold)
                                                 }
-                                                .buttonStyle(PlainButtonStyle())
                                                 
-                                                Text("\(filterItems[index].Amt)")
-                                                    .fontWeight(.bold)
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(Color.black)
                                                 
-                                                Button(action: {
-                                                    filterItems[index].Amt += 1
-                                                    print(lstPrvOrder)
-                                                    print(filterItems[index].Amt)
-                                                    
-                                                    let proditem = Allprods[index]
-                                                    print(proditem)
-                                                    let FilterProduct = Allprods[index].Unit_Typ_Product
-                                                    print(FilterProduct)
-                                                    
-                                                    let selectproduct = $FilterProduct[index] as? AnyObject
-                                                    print(selectproduct as Any)
-                                                    let  sQty = String(filterItems[index].Amt)
-                                                    print(sQty)
-                                                    
-                                                    print(Allprods[index].ProID)
-                                                    
-                                                    let Ids = Allprods[index].ProID
-                                                    print(Ids as Any)
-                                                    
-                                                    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                                                        
-                                                        if (Cart["Pcode"] as! String) == Ids {
-                                                            return true
+                                                
+                                                Spacer()
+                                                HStack {
+                                                    Button(action: {
+                                                        if filterItems[index].Amt > 0 {
+                                                            filterItems[index].Amt -= 1
                                                         }
-                                                        return false
-                                                    })
-                                                    var selUOMConv: String = "1"
-                                                    
-                                                    if(items.count>0){
-                                                        selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
-                                                        let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                        let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
-                                                        filterItems[index].TotAmt=String(TotalAmount)
-                                                    } else{
+                                                        let proditem = Allprods[index]
+                                                        print(proditem)
+                                                        let FilterProduct = Allprods[index].Unit_Typ_Product
+                                                        print(FilterProduct)
+                                                        let id = proditem.ProID
                                                         
-                                                        selUOMConv=String(filterItems[index].Amt)
-                                                        print(selUOMConv)
+                                                        let selectproduct = $FilterProduct[index] as? AnyObject
+                                                        print(selectproduct as Any)
+                                                        let  sQty = String(filterItems[index].Amt)
+                                                        print(sQty)
+                                                        print(Allprods[index].ProID)
+                                                        
+                                                        let Ids = Allprods[index].ProID
+                                                        print(Ids as Any)
+                                                        
+                                                        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                                            print(Cart)
+                                                            if (Cart["Pcode"] as! String) == Ids {
+                                                                return true
+                                                            }
+                                                            return false
+                                                        })
+                                                        var selUOMConv: String = "1"
+                                                        
+                                                        if(items.count>0){
+                                                            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
                                                             let uom = Int(selUOMConv)! * (filterItems[index].Amt)
-                                                        let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
-                                                        filterItems[index].TotAmt=String(TotalAmount)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        } else{
+                                                            
+                                                            selUOMConv=String(filterItems[index].Amt)
+                                                            print(selUOMConv)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        }
+                                                        
+                                                        minusQty(sQty: sQty, SelectProd: FilterProduct)
+                                                        Qtycount()
+                                                        TexQty()
+                                                        //OfferDet()
+                                                        
+                                                    }) {
+                                                        Text("-")
+                                                            .font(.system(size: 15))
+                                                            .fontWeight(.bold)
+                                                    }
+                                                    .buttonStyle(PlainButtonStyle())
+                                                    
+                                                    Text("\(filterItems[index].Amt)")
+                                                        .fontWeight(.bold)
+                                                        .font(.system(size: 15))
+                                                        .foregroundColor(Color.black)
+                                                    
+                                                    Button(action: {
+                                                        filterItems[index].Amt += 1
+                                                        print(lstPrvOrder)
+                                                        print(filterItems[index].Amt)
+                                                        
+                                                        let proditem = Allprods[index]
+                                                        print(proditem)
+                                                        let FilterProduct = Allprods[index].Unit_Typ_Product
+                                                        print(FilterProduct)
+                                                        
+                                                        let selectproduct = $FilterProduct[index] as? AnyObject
+                                                        print(selectproduct as Any)
+                                                        let  sQty = String(filterItems[index].Amt)
+                                                        print(sQty)
+                                                        
+                                                        print(Allprods[index].ProID)
+                                                        
+                                                        let Ids = Allprods[index].ProID
+                                                        print(Ids as Any)
+                                                        
+                                                        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                                            
+                                                            if (Cart["Pcode"] as! String) == Ids {
+                                                                return true
+                                                            }
+                                                            return false
+                                                        })
+                                                        var selUOMConv: String = "1"
+                                                        
+                                                        if(items.count>0){
+                                                            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        } else{
+                                                            
+                                                            selUOMConv=String(filterItems[index].Amt)
+                                                            print(selUOMConv)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        }
+                                                        
+                                                        
+                                                        addQty(sQty: sQty, SelectProd: FilterProduct)
+                                                        Qtycount()
+                                                        TexQty()
+                                                        
+                                                    }) {
+                                                        Text("+")                          .font(.system(size: 15))
+                                                            .fontWeight(.bold)
+                                                    }
+                                                    .buttonStyle(PlainButtonStyle())
+                                                }
+                                                .padding(.vertical, 6)
+                                                .padding(.horizontal, 20)
+                                                .background(Color.gray.opacity(0.2))
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .stroke(Color.gray, lineWidth: 2)
+                                                )
+                                                .foregroundColor(Color.blue)
+                                            }
+                                            .padding(.trailing,10)
+                                            if filterItems[index].Free != "0" {
+                                                HStack {
+                                                    Text("Free : \(filterItems[index].Free)")
+                                                        .font(.system(size: 14))
+                                                    
+                                                    if filterItems[index].Freeprdname != ""{
+                                                        
+                                                        Text("(\(filterItems[index].Freeprdname))")
+                                                            .font(.system(size: 14))
+                                                            .fontWeight(.semibold)
                                                     }
                                                     
-                                                    
-                                                    addQty(sQty: sQty, SelectProd: FilterProduct)
-                                                    Qtycount()
-                                                    TexQty()
-                                                    
-                                                }) {
-                                                    Text("+")                          .font(.system(size: 15))
-                                                        .fontWeight(.bold)
+                                                    Spacer()
                                                 }
-                                                .buttonStyle(PlainButtonStyle())
-                                            }
-                                            .padding(.vertical, 6)
-                                            .padding(.horizontal, 20)
-                                            .background(Color.gray.opacity(0.2))
-                                            .cornerRadius(10)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color.gray, lineWidth: 2)
-                                            )
-                                            .foregroundColor(Color.blue)
-                                        }
-                                        .padding(.trailing,10)
-                                        if filterItems[index].Free != "0" {
-                                        HStack {
-                                            Text("Free : \(filterItems[index].Free)")
-                                                .font(.system(size: 14))
-                                            
-                                            if filterItems[index].Freeprdname != ""{
-                                                
-                                                Text("(\(filterItems[index].Freeprdname))")
-                                                    .font(.system(size: 14))
-                                                    .fontWeight(.semibold)
+                                                .padding(.trailing,10)
                                             }
                                             
-                                            Spacer()
-                                        }
-                                        .padding(.trailing,10)
-                                    }
-                                        
-//                                        if filterItems[index].Dis != "" {
-//                                            HStack {
-//                                                Text("Disc : \(filterItems[index].Dis)")
-//                                                    .font(.system(size: 14))
-//
-//
-//                                                Spacer()
-//                                                Text("₹\(filterItems[index].DisVal)")
-//                                                    .font(.system(size: 14))
-//                                                    .fontWeight(.semibold)
-//                                            }
-//                                            .padding(.trailing,10)
-//                                        }
+                                            //                                        if filterItems[index].Dis != "" {
+                                            //                                            HStack {
+                                            //                                                Text("Disc : \(filterItems[index].Dis)")
+                                            //                                                    .font(.system(size: 14))
+                                            //
+                                            //
+                                            //                                                Spacer()
+                                            //                                                Text("₹\(filterItems[index].DisVal)")
+                                            //                                                    .font(.system(size: 14))
+                                            //                                                    .fontWeight(.semibold)
+                                            //                                            }
+                                            //                                            .padding(.trailing,10)
+                                            //                                        }
                                             
                                             HStack {
                                                 Text("TAX:\(filterItems[index].Tax_Val)")
@@ -668,29 +689,30 @@ struct Order: View {
                                                     .fontWeight(.semibold)
                                             }
                                             .padding(.trailing,10)
-                                        
-                                        Divider()
-                                        HStack {
-                                            Text("Total Qty: \(filterItems[index].Amt)")
-                                                .font(.system(size: 14))
-                                                .fontWeight(.semibold)
-                                            Spacer()
-                                            let totalvalue = nubers[0]
-                                            Text(filterItems[index].NetValu)
-                                                .font(.system(size: 14))
-                                                .fontWeight(.semibold)
+                                            
+                                            Divider()
+                                            HStack {
+                                                Text("Total Qty: \(filterItems[index].Amt)")
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                                Spacer()
+                                                let totalvalue = nubers[0]
+                                                Text(filterItems[index].NetValu)
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            .padding(.trailing,10)
+                                            
                                         }
-                                        .padding(.trailing,10)
+                                        .padding(.vertical, 5)
                                         
                                     }
-                                    .padding(.vertical, 5)
-                                     
+                                    .cornerRadius(10)
                                 }
                                 .cornerRadius(10)
                             }
-                            .cornerRadius(10)
+                            .padding(.horizontal,10)
                         }
-                        .padding(.horizontal,10)
                     }
                         
                 }
@@ -1153,20 +1175,25 @@ struct Order: View {
         items.removeAll()
         print(FilterProduct.count)
         print(Tax_value.count)
+        var Count = 0
         for index in 0..<FilterProduct.count {
             print(index)
-            
+            Count = index + 1
             print(FilterProduct.count)
             print(Tax_value.count)
             items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt ))
             print(items)
         }
-        
+        print(FilterProduct.count)
+        print(Count)
+        if (Count == FilterProduct.count){
+            print("fIX")
+        }
         print(items)
         print(Allprods)
         
         filterItems = items
-        print(FilterProduct.count)
+     
         print(filterItems)
     }
  
@@ -1179,6 +1206,7 @@ extension Collection {
 
 struct RemoteImageView: View {
     let url: String
+    @Binding var isLoading:Bool
     
     var body: some View {
         let modifiedUrlString = url.replacingOccurrences(of: " ", with: "%20")
@@ -2761,6 +2789,8 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     var Tax_Amt: Double = 0
     var Tax_Amt_Conv: String = ""
     var Tax_Type: String = ""
+    var Tax_Id: String = "0"
+    var Tax_Val: Int = 0
     
     
     
@@ -2838,13 +2868,18 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == PCODE }
         print(itemsWithTypID3)
         if let firstDict = itemsWithTypID3.first,
-           let taxName = firstDict["Tax_Val"] as? Int, let TaxType = firstDict["Tax_Type"] as? String {
+           let taxName = firstDict["Tax_Val"] as? Int, let TaxType = firstDict["Tax_Type"] as? String, let Taxid = firstDict["Tax_Id"] as? String {
             print(taxName) // This will print: "12 %"
             Tax_Type = TaxType
             print(Tax_Type)
             Tax_Amt = Disc_With_NetVal * (Double(taxName) / 100);
             Tax_Amt_Conv = String(format: "%.02f",Tax_Amt)
             Disc_With_NetVal = (Disc_With_NetVal + Tax_Amt)
+            Tax_Id = Taxid
+            Tax_Val = taxName
+            
+            
+            
         }
     } else {
         print("Error: 'Data' is not a valid array of dictionaries")
@@ -2860,14 +2895,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv];
+            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type];
+        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
@@ -3061,7 +3096,11 @@ func OrderSubmit(lat:String,log:String) {
         let disc: String = item["Disc"] as? String ?? "0"
         let disVal: String = item["DisVal"] as? String ?? "0"
         let Product_Total_Qty = Int(item["Qty"] as! String)!
-        
+        let Free = item["FQ"] as? Int ?? 0
+        let Tax_Id = item["Tax_Id"] as? String ?? "0"
+        let Tax_Val = item["Tax_Val"] as? Int ?? 0
+        let Tax_Typ = item["Tax_Type"] as? String ?? ""
+        let Tax_Amt = Double(item["Tax_Amt"]  as? String ?? "0") ?? 0
         let productQty = String(item["OffQty"] as? Int ?? 0)
         let productCode = prodItems.isEmpty ? "" : (prodItems[0]["id"] as? String ?? "")
         print(prodItems)
@@ -3073,9 +3112,9 @@ func OrderSubmit(lat:String,log:String) {
                sPItems = sPItems + " \"Product_RegularQty\": 0,"
                sPItems = sPItems + " \"Product_Amount\":" + (String(format: "%.2f", item["NetVal"] as! Double)) + ","
                sPItems = sPItems + " \"Rate\": \"\(item["Rate"] as! Double)\","
-               sPItems = sPItems + " \"free\": 0,"
-               sPItems = sPItems + " \"dis\": \"" + productQty + "\","
-               sPItems = sPItems + " \"dis_value\":\"" + productQty + "\","
+               sPItems = sPItems + " \"free\": \(Free),"
+               sPItems = sPItems + " \"dis\": \"" + disc + "\","
+               sPItems = sPItems + " \"dis_value\":\"" + disVal + "\","
                sPItems = sPItems + " \"Off_Pro_code\":\"\","
                sPItems = sPItems + " \"Off_Pro_name\":\"\","
                sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
@@ -3083,14 +3122,11 @@ func OrderSubmit(lat:String,log:String) {
                sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
                sPItems = sPItems + " \"UOM_Id\": \"2\","
                sPItems = sPItems + " \"UOM_Nm\": \"" + ((item["UOMNm"] as? String)!) + "\","
-               sPItems = sPItems + " \"TAX_details\": [{\"Tax_Id\": \"1\","
-               sPItems = sPItems + " \"Tax_Val\": 12,"
-               sPItems = sPItems + " \"Tax_Type\": \"GST 12%,\","
-               sPItems = sPItems + " \"Tax_Amt\": 23.64}]},"
-        
-        
+               sPItems = sPItems + " \"TAX_details\": [{\"Tax_Id\": \"\(Tax_Id)\","
+               sPItems = sPItems + " \"Tax_Val\": \(Tax_Val),"
+               sPItems = sPItems + " \"Tax_Type\": \"\(Tax_Typ),\","
+               sPItems = sPItems + " \"Tax_Amt\": \(Tax_Amt)}]},"
     }
-    
     var sPItems4: String = ""
     if sPItems.hasSuffix(",") {
         while sPItems.hasSuffix(",") {

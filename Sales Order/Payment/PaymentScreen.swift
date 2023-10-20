@@ -337,7 +337,7 @@ struct Loader: View {
     @State private var isLoading = true
 
     var body: some View {
-        List {
+     
             ForEach(0..<5, id: \.self) { index in
                 if isLoading {
                     ShimmeringSkeletonRow()
@@ -354,7 +354,7 @@ struct Loader: View {
                     }
                 }
             }
-        }
+        
     }
 }
 
@@ -362,30 +362,119 @@ struct ShimmeringSkeletonRow: View {
     @State private var isShimmering = false
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 8)
-            .foregroundColor(Color.gray.opacity(0.3))
-            .frame(height: 50)
-            .padding(.vertical, 5)
-            .padding(.horizontal, 10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
-                            startPoint: .top,
-                            endPoint: .bottom
+        VStack{
+            HStack{
+                VStack{
+                    Rectangle()
+                        .foregroundColor(Color.gray.opacity(0.3))
+                        .frame(width: 50,height: 50)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .mask(RoundedRectangle(cornerRadius: 8))
+                                .opacity(isShimmering ? 1 : 0)
+                                .animation(
+                                    Animation.linear(duration: 1)
+                                        .repeatForever(autoreverses: false)
+                                )
+                                .onAppear {
+                                    self.isShimmering = true
+                                }
                         )
+                    
+                }
+                VStack{
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundColor(Color.gray.opacity(0.3))
+                    .frame(height: 20)
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .mask(RoundedRectangle(cornerRadius: 8))
+                            .opacity(isShimmering ? 1 : 0)
+                            .animation(
+                                Animation.linear(duration: 1)
+                                    .repeatForever(autoreverses: false)
+                            )
+                            .onAppear {
+                                self.isShimmering = true
+                            }
                     )
-                    .mask(RoundedRectangle(cornerRadius: 8))
-                    .opacity(isShimmering ? 1 : 0)
-                    .animation(
-                        Animation.linear(duration: 1)
-                            .repeatForever(autoreverses: false)
-                    )
-                    .onAppear {
-                        self.isShimmering = true
-                    }
-            )
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundColor(Color.gray.opacity(0.3))
+                        .frame(height: 20)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .mask(RoundedRectangle(cornerRadius: 8))
+                                .opacity(isShimmering ? 1 : 0)
+                                .animation(
+                                    Animation.linear(duration: 1)
+                                        .repeatForever(autoreverses: false)
+                                )
+                                .onAppear {
+                                    self.isShimmering = true
+                                }
+                        )
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundColor(Color.gray.opacity(0.3))
+                        .frame(height: 20)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.clear, Color.white.opacity(0.5), Color.clear]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .mask(RoundedRectangle(cornerRadius: 8))
+                                .opacity(isShimmering ? 1 : 0)
+                                .animation(
+                                    Animation.linear(duration: 1)
+                                        .repeatForever(autoreverses: false)
+                                )
+                                .onAppear {
+                                    self.isShimmering = true
+                                }
+                        )
+            }
+            }
+        }
+}
+}
+struct LoaderSkil: View{
+    @State private var isShimmering = false
+    var body: some View{
+        VStack{
+            
+        }
     }
 }
 
