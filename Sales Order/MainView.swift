@@ -185,6 +185,7 @@ struct MainView: View {
             }
 
         }
+        .navigationViewStyle(StackNavigationViewStyle())
 
         .navigationBarBackButtonHidden(true)
 

@@ -44,7 +44,7 @@ struct ContentView: View {
             GeometryReader { geometry in
             ZStack{
                 ScrollView(showsIndicators: false){
-                   
+                   Spacer()
                         VStack(alignment: .center){
                             
                             Image("logo_new")
@@ -206,7 +206,7 @@ struct ContentView: View {
                             Spacer()
                         }
                        
-                    
+                  Spacer()
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .onTapGesture {
@@ -221,6 +221,7 @@ struct ContentView: View {
         }
            
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         
             }

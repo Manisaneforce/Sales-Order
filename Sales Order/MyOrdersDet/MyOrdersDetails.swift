@@ -256,6 +256,7 @@ struct MyOrdersDetails: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
         if OrderDetialsView{
@@ -729,6 +730,7 @@ struct AddSomeViewe:View{
             Spacer()
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         
     }

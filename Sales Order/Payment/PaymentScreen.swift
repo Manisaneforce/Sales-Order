@@ -21,14 +21,15 @@ struct PaymentScreen: View {
     let calendar = Calendar.current
     var body: some View {
         NavigationView{
+            VStack{
             ZStack{
                 Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
                     .edgesIgnoringSafeArea(.all)
                 VStack{
                     ZStack{
                         Rectangle()
-                        .foregroundColor(ColorData.shared.HeaderColor)
-                        .frame(height: 80)
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
                         HStack {
                             Button(action: {
                                 self.presentationMode.wrappedValue.dismiss()
@@ -46,8 +47,9 @@ struct PaymentScreen: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
-                                //.padding(.leading,50)
+                            
                             Spacer()
+                            
                         }
                         
                     }
@@ -68,12 +70,12 @@ struct PaymentScreen: View {
                             
                             HStack {
                                 Text(FromDate)
-                                 
+                                
                                 
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
                             }
-                     
+                            
                         }
                         .onTapGesture {
                             SelMode = "DOF"
@@ -82,9 +84,9 @@ struct PaymentScreen: View {
                             
                         }
                         .padding(10)
-                      
+                        
                         //.padding(10)
-                       
+                        
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.white)
@@ -111,7 +113,7 @@ struct PaymentScreen: View {
                         .onTapGesture {
                             Filterdate.toggle()
                         }
-                     
+                        
                         .padding(10)
                     }
                     .frame(height: 60)
@@ -135,11 +137,11 @@ struct PaymentScreen: View {
                                     .foregroundColor(.white)
                                     .font(.system(size: 15))
                             }
-                                
+                            
                         }
                         .padding(10)
                     }
-                   
+                    
                     .frame(height:40)
                     Spacer()
                     
@@ -206,7 +208,7 @@ struct PaymentScreen: View {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
-                           // Filterdate.toggle()
+                            // Filterdate.toggle()
                         }
                     VStack{
                         ZStack{
@@ -225,16 +227,16 @@ struct PaymentScreen: View {
                             VStack{
                                 
                                 Text("Last 7 days")
-                                 
+                                
                             }
                             .frame(width: 320)
                             .background(Color.white)
-                                .onTapGesture{
-                                    
-                                    Filterdate.toggle()
-                                    FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                    
-                                }
+                            .onTapGesture{
+                                
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                
+                            }
                             
                             Divider()
                             VStack{
@@ -242,10 +244,10 @@ struct PaymentScreen: View {
                             }
                             .frame(width: 320)
                             .background(Color.white)
-                                .onTapGesture{
-                                    Filterdate.toggle()
-                                    FromDate = (formattedDate(date: calculateStartDate(for: 30)))
-                                }
+                            .onTapGesture{
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 30)))
+                            }
                         }
                         Spacer()
                         ZStack{
@@ -268,6 +270,8 @@ struct PaymentScreen: View {
                 }
             }
         }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     
     }
@@ -302,7 +306,7 @@ struct PaymentScreen_Previews: PreviewProvider {
        
     }
 }
-
+//For Testing Code
 struct SkeletonLoader: View {
     @State private var animation = false
     

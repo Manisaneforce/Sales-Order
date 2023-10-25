@@ -48,6 +48,7 @@ struct Jiomoney: View {
                 WebView(htmlString: html)
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
            
     }

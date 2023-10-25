@@ -20,7 +20,6 @@ struct TrainingSplitView: View{
             }
 
         }
-
+        .navigationViewStyle(StackNavigationViewStyle())
     }
-
 }

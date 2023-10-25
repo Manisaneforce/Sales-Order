@@ -163,7 +163,7 @@ struct HomePage: View {
                                 NavigationLink(destination:MyOrdersScreen()){
                                     DashboardItem(imageName: "features", title: "My Orders")
                                 }
-                                NavigationLink(destination:Loader()){
+                                NavigationLink(destination:PaymentScreen()){
                                     DashboardItem(imageName: "credit-card", title: "Payment Ledger")
                                 }
                                 NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
@@ -204,6 +204,7 @@ struct HomePage: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
     

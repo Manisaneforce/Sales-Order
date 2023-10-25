@@ -164,6 +164,7 @@ struct Feedback: View {
             }
            
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
 }
@@ -325,6 +326,7 @@ struct ReachOut:View{
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
         if FeedbackSc{
@@ -378,6 +380,7 @@ struct ReachOutView:View{
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
 }

@@ -874,6 +874,7 @@ struct Order: View {
             
             
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .sheet(isPresented: $ADDaddress, content: {
             Address(ADDaddress: $ADDaddress, SelMod: $SelMod, isChecked: $isChecked)
@@ -2606,6 +2607,7 @@ struct SelPrvOrder: View {
         }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
       
        
@@ -2678,7 +2680,6 @@ struct SelPrvOrder: View {
                 let TaxAmt = PrvOrderData["Tax_Amt"] as? String
                 let Net_Val = String(format: "%.02f",(PrvOrderData["NetVal"] as? Double)!)
                 let Disc = PrvOrderData["Disc"] as? String
-                print(Disc)
                 print(Net_Val)
                 print(totAmt as Any)
                 
@@ -2702,12 +2703,8 @@ struct SelPrvOrder: View {
                                 print("Invalid input values")
                             }
                             
-                            
-                            
                             AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!))
                         }
-                        
-                        
                     }
                 } catch {
                     print("Error is \(error)")

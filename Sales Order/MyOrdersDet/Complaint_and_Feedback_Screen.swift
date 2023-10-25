@@ -86,6 +86,7 @@ struct Complaint_and_Feedback_Screen: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

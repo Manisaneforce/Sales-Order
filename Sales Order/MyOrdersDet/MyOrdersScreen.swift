@@ -365,6 +365,7 @@ struct MyOrdersScreen: View {
             
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
     private var dateFormatter: DateFormatter {
@@ -883,6 +884,7 @@ struct OrderDetView:View{
             }
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
     func generatePDF() -> Data {

@@ -28,7 +28,6 @@ struct OTPVerify: View {
     @State private var showResendButton = false
     @State private var OtpView:Bool = true
     @State private var NotReg:Bool = false
-    
     @Binding var jsondata: Outputdata
     //@Binding var phoneNumber:String
     let numberOffFields: Int
@@ -299,6 +298,7 @@ struct OTPVerify: View {
                 }
                  
         }
+            .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: "\(toststring)")
             
@@ -369,6 +369,7 @@ struct NotRegister: View {
             }
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
        
         

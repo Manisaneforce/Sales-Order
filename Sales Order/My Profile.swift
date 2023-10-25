@@ -715,6 +715,7 @@ struct My_Profile: View {
                 }
         }
     }
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
     private func RetAddress(){
