@@ -61,6 +61,12 @@ struct GroupId:Any{
     let id:String
     let ProdGrp_Sl_No:String
 }
+struct ViewScheme:Any{
+    let Scheme:String
+    let Free:String
+    let FreePro:String
+    let Dice:String
+}
 
 var lblTotAmt:String = "0.0"
 var lblTotAmt2:String = String()
@@ -108,6 +114,7 @@ struct Order: View {
     @State private var numbers: [Int] = []
     @State private var SelPrvOrderNavigte:Bool = false
     @State private var isShowingPopUp = false
+    @State private var ViewSchemeSc = false
     @State private var ADDaddress = false
     @State private var showAlert = false
     @State private var showToast = false
@@ -119,6 +126,7 @@ struct Order: View {
     @State private var TotalQty = [String]()
     @State private var TotalAmt = [String]()
     @State private var SelectUOMN:[editUom] = []
+    @State private var Schemedata:[ViewScheme] = []
     @State private var items: [TotAmt] = []
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var SelMod = ""
@@ -654,7 +662,10 @@ struct Order: View {
                                                     .fontWeight(.semibold)
                                             }
                                             .padding(.vertical,5)
-                                            .onTapGesture{ViewScheme(ProdCode:Allprods[index].ProID)}
+                                            .onTapGesture{
+                                                ViewScheme(ProdCode:Allprods[index].ProID)
+                                                ViewSchemeSc.toggle()
+                                            }
                                             if filterItems[index].Free != "0" {
                                                 HStack {
                                                     Text("Free : \(filterItems[index].Free)")
@@ -875,6 +886,73 @@ struct Order: View {
                     .cornerRadius(10)
                     .padding(20)
                 }
+                if ViewSchemeSc{
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            ViewSchemeSc.toggle()
+                        }
+                    VStack{
+                        ZStack{
+                            Rectangle()
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                                .frame(height: 50)
+                            Text("Scheme Details")
+                                .fontWeight(.bold)
+                                .font(.system(size: 16))
+                                .foregroundColor(.white)
+                        }
+                        VStack{
+                            ForEach(0 ..< Schemedata.count) { item in
+                                VStack(spacing:5){
+                                    HStack{
+                                        Text("Scheme: ")
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 14))
+                                        Text(Schemedata[item].Scheme)
+                                            .fontWeight(.semibold)
+                                            .font(.system(size: 14))
+                                        Spacer()
+                                    }
+                                    if (Schemedata[item].Free != "0"){
+                                        HStack{
+                                            Text("Free")
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 14))
+                                            Text(Schemedata[item].Free)
+                                                .fontWeight(.semibold)
+                                                .font(.system(size: 14))
+                                            if (Schemedata[item].FreePro != ""){
+                                                Text("(\(Schemedata[item].FreePro))")
+                                                    .fontWeight(.semibold)
+                                                    .font(.system(size: 14))
+                                            }
+                                            Spacer()
+                                        }
+                                    }
+                                    HStack{
+                                        Text("Discount")
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 14))
+                                        Text("\(Schemedata[item].Dice) %")
+                                            .fontWeight(.semibold)
+                                            .font(.system(size: 14))
+                                        Spacer()
+                                    }
+                                }
+                                Divider()
+                                    .padding(.vertical,10)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical,10)
+                        
+                        
+                    }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(20)
+                }
                 
             }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
@@ -1088,16 +1166,27 @@ struct Order: View {
         
     }
     private func ViewScheme(ProdCode:String){
+        Schemedata.removeAll()
         print("Hello World")
         print(ProdCode)
         print(lstSchemList)
-        var lstSchemListDetails:[String:AnyObject] = [:]
-        if let taxlist = GlobalFunc.convertToDictionary(text: lstSchemList) as? [String:AnyObject] {
-            lstSchemListDetails = taxlist;
+        var lstSchemListdata:[AnyObject] = []
+        if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
+            lstSchemListdata = list;
+            
         }
-        let itemsWithTypID3 = lstSchlstSchemListemList.filter { ($0["PCode"] as? String) == ProdCode }
-        print(itemsWithTypID3)
+        print(lstSchemListdata)
         
+        let itemsWithTypID3 = lstSchemListdata.filter { ($0["PCode"] as? String) == ProdCode }
+        print(itemsWithTypID3)
+        for items in itemsWithTypID3{
+            let Scheme = items["Scheme"] as? String
+            let Free = items["FQ"] as? String
+            let FreePro = items["OffProdNm"] as? String
+            let Disc = items["Disc"] as? String
+            Schemedata.append(Sales_Order.ViewScheme(Scheme: Scheme!, Free: Free!, FreePro: FreePro!, Dice: Disc!))
+        }
+        print(Schemedata)
         
     }
     private func TexQty(){
