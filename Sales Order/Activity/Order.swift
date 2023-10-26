@@ -496,11 +496,11 @@ struct Order: View {
                                                         .padding(.vertical, 6)
                                                         .font(.system(size: 14))
                                                         .padding(.horizontal, 20)
-                                                        .background(Color.gray.opacity(0.2))
+                                                        .background(Color.gray.opacity(0.1))
                                                         .cornerRadius(10)
                                                         .overlay(
                                                             RoundedRectangle(cornerRadius: 10)
-                                                                .stroke(Color.gray, lineWidth: 2)
+                                                                .stroke(Color.gray, lineWidth: 0.5)
                                                         )
                                                         .onTapGesture {
                                                             clickeindex=index
@@ -638,15 +638,23 @@ struct Order: View {
                                                 }
                                                 .padding(.vertical, 6)
                                                 .padding(.horizontal, 20)
-                                                .background(Color.gray.opacity(0.2))
+                                                .background(Color.gray.opacity(0.1))
                                                 .cornerRadius(10)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 10)
-                                                        .stroke(Color.gray, lineWidth: 2)
+                                                        .stroke(Color.gray, lineWidth: 0.5)
                                                 )
                                                 .foregroundColor(Color.blue)
                                             }
                                             .padding(.trailing,10)
+                                            HStack{
+                                                Image(systemName: "tag.fill")
+                                                Text("View Scheme")
+                                                    .font(.system(size: 14))
+                                                    .fontWeight(.semibold)
+                                            }
+                                            .padding(.vertical,5)
+                                            .onTapGesture{ViewScheme(ProdCode:Allprods[index].ProID)}
                                             if filterItems[index].Free != "0" {
                                                 HStack {
                                                     Text("Free : \(filterItems[index].Free)")
@@ -1079,6 +1087,19 @@ struct Order: View {
         }
         
     }
+    private func ViewScheme(ProdCode:String){
+        print("Hello World")
+        print(ProdCode)
+        print(lstSchemList)
+        var lstSchemListDetails:[String:AnyObject] = [:]
+        if let taxlist = GlobalFunc.convertToDictionary(text: lstSchemList) as? [String:AnyObject] {
+            lstSchemListDetails = taxlist;
+        }
+        let itemsWithTypID3 = lstSchlstSchemListemList.filter { ($0["PCode"] as? String) == ProdCode }
+        print(itemsWithTypID3)
+        
+        
+    }
     private func TexQty(){
         var Qty = "0"
         var Amount="0"
@@ -1107,7 +1128,7 @@ struct Order: View {
                 lstTaxDetails = taxlist;
             }
            // print(lstTaxDetails)
-            if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>] {
+            if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>]{
                 var NewData: [Dictionary<String, Any>] = TaxData
                 let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == id }
                 print(itemsWithTypID3)

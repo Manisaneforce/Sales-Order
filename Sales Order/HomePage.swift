@@ -18,6 +18,7 @@ struct HomePage: View {
     @State private var CustSAVEDet:String = UserDefaults.standard.string(forKey: "CustDet") ?? ""
     @State private var currentPage = 0
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    @Environment(\.horizontalSizeClass) var sizeClass
   
     var body: some View {
         NavigationView {
@@ -180,7 +181,7 @@ struct HomePage: View {
                         }
                     }
                     .padding(10)
-                    .frame(height:200)
+                    .frame(height: sizeClass == .compact ? 200 : 300)
                         
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
@@ -191,7 +192,7 @@ struct HomePage: View {
                                 .cornerRadius(10)
                         }
                         .padding(10)
-                        .frame(height:220)
+                        .frame(height: sizeClass == .compact ? 220 : 320)
                 }
                     
                     Spacer()
