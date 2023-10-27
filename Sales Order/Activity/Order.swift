@@ -916,7 +916,7 @@ struct Order: View {
                                     }
                                     if (Schemedata[item].Free != "0"){
                                         HStack{
-                                            Text("Free")
+                                            Text("Free:")
                                                 .fontWeight(.bold)
                                                 .font(.system(size: 14))
                                             Text(Schemedata[item].Free)
@@ -931,7 +931,7 @@ struct Order: View {
                                         }
                                     }
                                     HStack{
-                                        Text("Discount")
+                                        Text("Discount:")
                                             .fontWeight(.bold)
                                             .font(.system(size: 14))
                                         Text("\(Schemedata[item].Dice) %")
@@ -2233,6 +2233,8 @@ struct PrvProddata: Any {
     let Tax_Val:String
     let Tax_Dis_Amt:String
     let Disc:String
+    let Offerpro:String
+    let FreeQty:String
 }
 
 struct FilterItem: Identifiable {
@@ -2509,6 +2511,43 @@ struct SelPrvOrder: View {
                                             
                                         }
                                         .padding(.horizontal,10)
+                                        if (AllPrvprod[index].FreeQty != "0"){
+                                            ZStack{
+                                                LinearGradient(gradient: Gradient(colors: [ColorData.shared.HeaderColor.opacity(0.2), .white]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                                    .cornerRadius(5)
+                                                
+                                                // RadialGradient(gradient: Gradient(colors: [.red, .yellow]), center: .center, startRadius: 0, endRadius: 100)
+                                                //.frame(height: 25)
+                                                
+                                                HStack{
+                                                    VStack(alignment: .leading,spacing: 5){
+                                                        Text("SKU")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                        Text(AllPrvprod[index].Offerpro)
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.semibold)
+                                                    }
+                                                    Spacer()
+                                                    VStack(spacing: 5){
+                                                        Text("Free")
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.bold)
+                                                        Text(AllPrvprod[index].FreeQty)
+                                                            .font(.system(size: 10))
+                                                            .fontWeight(.semibold)
+                                                    }
+                                                }
+                                                .padding(.vertical,5)
+                                                .padding(.horizontal,10)
+                                            }
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 5)
+                                                    .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
+                                            )
+                                            .padding(.horizontal,20)
+                                        }
+                                        
                                     }
                                     Divider()
                                         .padding(.horizontal,10)
@@ -2603,7 +2642,6 @@ struct SelPrvOrder: View {
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 100)
                         Button(action:{
-                            
                             //getLocation()
                             if VisitData.shared.lstPrvOrder.count == 0{
                                 ShowTost="Cart is Empty"
@@ -2614,9 +2652,7 @@ struct SelPrvOrder: View {
                             }else{
                                 showAlert = true
                             }
-                            
                         }) {
-                            
                             VStack{
                                 HStack{
                                     
@@ -2781,6 +2817,8 @@ struct SelPrvOrder: View {
 
             print("Total Tax Amount for GST 12%: \(totalTaxForGST12)")
             GST12 = String(totalTaxForGST12)
+            var OffProname = ""
+            
             for PrvOrderData in VisitData.shared.lstPrvOrder{
                 print(PrvOrderData)
                 let RelID = PrvOrderData["Pcode"] as? String
@@ -2790,7 +2828,9 @@ struct SelPrvOrder: View {
                 let TaxAmt = PrvOrderData["Tax_Amt"] as? String
                 let Net_Val = String(format: "%.02f",(PrvOrderData["NetVal"] as? Double)!)
                 let Disc = PrvOrderData["Disc"] as? String
-                print(Net_Val)
+                let FreeQty = String((PrvOrderData["FQ"] as? Int)!)
+                OffProname = (PrvOrderData["OffProdNm"] as? String)!
+                print(FreeQty)
                 print(totAmt as Any)
                 
                 do {
@@ -2805,6 +2845,9 @@ struct SelPrvOrder: View {
                             let Proid = selectedPro["id"] as? String
                             let rate = selectedPro["Rate"] as? String
                             let Uom = PrvOrderData["UOMConv"] as? String
+                            if (OffProname == ""){
+                                OffProname = name!
+                            }
                             var result:Double = 0.0
                             if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
                                 result = rateValue * uomValue
@@ -2813,7 +2856,7 @@ struct SelPrvOrder: View {
                                 print("Invalid input values")
                             }
                             
-                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!))
+                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!, Offerpro: OffProname, FreeQty: FreeQty))
                         }
                     }
                 } catch {
@@ -3171,11 +3214,7 @@ func deleteItem(at index: Int) {
 }
 //9167497578
 func OrderSubmit(lat:String,log:String) {
-    
-    print(VisitData.shared.lstPrvOrder.count)
-  print(lat)
-    print(log)
-    
+
     var sPItems:String = ""
     for i in 0..<VisitData.shared.lstPrvOrder.count {
         guard let item = VisitData.shared.lstPrvOrder[i] as? [String: Any],
