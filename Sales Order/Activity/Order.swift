@@ -2871,21 +2871,12 @@ struct SelPrvOrder: View {
               let  qtys = (items["Qty"] as? String)!
                 qty.append(qtys)
             }
-            print(VisitData.shared.lstPrvOrder.count)
-            print(VisitData.shared.ProductCart.count)
-            print(qty)
             
             for index in 0..<VisitData.shared.lstPrvOrder.count {
                 print(index)
                 items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
             }
-            print(items)
             filterItems = items
-            
-            print(AllPrvprod.count)
-            print(VisitData.shared.lstPrvOrder.count)
-            print(filterItems.count)
-            print(filterItems)
         }
         
     }
@@ -2900,14 +2891,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         }
         return false
     })
-    print(id)
-    print(sUom)
-    print(sUomNm)
-    print(sUomConv)
-    print(sNetUnt)
-    print(sQty)
-    print(refresh)
-    print(ProdItem)
+
     let TotQty2: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
     let TotQty: Double = Double((sQty as NSString).intValue)
     var source: Double = Double()
@@ -2916,16 +2900,10 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
        let UomQty = Double(sUomConv) {
         OrgRate = Double(ConvRate) ?? 0.00
         source = OrgRate * UomQty
-        print(OrgRate)
-        print(UomQty)
     }
     let Source1 = String(format: "%.02f", source)
     let Rate: Double = Double(Source1)!
-    print(ProdItem)
-   
-    print(OrgRate)
     var ItmValue: Double = (TotQty*Rate)
-    print(ItmValue)
     
     
     var Scheme: Double = 0
@@ -2950,21 +2928,15 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     var lstSchemListdata:[AnyObject] = []
     if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
         lstSchemListdata = list;
-        print(lstSchemListdata)
     }
     
     var Schemes: [AnyObject] = lstSchemListdata.filter ({ (item) in
-        print(item)
-        print(PCODE)
-        print(TotQty2)
-        
         if item["PCode"] as! String == PCODE && (item["Scheme"] as! NSString).doubleValue <= TotQty2 {
             return true
         }
         return false
     })
     if(Schemes.count>1){Schemes.remove(at: 0)}
-    print(Schemes)
     if(Schemes.count>0){
         Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
         FQ = (Schemes[0]["FQ"] as! NSString).intValue
@@ -2981,24 +2953,12 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         var dis: Double = 0;
         Disc = Schemes[0]["Disc"] as! String
         if (Disc != "") {
-            print(ItmValue)
             dis = ItmValue * (Double(Disc)! / 100);
-            print(dis)
         }
         Schmval = String(format: "%.02f", dis);
         ItmValue = ItmValue - dis;
-        print(ItmValue)
     }
-    
-    print(Scheme)
-    print(FQ)
-    print(OffQty)
-    print(OffProd)
-    print(OffProdNm)
-    print(Schmval)
-    print(Disc)
     let Netvalue = (TotQty*Rate)
-    print(Netvalue)
     var Disc_With_NetVal:Double = 0.00
    
     if Schmval != ""{
@@ -3006,36 +2966,26 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     }else{
         Disc_With_NetVal=(TotQty*Rate)
     }
-    print(Disc_With_NetVal)
-    
     var lstTaxDetails:[String:AnyObject] = [:]
     if let taxlist = GlobalFunc.convertToDictionary(text: lstTax) as? [String:AnyObject] {
         lstTaxDetails = taxlist;
     }
-    print(lstTaxDetails)
     if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>] {
         let NewData: [Dictionary<String, Any>] = TaxData
         let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == PCODE }
-        print(itemsWithTypID3)
         if let firstDict = itemsWithTypID3.first,
            let taxName = firstDict["Tax_Val"] as? Int, let TaxType = firstDict["Tax_Type"] as? String, let Taxid = firstDict["Tax_Id"] as? String {
             print(taxName) // This will print: "12 %"
             Tax_Type = TaxType
-            print(Tax_Type)
             Tax_Amt = Disc_With_NetVal * (Double(taxName) / 100);
             Tax_Amt_Conv = String(format: "%.02f",Tax_Amt)
             Disc_With_NetVal = (Disc_With_NetVal + Tax_Amt)
             Tax_Id = Taxid
             Tax_Val = taxName
-            
-            
-            
         }
     } else {
         print("Error: 'Data' is not a valid array of dictionaries")
     }
-    print(Tax_Amt)
-    
     if items.count>0 {
         print(VisitData.shared.ProductCart)
         if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
@@ -3057,7 +3007,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
     }
-    print(VisitData.shared.ProductCart)
     var lstPrv:[AnyObject] = []
     lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
@@ -3065,23 +3014,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         }
         return false
     })
-    print(lstPrv.count)
-    print(lstPrv)
     VisitData.shared.lstPrvOrder = lstPrv
-    print(VisitData.shared.lstPrvOrder.count)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
 
 
 func addQty(sQty:String,SelectProd:[String:Any]) {
-    
-    print(sQty)
-    print(SelectProd)
-  
     let Ids = SelectProd["id"] as? String
-    print(Ids as Any)
-    print(VisitData.shared.ProductCart)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
         
         if (Cart["Pcode"] as! String) == Ids {
@@ -3157,10 +3097,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
-    print(VisitData.shared.lstPrvOrder.count)
-    
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-        print(VisitData.shared.lstPrvOrder)
         if (Cart["SalQty"] as! Double) > 0 {
             return true
         }
@@ -3170,35 +3107,26 @@ func updateOrderValues(refresh:Int){
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
-            print(item["NetVal"] as! Double)
             totAmt = totAmt + (item["NetVal"] as! Double)
-            print(totAmt)
-            print(item["NetVal"] as! Double)
             TotamtlistShow = String(totAmt)
             //(item["SalQty"] as! NSString).doubleValue
 
         }
     }
-    print(VisitData.shared.lstPrvOrder.count)
     lblTotAmt = String(format: "Rs. %.02f", totAmt)
     lblTotAmt2 = String(totAmt)
-    print(totAmt)
     if(refresh == 1){
      
     }
 
 }
 func deleteItem(at index: Int) {
-    print(VisitData.shared.lstPrvOrder)
-    print(VisitData.shared.ProductCart)
     var ids = [String]()
     var id = ""
     for allid in VisitData.shared.lstPrvOrder{
         ids.append(allid["id"] as! String)
     }
     id = ids[index]
-    print(ids)
-    print(id)
     VisitData.shared.lstPrvOrder.remove(at: index)
     VisitData.shared.ProductCart.removeAll(where: { (item) in
         if item["id"] as! String == id {
@@ -3206,11 +3134,9 @@ func deleteItem(at index: Int) {
         }
         return false
     })
-    print(VisitData.shared.lstPrvOrder)
-    print(VisitData.shared.ProductCart)
     updateOrderValues(refresh: 1)
 }
-//9167497578
+
 func OrderSubmit(lat:String,log:String) {
 
     var sPItems:String = ""
@@ -3247,7 +3173,6 @@ func OrderSubmit(lat:String,log:String) {
         let Tax_Amt = Double(item["Tax_Amt"]  as? String ?? "0") ?? 0
         let productQty = String(item["OffQty"] as? Int ?? 0)
         let productCode = prodItems.isEmpty ? "" : (prodItems[0]["id"] as? String ?? "")
-        print(prodItems)
         let productName = prodItems.isEmpty ? "" : (prodItems[0]["name"] as? String ?? "")
         
         sPItems = sPItems + "{\"product_code\":\"" + productCode + "\", \"product_Name\":\"" + productName + "\","
