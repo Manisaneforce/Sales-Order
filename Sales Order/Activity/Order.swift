@@ -3119,9 +3119,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 }
 
  func minusQty(sQty:String,SelectProd:[String:Any]) {
-     print(sQty)
-     print(SelectProd)
-   
+ 
      let Ids = SelectProd["id"] as? String
      print(Ids as Any)
      
@@ -3281,8 +3279,11 @@ func OrderSubmit(lat:String,log:String) {
         sPItems4 = sPItems
     }
     updateDateAndTime()
-    
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(lblTotAmt2)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    let ChangeDob = Double(lblTotAmt2)
+    print(ChangeDob)
+    let Netamount = String(format: "%.02f", ChangeDob!)
+    print(Netamount)
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(Netamount)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
     
@@ -3302,6 +3303,7 @@ func OrderSubmit(lat:String,log:String) {
             
             
            print(json)
+            ShowToastMes.shared.tost = "Order Submitted"
             UIApplication.shared.windows.first?.makeKeyAndVisible()
             if let window = UIApplication.shared.windows.first {
                 window.rootViewController = UIHostingController(rootView: HomePage())

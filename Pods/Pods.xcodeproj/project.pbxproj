@@ -51,7 +51,7 @@
 		6EDF8FBA0B82DEB0A11E5F13E0696A58 /* Pods-Sales OrderTests */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Sales OrderTests"; path = "libPods-Sales OrderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A93ED9754EC4DEDDFF2FAE0DA7B0A96 /* Pods-Sales OrderUITests */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-Sales OrderUITests"; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CD4F05FF086654408F8A1D1CD81F130 /* Pods-Sales Order-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sales Order-acknowledgements.markdown"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B03D5FD7992184100E46BF6561E400C6 /* Jiopay-pg-uat */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Jiopay-pg-uat"; path = "libJiopay-pg-uat.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B152A7804E3D61C1F5017AC535CDECA1 /* Pods-Sales OrderTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Sales OrderTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		BF7C095E7A2E4B2352C755F01499C254 /* Pods-Sales Order-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Sales Order-resources.sh"; sourceTree = "<group>"; };
@@ -140,6 +140,7 @@
 				C3A4E8D0967011E6C6B996AC3E8C37CF /* Resources */,
 				33B96E062196C437E4D8105DF8E1C7EC /* Support Files */,
 			);
+			name = "Jiopay-pg-uat";
 			path = "Jiopay-pg-uat";
 			sourceTree = "<group>";
 		};

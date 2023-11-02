@@ -17,6 +17,7 @@ struct HomePage: View {
     @State private var showAlert = false
     @State private var CustSAVEDet:String = UserDefaults.standard.string(forKey: "CustDet") ?? ""
     @State private var currentPage = 0
+    @State private var showToast = false
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     @Environment(\.horizontalSizeClass) var sizeClass
   
@@ -91,6 +92,18 @@ struct HomePage: View {
                     
                     
                     .onAppear() {
+                        if (ShowToastMes.shared.tost != "" ){
+                            showToast = true
+                          
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                if (showToast == true){
+                                    ShowToastMes.shared.tost = ""
+                                }
+                            showToast = false
+                        }
+                            
+                    }
+                        
                         print(CustSAVEDet)
                         if let jsonData = CustSAVEDet.data(using: .utf8){
                             do{
@@ -207,6 +220,7 @@ struct HomePage: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
+        .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
     }
     
     private func updateDate() {
@@ -296,8 +310,6 @@ struct NextScreen: View {
 func DashBoradImg(){
     let axn = "get_ad_images"
     
-    
-    
     let apiKey: String = "\(axn)"
     
     AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
@@ -321,7 +333,8 @@ func DashBoradImg(){
                                 print(response)
                                 for item in response{
                                     let url = item["url"] as? String
-                                    DashboardBaner.shared.ImgUrl.append(url!)
+                                    let modifiedUrlString = url!.replacingOccurrences(of: " ", with: "%20")
+                                    DashboardBaner.shared.ImgUrl.append(modifiedUrlString)
                                 }
                             }
                         }

@@ -377,11 +377,8 @@ struct NotRegister: View {
 }
 
 func OtpReSend(){
-    
     let axn = "send/sms"
     let apiKey = "\(axn)&mobile=\(phoneNumber2)"
-   
-    
     AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
         .validate(statusCode: 200 ..< 299)
         .responseJSON { response in
@@ -396,9 +393,7 @@ func OtpReSend(){
                         print("Error: Could print JSON in String")
                         return
                     }
-                    
                     print(prettyPrintedJson)
-               
                 }
             case .failure(let error):
                 print(error)

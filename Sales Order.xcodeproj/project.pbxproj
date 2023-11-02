@@ -42,6 +42,7 @@
 		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
 		38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */; };
 		38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */; };
+		38AAC4D92AEFC49700D469DF /* S3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AAC4D82AEFC49700D469DF /* S3.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
 		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
 		38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */; };
@@ -110,6 +111,7 @@
 		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
 		38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersDetails.swift; sourceTree = "<group>"; };
+		38AAC4D82AEFC49700D469DF /* S3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3.swift; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerify.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
 				383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */,
 				38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */,
+				38AAC4D82AEFC49700D469DF /* S3.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -587,6 +590,7 @@
 				384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
 				3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */,
+				38AAC4D92AEFC49700D469DF /* S3.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,

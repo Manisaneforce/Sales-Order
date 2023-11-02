@@ -7,6 +7,8 @@
 
 import SwiftUI
 import WebKit
+//import Amplify
+//import AWSS3
 
 struct Feedback: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -132,6 +134,10 @@ struct Feedback: View {
                 
                 Button(action: {
                     // Add your submit action here
+                    ShowToastMes.shared.tost = "Feedback Submit"
+                    if let window = UIApplication.shared.windows.first {
+                        window.rootViewController = UIHostingController(rootView: HomePage())
+                    }
                 }) {
                     ZStack{
                         Rectangle()
@@ -144,10 +150,9 @@ struct Feedback: View {
                                 .fontWeight(.bold)
                                 .font(.system(size: 15))
                         }
-                        .onTapGesture {
-                           
-                        }
+                       
                     }
+                    
                     .padding(10)
                 }
                 }

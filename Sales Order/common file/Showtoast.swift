@@ -4,7 +4,7 @@
 //
 //  Created by San eforce on 11/08/23.
 //
-
+import Foundation
 import SwiftUI
 import CoreLocation
 
@@ -70,4 +70,9 @@ struct Showtoast_Previews: PreviewProvider {
     static var previews: some View {
         Toast()
     }
+}
+
+class ShowToastMes{
+    static var shared = ShowToastMes()
+    var tost:String = ""
 }

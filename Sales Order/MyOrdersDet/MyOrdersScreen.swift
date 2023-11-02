@@ -180,15 +180,19 @@ struct MyOrdersScreen: View {
                             HStack(spacing:40){
                             Text(OrderPaymentDetails[index].No_Of_items)
                                 .font(.system(size: 12))
+                                //.frame(width: 30,alignment: .center)
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Quantity)
                                 .font(.system(size: 12))
+                                //.frame(width: 30,alignment: .center)
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Order_Value)
                                 .font(.system(size: 12))
+                                //.frame(width: 60,alignment: .leading)
                                 .multilineTextAlignment(.leading)
                             Text(OrderPaymentDetails[index].Status)
                                 .font(.system(size: 12))
+                                //.frame(width: 40,alignment: .leading)
                                 .multilineTextAlignment(.trailing)
                         }
                             
