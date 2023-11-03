@@ -9,7 +9,12 @@ import SwiftUI
 import WebKit
 //import Amplify
 //import AWSS3
-
+struct FedQust: Any {
+    let MasId: Int
+    var Qus: String
+    let SubHed: String
+    let Ans : [String]
+}
 struct Feedback: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var AddressTextInpute:String = ""
@@ -18,6 +23,18 @@ struct Feedback: View {
     @State private var Para:[String]=["1. How satisfied are you with the ReliVet App?","2. Is there any issue you would like to report?","3. is there any Material Damage / Expired?"]
     @Binding var FeedbackSc:Bool
     @Binding var CurrentSc:Bool
+    @State private var showToast = false
+    @State private var ToastMes = "Please type somthing in comments..."
+    @State private var FEDqust = [
+        FedQust(MasId: 0, Qus: "1. How satisfied are you with the ReliVet App?", SubHed: "(Please click one)", Ans: ["Very Statsfied","Satisfied","Neutral","Dissatisfied"]),
+        FedQust(MasId: 1, Qus: "2. How would you rate the overall quality of products?", SubHed: "(Please click one)", Ans: ["Excellent","Good","Neutral","Fair","Poor"]),
+        FedQust(MasId: 2, Qus: "3. Would you recommend the ReliNet App to others?", SubHed: "(Please click one)", Ans: ["Yes","No"]),
+        FedQust(MasId: 3, Qus: "4. Is there any ordered material damaged or expired?", SubHed: "(Please click one)", Ans: ["Yes","No"]),
+        FedQust(MasId: 4, Qus: "5. How was your overall delivery experience?", SubHed: "(Please click one)", Ans: ["Excellent","Good","Neutral","Fair","Poor"])
+    ]
+    @State private var selectedAnswers: [String] = Array(repeating: "", count: 5)
+    @State private var selectedAnswer: String? = nil
+    @State private var isSelected = false
 
     var body: some View {
         NavigationView{
@@ -49,61 +66,103 @@ struct Feedback: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 ScrollView(showsIndicators: false){
-                    ForEach(0..<3, id: \.self) { index in
-                        ZStack{
+
+                    ForEach(0..<FEDqust.count, id: \.self) { index in
+                        VStack(alignment: .leading) {
                             
-                            GeometryReader { proxy in
-                                            Color.clear
-                                                .preference(
-                                                    key: ViewOffsetKey.self,
-                                                    value: proxy.frame(in: .global).minY
-                                                )
-                                                 
-                                        }
-                                    .onPreferenceChange(ViewOffsetKey.self) { value in
-                                        self.scrollOffset = value
-                                        print(scrollOffset)
-                                        
-                                    }
+                            Text(FEDqust[index].Qus)
+                                .font(.headline)
+                                .padding(.horizontal,10)
+                            Text(FEDqust[index].SubHed)
+                                .font(.subheadline)
+                                .padding(.horizontal,10)
+                            
+                                ForEach(FEDqust[index].Ans, id: \.self) { ans in
+                                     
+                                    HStack {
                                     
-                        VStack{
-                            VStack{
-                                HStack{
-                                    Text(Para[index])
-                                        .font(.system(size: 14))
-                                        .fontWeight(.semibold)
-                                    Spacer()
+                                           Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+                                               .foregroundColor(.blue)
+                                               .onTapGesture {
+                                                   isSelected.toggle()
+                                                   selectedAnswer = isSelected ? ans : nil
+                                               }
+                                           Text(ans)
+                                               .font(.system(size: 14))
+                                               .fontWeight(.semibold)
+                                           Spacer()
+                                       }
+                                       .padding(.horizontal, 10)
+                                       .padding(.vertical, 5)
+                                       .onTapGesture {
+                                           print(index)
+                                       }
                                 }
-                                .padding(.leading,10)
-                                
-                                HStack{
-                                    HStack{
-                                        Image(systemName: isCheckedMarks[index] ? "checkmark.square.fill" : "square")
-                                            .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
-                                            .onTapGesture {
-                                                isCheckedMarks[index].toggle()
-                                            }
-                                        Text("Yes")
-                                            .font(.system(size: 14))
-                                            .fontWeight(.semibold)
-                                    }
-                                    HStack{
-                                        Image(systemName: isCheckedMarks[index] ? "square" : "checkmark.square.fill")
-                                            .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
-                                            .onTapGesture {
-                                                isCheckedMarks[index].toggle()
-                                            }
-                                        Text("No")
-                                            .font(.system(size: 14))
-                                            .fontWeight(.semibold)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(10)
-                            }
+                          
+                        }
+                        .onTapGesture {
+                            print(index)
                         }
                     }
-                }
+
+
+                    
+//
+//                    ForEach(0..<3, id: \.self) { index in
+//                        ZStack{
+//
+//                            GeometryReader { proxy in
+//                                            Color.clear
+//                                                .preference(
+//                                                    key: ViewOffsetKey.self,
+//                                                    value: proxy.frame(in: .global).minY
+//                                                )
+//
+//                                        }
+//                                    .onPreferenceChange(ViewOffsetKey.self) { value in
+//                                        self.scrollOffset = value
+//                                        print(scrollOffset)
+//
+//                                    }
+//
+//                        VStack{
+//                            VStack{
+//                                HStack{
+//                                    Text(Para[index])
+//                                        .font(.system(size: 14))
+//                                        .fontWeight(.semibold)
+//                                    Spacer()
+//                                }
+//                                .padding(.leading,10)
+//
+//                                HStack{
+//                                    HStack{
+//                                        Image(systemName: isCheckedMarks[index] ? "checkmark.square.fill" : "square")
+//                                            .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
+//                                            .onTapGesture {
+//                                                isCheckedMarks[index].toggle()
+//                                            }
+//                                        Text("Yes")
+//                                            .font(.system(size: 14))
+//                                            .fontWeight(.semibold)
+//                                    }
+//                                    HStack{
+//                                        Image(systemName: isCheckedMarks[index] ? "square" : "checkmark.square.fill")
+//                                            .foregroundColor(isCheckedMarks[index] ? .blue : .blue)
+//                                            .onTapGesture {
+//                                                isCheckedMarks[index].toggle()
+//                                            }
+//                                        Text("No")
+//                                            .font(.system(size: 14))
+//                                            .fontWeight(.semibold)
+//                                    }
+//                                    Spacer()
+//                                }
+//                                .padding(10)
+//                            }
+//                        }
+//                    }
+//                }
                 
                 HStack{
                     Text("4. For any other information/ to share Your feedback here")
@@ -134,9 +193,19 @@ struct Feedback: View {
                 
                 Button(action: {
                     // Add your submit action here
-                    ShowToastMes.shared.tost = "Feedback Submit"
-                    if let window = UIApplication.shared.windows.first {
-                        window.rootViewController = UIHostingController(rootView: HomePage())
+                    if (AddressTextInpute == ""){
+                        showToast = true
+                      
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    
+                        showToast = false
+                    }
+                    }
+                    else{
+                        ShowToastMes.shared.tost = "Feedback Submit"
+                        if let window = UIApplication.shared.windows.first {
+                            window.rootViewController = UIHostingController(rootView: HomePage())
+                        }
                     }
                 }) {
                     ZStack{
@@ -171,6 +240,7 @@ struct Feedback: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
+        .toast(isPresented: $showToast, message: ToastMes)
     }
 }
 struct ViewOffsetKey: PreferenceKey {
@@ -405,3 +475,7 @@ struct WebViews: UIViewRepresentable {
         // Update the view if needed
     }
 }
+
+
+
+
