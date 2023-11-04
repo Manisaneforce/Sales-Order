@@ -195,8 +195,6 @@ struct MyOrdersScreen: View {
                                 //.frame(width: 40,alignment: .leading)
                                 .multilineTextAlignment(.trailing)
                         }
-                            
-                            
                         }
                         HStack{
                             Text(OrderPaymentDetails[index].Order_Date)

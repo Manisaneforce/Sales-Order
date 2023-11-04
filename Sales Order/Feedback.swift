@@ -108,8 +108,6 @@ struct Feedback: View {
                             print(index)
                         }
                     }
-
-
                     
 //
 //                    ForEach(0..<3, id: \.self) { index in
@@ -400,6 +398,39 @@ struct ReachOut:View{
                         }
                         .padding(.leading,10)
                         .padding(.trailing,20)
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(height: 0.3)
+                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                            .padding(8)
+                        Button(action: {
+                            AppBarTit = "Contact Us"
+                            Url = "https://rad.salesjump.in/server/rad/Contact%20Us.pdf"
+                            CurrentSc.toggle()
+                            ReachOutView.toggle()
+                        })
+                        {
+                            HStack {
+                                Image("Group 8")
+                                    .frame(width: 32, height: 32)
+                                Text("Contact Us")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.black)
+                                    .fontWeight(.bold)
+                                    .padding(.leading,8)
+                                
+                                Spacer()
+                                Image("back")
+                                
+                            }
+                        }
+                        .padding(.leading,10)
+                        .padding(.trailing,20)
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(height: 0.3)
+                            .background(Color(red: 0.18, green: 0.19, blue: 0.2))
+                            .padding(8)
                     }
                     Spacer()
                 }
