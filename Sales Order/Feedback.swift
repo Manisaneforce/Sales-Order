@@ -32,7 +32,7 @@ struct Feedback: View {
         FedQust(MasId: 3, Qus: "4. Is there any ordered material damaged or expired?", SubHed: "(Please click one)", Ans: ["Yes","No"]),
         FedQust(MasId: 4, Qus: "5. How was your overall delivery experience?", SubHed: "(Please click one)", Ans: ["Excellent","Good","Neutral","Fair","Poor"])
     ]
-    @State private var selectedAnswers: [String] = Array(repeating: "", count: 5)
+    @State private var selectedAnswers: [String?] = []
     @State private var selectedAnswer: String? = nil
     @State private var isSelected = false
 
@@ -65,6 +65,9 @@ struct Feedback: View {
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                .onAppear {
+                            self.selectedAnswers = Array(repeating: nil, count: FEDqust.count)
+                        }
                 ScrollView(showsIndicators: false){
 
                     ForEach(0..<FEDqust.count, id: \.self) { index in
@@ -81,12 +84,13 @@ struct Feedback: View {
                                      
                                     HStack {
                                     
-                                           Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                                               .foregroundColor(.blue)
-                                               .onTapGesture {
-                                                   isSelected.toggle()
-                                                   selectedAnswer = isSelected ? ans : nil
-                                               }
+                                        Image(systemName: selectedAnswers.indices.contains(index) && selectedAnswers[index] == ans ? "checkmark.square.fill" : "square")
+                                                                        .foregroundColor(.blue)
+                                                                        .onTapGesture {
+                                                                            if selectedAnswers.indices.contains(index) {
+                                                                                selectedAnswers[index] = selectedAnswers[index] == ans ? nil : ans
+                                                                            }
+                                                                        }
                                            Text(ans)
                                                .font(.system(size: 14))
                                                .fontWeight(.semibold)
