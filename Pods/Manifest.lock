@@ -1,16 +1,24 @@
 PODS:
+  - AWSCore (2.33.4)
+  - AWSS3 (2.33.4):
+    - AWSCore (= 2.33.4)
   - Jiopay-pg-uat (0.0.20)
 
 DEPENDENCIES:
+  - AWSS3
   - Jiopay-pg-uat (~> 0.0.19)
 
 SPEC REPOS:
   trunk:
+    - AWSCore
+    - AWSS3
     - Jiopay-pg-uat
 
 SPEC CHECKSUMS:
+  AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
+  AWSS3: a0d31bc565dc8a6c5eaa756610ac15704c100674
   Jiopay-pg-uat: 7e0adaab83c6579c43515c825f36e0940fbe0164
 
-PODFILE CHECKSUM: c78ce58ba6c19c2e3e0c12f98dc8807b52fb237e
+PODFILE CHECKSUM: 96f2d7e6c42e350a7bb5a38ba2862cfa480f8d79
 
 COCOAPODS: 1.13.0

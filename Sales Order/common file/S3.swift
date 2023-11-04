@@ -7,8 +7,8 @@
 
 import Foundation
 import Alamofire
-//import AWSS3
-//import AWSCore
+import AWSS3
+import AWSCore
 //class S3ViewModel: ObservableObject {
 //    func uploadPhotoToS3(imageData: Data, bucketName: String, fileName: String) {
 //        let credentialsProvider = AWSStaticCredentialsProvider(accessKey: "fmcg_1",

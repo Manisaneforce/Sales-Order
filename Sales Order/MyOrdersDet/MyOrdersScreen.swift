@@ -828,45 +828,45 @@ struct OrderDetView:View{
                                     .foregroundColor(Color.gray)
                                     .frame(height: 1)
                                     .padding(10)
-                                VStack(spacing:-10){
-                                    HStack{
-                                        Text("Subtotal")
-                                            .font(.system(size: 12))
-                                        
-                                        Spacer()
-                                        Text("202.64")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    HStack{
-                                        Text("Total item")
-                                            .font(.system(size: 12))
-                                        Spacer()
-                                        Text("1")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    HStack{
-                                        Text("Total Qty")
-                                            .font(.system(size: 12))
-                                        Spacer()
-                                        Text("1")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    HStack{
-                                        Text("GST 12%")
-                                            .font(.system(size: 12))
-                                        Spacer()
-                                        Text("23.64")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    Rectangle()
-                                        .foregroundColor(Color.gray)
-                                        .frame(height: 1)
-                                        .padding(10)
-                                }
+//                                VStack(spacing:-10){
+//                                    HStack{
+//                                        Text("Subtotal")
+//                                            .font(.system(size: 12))
+//                                        
+//                                        Spacer()
+//                                        Text("202.64")
+//                                            .font(.system(size: 12))
+//                                    }
+//                                    .padding(10)
+//                                    HStack{
+//                                        Text("Total item")
+//                                            .font(.system(size: 12))
+//                                        Spacer()
+//                                        Text("1")
+//                                            .font(.system(size: 12))
+//                                    }
+//                                    .padding(10)
+//                                    HStack{
+//                                        Text("Total Qty")
+//                                            .font(.system(size: 12))
+//                                        Spacer()
+//                                        Text("1")
+//                                            .font(.system(size: 12))
+//                                    }
+//                                    .padding(10)
+//                                    HStack{
+//                                        Text("GST 12%")
+//                                            .font(.system(size: 12))
+//                                        Spacer()
+//                                        Text("23.64")
+//                                            .font(.system(size: 12))
+//                                    }
+//                                    .padding(10)
+//                                    Rectangle()
+//                                        .foregroundColor(Color.gray)
+//                                        .frame(height: 1)
+//                                        .padding(10)
+//                                }
                             }
                             HStack{
                                 Text("NET AMOUNT")

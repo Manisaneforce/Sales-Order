@@ -9,6 +9,8 @@ import SwiftUI
 import Alamofire
 import Combine
 import CoreLocation
+import AWSS3
+import AWSCore
 struct AddAddress : Any{
     let listedDrCode:String
     let address : String
@@ -182,6 +184,25 @@ struct My_Profile: View {
                                 .font(.system(size: 14))
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black)
+                                .onTapGesture {
+                                    func uploadImage() {
+                                            guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: "USW2S3") else { return }
+
+                                            let image = UIImage(named: "example.jpg")!
+                                            if let imageData = image.jpegData(compressionQuality: 0.8) {
+                                                let expression = AWSS3TransferUtilityUploadExpression()
+                                                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg")
+                                                try? imageData.write(to: fileURL)
+                                                transferUtility.uploadFile(fileURL, bucket: "relivet", key: "example.jpg", contentType: "image/jpeg", expression: expression, completionHandler: { task, error in
+                                                    if let error = error {
+                                                        print("Error uploading image: \(error.localizedDescription)")
+                                                    } else {
+                                                        print("Image uploaded successfully")
+                                                    }
+                                                })
+                                            }
+                                        }
+                                }
                             Spacer()
                             Image("back")
                             
@@ -361,7 +382,7 @@ struct My_Profile: View {
                             Image("Drug License:s copies or self-declaratio")
                                 .resizable()
                                 .frame(width: 20,height: 20)
-                            Text("Drug License/s copies or self-declaration")
+                            Text("Drug Licenses copies or self-declaration")
                                 .font(.system(size: 14))
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black)

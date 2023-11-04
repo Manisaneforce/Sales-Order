@@ -6,6 +6,7 @@ use_modular_headers!
 target 'Sales Order' do
   # ...
   pod 'Jiopay-pg-uat', '~> 0.0.19'
+  pod 'AWSS3'
   # ...
 end
 
