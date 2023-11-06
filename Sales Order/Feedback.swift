@@ -390,7 +390,6 @@ struct ReachOut:View{
                                     .foregroundColor(.black)
                                     .fontWeight(.bold)
                                     .padding(.leading,8)
-                                
                                 Spacer()
                                 Image("back")
                                 

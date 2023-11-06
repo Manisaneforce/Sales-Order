@@ -33,6 +33,7 @@ struct ContentView: View {
     @State private var jsondata = Outputdata()
     @State private var StoragePhoneNumber = ""
     @State private var userEmail:String = UserDefaults.standard.string(forKey: "savedPhoneNumber") ?? ""
+    @State private var PrivacySc = UserDefaults.standard.string(forKey: "Privacydata") ?? ""
     @State private var HomePageNvigater:Bool = false
    // @State private var jsondata = JSONData()
 
@@ -69,6 +70,10 @@ struct ContentView: View {
                             
                             LottieUIView(filename: "mobile_number").frame(width: 150,height: 150)
                                 .onAppear {
+                                    print(PrivacySc)
+                                    if (PrivacySc == ""){
+                                        PriPolicy()
+                                    }
                                     print("Saved Value  \(userEmail)")
                                     if userEmail.isEmpty{
                                         //HomePageNvigater = false
@@ -225,6 +230,11 @@ struct ContentView: View {
         .navigationBarHidden(true)
         
             }
+    func PriPolicy(){
+        if let window = UIApplication.shared.windows.first {
+            window.rootViewController = UIHostingController(rootView: PrivacyPolicy())
+        }
+    }
         }
 
     struct ContentView_Previews: PreviewProvider {
@@ -260,5 +270,78 @@ struct AddNewView: View {
                 
             }
         }
+    }
+}
+
+struct PrivacyPolicy:View{
+    @State private var isChecked = false
+   
+    var body: some View{
+        VStack{
+            ZStack{
+                Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .frame(height: 80)
+                HStack {
+                    Text("PRIVACY POLICY")
+                        .font(.system(size: 18))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                        .padding(.leading,10)
+                    
+                    Spacer()
+                    
+                }
+                
+            }
+            .edgesIgnoringSafeArea(.top)
+            .frame(maxWidth: .infinity)
+            .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+            WebViews(urlString: "https://rad.salesjump.in/server/radprivacy.html")
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            
+            Spacer()
+            VStack(spacing: 10){
+                HStack{
+                    Image(systemName: isChecked ? "checkmark.square.fill" : "square")
+                        .resizable()
+                        .frame(width: 20,height: 20)
+                        .onTapGesture {
+                            isChecked.toggle()
+                        }
+                    Text("Accept privacy policy")
+                        .font(.system(size: 13))
+                    
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.horizontal,10)
+                ZStack{
+                    Rectangle()
+                        .foregroundColor(isChecked ? ColorData.shared.HeaderColor : .gray)
+                        .frame(height: 40)
+                        .cornerRadius(10)
+                    Text("Continue")
+                        .foregroundColor(.white)
+                        .font(.system(size: 15))
+                        .fontWeight(.bold)
+                }
+                .padding(.horizontal,10)
+                .onTapGesture {
+                    if (isChecked == true){
+                        print(isChecked)
+                        UserDefaults.standard.set(isChecked, forKey: "Privacydata")
+                        if let window = UIApplication.shared.windows.first {
+                            window.rootViewController = UIHostingController(rootView: ContentView())
+                        }
+                    }else{
+                    
+                    }
+                }
+            }
+              
+        }
+        
     }
 }
