@@ -79,6 +79,7 @@ struct OTPVerify: View {
                           
                             
                                 .onAppear {
+                                    Toast(mes: ShowToastMes.shared.tost)
                                     startTimer()
                                 }
                                 .onDisappear {
@@ -128,11 +129,7 @@ struct OTPVerify: View {
                                 
                             }
                             
-                            ZStack{
-                                Rectangle()
-                                    .foregroundColor(ColorData.shared.HeaderColor)
-                                    .frame(height: 40)
-                                    .cornerRadius(2)
+                           
                                 Button(action: {
                                     print("JSON Data: \(jsondata.data)")
                                     let otpNumber = enterValue[0]+enterValue[1]+enterValue[2]+enterValue[3]+enterValue[4]+enterValue[5]
@@ -243,23 +240,26 @@ struct OTPVerify: View {
                                         }
                                         
                                     }else{
-                                        toststring = "Pls Enter Correct OTP"
-                                        showToast = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                            showToast = false
-                                        }
+                                       
+                                        Toast(mes: "Pls Enter Correct OTP")
+                                      
                                     }
                                     
                                 }){
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .frame(height: 40)
+                                            .cornerRadius(2)
                                     Text("Verify")
                                         .fontWeight(.semibold)
                                         .font(.title)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
-                                    
                                 }
-                            }
-                            .padding(15)
+                                .padding(15)
+                                }
+                           
                             
                             if showResendButton {
                                 Button(action: {
@@ -300,7 +300,7 @@ struct OTPVerify: View {
         }
             .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
-        .toast(isPresented: $showToast, message: "\(toststring)")
+        .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
             
                 
             
@@ -323,6 +323,21 @@ struct OTPVerify: View {
                 timer = nil
             }
         }
+    }
+    private func Toast(mes:String){
+        
+        ShowToastMes.shared.tost = mes
+        if (ShowToastMes.shared.tost != "" ){
+            showToast = true
+          
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                if (showToast == true){
+                    ShowToastMes.shared.tost = ""
+                }
+            showToast = false
+        }
+            
+    }
     }
 }
 

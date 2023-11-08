@@ -118,11 +118,7 @@ struct ContentView: View {
                             
                             
                             if #available(iOS 15.0, *) {
-                                ZStack{
-                                    Rectangle()
-                                        .foregroundColor(ColorData.shared.HeaderColor)
-                                        .frame(height: 40)
-                                        .cornerRadius(2)
+ 
                                     Button(action: {
                                         
                                         let axn = "send/sms"
@@ -152,7 +148,8 @@ struct ContentView: View {
                                                         if mobileNumber.count < 10 {
                                                             // If the mobile number is less than 10 characters
                                                             print(json["result"] as? String ?? "")
-                                                            ShowTost = (json["result"] as? String ?? "")
+                                                            //ShowTost = (json["result"] as? String ?? "")
+                                                            ShowTost = "Please enter a valid mobile number"
                                                             showToast = true
                                                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                                 showToast = false
@@ -161,7 +158,8 @@ struct ContentView: View {
                                                             NavigteBoll = true
                                                             // If the mobile number is 10 characters or more
                                                             print(json["msg"] as? String ?? "")
-                                                            ShowTost = json["msg"] as? String ?? ""
+                                                            //ShowTost = json["msg"] as? String ?? ""
+                                                            ShowToastMes.shared.tost = "OTP sent successfully"
                                                             showToast = true
                                                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                                 showToast = false
@@ -177,18 +175,21 @@ struct ContentView: View {
                                                 }
                                             }
                                     }) {
+                                        ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .frame(height: 40)
+                                            .cornerRadius(2)
                                         Text("SEND OTP")
-                                        //.font(.title)
                                             .fontWeight(.heavy)
                                             .foregroundColor(.white)
                                             .font(.system(size: 18))
                                             .multilineTextAlignment(.center)
-                                        //.frame(width: 325, height: 40)
-                                            .background(ColorData.shared.HeaderColor)
                                             .cornerRadius(10)
+                                        }
+                                        .padding(15)
                                     }
-                                }
-                                .padding(15)
+
                                 
                                 
                             }
@@ -200,7 +201,7 @@ struct ContentView: View {
                                     ) {
                                         EmptyView()
                                     }
-                                } else {
+                                } else{
                                     // Handle non-iOS 15 case if needed
                                 }
                             }
@@ -336,12 +337,14 @@ struct PrivacyPolicy:View{
                             window.rootViewController = UIHostingController(rootView: ContentView())
                         }
                     }else{
-                    
                     }
                 }
             }
-              
         }
-        
     }
 }
+
+//Full Button  click in Mobile Number Screen and OTP Screen == Error Fix But Didn't Show Toast
+//Product not Change In Click Button RV Test = Error Fix
+//Aliment Change In List View In MY Order Screen =  Error fix
+//Didn’t save Discount Value in order Submite = Fix Error

@@ -137,6 +137,8 @@ struct Order: View {
     @State private var Disc:Bool = true
     @State private var isLoading = true
     @State private var isManiView:Bool = false
+    @State private var prodTypes1 = [String]()
+    @State private var Typofid = [Int]()
 
     var body: some View {
         if OredSc{
@@ -281,7 +283,8 @@ struct Order: View {
                                     Button(action:{
                                         print(prettyPrintedJson[index].id)
                                         isLoading = true
-                                        
+                                        prodTypes1.removeAll()
+                                        Typofid.removeAll()
                                         if selectedGorup == index {
                                             selectedGorup = index
                                             
@@ -413,8 +416,9 @@ struct Order: View {
                                     }
                                     print(prettyPrintedJson)
                                 }
+                                OrderProdTyp()
                             }
-                            OrderProdTyp()
+                            
                             
                             Sales_Order.prodDets{
                                 json in
@@ -1059,13 +1063,16 @@ struct Order: View {
             if let jsonData = json.data(using: .utf8) {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                        var prodTypes1 = [String]()
-                        var Typofid = [Int]()
                         print(jsonArray)
+                        print(selectedGorup as Any)
                         let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup!) }
                         print(jsonArrays)
+                        print(jsonArrays.count)
                         for item in jsonArrays {
-                          
+                          print(item)
+                            print(item.count)
+                            print(prodTypes1)
+                            print(Typofid)
                             if let textName = item["name"] as? String , let typid = item["id"] as? Int {
                                 prodTypes1.append(textName)
                                 Typofid.append(typid)
@@ -1085,9 +1092,11 @@ struct Order: View {
         }
     }
     private func OrderprodCate(at index: Int){
+        print(prodTypes3)
         SelectId = prodTypes3[index]
         print(SelectId)
         prodofcat.removeAll()
+        proDetsID.removeAll()
         Sales_Order.prodCate { json in
             print(json)
             if let jsonData = json.data(using: .utf8) {
@@ -1109,7 +1118,9 @@ struct Order: View {
                                     
                                     prodofcat.append(procat)
                                     proDetsID.append(proDetID)
+                                    print(prodofcat)
                                     print(proDetsID)
+                                    
                                     
                                 }
                             }
@@ -1144,7 +1155,6 @@ struct Order: View {
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 print(procat)
                                 Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
-                                
                                 let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                 imgdataURL.append(inputText)
                                 Arry.append(proname)
@@ -1270,7 +1280,10 @@ struct Order: View {
                 print(FilterProduct)
                 let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
                 let Rate = FilterProduct[Cout]["Rate"] as? String
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: Rate!, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
+                let rateDouble = Double(Rate!)
+                let formattedRate = String(format: "₹ %.2f", rateDouble!)
+                print(formattedRate)
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
@@ -1394,6 +1407,24 @@ struct Address:View{
                 }
                 .frame(width: 350,height: 60)
                 .cornerRadius(10)
+                .onTapGesture {
+                    if SelMod == "SA"{
+                        ShpingAddress = CustDet.shared.Addr
+                        print(ShpingAddress)
+                        if isChecked == true{
+                            
+                        }else{
+                            ShpingAddress = BillingAddress
+                            
+                        }
+                    }
+                    if SelMod == "BA"{
+                        BillingAddress = CustDet.shared.Addr
+                        
+                    }
+                    ADDaddress = false
+                    
+                }
                 .onAppear{
                     
                     print(GetingAddress)
@@ -2921,7 +2952,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     var Tax_Val: Int = 0
     
     
-    
     if let Code = ProdItem["id"] as? String{
         PCODE = Code
     }
@@ -2929,7 +2959,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
         lstSchemListdata = list;
     }
-    
+    print(lstSchemListdata)
     var Schemes: [AnyObject] = lstSchemListdata.filter ({ (item) in
         if item["PCode"] as! String == PCODE && (item["Scheme"] as! NSString).doubleValue <= TotQty2 {
             return true
@@ -3123,6 +3153,7 @@ func updateOrderValues(refresh:Int){
 func deleteItem(at index: Int) {
     var ids = [String]()
     var id = ""
+   
     for allid in VisitData.shared.lstPrvOrder{
         ids.append(allid["id"] as! String)
     }
@@ -3138,7 +3169,7 @@ func deleteItem(at index: Int) {
 }
 
 func OrderSubmit(lat:String,log:String) {
-
+    var totalTaxAmt: Double = 0.0
     var sPItems:String = ""
     for i in 0..<VisitData.shared.lstPrvOrder.count {
         guard let item = VisitData.shared.lstPrvOrder[i] as? [String: Any],
@@ -3163,6 +3194,10 @@ func OrderSubmit(lat:String,log:String) {
             }
         }
         print(item)
+        print(VisitData.shared.lstPrvOrder)
+        let taxAmt = Double((item["Tax_Amt"] as? String)!)
+        totalTaxAmt += taxAmt!
+        
         let disc: String = item["Disc"] as? String ?? "0"
         let disVal: String = item["DisVal"] as? String ?? "0"
         let Product_Total_Qty = Int(item["Qty"] as! String)!
@@ -3184,10 +3219,10 @@ func OrderSubmit(lat:String,log:String) {
                sPItems = sPItems + " \"free\": \(Free),"
                sPItems = sPItems + " \"dis\": \"" + disc + "\","
                sPItems = sPItems + " \"dis_value\":\"" + disVal + "\","
-               sPItems = sPItems + " \"Off_Pro_code\":\"\","
-               sPItems = sPItems + " \"Off_Pro_name\":\"\","
+               sPItems = sPItems + " \"Off_Pro_code\":\"" + ((item["OffProd"] as? String)!) + "\","
+               sPItems = sPItems + " \"Off_Pro_name\":\"" + ((item["OffProdNm"] as? String)!) + "\","
                sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
-               sPItems = sPItems + " \"discount_type\":\"\","
+               sPItems = sPItems + " \"discount_type\":\"" + ((item["Tax_Type"] as? String)!) + "\","
                sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
                sPItems = sPItems + " \"UOM_Id\": \"2\","
                sPItems = sPItems + " \"UOM_Nm\": \"" + ((item["UOMNm"] as? String)!) + "\","
@@ -3208,7 +3243,8 @@ func OrderSubmit(lat:String,log:String) {
     print(ChangeDob)
     let Netamount = String(format: "%.02f", ChangeDob!)
     print(Netamount)
-    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(Netamount)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"Kartik Test\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"GST 12%\",\"Tax_Amt\":\"56.17\"}]},\"Order_Details\":[" + sPItems +  "]}]"
+    print(totalTaxAmt)
+    let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(Netamount)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"\(CustDet.shared.CusName)\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"\",\"Tax_Amt\":\"\(totalTaxAmt)\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
     
