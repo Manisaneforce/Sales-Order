@@ -1283,7 +1283,7 @@ struct Order: View {
                 let rateDouble = Double(Rate!)
                 let formattedRate = String(format: "₹ %.2f", rateDouble!)
                 print(formattedRate)
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate, NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
@@ -3195,8 +3195,14 @@ func OrderSubmit(lat:String,log:String) {
         }
         print(item)
         print(VisitData.shared.lstPrvOrder)
-        let taxAmt = Double((item["Tax_Amt"] as? String)!)
-        totalTaxAmt += taxAmt!
+        var taxAmt:Double = 0
+        if let taxAmt2 = Double((item["Tax_Amt"] as? String)!){
+            taxAmt = taxAmt2
+        }else{
+            print("no data")
+        }
+        
+        totalTaxAmt += taxAmt
         
         let disc: String = item["Disc"] as? String ?? "0"
         let disVal: String = item["DisVal"] as? String ?? "0"
