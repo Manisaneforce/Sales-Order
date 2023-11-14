@@ -818,7 +818,7 @@ struct OrderDetView:View{
                                 HStack{
                                     Text(SelectDet[index].Product_Name)
                                         .font(.system(size: 12))
-                                                    .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .center : .leading)
+                                                    .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
                                                     .multilineTextAlignment(.leading)
                                     
                                     Spacer()
@@ -841,7 +841,7 @@ struct OrderDetView:View{
                                         
                                         Text(SelectDet[index].value)
                                             .font(.system(size: 12))
-                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .center : .trailing)
+                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .trailing : .trailing)
                                         //.padding(-10)
                                         
                                     }

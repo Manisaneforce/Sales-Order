@@ -1149,7 +1149,7 @@ struct Order: View {
                   print(itemsWithTypID3)
                     if !itemsWithTypID3.isEmpty {
                         Allprods.removeAll()
-                        print(itemsWithTypID3.count)
+                        print(itemsWithTypID3)
                         for item in itemsWithTypID3 {
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
