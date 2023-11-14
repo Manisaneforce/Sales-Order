@@ -28,6 +28,7 @@
 		384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7032A99FABA009439E5 /* DeviceLocationService.swift */; };
 		384CB7062A9A205C009439E5 /* mobile_number.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB7052A9A205C009439E5 /* mobile_number.json */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
+		3860A79D2B0334E20067B583 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 3860A79C2B0334E20067B583 /* URLImage */; };
 		386AB3162AB1D3EA00FF49D2 /* My Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386AB3152AB1D3EA00FF49D2 /* My Profile.swift */; };
 		386AB3182AB1D49B00FF49D2 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386AB3172AB1D49B00FF49D2 /* Feedback.swift */; };
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
@@ -145,6 +146,7 @@
 				387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */,
 				3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */,
 				38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */,
+				3860A79D2B0334E20067B583 /* URLImage in Frameworks */,
 				383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */,
 				7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */,
 			);
@@ -352,6 +354,7 @@
 				38A3AEC92A8A1EFF00A4C826 /* Lottie */,
 				3838004E2AB9AFB30058F546 /* FirebaseAnalytics */,
 				383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */,
+				3860A79C2B0334E20067B583 /* URLImage */,
 			);
 			productName = "Sales Order";
 			productReference = 38EEBC572A7A255F00AEF032 /* Sales Order.app */;
@@ -432,6 +435,7 @@
 				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
 				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
 			projectDirPath = "";
@@ -967,6 +971,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dmytro-anokhin/url-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
 		387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -1003,6 +1015,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsSwift;
+		};
+		3860A79C2B0334E20067B583 /* URLImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */;
+			productName = URLImage;
 		};
 		387E0E7A2A84F7C000FEACBA /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

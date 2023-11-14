@@ -349,6 +349,26 @@ func DashBoradImg(){
         case .failure(let error):
             print(error)
         }
-        
+    }
+}
+
+
+struct DasImageView: View {
+    let url: String
+    
+    var body: some View {
+        let modifiedUrlString = url.replacingOccurrences(of: " ", with: "%20")
+        print(modifiedUrlString)
+        if let imageURL = URL(string: modifiedUrlString), let imageData = try? Data(contentsOf: imageURL), let uiImage = UIImage(data: imageData) {
+            return Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 75, height: 75)
+        } else {
+            return Image("logo_new")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 75, height: 75)
+        }
     }
 }

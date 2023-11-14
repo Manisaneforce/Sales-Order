@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import URLImage
 //import Jiopay_pg_uat
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
@@ -47,9 +48,8 @@ struct PaymentScreen: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
-                            
+        
                             Spacer()
-                            
                         }
                         
                     }
@@ -491,3 +491,6 @@ struct DataRow: View {
             .padding()
     }
 }
+
+
+

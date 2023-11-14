@@ -134,6 +134,15 @@
         "revision" : "3c54ab05249f59f2c6641dd2920b8358ea9ed127",
         "version" : "1.24.0"
       }
+    },
+    {
+      "identity" : "url-image",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dmytro-anokhin/url-image",
+      "state" : {
+        "revision" : "22eca5ee4f317e0283da75426849ee23f0516022",
+        "version" : "0.9.19"
+      }
     }
   ],
   "version" : 2

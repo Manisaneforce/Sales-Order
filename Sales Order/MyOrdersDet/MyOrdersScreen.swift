@@ -519,7 +519,10 @@ struct OrderDetView:View{
     @Binding var TotalVal:String
     @State private var isShowingSheet = false
     @State private var PagHeight:Int = 800
-    
+    @State private var tax12:Double = 0.0
+    @State private var tax18:Double = 0.0
+    @State private var NewQty:Int = 0
+    @State private var umounit:Int = 0
     var body: some View{
         NavigationView{
         ZStack{
@@ -685,7 +688,7 @@ struct OrderDetView:View{
                                             .font(.system(size: 15))
                                             .fontWeight(.bold)
                                         Spacer()
-                                        HStack(spacing:30){
+                                        HStack(spacing:40){
                                             Text("UOM")
                                                 .font(.system(size: 15))
                                                 .fontWeight(.bold)
@@ -731,9 +734,48 @@ struct OrderDetView:View{
                                                 if let jsonData = prettyPrintedJson.data(using: .utf8){
                                                     do{
                                                         if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                                                            print(jsonArray)
+                                                            
                                                             for Items in jsonArray{
                                                                 print(Items)
-                                                                
+                                                                if let TAX_details = Items["TAX_details"] as? [[String: Any]] {
+                                                                    // Print the entire TAX_details array
+                                                                    print(TAX_details)
+                                                                    
+                                                                   
+                                                                    if let firstTaxDetail = TAX_details.first {
+                                                                   
+                                                                        if let taxName = firstTaxDetail["Tax_Name"] as? String {
+                                                                          
+                                                                            print("Tax Name: \(taxName)")
+                                                                            if (taxName == "GST 18%,") {
+                                                                                print("GST 18%")
+                                                                                print(firstTaxDetail)
+                                                                                if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
+                                                                                    tax18 += taxamt
+                                                                                }
+                                                                              
+                                                                            }
+                                                                            
+                                                                            if (taxName == "GST 12%,") {
+                                                                                print("GST 12%")
+                                                                                print(firstTaxDetail)
+                                                                                if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
+                                                                                    tax12 += taxamt
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        print("TAX_details is empty")
+                                                                    }
+                                                                } else {
+                                                                    print("TAX_details is not a valid array")
+                                                                }
+                                                                if let totqty
+                                                                    = Items["New_Qty"] as? Int {
+                                                                    NewQty += totqty
+                                                                }
+                                                                umounit += 1
                                                                 let Product_Name = Items["Product_Name"] as? String
                                                                 let UOM = Items["UOM"] as? String
                                                                 let New_Qty = String((Items["New_Qty"] as? Int)!)
@@ -756,6 +798,8 @@ struct OrderDetView:View{
                                                                 
                                                                 SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, value: value))
                                                             }
+                                                            print(tax12)
+                                                            print(tax18)
                                                         }
                                                     } catch{
                                                         print("Error Data")
@@ -788,13 +832,16 @@ struct OrderDetView:View{
                                         
                                         Text(SelectDet[index].New_Qty)
                                             .font(.system(size: 12))
+                                            .frame(width: 20)
                                         
                                         Text(SelectDet[index].BillRate)
                                             .font(.system(size: 12))
+                                            .frame(width: 50)
                                             .multilineTextAlignment(.center)
                                         
                                         Text(SelectDet[index].value)
                                             .font(.system(size: 12))
+                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .center : .trailing)
                                         //.padding(-10)
                                         
                                     }
@@ -826,45 +873,57 @@ struct OrderDetView:View{
                                     .foregroundColor(Color.gray)
                                     .frame(height: 1)
                                     .padding(10)
-//                                VStack(spacing:-10){
-//                                    HStack{
-//                                        Text("Subtotal")
-//                                            .font(.system(size: 12))
-//                                        
-//                                        Spacer()
-//                                        Text("202.64")
-//                                            .font(.system(size: 12))
-//                                    }
-//                                    .padding(10)
-//                                    HStack{
-//                                        Text("Total item")
-//                                            .font(.system(size: 12))
-//                                        Spacer()
-//                                        Text("1")
-//                                            .font(.system(size: 12))
-//                                    }
-//                                    .padding(10)
-//                                    HStack{
-//                                        Text("Total Qty")
-//                                            .font(.system(size: 12))
-//                                        Spacer()
-//                                        Text("1")
-//                                            .font(.system(size: 12))
-//                                    }
-//                                    .padding(10)
-//                                    HStack{
-//                                        Text("GST 12%")
-//                                            .font(.system(size: 12))
-//                                        Spacer()
-//                                        Text("23.64")
-//                                            .font(.system(size: 12))
-//                                    }
-//                                    .padding(10)
-//                                    Rectangle()
-//                                        .foregroundColor(Color.gray)
-//                                        .frame(height: 1)
-//                                        .padding(10)
-//                                }
+                                VStack(spacing:-10){
+                                    HStack{
+                                        Text("Subtotal")
+                                            .font(.system(size: 12))
+
+                                        Spacer()
+                                        Text(TotalVal)
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    HStack{
+                                        Text("Total item")
+                                            .font(.system(size: 12))
+                                        Spacer()
+                                        Text("\(umounit)")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    HStack{
+                                        Text("Total Qty")
+                                            .font(.system(size: 12))
+                                        Spacer()
+                                        Text("\(NewQty)")
+                                            .font(.system(size: 12))
+                                    }
+                                    .padding(10)
+                                    if tax18 != 0.0{
+                                        HStack{
+                                            Text("GST 18%")
+                                                .font(.system(size: 12))
+                                            Spacer()
+                                            Text("\(tax18)")
+                                                .font(.system(size: 12))
+                                        }
+                                        .padding(10)
+                                    }
+                                    if tax12 != 0.0 {
+                                        HStack{
+                                            Text("GST 12%")
+                                                .font(.system(size: 12))
+                                            Spacer()
+                                            Text("\(tax12)")
+                                                .font(.system(size: 12))
+                                        }
+                                        .padding(10)
+                                    }
+                                    Rectangle()
+                                        .foregroundColor(Color.gray)
+                                        .frame(height: 1)
+                                        .padding(10)
+                                }
                             }
                             HStack{
                                 Text("NET AMOUNT")
