@@ -75,7 +75,7 @@ struct Jiomoney: View {
                     .padding(.horizontal,10)
                     .onTapGesture {
                         if let window = UIApplication.shared.windows.first {
-                            window.rootViewController = UIHostingController(rootView: HomePage())
+                            window.rootViewController = UIHostingController(rootView: ContentView())
                         }
                     }
                 }
@@ -129,10 +129,10 @@ struct WebView: UIViewRepresentable {
                 let myHostVariable = host
                 print(myHostVariable)
                 
-                if myHostVariable == "rad.salesjump.in" {
-                    self.parent.ShowButton.toggle()
-                    self.parent.backBT.toggle()
-                               }
+//                if myHostVariable == "rad.salesjump.in" {
+//                    self.parent.ShowButton.toggle()
+//                    self.parent.backBT.toggle()
+//                               }
             }
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {

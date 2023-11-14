@@ -51,3 +51,7 @@ class VisitData{
 }
 
 
+class hostdata{
+    static var shared = hostdata()
+    var Host: String = ""
+}
