@@ -11,7 +11,6 @@ import WebKit
 
 struct Jiomoney: View {
     
-    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showAlert = false
     @State private var ShowButton:Bool = false
@@ -38,8 +37,8 @@ struct Jiomoney: View {
                             }
                             .alert(isPresented: $showAlert) {
                                 Alert(
-                                    title: Text("Cancel Payment"),
-                                    message: Text("Do you want to cancel this payment?"),
+                                    title: Text("Payment"),
+                                    message: Text("Do you want to Back?"),
                                     primaryButton: .cancel(Text("No")),
                                     secondaryButton: .destructive(Text("Yes")) {
                                         self.presentationMode.wrappedValue.dismiss()
@@ -61,7 +60,7 @@ struct Jiomoney: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 WebView(htmlString: html, ShowButton: $ShowButton, backBT: $backBT)
-                if ShowButton{
+                if hostdata.shared.Host == "rad.salesjump.in"{
                     ZStack{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
@@ -99,6 +98,7 @@ struct WebView: UIViewRepresentable {
     let htmlString: String
     @Binding var ShowButton:Bool
     @Binding var backBT:Bool
+    @State private var bac:String = ""
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
@@ -116,20 +116,20 @@ struct WebView: UIViewRepresentable {
 
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: WebView
-
+        var Hostname:String = ""
         init(_ parent: WebView) {
             self.parent = parent
         }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            // Inject JavaScript code after 2 seconds
             print(webView.url?.host as Any)
             if let host = webView.url?.host {
-                // Store the host in a new variable
                 let myHostVariable = host
                 print(myHostVariable)
-                
-//                if myHostVariable == "rad.salesjump.in" {
+                print(parent)
+                Hostname = myHostVariable
+                    hostname(data: myHostVariable)
+//                if myHostVariable == "rad.salesjump.in"{
 //                    self.parent.ShowButton.toggle()
 //                    self.parent.backBT.toggle()
 //                               }
@@ -141,4 +141,9 @@ struct WebView: UIViewRepresentable {
             }
         }
     }
+   
+}
+
+func hostname(data:String){
+    hostdata.shared.Host = data
 }

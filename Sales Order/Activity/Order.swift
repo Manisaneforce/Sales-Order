@@ -1262,11 +1262,14 @@ struct Order: View {
                 DisVal = (items[0]["DisVal"] as? String)!
                 FreeQty = String((items[0]["FQ"] as? Int)!)
                 FreePrd = (items[0]["OffProdNm"] as? String)!
-                let TaxAmt = (items[0]["Tax_Amt"] as? String)!
+                var TaxAmt = (items[0]["Tax_Amt"] as? String)!
                 print(Dis)
                 print(DisVal)
                 print(FreeQty)
                 print(TaxAmt)
+                if TaxAmt == ""{
+                    TaxAmt = "0.00"
+                }
                 SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd, Tax_Amt: TaxAmt))
                 print(items)
                 print(Amount as Any)
