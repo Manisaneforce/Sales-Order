@@ -9,24 +9,17 @@
 /* Begin PBXBuildFile section */
 		2EC4D95DC001D6144D6D4296 /* libPods-Sales OrderUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */; };
 		3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE1A2A8A52070069B136 /* LottieUIURL.swift */; };
-		3801AE202A8C8A830069B136 /* OTP.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE1F2A8C8A830069B136 /* OTP.json */; };
-		3801AE222A8C8BD70069B136 /* Call.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE212A8C8BD70069B136 /* Call.json */; };
-		3801AE242A8C90970069B136 /* Msg.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE232A8C90970069B136 /* Msg.json */; };
-		3801AE262A8C9A840069B136 /* Order.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE252A8C9A840069B136 /* Order.json */; };
 		3801AE282A8E17C80069B136 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE272A8E17C80069B136 /* APIClient.swift */; };
-		3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */ = {isa = PBXBuildFile; fileRef = 3801AE292A8E551A0069B136 /* Phonering.json */; };
 		383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */; };
 		3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3838004B2AB9AE320058F546 /* GoogleService-Info.plist */; };
 		3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3838004E2AB9AFB30058F546 /* FirebaseAnalytics */; };
 		383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */; };
 		38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
-		384CB6FB2A98A905009439E5 /* order Submite.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB6FA2A98A905009439E5 /* order Submite.json */; };
 		384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */; };
 		384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FE2A98B20A009439E5 /* LocationService.swift */; };
 		384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7002A98B5B1009439E5 /* Loctionfile.swift */; };
 		384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7032A99FABA009439E5 /* DeviceLocationService.swift */; };
-		384CB7062A9A205C009439E5 /* mobile_number.json in Resources */ = {isa = PBXBuildFile; fileRef = 384CB7052A9A205C009439E5 /* mobile_number.json */; };
 		38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38595AE62A8A3DFB005EB704 /* LottieUIView.swift */; };
 		3860A79D2B0334E20067B583 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 3860A79C2B0334E20067B583 /* URLImage */; };
 		386AB3162AB1D3EA00FF49D2 /* My Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386AB3152AB1D3EA00FF49D2 /* My Profile.swift */; };
@@ -34,14 +27,22 @@
 		387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7A2A84F7C000FEACBA /* Alamofire */; };
 		387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 387E0E7D2A85F5CF00FEACBA /* SimpleToast */; };
 		387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387E0E842A85F7A600FEACBA /* Showtoast.swift */; };
-		38850A9E2AB3435D005061EE /* loader.json in Resources */ = {isa = PBXBuildFile; fileRef = 38850A9D2AB3435D005061EE /* loader.json */; };
 		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
-		38A54D112B0F2EF2009E8976 /* Animation - 1700722458471.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */; };
+		38A54D1D2B0F3433009E8976 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D122B0F3433009E8976 /* Gettingloction.json */; };
+		38A54D1E2B0F3433009E8976 /* Animation - 1700722458471.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D132B0F3433009E8976 /* Animation - 1700722458471.json */; };
+		38A54D1F2B0F3433009E8976 /* loader.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D142B0F3433009E8976 /* loader.json */; };
+		38A54D202B0F3433009E8976 /* Order.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D152B0F3433009E8976 /* Order.json */; };
+		38A54D212B0F3433009E8976 /* Call.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D162B0F3433009E8976 /* Call.json */; };
+		38A54D222B0F3433009E8976 /* OTP.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D172B0F3433009E8976 /* OTP.json */; };
+		38A54D232B0F3433009E8976 /* mobile_number.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D182B0F3433009E8976 /* mobile_number.json */; };
+		38A54D242B0F3433009E8976 /* Phonering.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D192B0F3433009E8976 /* Phonering.json */; };
+		38A54D252B0F3433009E8976 /* Msg.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D1A2B0F3433009E8976 /* Msg.json */; };
+		38A54D262B0F3433009E8976 /* order Submite.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D1B2B0F3433009E8976 /* order Submite.json */; };
+		38A54D272B0F3433009E8976 /* something_went_wrong.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D1C2B0F3433009E8976 /* something_went_wrong.json */; };
 		38A659CD2AA98E390020E543 /* Jiomoney.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A659CC2AA98E390020E543 /* Jiomoney.swift */; };
-		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
 		38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */; };
 		38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */; };
 		38AAC4D92AEFC49700D469DF /* S3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AAC4D82AEFC49700D469DF /* S3.swift */; };
@@ -57,7 +58,6 @@
 		38EEBC762A7A256000AEF032 /* Sales_OrderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */; };
 		38EEBC782A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */; };
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
-		38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */ = {isa = PBXBuildFile; fileRef = 38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */; };
 		7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */; };
 		E5F4656E514EFC0040E6C8CD /* libPods-Sales OrderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */; };
 /* End PBXBuildFile section */
@@ -84,34 +84,35 @@
 		0B005EB0D9C5857691C5B1DE /* Pods-Sales OrderUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderUITests.debug.xcconfig"; path = "Target Support Files/Pods-Sales OrderUITests/Pods-Sales OrderUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3801AE1A2A8A52070069B136 /* LottieUIURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIURL.swift; sourceTree = "<group>"; };
-		3801AE1F2A8C8A830069B136 /* OTP.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = OTP.json; path = ../../../UI/OTP.json; sourceTree = "<group>"; };
-		3801AE212A8C8BD70069B136 /* Call.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Call.json; path = ../../../UI/Call.json; sourceTree = "<group>"; };
-		3801AE232A8C90970069B136 /* Msg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Msg.json; path = ../../../UI/Msg.json; sourceTree = "<group>"; };
-		3801AE252A8C9A840069B136 /* Order.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Order.json; path = ../../../UI/Order.json; sourceTree = "<group>"; };
 		3801AE272A8E17C80069B136 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		3801AE292A8E551A0069B136 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Phonering.json; path = ../../../UI/Phonering.json; sourceTree = "<group>"; };
 		383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Cloud Messaging.swift"; sourceTree = "<group>"; };
 		3838004B2AB9AE320058F546 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterFile.swift; sourceTree = "<group>"; };
 		384CB6F42A9608D4009439E5 /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
-		384CB6FA2A98A905009439E5 /* order Submite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "order Submite.json"; path = "../../../UI/order Submite.json"; sourceTree = "<group>"; };
 		384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		384CB6FE2A98B20A009439E5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		384CB7002A98B5B1009439E5 /* Loctionfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loctionfile.swift; sourceTree = "<group>"; };
 		384CB7022A99F794009439E5 /* Sales-Order-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Sales-Order-Info.plist"; sourceTree = SOURCE_ROOT; };
 		384CB7032A99FABA009439E5 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
-		384CB7052A9A205C009439E5 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mobile_number.json; path = ../../../../Downloads/mobile_number.json; sourceTree = "<group>"; };
 		38595AE62A8A3DFB005EB704 /* LottieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIView.swift; sourceTree = "<group>"; };
 		386AB3152AB1D3EA00FF49D2 /* My Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "My Profile.swift"; sourceTree = "<group>"; };
 		386AB3172AB1D49B00FF49D2 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
 		387E0E842A85F7A600FEACBA /* Showtoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showtoast.swift; sourceTree = "<group>"; };
-		38850A9D2AB3435D005061EE /* loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = loader.json; path = ../../../../Downloads/loader.json; sourceTree = "<group>"; };
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
-		38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1700722458471.json"; sourceTree = "<group>"; };
+		38A54D122B0F3433009E8976 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Gettingloction.json; sourceTree = "<group>"; };
+		38A54D132B0F3433009E8976 /* Animation - 1700722458471.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1700722458471.json"; sourceTree = "<group>"; };
+		38A54D142B0F3433009E8976 /* loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loader.json; sourceTree = "<group>"; };
+		38A54D152B0F3433009E8976 /* Order.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Order.json; sourceTree = "<group>"; };
+		38A54D162B0F3433009E8976 /* Call.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Call.json; sourceTree = "<group>"; };
+		38A54D172B0F3433009E8976 /* OTP.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = OTP.json; sourceTree = "<group>"; };
+		38A54D182B0F3433009E8976 /* mobile_number.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mobile_number.json; sourceTree = "<group>"; };
+		38A54D192B0F3433009E8976 /* Phonering.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Phonering.json; sourceTree = "<group>"; };
+		38A54D1A2B0F3433009E8976 /* Msg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Msg.json; sourceTree = "<group>"; };
+		38A54D1B2B0F3433009E8976 /* order Submite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "order Submite.json"; sourceTree = "<group>"; };
+		38A54D1C2B0F3433009E8976 /* something_went_wrong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = something_went_wrong.json; sourceTree = "<group>"; };
 		38A659CC2AA98E390020E543 /* Jiomoney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jiomoney.swift; sourceTree = "<group>"; };
-		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
 		38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersDetails.swift; sourceTree = "<group>"; };
 		38AAC4D82AEFC49700D469DF /* S3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3.swift; sourceTree = "<group>"; };
@@ -130,7 +131,6 @@
 		38EEBC752A7A256000AEF032 /* Sales_OrderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITests.swift; sourceTree = "<group>"; };
 		38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = something_went_wrong.json; path = ../../../../Downloads/something_went_wrong.json; sourceTree = "<group>"; };
 		4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales Order.release.xcconfig"; path = "Target Support Files/Pods-Sales Order/Pods-Sales Order.release.xcconfig"; sourceTree = "<group>"; };
 		A8870ADAAC2AE985DA866047 /* Pods-Sales OrderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales OrderTests.debug.xcconfig"; path = "Target Support Files/Pods-Sales OrderTests/Pods-Sales OrderTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -189,17 +189,17 @@
 		3801AE1E2A8C8A700069B136 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
-				3801AE1F2A8C8A830069B136 /* OTP.json */,
-				3801AE212A8C8BD70069B136 /* Call.json */,
-				384CB6FA2A98A905009439E5 /* order Submite.json */,
-				3801AE232A8C90970069B136 /* Msg.json */,
-				3801AE252A8C9A840069B136 /* Order.json */,
-				38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */,
-				3801AE292A8E551A0069B136 /* Phonering.json */,
-				384CB7052A9A205C009439E5 /* mobile_number.json */,
-				38850A9D2AB3435D005061EE /* loader.json */,
-				38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */,
-				38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */,
+				38A54D132B0F3433009E8976 /* Animation - 1700722458471.json */,
+				38A54D162B0F3433009E8976 /* Call.json */,
+				38A54D122B0F3433009E8976 /* Gettingloction.json */,
+				38A54D142B0F3433009E8976 /* loader.json */,
+				38A54D182B0F3433009E8976 /* mobile_number.json */,
+				38A54D1A2B0F3433009E8976 /* Msg.json */,
+				38A54D1B2B0F3433009E8976 /* order Submite.json */,
+				38A54D152B0F3433009E8976 /* Order.json */,
+				38A54D172B0F3433009E8976 /* OTP.json */,
+				38A54D192B0F3433009E8976 /* Phonering.json */,
+				38A54D1C2B0F3433009E8976 /* something_went_wrong.json */,
 			);
 			name = Lottie;
 			path = ../Lottie;
@@ -456,21 +456,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				384CB6FB2A98A905009439E5 /* order Submite.json in Resources */,
-				3801AE2A2A8E551A0069B136 /* Phonering.json in Resources */,
-				384CB7062A9A205C009439E5 /* mobile_number.json in Resources */,
-				38850A9E2AB3435D005061EE /* loader.json in Resources */,
-				3801AE222A8C8BD70069B136 /* Call.json in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
-				38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */,
+				38A54D1E2B0F3433009E8976 /* Animation - 1700722458471.json in Resources */,
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
-				3801AE202A8C8A830069B136 /* OTP.json in Resources */,
+				38A54D272B0F3433009E8976 /* something_went_wrong.json in Resources */,
+				38A54D262B0F3433009E8976 /* order Submite.json in Resources */,
+				38A54D1F2B0F3433009E8976 /* loader.json in Resources */,
+				38A54D242B0F3433009E8976 /* Phonering.json in Resources */,
 				38EEBC5F2A7A256000AEF032 /* Assets.xcassets in Resources */,
-				38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */,
-				3801AE242A8C90970069B136 /* Msg.json in Resources */,
-				3801AE262A8C9A840069B136 /* Order.json in Resources */,
-				38A54D112B0F2EF2009E8976 /* Animation - 1700722458471.json in Resources */,
+				38A54D212B0F3433009E8976 /* Call.json in Resources */,
+				38A54D1D2B0F3433009E8976 /* Gettingloction.json in Resources */,
+				38A54D202B0F3433009E8976 /* Order.json in Resources */,
+				38A54D252B0F3433009E8976 /* Msg.json in Resources */,
 				3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */,
+				38A54D222B0F3433009E8976 /* OTP.json in Resources */,
+				38A54D232B0F3433009E8976 /* mobile_number.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
