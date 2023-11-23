@@ -39,6 +39,7 @@
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
+		38A54D112B0F2EF2009E8976 /* Animation - 1700722458471.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */; };
 		38A659CD2AA98E390020E543 /* Jiomoney.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A659CC2AA98E390020E543 /* Jiomoney.swift */; };
 		38AA42DE2AA5D07100B8AA10 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */; };
 		38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */; };
@@ -108,6 +109,7 @@
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
+		38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1700722458471.json"; sourceTree = "<group>"; };
 		38A659CC2AA98E390020E543 /* Jiomoney.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jiomoney.swift; sourceTree = "<group>"; };
 		38AA42DD2AA5D07100B8AA10 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Gettingloction.json; path = ../../../../Downloads/Gettingloction.json; sourceTree = "<group>"; };
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				3801AE292A8E551A0069B136 /* Phonering.json */,
 				384CB7052A9A205C009439E5 /* mobile_number.json */,
 				38850A9D2AB3435D005061EE /* loader.json */,
+				38A54D102B0F2EF2009E8976 /* Animation - 1700722458471.json */,
 				38EEC7AB2AA0AF07004ACC3C /* something_went_wrong.json */,
 			);
 			name = Lottie;
@@ -466,6 +469,7 @@
 				38EEC7AC2AA0AF08004ACC3C /* something_went_wrong.json in Resources */,
 				3801AE242A8C90970069B136 /* Msg.json in Resources */,
 				3801AE262A8C9A840069B136 /* Order.json in Resources */,
+				38A54D112B0F2EF2009E8976 /* Animation - 1700722458471.json in Resources */,
 				3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
