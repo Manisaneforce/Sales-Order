@@ -206,12 +206,12 @@
 			isa = PBXGroup;
 			children = (
 				3801AE1E2A8C8A700069B136 /* Lottie */,
+				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				387E0E842A85F7A600FEACBA /* Showtoast.swift */,
 				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
 				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
 				384CB6F42A9608D4009439E5 /* VisitData.swift */,
 				384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */,
-				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
 				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
@@ -276,7 +276,6 @@
 		38EEBC592A7A255F00AEF032 /* Sales Order */ = {
 			isa = PBXGroup;
 			children = (
-				384CB7022A99F794009439E5 /* Sales-Order-Info.plist */,
 				387E0E7F2A85F62A00FEACBA /* common file */,
 				38A659CB2AA98E260020E543 /* Payment */,
 				38CADF342A810D8400842DC9 /* Activity */,
@@ -286,6 +285,7 @@
 				38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */,
 				38EEBC5E2A7A256000AEF032 /* Assets.xcassets */,
 				3838004B2AB9AE320058F546 /* GoogleService-Info.plist */,
+				384CB7022A99F794009439E5 /* Sales-Order-Info.plist */,
 				38EEBC602A7A256000AEF032 /* Preview Content */,
 				38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */,
 				38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */,
