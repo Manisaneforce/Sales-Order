@@ -72,6 +72,7 @@ struct HomePage: View {
                                         primaryButton: .default(Text("OK")) {
                                             UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
                                             UserDefaults.standard.removeObject(forKey: "CustDet")
+                                            
                                             if let window = UIApplication.shared.windows.first {
                                                 window.rootViewController = UIHostingController(rootView: ContentView())
                                             }

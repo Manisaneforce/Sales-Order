@@ -38,6 +38,7 @@ struct TotAmt: Identifiable {
     var DisVal : String
     var Tax_Val: String
     var TaxAmt:String
+    var ShowShem:String
 }
 struct EdditeAddres : Any{
     let listedDrCode:String
@@ -55,6 +56,7 @@ struct editUom:Any{
     let freeQty: String
     let OffProdNm: String
     let Tax_Amt : String
+    let shomMod : String
 }
 struct GroupId:Any{
     let name:String
@@ -395,31 +397,7 @@ struct Order: View {
                         }
                         //.padding(.top,0)
                         .onAppear {
-                            
-                            prodGroup { jsonString in
-                                if let jsonData = jsonString.data(using: .utf8) {
-                                    prettyPrintedJson.removeAll()
-                                    do {
-                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
-                                            for firstItem in jsonArray {
-                                                print(jsonArray)
-                                                let textname = firstItem["name"] as? String ?? ""
-                                                let ProGroID = String((firstItem["id"] as? Int)!)
-                                                let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
-                                                
-                                                print("Name: \(textname)")
-                                                prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
-                                            }
-                                        }
-                                    } catch {
-                                        print("Error parsing JSON: \(error)")
-                                    }
-                                    print(prettyPrintedJson)
-                                }
-                                OrderProdTyp()
-                            }
-                            
-                            
+                            OrderprodGroup()
                             Sales_Order.prodDets{
                                 json in
                                 print(json)
@@ -659,6 +637,7 @@ struct Order: View {
                                                 .foregroundColor(Color.blue)
                                             }
                                             .padding(.trailing,10)
+                                            if (filterItems[index].ShowShem == "2"){
                                             HStack{
                                                 Image(systemName: "tag.fill")
                                                 Text("View Scheme")
@@ -670,6 +649,7 @@ struct Order: View {
                                                 ViewScheme(ProdCode:Allprods[index].ProID)
                                                 ViewSchemeSc.toggle()
                                             }
+                                        }
                                             if filterItems[index].Free != "0" {
                                                 HStack {
                                                     Text("Free : \(filterItems[index].Free)")
@@ -1056,7 +1036,30 @@ struct Order: View {
             numbers[index] -= 1
         }
     }
-    
+    private func OrderprodGroup(){
+        Sales_Order.prodGroup { jsonString in
+            if let jsonData = jsonString.data(using: .utf8) {
+                prettyPrintedJson.removeAll()
+                do {
+                    if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                        for firstItem in jsonArray {
+                            print(jsonArray)
+                            let textname = firstItem["name"] as? String ?? ""
+                            let ProGroID = String((firstItem["id"] as? Int)!)
+                            let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
+                            
+                            print("Name: \(textname)")
+                            prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
+                        }
+                    }
+                } catch {
+                    print("Error parsing JSON: \(error)")
+                }
+                print(prettyPrintedJson)
+            }
+            OrderProdTyp()
+        }
+    }
     private func OrderProdTyp(){
         
         Sales_Order.prodTypes { json in
@@ -1141,12 +1144,14 @@ struct Order: View {
         ProSelectID = proDetsID[index]
         print(ProSelectID)
         print(Allproddata)
-        if let jsonData = Allproddata.data(using: .utf8){
+        Sales_Order.prodDets() { json in
+            print(json)
+        if let jsonData = json.data(using: .utf8){
             do{
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
                     let itemsWithTypID3 = jsonArray.filter { ($0["cateid"] as? Int) == ProSelectID }
-                  print(itemsWithTypID3)
+                    print(itemsWithTypID3)
                     if !itemsWithTypID3.isEmpty {
                         Allprods.removeAll()
                         print(itemsWithTypID3)
@@ -1173,6 +1178,7 @@ struct Order: View {
                 print("Data is error\(error)")
             }
         }
+    }
         
     }
     private func ViewScheme(ProdCode:String){
@@ -1202,6 +1208,9 @@ struct Order: View {
     private func TexQty(){
         var Qty = "0"
         var Amount="0"
+        var ShemMod = ""
+        print(lstSchemList)
+        print(VisitData.shared.ProductCart)
         TotalAmt.removeAll()
         SelectUOMN.removeAll()
         TotalQty.removeAll()
@@ -1213,6 +1222,11 @@ struct Order: View {
            print(item)
             print(VisitData.shared.ProductCart)
             let id=String(format: "%@", item["id"] as! CVarArg)
+            var lstSchemListdata:[AnyObject] = []
+            if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
+                lstSchemListdata = list;
+                
+            }
             print(id)
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
                 print(Cart)
@@ -1270,7 +1284,14 @@ struct Order: View {
                 if TaxAmt == ""{
                     TaxAmt = "0.00"
                 }
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd, Tax_Amt: TaxAmt))
+                let ScehemVal = lstSchemListdata.filter { ($0["PCode"] as? String) == id }
+                print(ScehemVal)
+                if (ScehemVal.isEmpty){
+                    ShemMod = "1"
+                }else{
+                    ShemMod = "2"
+                }
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd, Tax_Amt: TaxAmt,shomMod: ShemMod))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1286,7 +1307,14 @@ struct Order: View {
                 let rateDouble = Double(Rate!)
                 let formattedRate = String(format: "₹ %.2f", rateDouble!)
                 print(formattedRate)
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00"))
+                let ScehemVal = lstSchemListdata.filter { ($0["PCode"] as? String) == id }
+                print(ScehemVal)
+                if (ScehemVal.isEmpty){
+                    ShemMod = "1"
+                }else{
+                    ShemMod = "2"
+                }
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00",shomMod: ShemMod))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
@@ -1298,7 +1326,7 @@ struct Order: View {
         print(FilterProduct)
         print(SelectUOMN)
         print(TotalAmt)
-        
+        print(ShemMod)
         items.removeAll()
         print(FilterProduct.count)
         print(Tax_value.count)
@@ -1308,7 +1336,7 @@ struct Order: View {
             Count = index + 1
             print(FilterProduct.count)
             print(Tax_value.count)
-            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt ))
+            items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt,ShowShem : SelectUOMN[index].shomMod ))
             print(items)
         }
         print(FilterProduct.count)
@@ -1998,8 +2026,6 @@ struct YourDataStructure: Codable {
 func prodGroup(completion: @escaping (String) -> Void) {
     
     let axn = "get/prodGroup"
-    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
-  
     let apiKey = "\(axn)"
     
     let aFormData: [String: Any] = [

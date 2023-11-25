@@ -30,6 +30,7 @@
 		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
+		389B99B82B12032D00A53B42 /* NoOreder.json in Resources */ = {isa = PBXBuildFile; fileRef = 389B99B72B12032D00A53B42 /* NoOreder.json */; };
 		38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 38A3AEC92A8A1EFF00A4C826 /* Lottie */; };
 		38A54D1D2B0F3433009E8976 /* Gettingloction.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D122B0F3433009E8976 /* Gettingloction.json */; };
 		38A54D1E2B0F3433009E8976 /* Animation - 1700722458471.json in Resources */ = {isa = PBXBuildFile; fileRef = 38A54D132B0F3433009E8976 /* Animation - 1700722458471.json */; };
@@ -101,6 +102,7 @@
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
+		389B99B72B12032D00A53B42 /* NoOreder.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = NoOreder.json; sourceTree = "<group>"; };
 		38A54D122B0F3433009E8976 /* Gettingloction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Gettingloction.json; sourceTree = "<group>"; };
 		38A54D132B0F3433009E8976 /* Animation - 1700722458471.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Animation - 1700722458471.json"; sourceTree = "<group>"; };
 		38A54D142B0F3433009E8976 /* loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loader.json; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				38A54D172B0F3433009E8976 /* OTP.json */,
 				38A54D192B0F3433009E8976 /* Phonering.json */,
 				38A54D1C2B0F3433009E8976 /* something_went_wrong.json */,
+				389B99B72B12032D00A53B42 /* NoOreder.json */,
 			);
 			name = Lottie;
 			path = ../Lottie;
@@ -459,6 +462,7 @@
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
 				38A54D1E2B0F3433009E8976 /* Animation - 1700722458471.json in Resources */,
 				38EEBC622A7A256000AEF032 /* Preview Assets.xcassets in Resources */,
+				389B99B82B12032D00A53B42 /* NoOreder.json in Resources */,
 				38A54D272B0F3433009E8976 /* something_went_wrong.json in Resources */,
 				38A54D262B0F3433009E8976 /* order Submite.json in Resources */,
 				38A54D1F2B0F3433009E8976 /* loader.json in Resources */,

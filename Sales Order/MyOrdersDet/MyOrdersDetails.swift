@@ -388,10 +388,10 @@ struct TapBar: View {
         TabView(selection: $currentTab) {
             ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden)
                 .tag(0)
-            INVOICE()
-                .tag(1)
+//            INVOICE()
+//                .tag(1)
             ORDERVSINVOICE(invoice: $invoice)
-                .tag(2)
+                .tag(1)
         }
         .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
     }
@@ -400,7 +400,8 @@ struct TapBar: View {
 struct TabBarView: View {
     @Binding var currentTab: Int
     @Namespace var namespace
-    var tabBarOptions: [String] = ["ORDER", "INVOICE", "ORDER VS INVOICE"]
+    //var tabBarOptions: [String] = ["ORDER", "INVOICE", "ORDER VS INVOICE"]
+    var tabBarOptions: [String] = ["ORDER","ORDER VS INVOICE"]
     
     var body: some View {
         HStack(spacing: 5) {

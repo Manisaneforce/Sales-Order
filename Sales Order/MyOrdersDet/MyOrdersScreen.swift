@@ -76,8 +76,8 @@ struct MyOrdersScreen: View {
                         Spacer()
                     }
                     NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
-                                    EmptyView()
-                                }
+                        EmptyView()
+                    }
                     
                 }
                 .edgesIgnoringSafeArea(.top)
@@ -90,7 +90,7 @@ struct MyOrdersScreen: View {
                     FromDate = fromDate
                     ToDate = fromDate
                     OrderDetailsTriger()
-                   
+                    
                 }
                 
                 
@@ -100,8 +100,8 @@ struct MyOrdersScreen: View {
                             .fill(Color.white)
                             .shadow(radius: 5)
                         HStack {
-                                Text(FromDate)
-                         
+                            Text(FromDate)
+                            
                             Image(systemName: "calendar")
                                 .foregroundColor(Color.blue)
                         }
@@ -112,7 +112,7 @@ struct MyOrdersScreen: View {
                         
                     }
                     .padding(10)
-                
+                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.white)
@@ -141,7 +141,7 @@ struct MyOrdersScreen: View {
                     .padding(10)
                 }
                 .frame(height: 60)
-                
+                if (OrderPaymentDetails.count != 0){
                 ZStack{
                     Rectangle()
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
@@ -168,7 +168,7 @@ struct MyOrdersScreen: View {
                     }
                     .padding(10)
                 }
-             
+                
                 List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
                     VStack{
                         HStack{
@@ -178,23 +178,23 @@ struct MyOrdersScreen: View {
                                 .multilineTextAlignment(.leading)
                             Spacer()
                             HStack(spacing:40){
-                            Text(OrderPaymentDetails[index].No_Of_items)
-                                .font(.system(size: 12))
-                                .frame(minWidth: 0,maxWidth: .infinity)
-                                .multilineTextAlignment(.leading)
-                            Text(OrderPaymentDetails[index].Quantity)
-                                .font(.system(size: 12))
-                                .frame(minWidth: 0,maxWidth: .infinity)
-                                .multilineTextAlignment(.leading)
-                            Text(OrderPaymentDetails[index].Order_Value)
-                                .font(.system(size: 12))
-                                .frame(width: 45)
-                                .multilineTextAlignment(.leading)
-                            Text(OrderPaymentDetails[index].Status)
-                                .font(.system(size: 12))
-                                .frame(width: 45)
-                                .multilineTextAlignment(.trailing)
-                        }
+                                Text(OrderPaymentDetails[index].No_Of_items)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0,maxWidth: .infinity)
+                                    .multilineTextAlignment(.leading)
+                                Text(OrderPaymentDetails[index].Quantity)
+                                    .font(.system(size: 12))
+                                    .frame(minWidth: 0,maxWidth: .infinity)
+                                    .multilineTextAlignment(.leading)
+                                Text(OrderPaymentDetails[index].Order_Value)
+                                    .font(.system(size: 12))
+                                    .frame(width: 45)
+                                    .multilineTextAlignment(.leading)
+                                Text(OrderPaymentDetails[index].Status)
+                                    .font(.system(size: 12))
+                                    .frame(width: 45)
+                                    .multilineTextAlignment(.trailing)
+                            }
                         }
                         HStack{
                             Text(OrderPaymentDetails[index].Order_Date)
@@ -212,37 +212,37 @@ struct MyOrdersScreen: View {
                             Spacer()
                             let orderDetail = OrderPaymentDetails[index]
                             if orderDetail.isPaid.isEmpty {
-                            Button(action:{
-                                
-                            }){
-                                ZStack{
-                                    Rectangle()
-                                        .foregroundColor(ColorData.shared.HeaderColor)
-                                        .cornerRadius(10)
-                                    Text("Pay")
-                                        .font(.system(size: 15))
-                                        .foregroundColor(Color.white)
+                                Button(action:{
                                     
-                                    
+                                }){
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .cornerRadius(10)
+                                        Text("Pay")
+                                            .font(.system(size: 15))
+                                            .foregroundColor(Color.white)
+                                        
+                                        
+                                    }
+                                    .frame(width: 50,height: 12)
+                                    .onTapGesture{
+                                        OrderId = OrderPaymentDetails[index].OrderNo
+                                        
+                                        PaymentHTML()
+                                    }
                                 }
-                                .frame(width: 50,height: 12)
-                                .onTapGesture{
-                                    OrderId = OrderPaymentDetails[index].OrderNo
-                                    
-                                    PaymentHTML()
-                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
-                            .buttonStyle(PlainButtonStyle())
                         }
-                        }
-                      
+                        
                     }
                     .onTapGesture{
                         print(index)
-                    TotalVal = OrderPaymentDetails[index].Order_Value
-                      OrderId = OrderPaymentDetails[index].OrderNo
+                        TotalVal = OrderPaymentDetails[index].Order_Value
+                        OrderId = OrderPaymentDetails[index].OrderNo
                         OrderNo = OrderId
-                      Orderdate =   OrderPaymentDetails[index].Order_Date
+                        Orderdate =   OrderPaymentDetails[index].Order_Date
                         OrdDate = Orderdate
                         
                         print(OrderId)
@@ -250,6 +250,9 @@ struct MyOrdersScreen: View {
                     }
                 }
                 .listStyle(PlainListStyle())
+                }else{
+                    NoOrderdate()
+                }
                 NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: $Orderdate, TotalVal: $TotalVal), isActive: $NaviOrdeDetNiew) {
                                 EmptyView()
                             }
@@ -1189,7 +1192,12 @@ func printDocument() {
 
     printController.present(animated: true, completionHandler: nil)
 }
-
+struct NoOrderdate:View{
+    var body: some View{
+        Spacer()
+        Text("No Record Found")
+    }
+}
 
 
 
