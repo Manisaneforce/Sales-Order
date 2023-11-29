@@ -8,6 +8,7 @@
 import SwiftUI
 import Alamofire
 import Foundation
+import AppTrackingTransparency
 
 struct Outputdata {
     var data: [String: AnyObject] = [:]
@@ -299,7 +300,7 @@ struct PrivacyPolicy:View{
             .edgesIgnoringSafeArea(.top)
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-            WebViews(urlString: "https://rad.salesjump.in/server/radprivacy.html")
+            WebViews(urlString: "https://rad.salesjump.in/privacyrad.html")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             
             Spacer()
@@ -334,7 +335,7 @@ struct PrivacyPolicy:View{
                         print(isChecked)
                         UserDefaults.standard.set(isChecked, forKey: "Privacydata")
                         if let window = UIApplication.shared.windows.first {
-                            window.rootViewController = UIHostingController(rootView: ContentView())
+                            window.rootViewController = UIHostingController(rootView: CheckPermissions())
                         }
                     }else{
                     }
@@ -343,8 +344,102 @@ struct PrivacyPolicy:View{
         }
     }
 }
-
-//Full Button  click in Mobile Number Screen and OTP Screen == Error Fix But Didn't Show Toast
-//Product not Change In Click Button RV Test = Error Fix
-//Aliment Change In List View In MY Order Screen =  Error fix
-//Didn’t save Discount Value in order Submite = Fix Error
+struct CheckPermissions:View{
+    
+    var body: some View{
+        ZStack{
+            Rectangle()
+                .foregroundColor(ColorData.shared.HeaderColor)
+                .edgesIgnoringSafeArea(.all)
+            VStack{
+                HStack{
+                    Text("ReliVet")
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                        .font(.system(size: 40))
+                    Spacer()
+                }
+                .padding(.top,50)
+                .padding(.leading,16)
+                
+                VStack{
+                    Text("Turning on tracking location services allow us to provide features Like :")
+                        .fontWeight(.bold)
+                        .font(.system(size: 20))
+                }
+                .padding(.vertical,5)
+                VStack{
+                    HStack{
+                        Image(systemName: "location.circle")
+                            .resizable()
+                            .frame(width: 35,height: 35)
+                            .padding(.horizontal,5)
+                        Text("Getting Location For Order Submit")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 20))
+                            .padding(.trailing,50)
+                        Spacer()
+                    }
+                    HStack{
+                        Image("geotag-b")
+                            .resizable()
+                            .frame(width: 35,height: 35)
+                            .padding(.horizontal,5)
+                        Text("Getting Delivery Address Of Customer")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                            .font(.system(size: 20))
+                            .padding(.trailing,50)
+                        Spacer()
+                    }
+                }
+                .padding(.top,20)
+                .padding(.leading,20)
+                
+                
+                Spacer()
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(.white)
+                            .frame(height: 40)
+                        Text("Continue")
+                            .foregroundColor(.black)
+                            .fontWeight(.bold)
+                            .font(.system(size: 20))
+                    }
+                    .onTapGesture {
+                        if #available(iOS 14, *) {
+                            ATTrackingManager.requestTrackingAuthorization { status in
+                                switch status {
+                                    case .authorized:
+                                        print("enable tracking")
+                                    case .denied:
+                                        print("disable tracking")
+                                    default:
+                                        print("disable tracking")
+                                }
+                                UserDefaults.standard.set(true, forKey: "TrackPermission")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    
+                                    if let window = UIApplication.shared.windows.first {
+                                        window.rootViewController = UIHostingController(rootView: ContentView())
+                                    }
+                                }
+                            }
+                        }else{}
+                    }
+                    .padding(.horizontal,40)
+                    Text("You can change this later in the settings app")
+                        .foregroundColor(.white)
+                        .font(.system(size: 15))
+                        .fontWeight(.semibold)
+                    
+                }
+                .padding(.bottom,80)
+            }
+                
+        }
+    }
+}

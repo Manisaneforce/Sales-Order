@@ -69,7 +69,7 @@ struct HomePage: View {
                                     Alert(
                                         title: Text("Logout"),
                                         message: Text("Do you want to log out?"),
-                                        primaryButton: .default(Text("OK")) {
+                                        primaryButton: .default(Text(" OK ")) {
                                             UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
                                             UserDefaults.standard.removeObject(forKey: "CustDet")
                                             

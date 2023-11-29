@@ -593,11 +593,7 @@ struct ORDER:View{
     }
 }
 
-struct INVOICE:View{
-    var body: some View{
-        Text("INVOICE")
-    }
-}
+ 
 
 struct ORDERVSINVOICE:View{
     @Binding var invoice: [getInvoice]
