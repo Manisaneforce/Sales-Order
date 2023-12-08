@@ -2311,15 +2311,18 @@ struct SelPrvOrder: View {
     @State private var AllPrvprod:[PrvProddata]=[]
     @State var filterItems: [FilterItem] = []
     @State private var showAlert = false
+    @State private var showPaymentAlert = false
     @State private var sLocationlat = ""
     @State private var sLocationlong = ""
     @State private var GetLoction = false
+    
     @State private var OrderSubStatus = ""
     @State private var isActive: Bool = false
     @State private var ShowTost = ""
     @State private var showToast = false
     @State private var GST12 = ""
     @State private var GST18 = ""
+    @State private var Jiomoneypage = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
@@ -2386,6 +2389,12 @@ struct SelPrvOrder: View {
                             }
                             .padding(10)
                             .onAppear{
+                                if (Invoiceid.shared.Order_place_Mood == 0){
+                                    Invoiceid.shared.Order_place_Mood = 1
+                                    if let window = UIApplication.shared.windows.first {
+                                        window.rootViewController = UIHostingController(rootView: HomePage())
+                                    }
+                                }
                                 prvDet()
                             }
                                 Rectangle()
@@ -2782,12 +2791,17 @@ struct SelPrvOrder: View {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         OrderSubmit(lat: sLocationlat, log: sLocationlong)
                                         GetLoction.toggle()
+                                        if (paymentenb.shared.isPaymentenbl == 1){
+                                            showPaymentAlert.toggle()
+                                        }
                                     }
                                 }
                             },
                             secondaryButton: .cancel()
                         )
                     }
+                    
+                    
                 }
                 if GetLoction{
                     ZStack{
@@ -2810,6 +2824,29 @@ struct SelPrvOrder: View {
                     
                 }
             }
+                if showPaymentAlert{
+                    ZStack{
+                        Color.black.opacity(0.5)
+                            .edgesIgnoringSafeArea(.all)
+                            .alert(isPresented: $showPaymentAlert) {
+                                               Alert(
+                                                   title: Text("Payment"),
+                                                   message: Text("The order had been placed successfully Would you like to make payment"),
+                                                   primaryButton: .default(Text("PAY LATER")) {
+                                                       if let window = UIApplication.shared.windows.first {
+                                                           window.rootViewController = UIHostingController(rootView: HomePage())
+                                                       }
+                                                   },
+                                                   secondaryButton: .default(Text("PAY NOW")){
+                                                       PaymentHTML()
+                                                   }
+                                               )
+                                           }
+                    }
+                }
+                NavigationLink(destination: Jiomoney(), isActive: $Jiomoneypage) {
+                                EmptyView()
+                            }
         }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
     }
@@ -2817,6 +2854,49 @@ struct SelPrvOrder: View {
         .navigationBarHidden(true)
       
        
+    }
+    
+    func PaymentHTML(){
+    
+        AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(Invoiceid.shared.id)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        if let jsonData = prettyPrintedJson.data(using: .utf8){
+                            do{
+                                if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                    if let HTML = jsonObject["html"] as? String {
+                                        print(HTML)
+                                        html = HTML
+                                         print(html)
+                                        Jiomoneypage = true
+                                    } else {
+                                        print("Error: Couldn't extract HTML")
+                                    }
+                                }
+                            } catch{
+                                print("Error Data")
+                            }
+                        }
+
+                        
+
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
     func GetCurrentLoction(){
         LocationService.sharedInstance.getNewLocation(location: { location in
@@ -3297,12 +3377,17 @@ func OrderSubmit(lat:String,log:String) {
         print(value)
         if let json = value as? [String: Any] {
             
-            
-           print(json)
+            print(json)
+            if let invoice = json["invoice"] as? String{
+                Invoiceid.shared.id = invoice
+            }
+            Invoiceid.shared.Order_place_Mood = 0
             ShowToastMes.shared.tost = "Order Submitted"
             UIApplication.shared.windows.first?.makeKeyAndVisible()
-            if let window = UIApplication.shared.windows.first {
-                window.rootViewController = UIHostingController(rootView: HomePage())
+            if (paymentenb.shared.isPaymentenbl == 0){
+                            if let window = UIApplication.shared.windows.first {
+                                window.rootViewController = UIHostingController(rootView: HomePage())
+                            }
             }
                             
             VisitData.shared.clear()

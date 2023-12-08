@@ -18,16 +18,19 @@ struct HomePage: View {
     @State private var CustSAVEDet:String = UserDefaults.standard.string(forKey: "CustDet") ?? ""
     @State private var currentPage = 0
     @State private var showToast = false
+    @State private var isPaymentenbl = 0
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     @Environment(\.horizontalSizeClass) var sizeClass
-  
     var body: some View {
         NavigationView {
+            
            // GeometryReader { geometry in
             ZStack{
                 Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05)
                     .edgesIgnoringSafeArea(.all)
-                
+                    .onAppear(){
+                        isPaymentEnabled()
+                    }
                 VStack(spacing:22){
                     
                     ZStack(){
@@ -93,6 +96,7 @@ struct HomePage: View {
                     
                     
                     .onAppear() {
+                        isPaymentEnabled()
                         if (ShowToastMes.shared.tost != "" ){
                             showToast = true
                           
@@ -178,8 +182,11 @@ struct HomePage: View {
                                 NavigationLink(destination:MyOrdersScreen()){
                                     DashboardItem(imageName: "features", title: "My Orders")
                                 }
-                                NavigationLink(destination:PaymentScreen()){
-                                    DashboardItem(imageName: "credit-card", title: "Payment Ledger")
+                                
+                                if (isPaymentenbl == 1){
+                                    NavigationLink(destination:PaymentScreen()){
+                                        DashboardItem(imageName: "credit-card", title: "Payment Ledger")
+                                    }
                                 }
                                 NavigationLink(destination:MyOrdersDetails(OrderId: "Add data")){
                                     DashboardItem(imageName: "business-report", title: "Reports")
@@ -257,6 +264,44 @@ struct HomePage: View {
             print (errMsg)
             //self.LoadingDismiss()
         })
+    }
+    
+    func isPaymentEnabled(){
+        let axn = "enable_payments"
+        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)"
+        
+     
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                        var lstisPaymentEnabled:[String:AnyObject] = [:]
+                        if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [String:AnyObject] {
+                            lstisPaymentEnabled = list;
+                            
+                        }
+                        print(lstisPaymentEnabled)
+                        isPaymentenbl = paymentenb.shared.isPaymentenbl
+                        paymentenb.shared.isPaymentenbl = lstisPaymentEnabled["isPaymentEnabled"] as? Int ?? 0
+
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
 }
 
@@ -373,3 +418,4 @@ struct DasImageView: View {
         }
     }
 }
+

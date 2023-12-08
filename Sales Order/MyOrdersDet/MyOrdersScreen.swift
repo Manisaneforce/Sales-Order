@@ -211,6 +211,7 @@ struct MyOrdersScreen: View {
                                 .foregroundColor(Color.red)
                             Spacer()
                             let orderDetail = OrderPaymentDetails[index]
+                            if (paymentenb.shared.isPaymentenbl == 1){
                             if orderDetail.isPaid.isEmpty {
                                 Button(action:{
                                     
@@ -228,12 +229,13 @@ struct MyOrdersScreen: View {
                                     .frame(width: 50,height: 12)
                                     .onTapGesture{
                                         OrderId = OrderPaymentDetails[index].OrderNo
-                                        
+                                        Invoiceid.shared.id = OrderPaymentDetails[index].OrderNo
                                         PaymentHTML()
                                     }
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
+                        }
                         }
                         
                     }
@@ -395,7 +397,6 @@ struct MyOrdersScreen: View {
           }
       }
     func PaymentHTML(){
-    
     
         AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)

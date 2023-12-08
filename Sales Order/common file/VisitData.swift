@@ -55,3 +55,14 @@ class hostdata{
     static var shared = hostdata()
     var Host: String = ""
 }
+
+class paymentenb{
+    static var shared = paymentenb()
+    var isPaymentenbl = 0
+}
+
+class Invoiceid{
+    static var shared = Invoiceid()
+    var id = ""
+    var Order_place_Mood = 1
+}
