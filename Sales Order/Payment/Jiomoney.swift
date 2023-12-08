@@ -60,24 +60,24 @@ struct Jiomoney: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 WebView(htmlString: html, ShowButton: $ShowButton, backBT: $backBT)
-                if hostdata.shared.Host == "rad.salesjump.in"{
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 40)
-                            .cornerRadius(10)
-                        Text("Close")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .font(.system(size: 16))
-                    }
-                    .padding(.horizontal,10)
-                    .onTapGesture {
-                        if let window = UIApplication.shared.windows.first {
-                            window.rootViewController = UIHostingController(rootView: ContentView())
-                        }
-                    }
-                }
+//                if hostdata.shared.Host == "rad.salesjump.in"{
+//                    ZStack{
+//                        Rectangle()
+//                            .foregroundColor(ColorData.shared.HeaderColor)
+//                            .frame(height: 40)
+//                            .cornerRadius(10)
+//                        Text("Close")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.white)
+//                            .font(.system(size: 16))
+//                    }
+//                    .padding(.horizontal,10)
+//                    .onTapGesture {
+//                        if let window = UIApplication.shared.windows.first {
+//                            window.rootViewController = UIHostingController(rootView: ContentView())
+//                        }
+//                    }
+//                }
             }
            
       
