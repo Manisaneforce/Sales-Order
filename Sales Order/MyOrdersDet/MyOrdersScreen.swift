@@ -39,6 +39,7 @@ struct MyOrdersScreen: View {
     @State private var FromDate = ""
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
+    @State private var Loader:Bool = true
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
     
@@ -141,7 +142,7 @@ struct MyOrdersScreen: View {
                     .padding(10)
                 }
                 .frame(height: 60)
-                if (OrderPaymentDetails.count != 0){
+                
                 ZStack{
                     Rectangle()
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
@@ -168,93 +169,112 @@ struct MyOrdersScreen: View {
                     }
                     .padding(10)
                 }
-                
-                List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
-                    VStack{
-                        HStack{
-                            Text(OrderPaymentDetails[index].OrderNo)
-                                .font(.system(size: 12))
-                                .frame(width: 100, alignment: OrderPaymentDetails[index].OrderNo.count > 10 ? .center : .leading)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                            HStack(spacing:40){
-                                Text(OrderPaymentDetails[index].No_Of_items)
-                                    .font(.system(size: 12))
-                                    .frame(minWidth: 0,maxWidth: .infinity)
-                                    .multilineTextAlignment(.leading)
-                                Text(OrderPaymentDetails[index].Quantity)
-                                    .font(.system(size: 12))
-                                    .frame(minWidth: 0,maxWidth: .infinity)
-                                    .multilineTextAlignment(.leading)
-                                Text(OrderPaymentDetails[index].Order_Value)
-                                    .font(.system(size: 12))
-                                    .frame(width: 45)
-                                    .multilineTextAlignment(.leading)
-                                Text(OrderPaymentDetails[index].Status)
-                                    .font(.system(size: 12))
-                                    .frame(width: 45)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                        }
-                        HStack{
-                            Text(OrderPaymentDetails[index].Order_Date)
-                                .font(.system(size: 9))
-                            Spacer()
-                        }
-                        HStack{
-                            Image(systemName: "circle.circle.fill")
-                                .resizable()
-                                .frame(width: 7,height: 7)
-                                .foregroundColor(Color.red)
-                            Text("Order recevied.Pending for Invoice")
-                                .font(.system(size: 9))
-                                .foregroundColor(Color.red)
-                            Spacer()
-                            let orderDetail = OrderPaymentDetails[index]
-                            if (paymentenb.shared.isPaymentenbl == 1){
-                            if orderDetail.isPaid.isEmpty {
-                                Button(action:{
+                if Loader{
+                    ScrollView(showsIndicators: false){
+                        ForEach(0 ..< OrderPaymentDetails.count, id: \.self) { index in
+                            ShimmeringSkeletonRow_For_Order()
+                                .transition(.opacity)
+                                .onAppear{
                                     
-                                }){
-                                    ZStack{
-                                        Rectangle()
-                                            .foregroundColor(ColorData.shared.HeaderColor)
-                                            .cornerRadius(10)
-                                        Text("Pay")
-                                            .font(.system(size: 15))
-                                            .foregroundColor(Color.white)
-                                        
-                                        
-                                    }
-                                    .frame(width: 50,height: 12)
-                                    .onTapGesture{
-                                        OrderId = OrderPaymentDetails[index].OrderNo
-                                        Invoiceid.shared.id = OrderPaymentDetails[index].OrderNo
-                                        PaymentHTML()
-                                    }
-                                }
-                                .buttonStyle(PlainButtonStyle())
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                            withAnimation {
+                                Loader = false
                             }
+                        }}
+                         
                         }
-                        }
-                        
-                    }
-                    .onTapGesture{
-                        print(index)
-                        TotalVal = OrderPaymentDetails[index].Order_Value
-                        OrderId = OrderPaymentDetails[index].OrderNo
-                        OrderNo = OrderId
-                        Orderdate =   OrderPaymentDetails[index].Order_Date
-                        OrdDate = Orderdate
-                        
-                        print(OrderId)
-                        NaviOrdeDetNiew = true
                     }
                 }
-                .listStyle(PlainListStyle())
+               else{
+                if (OrderPaymentDetails.count != 0){
+                    List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
+                        VStack{
+                            HStack{
+                                Text(OrderPaymentDetails[index].OrderNo)
+                                    .font(.system(size: 12))
+                                    .frame(width: 100, alignment: OrderPaymentDetails[index].OrderNo.count > 10 ? .center : .leading)
+                                    .multilineTextAlignment(.leading)
+                                Spacer()
+                                HStack(spacing:40){
+                                    Text(OrderPaymentDetails[index].No_Of_items)
+                                        .font(.system(size: 12))
+                                        .frame(minWidth: 0,maxWidth: .infinity)
+                                        .multilineTextAlignment(.leading)
+                                    Text(OrderPaymentDetails[index].Quantity)
+                                        .font(.system(size: 12))
+                                        .frame(minWidth: 0,maxWidth: .infinity)
+                                        .multilineTextAlignment(.leading)
+                                    Text(OrderPaymentDetails[index].Order_Value)
+                                        .font(.system(size: 12))
+                                        .frame(width: 45)
+                                        .multilineTextAlignment(.leading)
+                                    Text(OrderPaymentDetails[index].Status)
+                                        .font(.system(size: 12))
+                                        .frame(width: 45)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                            HStack{
+                                Text(OrderPaymentDetails[index].Order_Date)
+                                    .font(.system(size: 9))
+                                Spacer()
+                            }
+                            HStack{
+                                Image(systemName: "circle.circle.fill")
+                                    .resizable()
+                                    .frame(width: 7,height: 7)
+                                    .foregroundColor(Color.red)
+                                Text("Order recevied.Pending for Invoice")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(Color.red)
+                                Spacer()
+                                let orderDetail = OrderPaymentDetails[index]
+                                if (paymentenb.shared.isPaymentenbl == 1){
+                                    if orderDetail.isPaid.isEmpty {
+                                        Button(action:{
+                                            
+                                        }){
+                                            ZStack{
+                                                Rectangle()
+                                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                                    .cornerRadius(10)
+                                                Text("Pay")
+                                                    .font(.system(size: 15))
+                                                    .foregroundColor(Color.white)
+                                                
+                                                
+                                            }
+                                            .frame(width: 50,height: 12)
+                                            .onTapGesture{
+                                                OrderId = OrderPaymentDetails[index].OrderNo
+                                                Invoiceid.shared.id = OrderPaymentDetails[index].OrderNo
+                                                PaymentHTML()
+                                            }
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .onTapGesture{
+                            print(index)
+                            TotalVal = OrderPaymentDetails[index].Order_Value
+                            OrderId = OrderPaymentDetails[index].OrderNo
+                            OrderNo = OrderId
+                            Orderdate =   OrderPaymentDetails[index].Order_Date
+                            OrdDate = Orderdate
+                            
+                            print(OrderId)
+                            NaviOrdeDetNiew = true
+                        }
+                    }
+                    .listStyle(PlainListStyle())
                 }else{
                     NoOrderdate()
                 }
+            }
                 NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: $Orderdate, TotalVal: $TotalVal), isActive: $NaviOrdeDetNiew) {
                                 EmptyView()
                             }
@@ -285,6 +305,7 @@ struct MyOrdersScreen: View {
                         
                         Button(action:{
                             Selectdate()
+                            Loader.toggle()
                             isPopoverVisible.toggle()
                         }){
                             ZStack{
@@ -330,6 +351,7 @@ struct MyOrdersScreen: View {
                         .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
+                                Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                 OrderDetailsTriger()
@@ -343,6 +365,7 @@ struct MyOrdersScreen: View {
                         .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
+                                Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                 OrderDetailsTriger()

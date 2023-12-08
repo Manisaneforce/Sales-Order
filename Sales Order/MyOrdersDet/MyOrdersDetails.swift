@@ -31,6 +31,7 @@ struct MyOrdersDetails: View {
     @State private var currentTab: Int = 0
     @State private var HistoryInf:Bool = true
     @State private var OrderDetialsView:Bool = false
+    @State private var Loader:Bool = true
     @State var OrderId = ""
     @State var Totalval = value
     @State private var isHiden:Bool = false
@@ -146,7 +147,7 @@ struct MyOrdersDetails: View {
                     .frame(height:40)
                     .padding(.leading,2)
                     .padding(.trailing,2)
-                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden)
+                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader)
                     Spacer()
                 }
                 .popover(isPresented: $isPopoverVisible) {
@@ -172,6 +173,7 @@ struct MyOrdersDetails: View {
                                 
                                 Selectdate()
                                 isPopoverVisible.toggle()
+                                Loader.toggle()
                             }){
                                 ZStack{
                                     Rectangle()
@@ -215,7 +217,7 @@ struct MyOrdersDetails: View {
                             .frame(width: 320)
                             .background(Color.white)
                                 .onTapGesture{
-                                    
+                                    Loader.toggle()
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                     orderandinvoice()
@@ -230,6 +232,7 @@ struct MyOrdersDetails: View {
                             .frame(width: 320)
                             .background(Color.white)
                                 .onTapGesture{
+                                    Loader.toggle()
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                     orderandinvoice()
@@ -254,6 +257,29 @@ struct MyOrdersDetails: View {
                     .cornerRadius(10)
                     .padding(20)
                 }
+//                if Loader{
+//                    ZStack{
+//                    Color.black.opacity(0.5)
+//                        .edgesIgnoringSafeArea(.all)
+//                        .onTapGesture {
+//                               // GetLoction.toggle()
+//                        }
+//                    HStack{
+//                        LottieUIView(filename: "loader").frame(width: 50,height: 50)
+//                            .padding(.horizontal,20)
+//                        Text("Verifying...")
+//                            .font(.headline)
+//                            .fontWeight(.bold)
+//                            .multilineTextAlignment(.center)
+//                            .padding(.vertical,20)
+//                            .padding(.trailing,20)
+//                    }
+//                    .background(Color.white)
+//                    .cornerRadius(10)
+//                    .padding(20)
+//
+//                }
+//            }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -383,14 +409,15 @@ struct TapBar: View {
     @Binding var invoice: [getInvoice]
     @Binding var OrderId: String
     @Binding var isHiden:Bool
+    @Binding var Loader:Bool
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
-            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden)
+            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader)
                 .tag(0)
 //            INVOICE()
 //                .tag(1)
-            ORDERVSINVOICE(invoice: $invoice)
+            ORDERVSINVOICE(invoice: $invoice, Loader: $Loader)
                 .tag(1)
         }
         .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
@@ -463,137 +490,157 @@ struct ORDER:View{
     @State private var Totalval:String = ""
     @Binding var isHiden:Bool
     @State private var values = 0
+    @Binding var Loader : Bool
     var body: some View{
         VStack{
-            if (invoice.count != 0){
-            ScrollView{
-                ForEach(0..<invoice.count, id: \.self) { index in
-                    GeometryReader { reader -> AnyView in
-                        let yAxis = reader.frame(in: .global).minY
-                        
-                        if yAxis < 0 && !isHiden {
-                            DispatchQueue.main.async {
-                                withAnimation { isHiden = true }
-                                values += 1
-                            }
+            if Loader{
+                ScrollView(showsIndicators: false){
+                    ForEach(0 ..< invoice.count, id: \.self) { index in
+                        ShimmeringSkeletonRow_For_Order()
+                            .transition(.opacity)
+                            .onAppear{
+                                
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                        withAnimation {
+                            Loader = false
                         }
-                        
-                        if yAxis > 0 && isHiden {
-                            DispatchQueue.main.async {
-                                withAnimation { isHiden = false }
-                                values -= 1
-                            }
-                        }
-                        
-                        return AnyView(
-                            Text("")
-                                .frame(width: 0, height: 0)
-                        )
-                    }
-                    .frame(width: 0, height: 0)
-                    VStack{
-                        HStack{
-                            Text(CustDet.shared.StkNm)
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                            Spacer()
-                            Text("Pending")
-                                .font(.system(size: 14))
-                            Image(systemName:"ellipsis.circle.fill")
-                                .resizable()
-                                .frame(width: 12,height: 12)
-                                .foregroundColor(.red)
-                            
-                            
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,10)
-                        VStack(spacing:6){
-                            HStack{
-                                Text(invoice[index].OrderID)
-                                    .font(.system(size: 14))
-                                Spacer()
-                            }
-                            .padding(.leading,10 )
-                            HStack{
-                                Image(systemName: "calendar")
-                                    .resizable()
-                                    .frame(width: 10,height: 10)
-                                    .foregroundColor(.green)
-                                Text(invoice[index].Date)
-                                    .font(.system(size: 13))
-                                Spacer()
-                            }
-                            .padding(.leading,10)
-                        }
-                        HStack{
-                            Text("₹ \(invoice[index].Order_Value)")
-                                .font(.system(size: 14))
-                            Spacer()
-                            Text("View Order")
-                                .foregroundColor(.blue)
-                                .onTapGesture {
-                                    Totalval=invoice[index].Order_Value
-                                    value = Totalval
-                                    OrderId = invoice[index].OrderID
-                                    Orderdate = invoice[index].Date
-                                    HistoryInf.toggle()
-                                    OrderDetialsView.toggle()
-                                    
-                                    
-                                    let productNames = invoice[index].Product_Name.split(separator: ",")
-                                    let aFormData: [String] = productNames.map { String($0) }
-                                    let NoOfQty = invoice[index].Quantity.split(separator: ",")
-                                    let aFormDataQty:[String] = NoOfQty.map{
-                                        String($0)
-                                    }
-                                    
-                                    for character in aFormData {
-                                        let trimmedCharacter = (character as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                                        if let trimmedCharacter = trimmedCharacter {
-                                            print(trimmedCharacter)
-                                            ProName.append(trimmedCharacter)
-                                        }
-                                    }
-                                    for items in aFormDataQty{
-                                        let trimmedCharacter = (items as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                                        if let trimmedCharacter = trimmedCharacter{
-                                            print(trimmedCharacter)
-                                            Qty.append(trimmedCharacter)
-                                        }
-                                    }
-                                    
-                                    print(ProName.count)
-                                    print(Qty.count)
-                                    
-                                }
-                        }
-                        .padding(.leading,10)
-                        .padding(.trailing,10)
-                        
-                        //                                        Rectangle()
-                        //                                            .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
-                        //                                            .foregroundColor(.gray)
-                        //                                            .frame(height: 2)
-                        //                                            .padding(10)
-                        //                                        HStack{
-                        //                                            Text(invoice[index].Product_Name)
-                        //                                                .font(.system(size: 14))
-                        //                                                .foregroundColor(.gray)
-                        //                                            Spacer()
-                        //                                        }
-                        //                                            .padding(10)
-                        Rectangle()
-                            .frame(height: 1)
-                            .foregroundColor(.black)
-                            .padding(10)
+                    }}
+                     
                     }
                 }
             }
+            else{
+            if (invoice.count != 0){
+                ScrollView{
+                    ForEach(0..<invoice.count, id: \.self) { index in
+                        GeometryReader { reader -> AnyView in
+                            let yAxis = reader.frame(in: .global).minY
+                            
+                            if yAxis < 0 && !isHiden {
+                                DispatchQueue.main.async {
+                                    withAnimation { isHiden = true }
+                                    values += 1
+                                }
+                            }
+                            
+                            if yAxis > 0 && isHiden {
+                                DispatchQueue.main.async {
+                                    withAnimation { isHiden = false }
+                                    values -= 1
+                                }
+                            }
+                            
+                            return AnyView(
+                                Text("")
+                                    .frame(width: 0, height: 0)
+                            )
+                        }
+                        .frame(width: 0, height: 0)
+                        VStack{
+                            HStack{
+                                Text(CustDet.shared.StkNm)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                Spacer()
+                                Text("Pending")
+                                    .font(.system(size: 14))
+                                Image(systemName:"ellipsis.circle.fill")
+                                    .resizable()
+                                    .frame(width: 12,height: 12)
+                                    .foregroundColor(.red)
+                                
+                                
+                            }
+                            .padding(.leading,10)
+                            .padding(.trailing,10)
+                            VStack(spacing:6){
+                                HStack{
+                                    Text(invoice[index].OrderID)
+                                        .font(.system(size: 14))
+                                    Spacer()
+                                }
+                                .padding(.leading,10 )
+                                HStack{
+                                    Image(systemName: "calendar")
+                                        .resizable()
+                                        .frame(width: 10,height: 10)
+                                        .foregroundColor(.green)
+                                    Text(invoice[index].Date)
+                                        .font(.system(size: 13))
+                                    Spacer()
+                                }
+                                .padding(.leading,10)
+                            }
+                            HStack{
+                                Text("₹ \(invoice[index].Order_Value)")
+                                    .font(.system(size: 14))
+                                Spacer()
+                                Text("View Order")
+                                    .foregroundColor(.blue)
+                                    .onTapGesture {
+                                        Totalval=invoice[index].Order_Value
+                                        value = Totalval
+                                        OrderId = invoice[index].OrderID
+                                        Orderdate = invoice[index].Date
+                                        HistoryInf.toggle()
+                                        OrderDetialsView.toggle()
+                                        
+                                        
+                                        let productNames = invoice[index].Product_Name.split(separator: ",")
+                                        let aFormData: [String] = productNames.map { String($0) }
+                                        let NoOfQty = invoice[index].Quantity.split(separator: ",")
+                                        let aFormDataQty:[String] = NoOfQty.map{
+                                            String($0)
+                                        }
+                                        
+                                        for character in aFormData {
+                                            let trimmedCharacter = (character as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                                            if let trimmedCharacter = trimmedCharacter {
+                                                print(trimmedCharacter)
+                                                ProName.append(trimmedCharacter)
+                                            }
+                                        }
+                                        for items in aFormDataQty{
+                                            let trimmedCharacter = (items as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                                            if let trimmedCharacter = trimmedCharacter{
+                                                print(trimmedCharacter)
+                                                Qty.append(trimmedCharacter)
+                                            }
+                                        }
+                                        
+                                        print(ProName.count)
+                                        print(Qty.count)
+                                        
+                                    }
+                            }
+                            .padding(.leading,10)
+                            .padding(.trailing,10)
+                            
+                            //                                        Rectangle()
+                            //                                            .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
+                            //                                            .foregroundColor(.gray)
+                            //                                            .frame(height: 2)
+                            //                                            .padding(10)
+                            //                                        HStack{
+                            //                                            Text(invoice[index].Product_Name)
+                            //                                                .font(.system(size: 14))
+                            //                                                .foregroundColor(.gray)
+                            //                                            Spacer()
+                            //                                        }
+                            //                                            .padding(10)
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(.black)
+                                .padding(10)
+                        }
+                    }
+                }
             }else{
                 NoOrderdate()
                 Spacer()
             }
+        }
             
         }
     }
@@ -603,6 +650,7 @@ struct ORDER:View{
 
 struct ORDERVSINVOICE:View{
     @Binding var invoice: [getInvoice]
+    @Binding var Loader : Bool
     var body: some View{
        
         VStack{
@@ -620,33 +668,78 @@ struct ORDERVSINVOICE:View{
                 .foregroundColor(ColorData.shared.HeaderColor)
                 .padding(.leading,10)
                 .padding(.trailing,10)
+            if Loader{
+                ScrollView(showsIndicators: false){
+                    ForEach(0 ..< invoice.count, id: \.self) { index in
+                        ShimmeringSkeletonRow()
+                            .transition(.opacity)
+                            .onAppear{
+                                
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                        withAnimation {
+                            Loader = false
+                        }
+                    }}
+                     
+                    }
+                }
+            }
+           else{
             if (invoice.count != 0){
-            ScrollView{
-                
-                ForEach(0..<invoice.count, id: \.self) { index in
-                    HStack{
-                        VStack{
-                            HStack{
-                                Text("Relivet Animal Health")
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                Spacer()
-                            }
-                            HStack{
-                                Text(invoice[index].OrderID)
-                                    .font(.system(size: 14))
-                                Spacer()
-                            }
-                            VStack(spacing:0){
+                ScrollView{
+                    
+                    ForEach(0..<invoice.count, id: \.self) { index in
+                        HStack{
+                            VStack{
                                 HStack{
-                                    Image(systemName: "calendar")
-                                        .resizable()
-                                        .frame(width: 10,height: 10)
-                                        .foregroundColor(.green)
-                                    Text(invoice[index].Date)
-                                        .font(.system(size: 13))
+                                    Text("Relivet Animal Health")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
                                     Spacer()
                                 }
+                                HStack{
+                                    Text(invoice[index].OrderID)
+                                        .font(.system(size: 14))
+                                    Spacer()
+                                }
+                                VStack(spacing:0){
+                                    HStack{
+                                        Image(systemName: "calendar")
+                                            .resizable()
+                                            .frame(width: 10,height: 10)
+                                            .foregroundColor(.green)
+                                        Text(invoice[index].Date)
+                                            .font(.system(size: 13))
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        
+                                        Image(systemName:"ellipsis.circle.fill")
+                                            .resizable()
+                                            .frame(width: 12,height: 12)
+                                            .foregroundColor(.red)
+                                        Text("Pending")
+                                            .font(.system(size: 14))
+                                        Spacer()
+                                        
+                                    }
+                                }
+                                .padding(.top,-10)
+                                HStack{
+                                    Text("₹ \(invoice[index].Order_Value)")
+                                        .font(.system(size: 14))
+                                    Spacer()
+                                }
+                                
+                            }
+                            .padding(.leading,10)
+                            Rectangle()
+                                .frame(width: 0.7)
+                                .foregroundColor(.gray)
+                                .padding(.bottom,10)
+                                .padding(.top,10)
+                            VStack{
                                 HStack{
                                     
                                     Image(systemName:"ellipsis.circle.fill")
@@ -659,46 +752,20 @@ struct ORDERVSINVOICE:View{
                                     
                                 }
                             }
-                            .padding(.top,-10)
-                            HStack{
-                                Text("₹ \(invoice[index].Order_Value)")
-                                    .font(.system(size: 14))
-                                Spacer()
-                            }
                             
                         }
-                        .padding(.leading,10)
                         Rectangle()
-                            .frame(width: 0.7)
-                            .foregroundColor(.gray)
-                            .padding(.bottom,10)
-                            .padding(.top,10)
-                        VStack{
-                            HStack{
-                                
-                                Image(systemName:"ellipsis.circle.fill")
-                                    .resizable()
-                                    .frame(width: 12,height: 12)
-                                    .foregroundColor(.red)
-                                Text("Pending")
-                                    .font(.system(size: 14))
-                                Spacer()
-                                
-                            }
-                        }
-                        
+                            .frame(height: 1)
+                            .foregroundColor(.black)
+                            .padding(.leading,10)
+                            .padding(.trailing,10)
                     }
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.black)
-                        .padding(.leading,10)
-                        .padding(.trailing,10)
                 }
-            }
             }else{
                 NoOrderdate()
                 Spacer()
             }
+        }
         }
         }
         }
