@@ -28,6 +28,7 @@ struct OTPVerify: View {
     @State private var showResendButton = false
     @State private var OtpView:Bool = true
     @State private var NotReg:Bool = false
+    @State private var OtpLoader = false
     @Binding var jsondata: Outputdata
     //@Binding var phoneNumber:String
     let numberOffFields: Int
@@ -42,8 +43,9 @@ struct OTPVerify: View {
     var body: some View {
         if OtpView{
             NavigationView {
-                ScrollView(showsIndicators: false){
+                
                 ZStack {
+                    ScrollView(showsIndicators: false){
                     VStack{
                         VStack {
                             Image("logo_new")
@@ -67,7 +69,7 @@ struct OTPVerify: View {
                             
                             LottieUIView(filename: "OTP").frame(width: 200,height: 200)
                             
-                            Text("+91\(phoneNumber2)")
+                            Text("+91 \(phoneNumber2)")
                                 .font(.system(size: 17))
                                 .font(.title)
                                 .foregroundColor(Color.gray)
@@ -131,6 +133,8 @@ struct OTPVerify: View {
                             
                            
                                 Button(action: {
+                                    OtpLoader.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     print("JSON Data: \(jsondata.data)")
                                     let otpNumber = enterValue[0]+enterValue[1]+enterValue[2]+enterValue[3]+enterValue[4]+enterValue[5]
                                     print(otpNumber.count)
@@ -244,8 +248,11 @@ struct OTPVerify: View {
                                         Toast(mes: "Pls Enter Correct OTP")
                                       
                                     }
-                                    
+                                   
+                                        OtpLoader.toggle()
+                                    }
                                 }){
+                                    
                                     ZStack{
                                         Rectangle()
                                             .foregroundColor(ColorData.shared.HeaderColor)
@@ -270,13 +277,14 @@ struct OTPVerify: View {
                                     Text("Resend OTP")
                                         .font(.system(size: 18))
                                         .foregroundColor(.black)
-                                    
                                 }
                             } else {
                                 Text("OTP didn't receive? Resend the OTP  \(remainingTime) in seconds")
                                     .padding(.horizontal,10)
                                     .multilineTextAlignment(.center)
                             }
+                            
+                        
                             
                         }
                         if NavigteBoll {
@@ -286,16 +294,42 @@ struct OTPVerify: View {
                                 EmptyView()
                             }
                         }
+                        
+                    }
+                  
+                }
+                     .ignoresSafeArea(.keyboard, edges: .bottom)
+                     .onTapGesture {
+                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                     }
+                     .onAppear {
+                         UIScrollView.appearance().bounces = false
+                     }
+                    if OtpLoader{
+                        ZStack{
+                        Color.black.opacity(0.5)
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+//                                GetLoction.toggle()
+                            }
+                        HStack{
+                            LottieUIView(filename: "loader").frame(width: 50,height: 50)
+                                .padding(.horizontal,20)
+                            Text("Verifying...")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .padding(.vertical,20)
+                                .padding(.trailing,20)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(20)
+                        
                     }
                 }
             }
-               // .ignoresSafeArea(.keyboard, edges: .bottom)
-                .onTapGesture {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-                .onAppear {
-                    UIScrollView.appearance().bounces = false
-                }
+              
                  
         }
             .navigationViewStyle(StackNavigationViewStyle())
