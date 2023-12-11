@@ -85,12 +85,12 @@ struct MyOrdersScreen: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
                 .onAppear{
-                    
                     let fromDate = String(dateFormatter.string(from:selectedDate))
                     print(fromDate)
                     FromDate = fromDate
                     ToDate = fromDate
                     OrderDetailsTriger()
+                    Loader.toggle()
                     
                 }
                 
