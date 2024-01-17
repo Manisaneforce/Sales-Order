@@ -185,23 +185,27 @@ struct My_Profile: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black)
                                 .onTapGesture {
-                                    func uploadImage() {
-                                            guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: "USW2S3") else { return }
-
-                                            let image = UIImage(named: "example.jpg")!
-                                            if let imageData = image.jpegData(compressionQuality: 0.8) {
-                                                let expression = AWSS3TransferUtilityUploadExpression()
-                                                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg")
-                                                try? imageData.write(to: fileURL)
-                                                transferUtility.uploadFile(fileURL, bucket: "relivet", key: "example.jpg", contentType: "image/jpeg", expression: expression, completionHandler: { task, error in
-                                                    if let error = error {
-                                                        print("Error uploading image: \(error.localizedDescription)")
-                                                    } else {
-                                                        print("Image uploaded successfully")
-                                                    }
-                                                })
-                                            }
-                                        }
+                                    uploadDoc()
+                                    
+                                    //Use in Live
+                                    
+//                                    func uploadImage() {
+//                                            guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: "USW2S3") else { return }
+//
+//                                            let image = UIImage(named: "example.jpg")!
+//                                            if let imageData = image.jpegData(compressionQuality: 0.8) {
+//                                                let expression = AWSS3TransferUtilityUploadExpression()
+//                                                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg")
+//                                                try? imageData.write(to: fileURL)
+//                                                transferUtility.uploadFile(fileURL, bucket: "relivet", key: "example.jpg", contentType: "image/jpeg", expression: expression, completionHandler: { task, error in
+//                                                    if let error = error {
+//                                                        print("Error uploading image: \(error.localizedDescription)")
+//                                                    } else {
+//                                                        print("Image uploaded successfully")
+//                                                    }
+//                                                })
+//                                            }
+//                                        }
                                 }
                             Spacer()
                             Image("back")
@@ -805,6 +809,34 @@ struct My_Profile: View {
     private func deleteItem(){
         RetAddressData.remove(at: ClickIndex )
     }
+    func uploadDoc() {
+           let jsonString = "[{\"Activity_Retailer_Document\":{\"Ret_Code\":\"\(CustDet.shared.CusId)\",\"Sf_Code\":\"\(CustDet.shared.CusId)\",\"My_Document\":\"MANITEST\",\"UG_Certificate\":\"MANITEST\",\"PG_Certificate\":\"MANITEST\",\"SVC_Certificate\":\"EKSf_Code654147271\",\"VCI_Certificate\":\"MANITEST\",\"PANcard\":\"MANITEST\",\"GST_Number\":\"MANITEST\",\"Drug_Lic\":\"MANITEST\",\"ID\":25}}]"
+                                             
+       let params: Parameters = [
+                            "data": jsonString
+                        ]
+                                             
+                        print(params)
+                        AF.request(APIClient.shared.BaseURL+APIClient.shared.TestDBURL+"save_Retailer_Document"+"&divisionCode=\(CustDet.shared.Div)"+"&Sf_code=\(CustDet.shared.CusId)", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                            AFdata in
+                              switch AFdata.result
+                             {
+                        case .success(let value):
+                          print(value)
+                         if let json = value as? [String: Any] {
+                                                     
+                          print(json)
+                                                  
+                             }
+                                                 
+                           case .failure(let error):
+                           let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                          alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                            return
+                                })
+                                 }
+                                  }
+                                 }
 }
 
 struct My_Profile_Previews: PreviewProvider {
