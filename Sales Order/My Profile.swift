@@ -38,6 +38,7 @@ struct My_Profile: View {
     @State private var Editid:Int = 0
     @State private var listedDrCode = ""
     @State private var ClickIndex = Int()
+    @State private var showToast = false
     @State private var ShowTost = ""
     @State private var ontap_Educational_Details:Bool = false
     @State private var Ontap_Registration_certificate:Bool = false
@@ -136,7 +137,10 @@ struct My_Profile: View {
                     }
                     .padding(.leading,10)
                     .padding(.trailing,25)
-                    .onAppear{RetAddress()}
+                    .onAppear{
+                        RetAddress()
+                        Get_State()
+                    }
                     
                     ForEach(0..<RetAddressData.count, id: \.self) { index in
                         ZStack{
@@ -408,7 +412,7 @@ struct My_Profile: View {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
-                            AddNewAddres.toggle()
+                            //AddNewAddres.toggle()
                         }
                     VStack{
                         HStack {
@@ -452,55 +456,7 @@ struct My_Profile: View {
                         )
                         .onTapGesture {
                             SelectSatae.toggle()
-                            
-                            let axn = "get_states"
-                          
-                            let apiKey = "\(axn)"
-                            
-                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                .validate(statusCode: 200 ..< 299)
-                                .responseJSON { response in
-                                    switch response.result {
-                                    case .success(let value):
-                                        print(value)
-                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                                            return
-                                        }
-                                        guard let prettyPrintedJsons = String(data: prettyJsonData, encoding: .utf8) else {
-                                            print("Error: Could print JSON in String")
-                                            return
-                                        }
-                                        print(prettyPrintedJsons)
-                                        
-                                        // Assuming prettyPrintedJsons is a JSON string
-                                        if let jsonData = prettyPrintedJsons.data(using: .utf8),
-                                           let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-                                           let responseArray = json["response"] as? [[String: Any]] {
-                                            for stateItem in responseArray {
-                                                if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
-                                                    
-                                                    List_State.append(ListState(id: id, title: title))
-                                                }
-                                            }
-                                        }
-                                      
-                                        if let json = value as? [AnyObject] {
-                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                return
-                                            }
-                                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                print("Error: Could print JSON in String")
-                                                return
-                                            }
-                                            
-                                            print(prettyPrintedJson)
-                                        }
-                                    case .failure(let error):
-                                        print(error)
-                                    }
-                                }
+                            Get_State()
                         }
                         
                         HStack{
@@ -552,59 +508,24 @@ struct My_Profile: View {
                             }
                         }
                         .onTapGesture {
-                            if OpenMod == "Add"{
-                                if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=\(CustDet.shared.CusId)"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
-                                    AFdata in
-                                    switch AFdata.result
-                                    {
-                                        
-                                    case .success(let value):
-                                        print(value)
-                                        if let json = value as? [String: Any] {
-                                            
-                                            print(json)
-                                            RetAddress()
-                                            AddNewAddres.toggle()
-                                            UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                            
-                                        }
-                                        
-                                    case .failure(let error):
-                                        
-                                        let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                                        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                                            return
-                                        })
-                                        
-                                    }
-                                }
+                            print(selectedstateText)
+                            if (selectedstateText == "Select State"){
+                                showToast.toggle()
+                                 ShowTost = "Select State"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast.toggle()
                             }
-                        }
-                            if OpenMod == "Edit"{
-                                if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                                    let urlString = APIClient.shared.BaseURL + APIClient.shared.DBURL + "update_ret_address" + "&id=\(Editid)" + "&listedDrCode=\(CustDet.shared.CusId)" + "&address=\(encodedAddress)"
-
-                                    AF.request(urlString, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { AFdata in
-                                        switch AFdata.result {
-                                        case .success(let value):
-                                            print(value)
-                                            if let json = value as? [String: Any] {
-                                                print(json)
-                                                RetAddress()
-                                                AddNewAddres.toggle()
-                                                UIApplication.shared.windows.first?.makeKeyAndVisible()
-                                            }
-
-                                        case .failure(let error):
-                                            let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
-                                            alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
-                                                return
-                                            })
-                                        }
-                                    }
-                                }
+                            }else if(AddressTextInpute == ""){
+                                showToast.toggle()
+                                 ShowTost = "Enter Address"
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast.toggle()
                             }
+                            }else{
+                                Addres_Add_And_Edite()
+                            }
+                         
+                            
                         }
                     }
                     .background(Color.white)
@@ -742,6 +663,7 @@ struct My_Profile: View {
     }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
+        .toast(isPresented: $showToast, message: ShowTost)
     }
     private func RetAddress(){
         let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
@@ -760,13 +682,10 @@ struct My_Profile: View {
                             print("Error: Could print JSON in String")
                             return
                         }
-                        
-                        print(prettyPrintedJson)
                         RetAddressData.removeAll()
                         if let jsonData = prettyPrintedJson.data(using: .utf8),
                            let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
                            let responseArray = json["response"] as? [[String: Any]] {
-                            print(responseArray)
                             for AddressItem in responseArray {
                                 if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
                                     RetAddressData.append(AddAddress(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
@@ -780,7 +699,6 @@ struct My_Profile: View {
             }
     }
     private func GetCurrentLoction(){
-       
         LocationService.sharedInstance.getNewLocation(location: { location in
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             lazy var geocoder = CLGeocoder()
@@ -791,6 +709,13 @@ struct My_Profile: View {
                         let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
                         for i in 0...jAddress.count-1 {
                             print(jAddress[i])
+                            let Filter_State = List_State.filter { $0.title == jAddress[i] }
+                            if let tamilNaduState = Filter_State.first {
+                                let title = tamilNaduState.title
+                                selectedstateText = title
+                            } else {
+                                //selectedstateText = ""
+                            }
                             if i==0{
                                 sAddress = String(format: "%@", jAddress[i])
                             }else{
@@ -801,10 +726,119 @@ struct My_Profile: View {
                 }
                 AddressTextInpute = sAddress
                 print(sAddress)
+                print(List_State)
             }
         }, error:{ errMsg in
             print (errMsg)
         })
+    }
+    private func Get_State(){
+        List_State.removeAll()
+        let axn = "get_states"
+      
+        let apiKey = "\(axn)"
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJsons = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJsons)
+                    
+                    // Assuming prettyPrintedJsons is a JSON string
+                    if let jsonData = prettyPrintedJsons.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                       let responseArray = json["response"] as? [[String: Any]] {
+                        for stateItem in responseArray {
+                            if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
+                                
+                                List_State.append(ListState(id: id, title: title))
+                            }
+                        }
+                    }
+                  
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    private func Addres_Add_And_Edite(){
+        if OpenMod == "Add"{
+            if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"insert_ret_address"+"&listedDrCode=\(CustDet.shared.CusId)"+"&address=\(encodedAddress)", method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
+                AFdata in
+                switch AFdata.result
+                {
+                    
+                case .success(let value):
+                    print(value)
+                    if let json = value as? [String: Any] {
+                        
+                        print(json)
+                        RetAddress()
+                        AddNewAddres.toggle()
+                        selectedstateText = "Select State"
+                        UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        
+                    }
+                    
+                case .failure(let error):
+                    
+                    let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                        return
+                    })
+                    
+                }
+            }
+        }
+    }
+        if OpenMod == "Edit"{
+            if let encodedAddress = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                let urlString = APIClient.shared.BaseURL + APIClient.shared.DBURL + "update_ret_address" + "&id=\(Editid)" + "&listedDrCode=\(CustDet.shared.CusId)" + "&address=\(encodedAddress)"
+
+                AF.request(urlString, method: .post, parameters: nil, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON { AFdata in
+                    switch AFdata.result {
+                    case .success(let value):
+                        print(value)
+                        if let json = value as? [String: Any] {
+                            print(json)
+                            RetAddress()
+                            AddNewAddres.toggle()
+                            selectedstateText = "Select State"
+                            UIApplication.shared.windows.first?.makeKeyAndVisible()
+                        }
+
+                    case .failure(let error):
+                        let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .destructive) { _ in
+                            return
+                        })
+                    }
+                }
+            }
+        }
     }
     private func deleteItem(){
         RetAddressData.remove(at: ClickIndex )

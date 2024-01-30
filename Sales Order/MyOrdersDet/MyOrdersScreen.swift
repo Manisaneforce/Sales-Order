@@ -230,7 +230,7 @@ struct MyOrdersScreen: View {
                                     .foregroundColor(Color.red)
                                 Spacer()
                                 let orderDetail = OrderPaymentDetails[index]
-                                if (paymentenb.shared.isPaymentenbl == 1){
+                                if (paymentenb.shared.isPaymentenbl == 0){
                                     if orderDetail.isPaid.isEmpty {
                                         Button(action:{
                                             

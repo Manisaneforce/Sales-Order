@@ -350,7 +350,7 @@ struct MyOrdersDetails: View {
                                   print(orders)
                                     for itemsdata in orders{
                                         print(itemsdata)
-                                        let Status = itemsdata["Status"] as? String
+                                        let Status = itemsdata["invoiceStatus"] as? String
                                         let OrderID = itemsdata["OrderID"] as? String
                                         let Order_Value = String(format: "Rs. %.02f", (itemsdata["Order_Value"] as? Double)!)
                                         let Date = itemsdata["Date"] as? String

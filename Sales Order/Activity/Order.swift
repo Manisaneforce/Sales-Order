@@ -1460,7 +1460,10 @@ struct Address:View{
                     
                     print(GetingAddress)
                 }
-                .onAppear{GetingListAddress()}
+                .onAppear{
+                    GetingListAddress()
+                    Get_State()
+                }
                 ScrollView{
                 ForEach(0..<GetingAddress.count, id: \.self) { index in
                     if #available(iOS 15.0, *) {
@@ -1600,7 +1603,7 @@ struct Address:View{
                             clickPlusButton.toggle()
                         }) {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.blue)
+                                .foregroundColor(.red)
                         }
                         .padding(.top, 10)
                     }
@@ -1630,71 +1633,7 @@ struct Address:View{
                         )
                         .onTapGesture {
                             ClickStateButton.toggle()
-                            print(ClickStateButton)
-                            
-                            
-                            let axn = "get_states"
-                            /// http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get_states
-                            
-                            let apiKey = "\(axn)"
-                            
-                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                .validate(statusCode: 200 ..< 299)
-                                .responseJSON { response in
-                                    switch response.result {
-                                    case .success(let value):
-                                        print(value)
-                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
-                                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                                            return
-                                        }
-                                        guard let prettyPrintedJsons = String(data: prettyJsonData, encoding: .utf8) else {
-                                            print("Error: Could print JSON in String")
-                                            return
-                                        }
-                                        SelectState = prettyPrintedJsons
-                                        print(prettyPrintedJsons)
-                                        
-                                        // Assuming prettyPrintedJsons is a JSON string
-                                        if let jsonData = prettyPrintedJsons.data(using: .utf8),
-                                           let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-                                           let responseArray = json["response"] as? [[String: Any]] {
-                                            for stateItem in responseArray {
-                                                if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
-                                                    
-                                                    Getstates.append(get_states(id: id, title: title))
-                                                }
-                                            }
-                                        }
-                                        print(Getstates)
-                                        
-                                        
-                                        
-                                        if let json = value as? [AnyObject] {
-                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                return
-                                            }
-                                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                print("Error: Could print JSON in String")
-                                                return
-                                            }
-                                            
-                                            print(prettyPrintedJson)
-                                            
-                                            
-                                            print("______________________prodGroup_______________")
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                        }
-                                    case .failure(let error):
-                                        print(error)
-                                    }
-                                }
+                            Get_State()
                         }
                         HStack{
                             Text("Full Address")
@@ -1774,7 +1713,7 @@ struct Address:View{
                                             print(json)
                                             GetingListAddress()
                                             clickPlusButton.toggle()
-                                            
+                                            selectedstate = "Select State"
                                             UIApplication.shared.windows.first?.makeKeyAndVisible()
                                             
                                         }
@@ -1810,6 +1749,7 @@ struct Address:View{
                                             
                                             print(json)
                                             GetingListAddress()
+                                            selectedstate = "Select State"
                                             clickPlusButton.toggle()
                                             UIApplication.shared.windows.first?.makeKeyAndVisible()
                                             
@@ -1922,6 +1862,13 @@ struct Address:View{
                         let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
                         for i in 0...jAddress.count-1 {
                             print(jAddress[i])
+                            let Filter_State = Getstates.filter { $0.title == jAddress[i] }
+                            if let tamilNaduState = Filter_State.first {
+                                let title = tamilNaduState.title
+                                selectedstate = title
+                            } else {
+                                //selectedstateText = ""
+                            }
                             if i==0{
                                 sAddress = String(format: "%@", jAddress[i])
                             }else{
@@ -1936,6 +1883,67 @@ struct Address:View{
         }, error:{ errMsg in
             print (errMsg)
         })
+    }
+    private func Get_State(){
+        let axn = "get_states"
+        let apiKey = "\(axn)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    print(value)
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJsons = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    SelectState = prettyPrintedJsons
+                    print(prettyPrintedJsons)
+                    
+                    // Assuming prettyPrintedJsons is a JSON string
+                    if let jsonData = prettyPrintedJsons.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                       let responseArray = json["response"] as? [[String: Any]] {
+                        for stateItem in responseArray {
+                            if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
+                                
+                                Getstates.append(get_states(id: id, title: title))
+                            }
+                        }
+                    }
+                    print(Getstates)
+                    
+                    
+                    
+                    if let json = value as? [AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                        
+                        
+                        print("______________________prodGroup_______________")
+                        
+                        
+                        
+                        
+                        
+                        
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
     func GetingListAddress(){
         let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
