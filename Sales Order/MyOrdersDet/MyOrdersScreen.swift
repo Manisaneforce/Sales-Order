@@ -150,21 +150,21 @@ struct MyOrdersScreen: View {
                     HStack{
                         Text("Description")
                             .foregroundColor(Color.white)
-                            .font(.system(size: 16))
+                            .font(.system(size: 14))
                         Spacer()
                         HStack(spacing:40){
                             Text("items")
                                 .foregroundColor(Color.white)
-                                .font(.system(size: 16))
+                                .font(.system(size: 14))
                             Text("Qty")
                                 .foregroundColor(Color.white)
-                                .font(.system(size: 16))
-                            Text("Values")
+                                .font(.system(size: 14))
+                            Text("Value")
                                 .foregroundColor(Color.white)
-                                .font(.system(size: 16))
+                                .font(.system(size: 14))
                             Text("Type")
                                 .foregroundColor(Color.white)
-                                .font(.system(size: 16))
+                                .font(.system(size: 14))
                         }
                     }
                     .padding(10)

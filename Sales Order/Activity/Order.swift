@@ -141,6 +141,7 @@ struct Order: View {
     @State private var isManiView:Bool = false
     @State private var prodTypes1 = [String]()
     @State private var Typofid = [Int]()
+    @State private var Text_Qty = ""
 
     var body: some View {
         if OredSc{
@@ -540,7 +541,7 @@ struct Order: View {
                                                             return false
                                                         })
                                                         var selUOMConv: String = "1"
-                                                        
+                                                            
                                                         if(items.count>0){
                                                             selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
                                                             let uom = Int(selUOMConv)! * (filterItems[index].Amt)
@@ -566,34 +567,41 @@ struct Order: View {
                                                             .fontWeight(.bold)
                                                     }
                                                     .buttonStyle(PlainButtonStyle())
+                                                   
                                                     
-                                                    Text("\(filterItems[index].Amt)")
-                                                        .fontWeight(.bold)
-                                                        .font(.system(size: 15))
-                                                        .foregroundColor(Color.black)
+//                                                    Text("\(filterItems[index].Amt)")
+//                                                        .fontWeight(.bold)
+//                                                        .font(.system(size: 15))
+//                                                        .foregroundColor(Color.black)
+//                                                        .frame(width: 40)
+                                                        
                                                     
-                                                    Button(action: {
-                                                        filterItems[index].Amt += 1
-                                                        print(lstPrvOrder)
-                                                        print(filterItems[index].Amt)
+                                                    TextField("0", text: Binding(
+                                                        get: {
+                                                            String(filterItems[index].Amt)
+                                                        },
+                                                        set: { newValue in
+                                                            if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {
+                                                                filterItems[index].Amt = newQuantity
+                                                            } else if newValue.isEmpty {
+                                                                // If the TextField is empty, set the value to zero
+                                                                filterItems[index].Amt = 0
+                                                            }
+                                                        }
+                                                    ))
+                                                    .font(.system(size: 15))
+                                                    .foregroundColor(Color.black)
+                                                    .frame(width: 40)
+                                                    .keyboardType(.numberPad)
+                                                    .multilineTextAlignment(.center)
+                                                    .onChange(of: filterItems[index].Amt) { newValue in
                                                         
                                                         let proditem = Allprods[index]
-                                                        print(proditem)
                                                         let FilterProduct = Allprods[index].Unit_Typ_Product
-                                                        print(FilterProduct)
-                                                        
                                                         let selectproduct = $FilterProduct[index] as? AnyObject
-                                                        print(selectproduct as Any)
                                                         let  sQty = String(filterItems[index].Amt)
-                                                        print(sQty)
-                                                        
-                                                        print(Allprods[index].ProID)
-                                                        
                                                         let Ids = Allprods[index].ProID
-                                                        print(Ids as Any)
-                                                        
                                                         let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                                                            
                                                             if (Cart["Pcode"] as! String) == Ids {
                                                                 return true
                                                             }
@@ -607,9 +615,38 @@ struct Order: View {
                                                             let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
                                                             filterItems[index].TotAmt=String(TotalAmount)
                                                         } else{
-                                                            
                                                             selUOMConv=String(filterItems[index].Amt)
-                                                            print(selUOMConv)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        }
+                                                        
+                                                        changeQty(sQty: String(newValue), SelectProd: FilterProduct)
+                                                        Qtycount()
+                                                        TexQty()
+                                                    }
+                                                    Button(action: {
+                                                        filterItems[index].Amt += 1
+                                                        let proditem = Allprods[index]
+                                                        let FilterProduct = Allprods[index].Unit_Typ_Product
+                                                        let selectproduct = $FilterProduct[index] as? AnyObject
+                                                        let  sQty = String(filterItems[index].Amt)
+                                                        let Ids = Allprods[index].ProID
+                                                        let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                                            if (Cart["Pcode"] as! String) == Ids {
+                                                                return true
+                                                            }
+                                                            return false
+                                                        })
+                                                        var selUOMConv: String = "1"
+                                                        
+                                                        if(items.count>0){
+                                                            selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+                                                            let uom = Int(selUOMConv)! * (filterItems[index].Amt)
+                                                            let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
+                                                            filterItems[index].TotAmt=String(TotalAmount)
+                                                        } else{
+                                                            selUOMConv=String(filterItems[index].Amt)
                                                             let uom = Int(selUOMConv)! * (filterItems[index].Amt)
                                                             let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
                                                             filterItems[index].TotAmt=String(TotalAmount)
@@ -940,9 +977,9 @@ struct Order: View {
                 
             }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
-            
-            
-            
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
@@ -1451,10 +1488,8 @@ struct Address:View{
                     }
                     if SelMod == "BA"{
                         BillingAddress = CustDet.shared.Addr
-                        
                     }
                     ADDaddress = false
-                    
                 }
                 .onAppear{
                     
@@ -2515,7 +2550,8 @@ struct SelPrvOrder: View {
                                                 Text("\(filterItems[index].quantity)")
                                                     .fontWeight(.bold)
                                                     .foregroundColor(Color.black)
-                                                    .font(.system(size: 14))
+                                                    .frame(width: 40)
+                                                    .font(.system(size: 13))
                                                 Button(action:{
                                                     filterItems[index].quantity += 1
                                                     print(AllPrvprod[index].ProID)
@@ -3154,6 +3190,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
     }
+    print(VisitData.shared.ProductCart)
     var lstPrv:[AnyObject] = []
     lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
@@ -3239,7 +3276,41 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
 
      updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
 }
+func changeQty(sQty:String,SelectProd:[String:Any]) {
+    print("Quantity changed to: \(sQty)")
+    print(SelectProd)
+    let Ids = SelectProd["id"] as? String
+    print(Ids as Any)
+    
+    let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
+        
+        if Cart["Pcode"] as! String == Ids {
+            return true
+        }
+        return false
+    })
+    var selUOMConv: String = "1"
+    var selNetWt: String = ""
+    if (items.count>0){
+        selUOM=String(format: "%@", items[0]["UOM"] as! CVarArg)
+        selUOMNm=String(format: "%@", items[0]["UOMNm"] as! CVarArg)
+        selUOMConv=String(format: "%@", items[0]["UOMConv"] as! CVarArg)
+        selNetWt=String(format: "%@", items[0]["NetWt"] as! CVarArg)
+    }
+    else{
+         selUOM=String(format: "%@", SelectProd["Division_Code"] as! CVarArg)
+        print(selUOM)
+          selUOMNm=String(format: "%@", SelectProd["Product_Sale_Unit"] as! CVarArg)
+        print(selUOMNm)
+         selUOMConv=String(format: "%@", SelectProd["OrdConvSec"] as! CVarArg)
+        print(selUOMConv)
+        // let selNetWt=String(format: "%@", lstProducts[indxPath.row]["product_netwt"] as! CVarArg)
+         selNetWt = ""
+        print(selNetWt)
+    }
 
+    updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
+}
 
 
 func updateOrderValues(refresh:Int){

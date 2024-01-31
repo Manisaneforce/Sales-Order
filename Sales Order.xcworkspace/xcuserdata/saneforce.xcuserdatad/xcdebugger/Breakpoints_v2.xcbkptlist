@@ -3,4 +3,118 @@
    uuid = "91663B3D-248D-42A2-84B4-CFE7B63E5E81"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9331F7A4-1FF6-4713-A1F3-469A122AC17B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1389"
+            endingLineNumber = "1389"
+            landmarkName = "TexQty()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6251C84-4B27-44D1-A06B-BCB18C17023C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1267"
+            endingLineNumber = "1267"
+            landmarkName = "TexQty()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4C07DE28-D0E8-4AC7-B66D-3B5AB3F8C48F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1250"
+            endingLineNumber = "1250"
+            landmarkName = "TexQty()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FABA7713-9BB6-4DCC-A6FE-D1A8B6DAE5D2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1302"
+            endingLineNumber = "1302"
+            landmarkName = "TexQty()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FCE1DD96-3148-495B-BEF0-BAE6E2146C04"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sales Order/Activity/Order.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "3193"
+            endingLineNumber = "3193"
+            landmarkName = "updateQty(id:sUom:sUomNm:sUomConv:sNetUnt:sQty:ProdItem:refresh:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "FCE1DD96-3148-495B-BEF0-BAE6E2146C04 - 243fcdf41b47474b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sales_Order.updateQty(id: Swift.String, sUom: Swift.String, sUomNm: Swift.String, sUomConv: Swift.String, sNetUnt: Swift.String, sQty: Swift.String, ProdItem: Swift.Dictionary&lt;Swift.String, Any&gt;, refresh: Swift.Int) -&gt; ()"
+                  moduleName = "Sales Order"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "3168"
+                  endingLineNumber = "3168"
+                  offsetFromSymbolStart = "18384">
+               </Location>
+               <Location
+                  uuid = "FCE1DD96-3148-495B-BEF0-BAE6E2146C04 - 243fcdf41b47474b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Sales_Order.updateQty(id: Swift.String, sUom: Swift.String, sUomNm: Swift.String, sUomConv: Swift.String, sNetUnt: Swift.String, sQty: Swift.String, ProdItem: Swift.Dictionary&lt;Swift.String, Any&gt;, refresh: Swift.Int) -&gt; ()"
+                  moduleName = "Sales Order"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/saneforce/Desktop/Sales%20Order/Sales%20Order/Activity/Order.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "3168"
+                  endingLineNumber = "3168"
+                  offsetFromSymbolStart = "18404">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
