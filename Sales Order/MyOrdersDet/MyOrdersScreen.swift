@@ -562,7 +562,6 @@ struct OrderDetView:View{
                         .frame(height: 80)
                     
                     HStack {
-                        
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
                         })

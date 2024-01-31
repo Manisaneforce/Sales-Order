@@ -800,7 +800,7 @@ struct Order: View {
                             .padding(.horizontal,10)
                             HStack{
                                 
-                                Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
+                                Text("\(Image(systemName: "indianrupeesign"))\(String(lblTotAmt))")
                                     .font(.system(size: 13))
                                     .fontWeight(.heavy)
                                     .foregroundColor(.white)
@@ -2366,6 +2366,7 @@ struct SelPrvOrder: View {
     @State private var GST12 = ""
     @State private var GST18 = ""
     @State private var Jiomoneypage = false
+    @State private var Home_Button_Alt = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
@@ -2395,12 +2396,36 @@ struct SelPrvOrder: View {
                             HStack {
                                 
                                 Text(" Selected Order Prv")
-                                    .font(.system(size: 25))
+                                    .font(.system(size: 18))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .padding(.top, 50)
                                     .offset(x: -20)
+                                    .padding(.leading,20)
+                                Spacer()
+                                Image(systemName: "house.fill")
+                                    .foregroundColor(.white)
+                                    .padding(.top, 50)
+                                    .offset(x: -20)
+                                    .onTapGesture {
+                                        Home_Button_Alt .toggle()
+                                    }
+                                    .alert(isPresented: $Home_Button_Alt) {
+                                        Alert(
+                                            title: Text("Confirmation"),
+                                            message: Text("Do you want cancel this order Draft"),
+                                            primaryButton: .default(Text("OK")) {
+                                                VisitData.shared.ProductCart = []
+                                                VisitData.shared.lstPrvOrder = []
+                                                TotalQtyData = 0
+                                                lblTotAmt = "0.0"
+                                                self.presentationMode.wrappedValue.dismiss()
+                                            },
+                                            secondaryButton: .cancel()
+                                        )
+                                    }
                             }
+                            .padding(.horizontal,10)
                         }
                         .frame(maxWidth: .infinity)
                         
@@ -2547,11 +2572,58 @@ struct SelPrvOrder: View {
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
                                                 
-                                                Text("\(filterItems[index].quantity)")
-                                                    .fontWeight(.bold)
-                                                    .foregroundColor(Color.black)
-                                                    .frame(width: 40)
-                                                    .font(.system(size: 13))
+//                                                Text(String(filterItems[index].quantity))
+//                                                    .fontWeight(.bold)
+//                                                    .foregroundColor(Color.black)
+//                                                    .frame(width: 40)
+//                                                    .font(.system(size: 13))
+                                                
+                                                TextField("0", text: Binding(
+                                                    get: {
+                                                        String(filterItems[index].quantity)
+                                                    },
+                                                    set: { newValue in
+                                                        if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {
+                                                            filterItems[index].quantity = newQuantity
+                                                        } else if newValue.isEmpty {
+                                                            // If the TextField is empty, set the value to zero
+                                                            filterItems[index].quantity = 0
+                                                        }
+                                                    }
+                                                ))
+                                                .font(.system(size: 15))
+                                                .foregroundColor(Color.black)
+                                                .frame(width: 40)
+                                                .keyboardType(.numberPad)
+                                                .multilineTextAlignment(.center)
+                                                .onChange(of: filterItems[index].quantity) { newValue in
+                                                    
+                                                    
+                                                    let ProId = AllPrvprod[index].ProID
+                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                        do{
+                                                            if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+                                                                print(jsonArray)
+                                                                let itemsWithTypID3 = jsonArray.filter { ($0["id"] as? String) == ProId }
+                                                                
+                                                                if !itemsWithTypID3.isEmpty {
+                                                                    for item in itemsWithTypID3 {
+                                                                        let Qty = String(filterItems[index].quantity)
+                                                                        changeQty(sQty: String(newValue), SelectProd: item)
+                                                                        Qtycount()
+                                                                        prvDet()
+                                                                    }
+                                                                } else {
+                                                                    print("No data with TypID")
+                                                                }
+                                                                
+                                                            }
+                                                        } catch{
+                                                            print("Data is error\(error)")
+                                                        }
+                                                    }
+                                                }
+                                                
                                                 Button(action:{
                                                     filterItems[index].quantity += 1
                                                     print(AllPrvprod[index].ProID)
@@ -2587,7 +2659,7 @@ struct SelPrvOrder: View {
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
                                             }
-                                            .frame(width: 60)
+                                            .frame(width: 75)
                                             .padding(.vertical, 4)
                                             .padding(.horizontal, 15)
                                             .background(Color.gray.opacity(0.2))
@@ -2791,7 +2863,7 @@ struct SelPrvOrder: View {
                                 .padding(.horizontal,10)
                                 HStack{
                                     
-                                    Text("\(Image(systemName: "indianrupeesign"))\(lblTotAmt)")
+                                    Text("\(Image(systemName: "indianrupeesign"))\(String(lblTotAmt))")
                                         .font(.system(size: 13))
                                         .fontWeight(.heavy)
                                         .foregroundColor(.white)
@@ -2893,6 +2965,9 @@ struct SelPrvOrder: View {
                             }
         }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
     }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
@@ -3061,6 +3136,7 @@ struct SelPrvOrder: View {
                 items.append(Sales_Order.FilterItem(id: index, quantity: Int(qty[index])!))
             }
             filterItems = items
+            print(filterItems)
         }
         
     }
