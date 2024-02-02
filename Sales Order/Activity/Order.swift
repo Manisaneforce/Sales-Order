@@ -185,8 +185,7 @@ struct Order: View {
                             }
                             
                             Text("Order")
-                                .font(.system(size: 22))
-                                .fontWeight(.bold)
+                                .font(.custom("Poppins-Bold", size: 18))
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                             Spacer()
@@ -202,7 +201,7 @@ struct Order: View {
                         VStack(spacing:5){
                             HStack{
                                 Text(CustDet.shared.CusName)
-                                    .font(.system(size: 15))
+                                    .font(.custom("Poppins-SemiBold", size: 15))
                                 Spacer()
                             }
                             HStack {
@@ -212,15 +211,14 @@ struct Order: View {
                                 //                                .background(Color.blue)
                                 //                                .cornerRadius(10)
                                 Text(CustDet.shared.Mob)
-                                    .font(.system(size: 15))
-                                    .fontWeight(.semibold)
+                                    .font(.custom("Poppins-SemiBold", size: 15))
                                 Spacer()
                             }
                             HStack{
                                 Text("Billing Address:")
-                                    .font(.system(size: 12))
+                                    .font(.custom("Poppins-Regular", size: 12))
                                 Text(BillingAddress)
-                                    .font(.system(size: 12))
+                                    .font(.custom("Poppins-Regular", size: 12))
                                 Spacer()
                                 
                                 Image(systemName: "pencil" )
@@ -250,15 +248,15 @@ struct Order: View {
                                         }
                                     }
                                 Text("Shipping Address same As Billing Address")
-                                    .font(.system(size: 12))
+                                    .font(.custom("Poppins-Regular", size: 12))
                                 Spacer()
                             }
                             if !SameAddrssmark{
                                 HStack{
                                     Text("Shipping Address:")
-                                        .font(.system(size: 12))
+                                        .font(.custom("Poppins-Regular", size: 12))
                                     Text(ShpingAddress)
-                                        .font(.system(size: 12))
+                                        .font(.custom("Poppins-Regular", size: 12))
                                     Spacer()
                                     Image(systemName: "pencil")
                                         .foregroundColor(Color(.blue))

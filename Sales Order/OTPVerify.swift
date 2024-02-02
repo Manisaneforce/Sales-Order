@@ -280,6 +280,7 @@ struct OTPVerify: View {
                                 }
                             } else {
                                 Text("OTP didn't receive? Resend the OTP  \(remainingTime) in seconds")
+                                    .font(.custom("Poppins-SemiBold", size: 15))
                                     .padding(.horizontal,10)
                                     .multilineTextAlignment(.center)
                             }

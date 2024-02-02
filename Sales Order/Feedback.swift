@@ -167,7 +167,7 @@ struct Feedback: View {
 //                }
                 
                 HStack{
-                    Text("4. For any other information/ to share Your feedback here")
+                    Text("6. For any other information/ to share Your feedback here")
                         .font(.system(size: 14))
                         .fontWeight(.semibold)
                     Spacer()

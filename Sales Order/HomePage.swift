@@ -41,7 +41,8 @@ struct HomePage: View {
                         HStack() {
                             Text(" ")
                             Text("Dashboard")
-                                .font(.system(size: 20))
+                                //.font(.system(size: 20))
+                                .font(.custom("Poppins-Bold", size: 20))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
@@ -49,9 +50,8 @@ struct HomePage: View {
                             Spacer()
                             HStack(spacing:30){
                                 Text(currentDate)
-                                    .font(.system(size: 15))
+                                    .font(.custom("Poppins-SemiBold", size: 15))
                                     .font(.headline)
-                                    .fontWeight(.bold)
                                     .foregroundColor(Color.white)
                                 //.offset(x: 30, y: 20)
                                 
@@ -163,8 +163,7 @@ struct HomePage: View {
                         VStack{
                             HStack{
                                 Text("Greetings Dr.\(CustDet.shared.CusName)")
-                                    .font(.system(size: 18))
-                                    .fontWeight(.semibold)
+                                    .font(.custom("Poppins-SemiBold", size: 15))
                                 Spacer()
                             }
                             .padding(.leading,15)
@@ -334,9 +333,7 @@ struct DashboardItem: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40, height: 40)
             Text(title)
-                //.font(.callout)
-                .font(.system(size: 12))
-                //.fontWeight(.semibold)
+                .font(.custom("Poppins-Regular", size: 12))
                 .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 
@@ -419,3 +416,5 @@ struct DasImageView: View {
     }
 }
 
+// SwipGestore
+//https://chat.openai.com/c/4ca48131-f3e9-4e77-b1c0-27c233b20df6
