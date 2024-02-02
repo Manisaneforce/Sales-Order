@@ -179,7 +179,7 @@ struct My_Profile: View {
                         .foregroundColor(.gray)
                         .padding(10)
                     
-                    VStack{
+                    /*VStack{
                         HStack{
                             Image("documents")
                                 .resizable()
@@ -189,27 +189,8 @@ struct My_Profile: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black)
                                 .onTapGesture {
-                                    uploadDoc()
-                                    
-                                    //Use in Live
-                                    
-//                                    func uploadImage() {
-//                                            guard let transferUtility = AWSS3TransferUtility.s3TransferUtility(forKey: "USW2S3") else { return }
-//
-//                                            let image = UIImage(named: "example.jpg")!
-//                                            if let imageData = image.jpegData(compressionQuality: 0.8) {
-//                                                let expression = AWSS3TransferUtilityUploadExpression()
-//                                                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("jpg")
-//                                                try? imageData.write(to: fileURL)
-//                                                transferUtility.uploadFile(fileURL, bucket: "relivet", key: "example.jpg", contentType: "image/jpeg", expression: expression, completionHandler: { task, error in
-//                                                    if let error = error {
-//                                                        print("Error uploading image: \(error.localizedDescription)")
-//                                                    } else {
-//                                                        print("Image uploaded successfully")
-//                                                    }
-//                                                })
-//                                            }
-//                                        }
+                                    //uploadDoc()
+                                
                                 }
                             Spacer()
                             Image("back")
@@ -403,7 +384,7 @@ struct My_Profile: View {
                             .frame(height: 1)
                             .foregroundColor(.gray)
                             .padding(10)
-                    }
+                    }*/
                 }
               
                 Spacer()
