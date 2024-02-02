@@ -19,3 +19,12 @@ class GlobalFunc{
         return nil
     }
 }
+
+extension Bundle {
+    
+    public var appBuild: String { getInfo("CFBundleVersion") }
+    public var appVersionLong: String { getInfo("CFBundleShortVersionString") }
+    //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
+    
+    fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+}

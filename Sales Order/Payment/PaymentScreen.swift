@@ -141,8 +141,13 @@ struct PaymentScreen: View {
                         }
                         .padding(10)
                     }
-                    
                     .frame(height:40)
+                     Spacer()
+                    Text("No Data Found !")
+                        .fontWeight(.bold)
+                        .font(.system(size: 15))
+                        
+                    
                     Spacer()
                     
                     ZStack {

@@ -211,6 +211,10 @@ struct ContentView: View {
                             }
                             
                             Spacer()
+                            Text("App Version \(Bundle.main.appVersionLong)")
+                                .padding(.bottom,10)
+                                .padding(.top,150)
+                                .font(.system(size: 12))
                         }
                        
                   Spacer()
