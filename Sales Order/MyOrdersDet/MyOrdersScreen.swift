@@ -318,11 +318,8 @@ struct MyOrdersScreen: View {
                                     .foregroundColor(.white)
                             }
                         }
-                        
-                        //.padding()
                     }
                 }
-                
             }
             
             if Filterdate{
@@ -613,368 +610,372 @@ struct OrderDetView:View{
            
                 VStack{
                     VStack{
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.white)
-                            .shadow(radius: 5)
-                            .padding(.horizontal,10)
-                        VStack{
-                            HStack{
-                                Text(CustDet.shared.StkNm)
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                                Spacer()
-                                Text("ORDER")
-                                    .font(.system(size: 14))
-                                    .fontWeight(.bold)
-                            }
-                            .padding(.horizontal,20)
-                            .padding(.vertical,5)
-                            HStack{
-                                Image(systemName: "phone.circle.fill")
-                                    .foregroundColor(Color.blue)
-                                Text(CustDet.shared.StkMob)
-                                Spacer()
-                            }
-                            .padding(.horizontal,20)
-                            
-                            ZStack{
-                                Rectangle()
-                                    .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
-                                    .foregroundColor(Color.gray)
-                                VStack(spacing:10){
-                                    HStack{
-                                        Text("BILL TO")
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 13))
-                                        Spacer()
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.white)
+                                .shadow(radius: 5)
+                                .padding(.horizontal,10)
+                            VStack{
+                                HStack{
+                                    Text(CustDet.shared.StkNm)
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                    Text("ORDER")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.bold)
+                                }
+                                .padding(.horizontal,20)
+                                .padding(.vertical,5)
+                                HStack{
+                                    Image(systemName: "phone.circle.fill")
+                                        .foregroundColor(Color.blue)
+                                    Text(CustDet.shared.StkMob)
+                                    Spacer()
+                                }
+                                .padding(.horizontal,20)
+                                
+                                ZStack{
+                                    Rectangle()
+                                        .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
+                                        .foregroundColor(Color.gray)
+                                    VStack(spacing:10){
+                                        HStack{
+                                            Text("BILL TO")
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 13))
+                                            Spacer()
+                                        }
+                                        .padding(.top,10)
+                                        .padding(.horizontal,10)
+                                        HStack{
+                                            Text(CustDet.shared.CusName)
+                                                .font(.system(size: 13))
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                        }
+                                        .padding(.horizontal,10)
+                                        HStack{
+                                            Image(systemName: "phone.circle.fill")
+                                                .foregroundColor(Color.blue)
+                                            Text(CustDet.shared.Mob)
+                                                .font(.system(size: 13))
+                                                .foregroundColor(.gray)
+                                            Spacer()
+                                        }
+                                        .padding(.horizontal,10)
+                                        HStack{
+                                            Text(CustDet.shared.Addr)
+                                                .font(.system(size: 13))
+                                                .foregroundColor(.gray)
+                                            
+                                            Spacer()
+                                        }
+                                        .padding(.horizontal,10)
+                                        .padding(.bottom,10)
+                                        
                                     }
-                                    .padding(.top,10)
-                                    .padding(.horizontal,10)
-                                    HStack{
-                                        Text(CustDet.shared.CusName)
-                                            .font(.system(size: 13))
-                                            .fontWeight(.bold)
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal,10)
-                                    HStack{
-                                        Image(systemName: "phone.circle.fill")
-                                            .foregroundColor(Color.blue)
-                                        Text(CustDet.shared.Mob)
-                                            .font(.system(size: 13))
-                                            .foregroundColor(.gray)
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal,10)
-                                    HStack{
-                                        Text(CustDet.shared.Addr)
-                                            .font(.system(size: 13))
-                                            .foregroundColor(.gray)
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal,10)
-                                    .padding(.bottom,10)
+                                    
                                     
                                 }
-                                
-                                
+                                .padding(.horizontal,20)
+                                .padding(.vertical,10)
                             }
-                            .padding(.horizontal,20)
-                            .padding(.vertical,10)
                         }
-                    }
-                    .frame(height: 200)
+                        .frame(height: 200)
                     }.padding(.horizontal,10)
                         .padding(.vertical,10)
-                
-                
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.white)
-                            .shadow(radius: 5)
-                            .padding(.horizontal,20)
-                        ScrollView{
-                        VStack{
+                    
+                    VStack{
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.white)
+                                .shadow(radius: 5)
+                                .padding(.horizontal,20)
                             VStack{
-                                HStack{
-                                    Text(OrderId)
-                                        .font(.system(size: 15))
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                    HStack{
-                                        Text("Delivery")
-                                            .font(.system(size: 15))
-                                            .fontWeight(.bold)
-                                    }
-                                }
-                                .padding(10)
-                                HStack{
-                                    Text(Orderdate)
-                                    Spacer()
-                                }
-                                .padding(10)
+                            ScrollView{
                                 VStack{
-                                    Rectangle()
-                                        .frame(height: 1)
+                                    VStack{
+                                        HStack{
+                                            Text(OrderId)
+                                                .font(.system(size: 15))
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                            HStack{
+                                                Text("Delivery")
+                                                    .font(.system(size: 15))
+                                                    .fontWeight(.bold)
+                                            }
+                                        }
                                         .padding(10)
-                                    HStack{
-                                        Text("Item")
-                                            .font(.system(size: 15))
-                                            .fontWeight(.bold)
-                                        Spacer()
-                                        HStack(spacing:40){
-                                            Text("UOM")
-                                                .font(.system(size: 15))
-                                                .fontWeight(.bold)
-                                            Text("Qty")
-                                                .font(.system(size: 15))
-                                                .fontWeight(.bold)
-                                            Text("Price")
-                                                .font(.system(size: 15))
-                                                .fontWeight(.bold)
-                                            Text("Total")
-                                                .font(.system(size: 15))
-                                                .fontWeight(.bold)
+                                        HStack{
+                                            Text(Orderdate)
+                                            Spacer()
+                                        }
+                                        .padding(10)
+                                        VStack{
+                                            Rectangle()
+                                                .frame(height: 1)
+                                                .padding(10)
+                                            HStack{
+                                                Text("Item")
+                                                    .font(.system(size: 15))
+                                                    .fontWeight(.bold)
+                                                Spacer()
+                                                HStack(spacing:40){
+                                                    Text("UOM")
+                                                        .font(.system(size: 15))
+                                                        .fontWeight(.bold)
+                                                    Text("Qty")
+                                                        .font(.system(size: 15))
+                                                        .fontWeight(.bold)
+                                                    Text("Price")
+                                                        .font(.system(size: 15))
+                                                        .fontWeight(.bold)
+                                                    Text("Total")
+                                                        .font(.system(size: 15))
+                                                        .fontWeight(.bold)
+                                                }
+                                            }
+                                            .padding(10)
+                                            
+                                            Rectangle()
+                                                .frame(height: 1)
+                                                .padding(10)
                                         }
                                     }
-                                    .padding(10)
-                                    
-                                    Rectangle()
-                                        .frame(height: 1)
-                                        .padding(10)
-                                }
-                            }
-                            .onAppear{
-                                print(OrderId)
-                                let axn = "get/orderDet&orderID=\(OrderId)"
-                                //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/orderDet&orderID=MUMBAI01-2023-2024-SO-95
-                                let apiKey = "\(axn)"
-                                
-                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                    .validate(statusCode: 200 ..< 299)
-                                    .responseJSON { response in
-                                        switch response.result {
-                                        case .success(let value):
-                                            if let json = value as? [AnyObject] {
-                                                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                    print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                    return
-                                                }
-                                                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                    print("Error: Could print JSON in String")
-                                                    return
-                                                }
-                                                print(prettyPrintedJson)
-                                                if let jsonData = prettyPrintedJson.data(using: .utf8){
-                                                    do{
-                                                        if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
-                                                            print(jsonArray)
-                                                            
-                                                            for Items in jsonArray{
-                                                                print(Items)
-                                                                if let TAX_details = Items["TAX_details"] as? [[String: Any]] {
-                                                                    // Print the entire TAX_details array
-                                                                    print(TAX_details)
-                                                                    
-                                                                   
-                                                                    if let firstTaxDetail = TAX_details.first {
-                                                                   
-                                                                        if let taxName = firstTaxDetail["Tax_Name"] as? String {
-                                                                          
-                                                                            print("Tax Name: \(taxName)")
-                                                                            if (taxName == "GST 18%,") {
-                                                                                print("GST 18%")
-                                                                                print(firstTaxDetail)
-                                                                                if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
-                                                                                    tax18 += taxamt
-                                                                                }
-                                                                              
-                                                                            }
-                                                                            
-                                                                            if (taxName == "GST 12%,") {
-                                                                                print("GST 12%")
-                                                                                print(firstTaxDetail)
-                                                                                if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
-                                                                                    tax12 += taxamt
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        print("TAX_details is empty")
-                                                                    }
-                                                                } else {
-                                                                    print("TAX_details is not a valid array")
-                                                                }
-                                                                if let totqty
-                                                                    = Items["New_Qty"] as? Int {
-                                                                    NewQty += totqty
-                                                                }
-                                                                umounit += 1
-                                                                let Product_Name = Items["Product_Name"] as? String
-                                                                let UOM = Items["UOM"] as? String
-                                                                let New_Qty = String((Items["New_Qty"] as? Int)!)
-                                                                var BillRate = ""
-                                                                if let BillRates = Items["BillRate"] as? Double {
-                                                                    BillRate = String(format: "%.2f", BillRates)
-                                                                    print("Formatted Order Value: \(BillRates)")
-                                                                } else {
-                                                                    print("Order Value is not a valid Double.")
-                                                                }
-                                                                
-                                                                
-                                                                var value = ""
-                                                                if let values = Items["value"] as? Double {
-                                                                    value = String(format: "%.2f", values)
-                                                                    print("Formatted Order Value: \(values)")
-                                                                } else {
-                                                                    print("Order Value is not a valid Double.")
-                                                                }
-                                                                
-                                                                SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, value: value))
-                                                            }
-                                                            print(tax12)
-                                                            print(tax18)
+                                    .onAppear{
+                                        print(OrderId)
+                                        let axn = "get/orderDet&orderID=\(OrderId)"
+                                        //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/orderDet&orderID=MUMBAI01-2023-2024-SO-95
+                                        let apiKey = "\(axn)"
+                                        
+                                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                            .validate(statusCode: 200 ..< 299)
+                                            .responseJSON { response in
+                                                switch response.result {
+                                                case .success(let value):
+                                                    if let json = value as? [AnyObject] {
+                                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                            return
                                                         }
-                                                    } catch{
-                                                        print("Error Data")
+                                                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                            print("Error: Could print JSON in String")
+                                                            return
+                                                        }
+                                                        print(prettyPrintedJson)
+                                                        if let jsonData = prettyPrintedJson.data(using: .utf8){
+                                                            do{
+                                                                if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
+                                                                    print(jsonArray)
+                                                                    
+                                                                    for Items in jsonArray{
+                                                                        print(Items)
+                                                                        if let TAX_details = Items["TAX_details"] as? [[String: Any]] {
+                                                                            // Print the entire TAX_details array
+                                                                            print(TAX_details)
+                                                                            
+                                                                            
+                                                                            if let firstTaxDetail = TAX_details.first {
+                                                                                
+                                                                                if let taxName = firstTaxDetail["Tax_Name"] as? String {
+                                                                                    
+                                                                                    print("Tax Name: \(taxName)")
+                                                                                    if (taxName == "GST 18%,") {
+                                                                                        print("GST 18%")
+                                                                                        print(firstTaxDetail)
+                                                                                        if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
+                                                                                            tax18 += taxamt
+                                                                                        }
+                                                                                        
+                                                                                    }
+                                                                                    
+                                                                                    if (taxName == "GST 12%,") {
+                                                                                        print("GST 12%")
+                                                                                        print(firstTaxDetail)
+                                                                                        if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
+                                                                                            tax12 += taxamt
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } else {
+                                                                                print("TAX_details is empty")
+                                                                            }
+                                                                        } else {
+                                                                            print("TAX_details is not a valid array")
+                                                                        }
+                                                                        if let totqty
+                                                                            = Items["New_Qty"] as? Int {
+                                                                            NewQty += totqty
+                                                                        }
+                                                                        umounit += 1
+                                                                        let Product_Name = Items["Product_Name"] as? String
+                                                                        let UOM = Items["UOM"] as? String
+                                                                        let New_Qty = String((Items["New_Qty"] as? Int)!)
+                                                                        var BillRate = ""
+                                                                        if let BillRates = Items["BillRate"] as? Double {
+                                                                            BillRate = String(format: "%.2f", BillRates)
+                                                                            print("Formatted Order Value: \(BillRates)")
+                                                                        } else {
+                                                                            print("Order Value is not a valid Double.")
+                                                                        }
+                                                                        
+                                                                        
+                                                                        var value = ""
+                                                                        if let values = Items["value"] as? Double {
+                                                                            value = String(format: "%.2f", values)
+                                                                            print("Formatted Order Value: \(values)")
+                                                                        } else {
+                                                                            print("Order Value is not a valid Double.")
+                                                                        }
+                                                                        
+                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, value: value))
+                                                                    }
+                                                                    print(tax12)
+                                                                    print(tax18)
+                                                                }
+                                                            } catch{
+                                                                print("Error Data")
+                                                            }
+                                                        }
+                                                        print(SelectDet)
+                                                        
                                                     }
+                                                case .failure(let error):
+                                                    print(error)
                                                 }
-                                                print(SelectDet)
+                                            }
+                                        
+                                    }
+                                    ForEach(0 ..< SelectDet.count, id: \.self) { index in
+                                        HStack{
+                                            Text(SelectDet[index].Product_Name)
+                                                .font(.system(size: 12))
+                                                .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
+                                                .multilineTextAlignment(.leading)
+                                            
+                                            Spacer()
+                                            HStack(spacing:20){
+                                                
+                                                Text(SelectDet[index].Unit_Name)
+                                                    .font(.system(size: 12))
+                                                    .multilineTextAlignment(.leading)
+                                                    .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .center : .leading)
+                                                
+                                                
+                                                Text(SelectDet[index].New_Qty)
+                                                    .font(.system(size: 12))
+                                                    .frame(width: 20)
+                                                
+                                                Text(SelectDet[index].BillRate)
+                                                    .font(.system(size: 12))
+                                                    .frame(width: 50)
+                                                    .multilineTextAlignment(.center)
+                                                
+                                                Text(SelectDet[index].value)
+                                                    .font(.system(size: 12))
+                                                    .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .trailing : .trailing)
+                                                //.padding(-10)
                                                 
                                             }
-                                        case .failure(let error):
-                                            print(error)
+                                        }
+                                        
+                                        .onAppear{
+                                            PagHeight += 50
+                                        }
+                                        
+                                        
+                                        
+                                    }
+                                    .listStyle(PlainListStyle())
+                                    .padding(13)
+                                    VStack{
+                                        Rectangle()
+                                            .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
+                                            .foregroundColor(Color.gray)
+                                            .frame(height: 2)
+                                            .padding(10)
+                                        HStack{
+                                            Text("PRICE DETAILS")
+                                                .font(.system(size: 16))
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                        }
+                                        .padding(10)
+                                        Rectangle()
+                                            .foregroundColor(Color.gray)
+                                            .frame(height: 1)
+                                            .padding(10)
+                                        VStack(spacing:-10){
+                                            HStack{
+                                                Text("Subtotal")
+                                                    .font(.system(size: 12))
+                                                
+                                                Spacer()
+                                                Text(TotalVal)
+                                                    .font(.system(size: 12))
+                                            }
+                                            .padding(10)
+                                            HStack{
+                                                Text("Total item")
+                                                    .font(.system(size: 12))
+                                                Spacer()
+                                                Text("\(umounit)")
+                                                    .font(.system(size: 12))
+                                            }
+                                            .padding(10)
+                                            HStack{
+                                                Text("Total Qty")
+                                                    .font(.system(size: 12))
+                                                Spacer()
+                                                Text("\(NewQty)")
+                                                    .font(.system(size: 12))
+                                            }
+                                            .padding(10)
+                                            if tax18 != 0.0{
+                                                HStack{
+                                                    Text("GST 18%")
+                                                        .font(.system(size: 12))
+                                                    Spacer()
+                                                    Text("\(tax18)")
+                                                        .font(.system(size: 12))
+                                                }
+                                                .padding(10)
+                                            }
+                                            if tax12 != 0.0 {
+                                                HStack{
+                                                    Text("GST 12%")
+                                                        .font(.system(size: 12))
+                                                    Spacer()
+                                                    Text("\(tax12)")
+                                                        .font(.system(size: 12))
+                                                }
+                                                .padding(10)
+                                            }
+                                            Rectangle()
+                                                .foregroundColor(Color.gray)
+                                                .frame(height: 1)
+                                                .padding(10)
                                         }
                                     }
-                                
-                            }
-                            ForEach(0 ..< SelectDet.count, id: \.self) { index in
-                                HStack{
-                                    Text(SelectDet[index].Product_Name)
-                                        .font(.system(size: 12))
-                                                    .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
-                                                    .multilineTextAlignment(.leading)
-                                    
-                                    Spacer()
-                                    HStack(spacing:20){
-                                        
-                                        Text(SelectDet[index].Unit_Name)
-                                            .font(.system(size: 12))
-                                            .multilineTextAlignment(.leading)
-                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .center : .leading)
-                                        
-                                        
-                                        Text(SelectDet[index].New_Qty)
-                                            .font(.system(size: 12))
-                                            .frame(width: 20)
-                                        
-                                        Text(SelectDet[index].BillRate)
-                                            .font(.system(size: 12))
-                                            .frame(width: 50)
-                                            .multilineTextAlignment(.center)
-                                        
-                                        Text(SelectDet[index].value)
-                                            .font(.system(size: 12))
-                                            .frame(width: 50,alignment: SelectDet[index].Product_Name.count > 10 ? .trailing : .trailing)
-                                        //.padding(-10)
-                                        
-                                    }
-                                }
-                                
-                                .onAppear{
-                                    PagHeight += 50
-                                }
-                
-                                
-                                
-                            }
-                            .listStyle(PlainListStyle())
-                            .padding(13)
-                            VStack{
-                                Rectangle()
-                                    .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
-                                    .foregroundColor(Color.gray)
-                                    .frame(height: 2)
-                                    .padding(10)
-                                HStack{
-                                    Text("PRICE DETAILS")
-                                        .font(.system(size: 16))
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                .padding(10)
-                                Rectangle()
-                                    .foregroundColor(Color.gray)
-                                    .frame(height: 1)
-                                    .padding(10)
-                                VStack(spacing:-10){
                                     HStack{
-                                        Text("Subtotal")
-                                            .font(.system(size: 12))
-
+                                        Text("NET AMOUNT")
+                                            .font(.system(size: 16))
+                                            .fontWeight(.bold)
                                         Spacer()
+                                        
                                         Text(TotalVal)
-                                            .font(.system(size: 12))
+                                            .font(.system(size: 16))
+                                            .fontWeight(.bold)
                                     }
                                     .padding(10)
-                                    HStack{
-                                        Text("Total item")
-                                            .font(.system(size: 12))
-                                        Spacer()
-                                        Text("\(umounit)")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    HStack{
-                                        Text("Total Qty")
-                                            .font(.system(size: 12))
-                                        Spacer()
-                                        Text("\(NewQty)")
-                                            .font(.system(size: 12))
-                                    }
-                                    .padding(10)
-                                    if tax18 != 0.0{
-                                        HStack{
-                                            Text("GST 18%")
-                                                .font(.system(size: 12))
-                                            Spacer()
-                                            Text("\(tax18)")
-                                                .font(.system(size: 12))
-                                        }
-                                        .padding(10)
-                                    }
-                                    if tax12 != 0.0 {
-                                        HStack{
-                                            Text("GST 12%")
-                                                .font(.system(size: 12))
-                                            Spacer()
-                                            Text("\(tax12)")
-                                                .font(.system(size: 12))
-                                        }
-                                        .padding(10)
-                                    }
-                                    Rectangle()
-                                        .foregroundColor(Color.gray)
-                                        .frame(height: 1)
-                                        .padding(10)
-                                }
+                                }.padding(.horizontal,20)
                             }
-                            HStack{
-                                Text("NET AMOUNT")
-                                    .font(.system(size: 16))
-                                    .fontWeight(.bold)
-                                Spacer()
-                                
-                                Text(TotalVal)
-                                    .font(.system(size: 16))
-                                    .fontWeight(.bold)
-                                
-                            }
-                            .padding(10)
-                        }.padding(.horizontal,20)
+                        }
+                            .padding(.bottom,10)
                     }
-                    }
+                }
             }
             }
         }
