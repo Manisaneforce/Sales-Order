@@ -196,14 +196,15 @@ struct MyOrdersScreen: View {
                                     .frame(width: 100, alignment: OrderPaymentDetails[index].OrderNo.count > 10 ? .center : .leading)
                                     .multilineTextAlignment(.leading)
                                 Spacer()
-                                HStack(spacing:40){
+                                HStack(spacing:30){
                                     Text(OrderPaymentDetails[index].No_Of_items)
                                         .font(.system(size: 12))
                                         .frame(minWidth: 0,maxWidth: .infinity)
                                         .multilineTextAlignment(.leading)
                                     Text(OrderPaymentDetails[index].Quantity)
                                         .font(.system(size: 12))
-                                        .frame(minWidth: 0,maxWidth: .infinity)
+                                        //.frame(minWidth: 0,maxWidth: .infinity)
+                                        .frame(width: 30)
                                         .multilineTextAlignment(.leading)
                                     Text(OrderPaymentDetails[index].Order_Value)
                                         .font(.system(size: 12))
@@ -610,84 +611,92 @@ struct OrderDetView:View{
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
            
-                VStack(spacing:-10){
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(Color.white)
-                        .shadow(radius: 5)
-                    VStack(spacing:-12){
-                        HStack(){
-                            Text(CustDet.shared.StkNm)
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                            Spacer()
-                            Text("ORDER")
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                        }
-                        .padding(10)
-                        HStack{
-                            Image(systemName: "phone.circle.fill")
-                                .foregroundColor(Color.blue)
-                            Text(CustDet.shared.StkMob)
-                            Spacer()
-                        }
-                        .padding(10)
-                        ZStack{
-                            Rectangle()
-                                .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
-                            
-                                .foregroundColor(Color.gray)
-                            VStack(spacing:-15){
-                                HStack{
-                                    Text("BILL TO")
-                                        .fontWeight(.bold)
-                                        .font(.system(size: 13))
-                                    Spacer()
-                                }
-                                .padding(10)
-                                HStack{
-                                    Text(CustDet.shared.CusName)
-                                        .font(.system(size: 13))
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                .padding(10)
-                                HStack{
-                                    Image(systemName: "phone.circle.fill")
-                                        .foregroundColor(Color.blue)
-                                    Text(CustDet.shared.Mob)
-                                        .font(.system(size: 13))
-                                        .foregroundColor(.gray)
-                                    Spacer()
-                                }
-                                .padding(10)
-                                HStack{
-                                    Text(CustDet.shared.Addr)
-                                        .font(.system(size: 13))
-                                        .foregroundColor(.gray)
-                                    Spacer()
-                                }
-                                .padding(10)
-                                    
+                VStack{
+                    VStack{
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.white)
+                            .shadow(radius: 5)
+                            .padding(.horizontal,10)
+                        VStack{
+                            HStack{
+                                Text(CustDet.shared.StkNm)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                Spacer()
+                                Text("ORDER")
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
                             }
+                            .padding(.horizontal,20)
+                            .padding(.vertical,5)
+                            HStack{
+                                Image(systemName: "phone.circle.fill")
+                                    .foregroundColor(Color.blue)
+                                Text(CustDet.shared.StkMob)
+                                Spacer()
+                            }
+                            .padding(.horizontal,20)
                             
-                            
+                            ZStack{
+                                Rectangle()
+                                    .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
+                                    .foregroundColor(Color.gray)
+                                VStack(spacing:10){
+                                    HStack{
+                                        Text("BILL TO")
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 13))
+                                        Spacer()
+                                    }
+                                    .padding(.top,10)
+                                    .padding(.horizontal,10)
+                                    HStack{
+                                        Text(CustDet.shared.CusName)
+                                            .font(.system(size: 13))
+                                            .fontWeight(.bold)
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal,10)
+                                    HStack{
+                                        Image(systemName: "phone.circle.fill")
+                                            .foregroundColor(Color.blue)
+                                        Text(CustDet.shared.Mob)
+                                            .font(.system(size: 13))
+                                            .foregroundColor(.gray)
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal,10)
+                                    HStack{
+                                        Text(CustDet.shared.Addr)
+                                            .font(.system(size: 13))
+                                            .foregroundColor(.gray)
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal,10)
+                                    .padding(.bottom,10)
+                                    
+                                }
+                                
+                                
+                            }
+                            .padding(.horizontal,20)
+                            .padding(.vertical,10)
                         }
-                       
-                        .padding(10)
                     }
-                }
-                .frame(height: 200)
-                .padding(10)
+                    .frame(height: 200)
+                    }.padding(.horizontal,10)
+                        .padding(.vertical,10)
+                
                 
                     ZStack{
                         RoundedRectangle(cornerRadius: 5)
                             .fill(Color.white)
                             .shadow(radius: 5)
+                            .padding(.horizontal,20)
                         ScrollView{
                         VStack{
-                            VStack(spacing:-15){
+                            VStack{
                                 HStack{
                                     Text(OrderId)
                                         .font(.system(size: 15))
@@ -705,7 +714,7 @@ struct OrderDetView:View{
                                     Spacer()
                                 }
                                 .padding(10)
-                                VStack(spacing:-15){
+                                VStack{
                                     Rectangle()
                                         .frame(height: 1)
                                         .padding(10)
@@ -848,7 +857,7 @@ struct OrderDetView:View{
                                                     .multilineTextAlignment(.leading)
                                     
                                     Spacer()
-                                    HStack(spacing:30){
+                                    HStack(spacing:20){
                                         
                                         Text(SelectDet[index].Unit_Name)
                                             .font(.system(size: 12))
@@ -882,7 +891,7 @@ struct OrderDetView:View{
                             }
                             .listStyle(PlainListStyle())
                             .padding(13)
-                            VStack(spacing:-10){
+                            VStack{
                                 Rectangle()
                                     .strokeBorder(style: StrokeStyle(lineWidth: 1,dash: [2]))
                                     .foregroundColor(Color.gray)
@@ -963,10 +972,9 @@ struct OrderDetView:View{
                                 
                             }
                             .padding(10)
-                        }
+                        }.padding(.horizontal,20)
                     }
-                }
-                .padding(10)
+                    }
             }
             }
         }
