@@ -1230,7 +1230,3 @@ struct NoOrderdate:View{
         Text("No Record Found")
     }
 }
-
-
-
-

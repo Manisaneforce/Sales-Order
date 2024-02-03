@@ -299,7 +299,7 @@ struct OTPVerify: View {
                     }
                   
                 }
-                     .ignoresSafeArea(.keyboard, edges: .bottom)
+                     //.ignoresSafeArea(.keyboard, edges: .bottom)
                      .onTapGesture {
                          UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                      }

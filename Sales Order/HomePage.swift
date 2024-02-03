@@ -20,6 +20,14 @@ struct HomePage: View {
     @State private var showToast = false
     @State private var isPaymentenbl = 0
     @StateObject private var networkMonitor = NetworkMonitor.shared
+    let imageUrls = [
+         "https://rad.salesjump.in/server/rad/Banner%201.jpg",
+         "https://rad.salesjump.in/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
+         "https://rad.salesjump.in/server/rad/FiproRel-S%201.34%20mL%20Carton.png",
+         "https://rad.salesjump.in/server/rad/FiproRel-S%202.68%20mL%20Carton.png",
+         "https://rad.salesjump.in/server/rad/FiproRel-S%204.02%20mL%20Carton.png"
+     ]
+    @State private var currentImageIndex = 0
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     @Environment(\.horizontalSizeClass) var sizeClass
     var body: some View {
@@ -210,11 +218,14 @@ struct HomePage: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.white)
                                 .shadow(radius: 5)
-                            Image("Banner 1")
-                                .resizable()
-                                .cornerRadius(10)
+                            Image(uiImage: loadImage())
+                                            .resizable()
+                                            .cornerRadius(10)
                         }
                         .padding(10)
+                        .onAppear {
+                                    startTimer()
+                                }
                         .frame(height: sizeClass == .compact ? 220 : 320)
                 }
                     
@@ -232,6 +243,24 @@ struct HomePage: View {
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
     }
+    
+    func startTimer() {
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+                withAnimation {
+                    // Increment the image index, or reset to 0 if it exceeds the array bounds
+                    currentImageIndex = (currentImageIndex + 1) % imageUrls.count
+                }
+            }
+        }
+        
+        func loadImage() -> UIImage {
+            guard let url = URL(string: imageUrls[currentImageIndex]),
+                  let data = try? Data(contentsOf: url),
+                  let uiImage = UIImage(data: data) else {
+                return UIImage(systemName: "photo") ?? UIImage()
+            }
+            return uiImage
+        }
     
     private func updateDate() {
         let formatter = DateFormatter()
@@ -270,9 +299,7 @@ struct HomePage: View {
     
     func isPaymentEnabled(){
         let axn = "enable_payments"
-        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)"
-        
-     
+        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&id=\(CustDet.shared.CusId)"
         
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
@@ -380,6 +407,7 @@ func DashBoradImg(){
                                 for item in response{
                                     let url = item["url"] as? String
                                     let modifiedUrlString = url!.replacingOccurrences(of: " ", with: "%20")
+                                    
                                     DashboardBaner.shared.ImgUrl.append(modifiedUrlString)
                                 }
                             }
@@ -394,27 +422,6 @@ func DashBoradImg(){
             }
         case .failure(let error):
             print(error)
-        }
-    }
-}
-
-
-struct DasImageView: View {
-    let url: String
-    
-    var body: some View {
-        let modifiedUrlString = url.replacingOccurrences(of: " ", with: "%20")
-        print(modifiedUrlString)
-        if let imageURL = URL(string: modifiedUrlString), let imageData = try? Data(contentsOf: imageURL), let uiImage = UIImage(data: imageData) {
-            return Image(uiImage: uiImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 75, height: 75)
-        } else {
-            return Image("logo_new")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 75, height: 75)
         }
     }
 }

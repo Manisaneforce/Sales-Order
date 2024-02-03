@@ -40,6 +40,7 @@ struct ContentView: View {
    // @State private var jsondata = JSONData()
 
     @State private var Value = ""
+    @State var isTapped = false
 
     var body: some View {
        
@@ -95,30 +96,80 @@ struct ContentView: View {
                                 .padding(.bottom,30)
                             
                             
-                            TextField("Mobile Number", text: $phoneNumber)
-                            // .border(Color.blue, width: 2)
-                                .cornerRadius(5)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
-                                )
-                                .padding(.horizontal,15)
-                                .keyboardType(.numberPad)
-                                .onChange(of: phoneNumber, perform: { newValue in
-                                    // Limit the phone number to 10 characters
-                                    if newValue.count > 10 {
-                                        phoneNumber = String(newValue.prefix(10))
-                                        
+//                            TextField("Mobile Number", text: $phoneNumber)
+//                            // .border(Color.blue, width: 2)
+//                                .cornerRadius(5)
+//                                .textFieldStyle(RoundedBorderTextFieldStyle())
+//
+//                                .overlay(
+//                                    RoundedRectangle(cornerRadius: 5)
+//                                        .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
+//                                )
+//                                .padding(.horizontal,15)
+//                                .keyboardType(.numberPad)
+//                                .onChange(of: phoneNumber, perform: { newValue in
+//                                    if newValue.count > 10 {
+//                                        phoneNumber = String(newValue.prefix(10))
+//
+//                                    }
+//                                    phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
+//                                })
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack{
+                                    TextField("", text: $phoneNumber) { status in
+                                        if status {
+                                            withAnimation(.easeIn) {
+                                                isTapped = true
+                                            }
+                                        }
+                                    } onCommit: {
+                                        if phoneNumber == "" {
+                                            withAnimation(.easeOut) {
+                                                isTapped = false
+                                            }
+                                        }
                                     }
-                                    // Remove non-numeric characters
-                                    phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
-                                    //UserDefaults.standard.set(phoneNumber, forKey: "savedPhoneNumber")
-                                })
+                                    .padding(.leading, 10)
+                                    .padding(.top, isTapped ? 20 : 5)
+                                    .background(
+                                        Text("Mobile Number")
+                                            .font(.custom("Poppins-Bold", size: 13))
+                                            .scaleEffect(isTapped ? 0.8 : 1)
+                                            .offset(x: isTapped ? -7 : 0, y: isTapped ? -15 : 0)
+                                            .padding(.leading,5)
+                                            .foregroundColor(.gray),
+                                        alignment: .leading
+                                    )
+                                    .keyboardType(.numberPad)
+                                    .onChange(of: phoneNumber) { newValue in
+                                        if newValue.count > 10 {
+                                            phoneNumber = String(newValue.prefix(10))
+                                        }
+                                        phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
+                                    }
+                                    Spacer()
+                                    Text("\(phoneNumber.count)/10")
+                                        .padding(.trailing, 10)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
+                                    
+                                    
+                                }
+                            }
+                            .padding(.vertical, 12)
+                            .padding(.horizontal)
+                            .background(
+                                Color.gray.opacity(0.09)
+                                    .padding(.horizontal, 15)
+                                    .cornerRadius(5)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
+                                    .padding(.horizontal, 15)
+                            )
                             
-                            
-                            
+
                             if #available(iOS 15.0, *) {
  
                                     Button(action: {
@@ -212,15 +263,17 @@ struct ContentView: View {
                             }
                             
                             Spacer()
-                            Text("App Version \(Bundle.main.appVersionLong)")
-                                .padding(.bottom,10)
-                                .padding(.top,150)
-                                .font(.system(size: 12))
+                            VStack{
+                                Text("App Version \(Bundle.main.appVersionLong)")
+                                    .padding(.bottom,10)
+                                    .padding(.top,150)
+                                    .font(.system(size: 12))
+                            }
                         }
                        
                   Spacer()
                 }
-                .ignoresSafeArea(.keyboard, edges: .bottom)
+                //.ignoresSafeArea(.keyboard, edges: .bottom)
                 .onTapGesture {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
