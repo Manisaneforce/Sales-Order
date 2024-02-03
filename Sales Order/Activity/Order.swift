@@ -142,6 +142,7 @@ struct Order: View {
     @State private var prodTypes1 = [String]()
     @State private var Typofid = [Int]()
     @State private var Text_Qty = ""
+    @StateObject private var networkMonitor = NetworkMonitor.shared
 
     var body: some View {
         if OredSc{
@@ -151,11 +152,11 @@ struct Order: View {
                     .edgesIgnoringSafeArea(.all)
                 VStack(spacing: 0) {
                     
-                    ZStack(alignment: .top) {
+                    ZStack(alignment: .top){
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 80)
-                        
+                        if networkMonitor.isConnected {
                         HStack {
                             Button(action: {
                                 showAlert = true
@@ -190,12 +191,21 @@ struct Order: View {
                                 .padding(.top,50)
                             Spacer()
                         }
+                        }else{
+                            Internet_Connection()
+                        }
                         
                     }
                     //.cornerRadius(5)
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                    .onAppear {
+                        networkMonitor.startMonitoring()
+                    }
+                    .onDisappear {
+                        networkMonitor.stopMonitoring()
+                    }
                     
                     VStack(alignment: .leading, spacing: 6) {
                         VStack(spacing:5){

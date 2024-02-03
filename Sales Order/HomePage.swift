@@ -19,6 +19,7 @@ struct HomePage: View {
     @State private var currentPage = 0
     @State private var showToast = false
     @State private var isPaymentenbl = 0
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     @Environment(\.horizontalSizeClass) var sizeClass
     var body: some View {
@@ -32,67 +33,69 @@ struct HomePage: View {
                         isPaymentEnabled()
                     }
                 VStack(spacing:22){
-                    
-                    ZStack(){
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 80)
-                        
-                        HStack() {
-                            Text(" ")
-                            Text("Dashboard")
-                                //.font(.system(size: 20))
-                                .font(.custom("Poppins-Bold", size: 20))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.top,50)
-                            
-                            Spacer()
-                            HStack(spacing:30){
-                                Text(currentDate)
-                                    .font(.custom("Poppins-SemiBold", size: 15))
-                                    .font(.headline)
-                                    .foregroundColor(Color.white)
-                                //.offset(x: 30, y: 20)
-                                
-                                
-                                VStack {
-                                    Button(action: {
-                                        
-                                        
-                                        showAlert = true
-                                    }) {
-                                        Image("logout")
-                                            .renderingMode(.template)
+                
+                    ZStack {
+                               Rectangle()
+                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                    .frame(height: 80)
+
+                                if networkMonitor.isConnected {
+                                    HStack {
+                                        Text("Dashboard")
+                                            .font(.custom("Poppins-Bold", size: 20))
+                                            .fontWeight(.bold)
                                             .foregroundColor(.white)
-                                    }
-                                    //.offset(x: 55, y: 20)
-                                }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("Logout"),
-                                        message: Text("Do you want to log out?"),
-                                        primaryButton: .default(Text(" OK ")) {
-                                            UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
-                                            UserDefaults.standard.removeObject(forKey: "CustDet")
-                                            
-                                            if let window = UIApplication.shared.windows.first {
-                                                window.rootViewController = UIHostingController(rootView: ContentView())
+                                            .padding(.leading,10)
+                                            .padding(.top, 50)
+                                        Spacer()
+                                        HStack(spacing: 30) {
+                                            Text(currentDate)
+                                                .font(.custom("Poppins-SemiBold", size: 15))
+                                                .font(.headline)
+                                                .foregroundColor(.white)
+
+                                            VStack {
+                                                Button(action: {
+                                                    showAlert = true
+                                                }) {
+                                                    Image("logout")
+                                                        .renderingMode(.template)
+                                                        .foregroundColor(.white)
+                                                }
                                             }
-                                        },
-                                        secondaryButton: .cancel()
-                                    )
+                                            .alert(isPresented: $showAlert) {
+                                                Alert(
+                                                    title: Text("Logout"),
+                                                    message: Text("Do you want to log out?"),
+                                                    primaryButton: .default(Text(" OK ")) {
+                                                        // Handle logout action
+                                                        UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
+                                                        UserDefaults.standard.removeObject(forKey: "CustDet")
+
+                                                        if let window = UIApplication.shared.windows.first {
+                                                            window.rootViewController = UIHostingController(rootView: ContentView())
+                                                        }
+                                                    },
+                                                    secondaryButton: .cancel()
+                                                )
+                                            }
+                                        }
+                                        .padding(.top, 50)
+                                        .padding(.trailing, 16)
+                                    }
+                                } else {
+                                    Internet_Connection()
                                 }
-                                
                             }
-                            .padding(.top,50)
-                            .padding(.trailing,16)
-                        }
-                        
-                    }
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                            .edgesIgnoringSafeArea(.top)
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
+                            .onAppear {
+                                networkMonitor.startMonitoring()
+                            }
+                            .onDisappear {
+                                networkMonitor.stopMonitoring()
+                            }
                     
                     
                     .onAppear() {
@@ -418,3 +421,4 @@ struct DasImageView: View {
 
 // SwipGestore
 //https://chat.openai.com/c/4ca48131-f3e9-4e77-b1c0-27c233b20df6
+

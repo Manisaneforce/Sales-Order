@@ -10,13 +10,14 @@
 		2EC4D95DC001D6144D6D4296 /* libPods-Sales OrderUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */; };
 		3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE1A2A8A52070069B136 /* LottieUIURL.swift */; };
 		3801AE282A8E17C80069B136 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801AE272A8E17C80069B136 /* APIClient.swift */; };
+		380540332B6E0B4F00F9AAE3 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380540322B6E0B4F00F9AAE3 /* NetworkMonitor.swift */; };
+		380540352B6E13BB00F9AAE3 /* Internet_Not_Connected.json in Resources */ = {isa = PBXBuildFile; fileRef = 380540342B6E13BB00F9AAE3 /* Internet_Not_Connected.json */; };
 		383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */; };
 		3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3838004B2AB9AE320058F546 /* GoogleService-Info.plist */; };
 		3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3838004E2AB9AFB30058F546 /* FirebaseAnalytics */; };
 		383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */; };
 		38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
-		384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */; };
 		384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FE2A98B20A009439E5 /* LocationService.swift */; };
 		384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7002A98B5B1009439E5 /* Loctionfile.swift */; };
 		384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB7032A99FABA009439E5 /* DeviceLocationService.swift */; };
@@ -104,11 +105,12 @@
 		308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3801AE1A2A8A52070069B136 /* LottieUIURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIURL.swift; sourceTree = "<group>"; };
 		3801AE272A8E17C80069B136 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		380540322B6E0B4F00F9AAE3 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		380540342B6E13BB00F9AAE3 /* Internet_Not_Connected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Internet_Not_Connected.json; sourceTree = "<group>"; };
 		383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Cloud Messaging.swift"; sourceTree = "<group>"; };
 		3838004B2AB9AE320058F546 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterFile.swift; sourceTree = "<group>"; };
 		384CB6F42A9608D4009439E5 /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
-		384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		384CB6FE2A98B20A009439E5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		384CB7002A98B5B1009439E5 /* Loctionfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loctionfile.swift; sourceTree = "<group>"; };
 		384CB7022A99F794009439E5 /* Sales-Order-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Sales-Order-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -239,29 +241,36 @@
 				38A54D192B0F3433009E8976 /* Phonering.json */,
 				38A54D1C2B0F3433009E8976 /* something_went_wrong.json */,
 				389B99B72B12032D00A53B42 /* NoOreder.json */,
+				380540342B6E13BB00F9AAE3 /* Internet_Not_Connected.json */,
 			);
-			name = Lottie;
-			path = ../Lottie;
+			path = Lottie;
+			sourceTree = "<group>";
+		};
+		3805402F2B6E058400F9AAE3 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				3801AE1E2A8C8A700069B136 /* Lottie */,
+				380540322B6E0B4F00F9AAE3 /* NetworkMonitor.swift */,
+				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
+				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
+				383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */,
+				38AAC4D82AEFC49700D469DF /* S3.swift */,
+				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
+				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		387E0E7F2A85F62A00FEACBA /* common file */ = {
 			isa = PBXGroup;
 			children = (
-				3801AE1E2A8C8A700069B136 /* Lottie */,
-				384CB6FE2A98B20A009439E5 /* LocationService.swift */,
 				387E0E842A85F7A600FEACBA /* Showtoast.swift */,
-				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
-				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
 				384CB6F42A9608D4009439E5 /* VisitData.swift */,
-				384CB6FC2A98AE90009439E5 /* NetworkMonitor.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
-				384CB7032A99FABA009439E5 /* DeviceLocationService.swift */,
 				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
-				383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */,
 				38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */,
-				38AAC4D82AEFC49700D469DF /* S3.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -347,6 +356,7 @@
 				38A659CB2AA98E260020E543 /* Payment */,
 				38CADF342A810D8400842DC9 /* Activity */,
 				38AA42E12AA7066300B8AA10 /* MyOrdersDet */,
+				3805402F2B6E058400F9AAE3 /* Service */,
 				38EEBC5A2A7A255F00AEF032 /* Sales_OrderApp.swift */,
 				38EEBC5C2A7A255F00AEF032 /* ContentView.swift */,
 				38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */,
@@ -525,6 +535,7 @@
 				38A266162B6D135500336994 /* Poppins-Medium.ttf in Resources */,
 				38A266122B6D134600336994 /* Poppins-Light.ttf in Resources */,
 				38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */,
+				380540352B6E13BB00F9AAE3 /* Internet_Not_Connected.json in Resources */,
 				38A266002B6D12EF00336994 /* Poppins-Black.ttf in Resources */,
 				38A266222B6D138000336994 /* Poppins-ThinItalic.ttf in Resources */,
 				38A54D1E2B0F3433009E8976 /* Animation - 1700722458471.json in Resources */,
@@ -674,6 +685,7 @@
 				384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */,
 				386AB3162AB1D3EA00FF49D2 /* My Profile.swift in Sources */,
 				3801AE282A8E17C80069B136 /* APIClient.swift in Sources */,
+				380540332B6E0B4F00F9AAE3 /* NetworkMonitor.swift in Sources */,
 				384CB7012A98B5B1009439E5 /* Loctionfile.swift in Sources */,
 				386AB3182AB1D49B00FF49D2 /* Feedback.swift in Sources */,
 				38CADF362A810D9700842DC9 /* Order.swift in Sources */,
@@ -688,7 +700,6 @@
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
 				38DC8F562AD7D23200EFD572 /* GlobalFunc.swift in Sources */,
 				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
-				384CB6FD2A98AE90009439E5 /* NetworkMonitor.swift in Sources */,
 				38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */,
 				383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */,
 			);

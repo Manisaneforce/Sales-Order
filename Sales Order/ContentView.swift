@@ -9,6 +9,7 @@ import SwiftUI
 import Alamofire
 import Foundation
 import AppTrackingTransparency
+import Combine
 
 struct Outputdata {
     var data: [String: AnyObject] = [:]
@@ -247,37 +248,12 @@ struct ContentView: View {
         static var previews: some View {
             if #available(iOS 15.0, *) {
                 ContentView()
-                //AddNewView()
+               
             } else {
                 
             }
         }
     }
-
-
-struct AddNewView: View {
-    var body: some View{
-        VStack{
-            Image("logo_new")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 250, height: 100)
-            
-            VStack{
-                Text("Welcome to ReliVet")
-                    .font(.title)
-                    .bold()
-                    .font(.system(size: 24))
-                    .foregroundColor(Color.gray)
-                Text("Sign in to continue")
-                    .font(.system(size: 20))
-                    .font(.title)
-                    .foregroundColor(Color.gray)
-                
-            }
-        }
-    }
-}
 
 struct PrivacyPolicy:View{
     @State private var isChecked = false
