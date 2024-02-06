@@ -39,6 +39,7 @@ struct My_Profile: View {
     @State private var listedDrCode = ""
     @State private var ClickIndex = Int()
     @State private var showToast = false
+    @State private var showAlert = false
     @State private var ShowTost = ""
     @State private var ontap_Educational_Details:Bool = false
     @State private var Ontap_Registration_certificate:Bool = false
@@ -609,31 +610,43 @@ struct My_Profile: View {
                             Spacer()
                         }
                         .onTapGesture {
-                            let axn = "delete_ret_address&id=\(Editid)&listedDrCode=\(listedDrCode)"
-                            let apiKey = "\(axn)"
-                            AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                .validate(statusCode: 200 ..< 299)
-                                .responseJSON { response in
-                                    switch response.result {
-                                    case .success(let value):
-                                        if let json = value as? [String:AnyObject] {
-                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                return
+                            showAlert = true
+                        }
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("Delete"), message: Text("Are you sure you want to delete this Address?"),
+                                primaryButton: .default(Text(" YES ").foregroundColor(.red)) {
+                                    
+                                    let axn = "delete_ret_address&id=\(Editid)&listedDrCode=\(listedDrCode)"
+                                    let apiKey = "\(axn)"
+                                    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                        .validate(statusCode: 200 ..< 299)
+                                        .responseJSON { response in
+                                            switch response.result {
+                                            case .success(let value):
+                                                if let json = value as? [String:AnyObject] {
+                                                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                        return
+                                                    }
+                                                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                        print("Error: Could print JSON in String")
+                                                        return
+                                                    }
+                                                    deleteItem()
+                                                    print(prettyPrintedJson)
+                                        
+                                                }
+                                            case .failure(let error):
+                                                print(error)
                                             }
-                                            guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                print("Error: Could print JSON in String")
-                                                return
-                                            }
-                                            deleteItem()
-                                            print(prettyPrintedJson)
-                                
                                         }
-                                    case .failure(let error):
-                                        print(error)
-                                    }
+                                    actionButton.toggle()
+                                },
+                                secondaryButton: .default(Text(" NO ")) {
+                                    //actionButton.toggle()
                                 }
-                            actionButton.toggle()
+                            )
                         }
                     }
                     .background(Color.white)

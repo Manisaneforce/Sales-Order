@@ -582,6 +582,7 @@ struct ORDER:View{
                                         Totalval=invoice[index].Order_Value
                                         value = Totalval
                                         OrderId = invoice[index].OrderID
+                                        OrderNo = OrderId
                                         Orderdate = invoice[index].Date
                                         HistoryInf.toggle()
                                         OrderDetialsView.toggle()

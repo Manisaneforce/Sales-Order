@@ -263,7 +263,10 @@ struct MyOrdersScreen: View {
                             print(index)
                             TotalVal = OrderPaymentDetails[index].Order_Value
                             OrderId = OrderPaymentDetails[index].OrderNo
+                            print(OrderPaymentDetails)
+                            print(OrderPaymentDetails[index].OrderNo)
                             OrderNo = OrderId
+                            print(OrderNo)
                             Orderdate =   OrderPaymentDetails[index].Order_Date
                             OrdDate = Orderdate
                             
@@ -1180,6 +1183,7 @@ struct OrderDetView:View{
 
         
         func saveAndSharePDF(_ data: Data) {
+            print(OrderNo)
             let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(OrderNo).pdf")
             do {
                 try data.write(to: tempURL)
