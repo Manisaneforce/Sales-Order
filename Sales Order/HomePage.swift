@@ -245,9 +245,8 @@ struct HomePage: View {
     }
     
     func startTimer() {
-            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
                 withAnimation {
-                    // Increment the image index, or reset to 0 if it exceeds the array bounds
                     currentImageIndex = (currentImageIndex + 1) % imageUrls.count
                 }
             }
