@@ -849,7 +849,6 @@ struct OrderDetView:View{
                                                     print(error)
                                                 }
                                             }
-                                        
                                     }
                                     ForEach(0 ..< SelectDet.count, id: \.self) { index in
                                         HStack{
@@ -1156,32 +1155,20 @@ struct OrderDetView:View{
             SubTotalUpLine?.addLine(to: CGPoint(x: 700, y: yOffset+150))
             SubTotalUpLine?.strokePath()
             
-            
             let NetAmtRe = CGRect(x: 50, y: yOffset+160, width: 512, height: 50)
             NetAmt.draw(in:NetAmtRe,withAttributes: ItemAt)
             
             let TotNetAmtRe = CGRect(x: 400, y: yOffset+160, width: 512, height: 50)
             TotalNetAmt.draw(in:TotNetAmtRe,withAttributes: ItemAt)
             
-            
-            
             let SubTotalDwnLine = UIGraphicsGetCurrentContext()
             SubTotalDwnLine?.setLineWidth(1.0)
             SubTotalDwnLine?.move(to: CGPoint(x: 0, y: yOffset+190))
             SubTotalDwnLine?.addLine(to: CGPoint(x: 700, y: yOffset+190))
             SubTotalDwnLine?.strokePath()
-            
-            
-            
-            
-            
-     
         }
         return pdfData
     }
-
-
-        
         func saveAndSharePDF(_ data: Data) {
             print(OrderNo)
             let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(OrderNo).pdf")

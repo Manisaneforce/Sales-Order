@@ -40,7 +40,6 @@ struct MyOrdersDetails: View {
     let currentDate = Date()
     let calendar = Calendar.current
     var body: some View {
-        if HistoryInf{
         NavigationView{
             ZStack{
                 Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
@@ -284,12 +283,9 @@ struct MyOrdersDetails: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
-    }
-        if OrderDetialsView{
-            VStack{
-                OrderDetView(OrderId: $OrderId, Orderdate: .constant(Orderdate), TotalVal: .constant(value) )
-            }
-        }
+           
+            NavigationLink(destination: OrderDetView(OrderId:$OrderId, Orderdate: .constant(Orderdate), TotalVal: .constant(value)), isActive: $OrderDetialsView) {
+                    }
     }
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
@@ -484,6 +480,7 @@ struct ORDER:View{
     @Binding var invoice: [getInvoice]
     @Binding var HistoryInf:Bool
     @Binding var OrderDetialsView:Bool
+    @State private var OrderDetialsView2 = false
     @State private var ProName = [String]()
     @State private var Qty = [String]()
     @Binding var OrderId:String
@@ -586,6 +583,7 @@ struct ORDER:View{
                                         Orderdate = invoice[index].Date
                                         HistoryInf.toggle()
                                         OrderDetialsView.toggle()
+                                        OrderDetialsView2.toggle()
                                         
                                         
                                         let productNames = invoice[index].Product_Name.split(separator: ",")
@@ -612,8 +610,9 @@ struct ORDER:View{
                                         
                                         print(ProName.count)
                                         print(Qty.count)
-                                        
+                                     
                                     }
+                               
                             }
                             .padding(.leading,10)
                             .padding(.trailing,10)

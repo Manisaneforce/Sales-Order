@@ -330,10 +330,8 @@ struct OTPVerify: View {
                     }
                 }
             }
-              
-                 
         }
-            .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
             

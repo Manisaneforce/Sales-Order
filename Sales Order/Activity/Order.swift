@@ -178,7 +178,7 @@ struct Order: View {
                             .alert(isPresented: $showAlert) {
                                 Alert(
                                     title: Text("Confirmation"),
-                                    message: Text("Do you want cancel this order Draft"),
+                                    message: Text("Do you want cancel this order draft"),
                                     primaryButton: .default(Text("OK")) {
                                         VisitData.shared.ProductCart = []
                                         VisitData.shared.lstPrvOrder = []
@@ -892,10 +892,6 @@ struct Order: View {
                                                .stroke(Color.gray, lineWidth: 1)
                                        )
                                        .onChange(of: text) { newText in
-                                           print("Text changed to: \(newText)")
-                                           print(lObjSel)
-                                           print(allUomlist)
-                                           
                                            if newText.isEmpty {
                                                lObjSel = allUomlist
                                            } else {
@@ -913,37 +909,26 @@ struct Order: View {
                         
                         List(0 ..< lObjSel.count, id: \.self) { index in
                             VStack {
-                                Button(action: {
-                                    isShowingPopUp.toggle()
-                                    SelectItem = allUomlist[index].UomName
-                                    let UOMNAME = allUomlist[index].UomName
-                                    print(SelectItem)
-                                    let FilterUnite =  FilterProduct[index]
-                                    print(FilterUnite)
-                                    let uomList = FilterUnite["UOMList"] as? [[String: Any]]
-                                    
-                                    
-                                    if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
-                                        if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
-                                            print(uomLists2)
-                                            self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
-                                        } else {
-                                            print("Invalid index or data")
-                                        }
-                                    } else {
-                                        print("UOMList not found or not in the expected format.")
-                                    }
-                                    print(filterItems)
-                                    TexQty()
-                                    print(items)
-                                    
-                                }) {
-                                    
-                                    Text(allUomlist[index].UomName)
-                                    Text("1x\(allUomlist[index].UomConv)")
-                                }
+                                Text(allUomlist[index].UomName)
+                                Text("1x\(allUomlist[index].UomConv)")
                             }
-                            
+                            .onTapGesture{
+                                isShowingPopUp.toggle()
+                                SelectItem = allUomlist[index].UomName
+                                let UOMNAME = allUomlist[index].UomName
+                                let FilterUnite =  FilterProduct[index]
+                                let uomList = FilterUnite["UOMList"] as? [[String: Any]]
+                                if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
+                                    if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
+                                        self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
+                                    } else {
+                                        print("Invalid index or data")
+                                    }
+                                } else {
+                                    print("UOMList not found or not in the expected format.")
+                                }
+                                TexQty()
+                            }
                         }
                         .background(Color.white)
                         .cornerRadius(10)
@@ -1013,14 +998,11 @@ struct Order: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.vertical,10)
-                        
-                        
                     }
                     .background(Color.white)
                     .cornerRadius(10)
                     .padding(20)
                 }
-                
             }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
             .onTapGesture {
@@ -1582,13 +1564,10 @@ struct Address:View{
                                         Editid = GetingAddress[index].id
                                         clickPlusButton.toggle()
                                         OpenMod = "Edit"
-                                        EditeAddressHed = "Edite Address"
+                                        EditeAddressHed = "Edit Address"
                                         //EditState = GetingAddress[index].address
                                         EditeAddres = GetingAddress[index].address
                                         AddressTextInpute = EditeAddres
-                                        
-                                        
-                                        
                                     }
                                 Image(systemName: "trash.fill")
                                     .foregroundColor(Color.red)
@@ -1930,7 +1909,7 @@ struct Address:View{
                     }
                 VStack{
                     LottieUIView(filename: "Gettingloction").frame(width: 220,height: 150)
-                    Text("Getting Current Loction...")
+                    Text("Getting Current location...")
                         .font(.headline)
                         .fontWeight(.bold)
                         .multilineTextAlignment(.center)
@@ -2377,7 +2356,6 @@ struct SelPrvOrder: View {
     @State private var sLocationlat = ""
     @State private var sLocationlong = ""
     @State private var GetLoction = false
-    
     @State private var OrderSubStatus = ""
     @State private var isActive: Bool = false
     @State private var ShowTost = ""
@@ -2394,12 +2372,7 @@ struct SelPrvOrder: View {
     init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>) {
         self._OredSc = OredSc
         self._SelPrvSc = SelPrvSc
-       
-        print(selectitemCount)
-    
     }
-
-   
     var body: some View {
         NavigationView{
             ZStack{
@@ -2414,7 +2387,7 @@ struct SelPrvOrder: View {
                             
                             HStack {
                                 
-                                Text(" Selected Order Prv")
+                                Text("   Order")
                                     .font(.system(size: 18))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -2432,7 +2405,7 @@ struct SelPrvOrder: View {
                                     .alert(isPresented: $Home_Button_Alt) {
                                         Alert(
                                             title: Text("Confirmation"),
-                                            message: Text("Do you want cancel this order Draft"),
+                                            message: Text("Do you want cancel this order draft"),
                                             primaryButton: .default(Text("OK")) {
                                                 VisitData.shared.ProductCart = []
                                                 VisitData.shared.lstPrvOrder = []
@@ -2856,6 +2829,7 @@ struct SelPrvOrder: View {
                             }else{
                                 showAlert = true
                             }
+                         
                         }) {
                             VStack{
                                 HStack{
@@ -2921,7 +2895,7 @@ struct SelPrvOrder: View {
                                 GetLoction.toggle()
                                 OrderSubStatus = "Getting Current Loction..."
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    OrderSubStatus = "Data Summitting Wait..."
+                                    OrderSubStatus = "Data Submitting..."
                                     
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         OrderSubmit(lat: sLocationlat, log: sLocationlong)
@@ -2992,6 +2966,9 @@ struct SelPrvOrder: View {
         .navigationBarHidden(true)
       
        
+    }
+    func ShowAlert(){
+        
     }
     
     func PaymentHTML(){
@@ -3540,13 +3517,11 @@ func OrderSubmit(lat:String,log:String) {
     let params: Parameters = [
         "data": jsonString
     ]
-    
     print(params)
     AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL+"save/salescalls"+"&divisionCode=\(CustDet.shared.Div)"+"&Sf_code=\(CustDet.shared.CusId)", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil).validate(statusCode: 200 ..< 299).responseJSON {
     AFdata in
     switch AFdata.result
     {
-        
     case .success(let value):
         print(value)
         if let json = value as? [String: Any] {
@@ -3554,19 +3529,23 @@ func OrderSubmit(lat:String,log:String) {
             print(json)
             if let invoice = json["invoice"] as? String{
                 Invoiceid.shared.id = invoice
+                Invoiceid.shared.Order_place_Mood = 0
+                ShowToastMes.shared.tost = "Order Submitted"
+                UIApplication.shared.windows.first?.makeKeyAndVisible()
+                if (paymentenb.shared.isPaymentenbl == 0){
+                                if let window = UIApplication.shared.windows.first {
+                                    window.rootViewController = UIHostingController(rootView: HomePage())
+                                }
+                }
+                VisitData.shared.clear()
             }
-            Invoiceid.shared.Order_place_Mood = 0
-            ShowToastMes.shared.tost = "Order Submitted"
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
-            if (paymentenb.shared.isPaymentenbl == 0){
-                            if let window = UIApplication.shared.windows.first {
-                                window.rootViewController = UIHostingController(rootView: HomePage())
-                            }
+            if let msg = json["Msg"] as? String {
+                ShowToastMes.shared.tost = msg
+                if let window = UIApplication.shared.windows.first {
+                    window.rootViewController = UIHostingController(rootView: HomePage())
+                }
             }
-                            
-            VisitData.shared.clear()
         }
-        
     case .failure(let error):
         
         let alert = UIAlertController(title: "Information", message: error.errorDescription, preferredStyle: .alert)
@@ -3576,7 +3555,6 @@ func OrderSubmit(lat:String,log:String) {
        
     }
 }
-    
 }
 func updateDateAndTime() {
     let formatter = DateFormatter()
