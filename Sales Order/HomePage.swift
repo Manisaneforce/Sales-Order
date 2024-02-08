@@ -427,4 +427,3 @@ func DashBoradImg(){
 
 // SwipGestore
 //https://chat.openai.com/c/4ca48131-f3e9-4e77-b1c0-27c233b20df6
-

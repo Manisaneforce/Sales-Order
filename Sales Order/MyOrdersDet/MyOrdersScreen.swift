@@ -904,7 +904,7 @@ struct OrderDetView:View{
                                                     //.padding(-10)
                                                     
                                                 }
-                                                if (SelectDet[index].off_pro_unit != ""){
+                                                if (SelectDet[index].Offer_Product != ""){
                                                     ZStack{
                                                         LinearGradient(gradient: Gradient(colors: [ColorData.shared.HeaderColor.opacity(0.2), .white]), startPoint: .topLeading, endPoint: .bottomTrailing)
                                                             .cornerRadius(5)
@@ -1074,6 +1074,7 @@ struct OrderDetView:View{
             // Define font and size for title and text
             let titleFont = UIFont.boldSystemFont(ofSize: 20.0)
             let textFont = UIFont.systemFont(ofSize: 12.0)
+            let textFontaSmal = UIFont.boldSystemFont(ofSize: 10.0)
             let textId = UIFont.systemFont(ofSize: 12.0)
             let ComFont = UIFont.systemFont(ofSize: 12.0)
             let Bill = UIFont.systemFont(ofSize: 15.0)
@@ -1092,16 +1093,18 @@ struct OrderDetView:View{
             let Uom = "UOM"
             let Qty = "Qty"
             let Price = "Price"
+            let Tax = "Tax"
             let Total = "Total"
             let SubTotal = "Sub Total"
-            let SubTotalAmt = TotalVal
+            let SubTotalAmt = "₹"+TotalVal
             let TotalItem = "Total Item"
             var CountOfOrder = ""
             var TotalQty = "Total Qty"
             var TotaCountOfQty = "0"
+            var TotalTaxs = TaxTyp
+            var TatalTaxAmt = "₹\(String(format: "%.2f",TotalTax))"
             let NetAmt = "NET AMOUNT"
             let TotalNetAmt = "₹\(TotalVal)"
-            
             
             // Draw title
             let titleAttributes = [NSAttributedString.Key.font: titleFont]
@@ -1151,13 +1154,15 @@ struct OrderDetView:View{
             let ItemAt = [NSAttributedString.Key.font:ComFont]
             let ItemRe = CGRect(x: 50, y: 268, width: 512, height: 50)
             Item.draw(in:ItemRe,withAttributes: ItemAt)
-            let UomRe = CGRect(x: 260, y: 268, width: 512, height: 50)
+            let UomRe = CGRect(x: 220, y: 268, width: 512, height: 50)
             Uom.draw(in:UomRe,withAttributes: ItemAt)
-            let QtyRe = CGRect(x: 345, y: 268, width: 512, height: 50)
+            let QtyRe = CGRect(x: 305, y: 268, width: 512, height: 50)
             Qty.draw(in:QtyRe,withAttributes: ItemAt)
-            let PricRe = CGRect(x: 415, y: 268, width: 512, height: 50)
+            let PricRe = CGRect(x: 375, y: 268, width: 512, height: 50)
             Price.draw(in:PricRe,withAttributes: ItemAt)
-            let TotalRe = CGRect(x: 500, y: 268, width: 512, height: 50)
+            let TaxRe = CGRect(x: 450, y: 268, width: 512, height: 50)
+            Tax.draw(in:TaxRe,withAttributes: ItemAt)
+            let TotalRe = CGRect(x: 540, y: 268, width: 512, height: 50)
             Total.draw(in:TotalRe,withAttributes: ItemAt)
             
         
@@ -1166,12 +1171,11 @@ struct OrderDetView:View{
             LowLine?.move(to: CGPoint(x: 0, y: 290))
             LowLine?.addLine(to: CGPoint(x: 700, y: 290))
             LowLine?.strokePath()
-            
-          
+   
             var yOffset = 270 // Starting y-coordinate
-            
+      
             for orderIndex in 0..<SelectDet.count {
-                yOffset += 50
+                yOffset += 70
                 let TotatNoofQty = Int(SelectDet[orderIndex].New_Qty)! + Int(TotaCountOfQty)!
                 TotaCountOfQty = String(TotatNoofQty)
                 
@@ -1179,30 +1183,73 @@ struct OrderDetView:View{
                 CountOfOrder = String(Count)
                  let NoOfPro = "\(Count)."
                 let orderNoAttributes = [NSAttributedString.Key.font: textFont]
-                let NoOfInd = CGRect(x: 20, y: yOffset, width: 512, height: 50)
+                let orderNoAttributes_small = [NSAttributedString.Key.font: textFontaSmal]
+                let NoOfInd = CGRect(x: 20, y: yOffset-10, width: 512, height: 50)
                 NoOfPro.draw(in:NoOfInd,withAttributes:orderNoAttributes )
                 
                 let ProName = SelectDet[orderIndex].Product_Name
-                let orderNoRect = CGRect(x: 50, y: yOffset, width: 512, height: 50)
+                let orderNoRect = CGRect(x: 50, y: yOffset-10, width: 512, height: 50)
                 ProName.draw(in: orderNoRect, withAttributes: orderNoAttributes)
                  // Increase y-coordinate for next OrderNo
             
                 let Uom = SelectDet[orderIndex].Unit_Name
-                let UomRect = CGRect(x: 260, y: yOffset, width: 512, height: 50)
+                let UomRect = CGRect(x: 220, y: yOffset-10, width: 512, height: 50)
                 Uom.draw(in: UomRect, withAttributes: orderNoAttributes)
             
                 let Qty = SelectDet[orderIndex].New_Qty
-                let QtyRect = CGRect(x: 345, y: yOffset, width: 512, height: 50)
+                let QtyRect = CGRect(x: 305, y: yOffset-10, width: 512, height: 50)
                 Qty.draw(in: QtyRect, withAttributes: orderNoAttributes)
                 
                 let Prce = SelectDet[orderIndex].BillRate
-                let PriRect = CGRect(x: 415, y: yOffset, width: 512, height: 50)
+                let PriRect = CGRect(x: 375, y: yOffset-10, width: 512, height: 50)
                 Prce.draw(in:PriRect,withAttributes: orderNoAttributes)
                 
+                let tax = SelectDet[orderIndex].Tax
+                let taxRect = CGRect(x: 450, y: yOffset-10, width: 512, height: 50)
+                tax.draw(in:taxRect,withAttributes: orderNoAttributes)
+                
                 let Total = SelectDet[orderIndex].value
-                let TotalRect = CGRect(x: 500, y: yOffset, width: 512, height: 50)
+                let TotalRect = CGRect(x: 540, y: yOffset-10, width: 512, height: 50)
                 Total.draw(in:TotalRect,withAttributes: orderNoAttributes)
                 
+                if (SelectDet[orderIndex].Offer_Product != ""){
+                    
+                    // DashLine start
+                    let boxRect = CGRect(x: 70, y: yOffset+10, width: 480, height: 30) // Adjust the values as needed
+                    let boxPath = UIBezierPath(rect: boxRect)
+                    
+                    if let currentContexts = UIGraphicsGetCurrentContext() {
+                        currentContexts.setStrokeColor(UIColor.black.cgColor)
+                        currentContexts.setLineWidth(1.0)
+                        
+                        // Set the dash pattern for a dashed border
+                        let dashPattern: [CGFloat] = [4.0, 4.0] // Adjust these values as needed
+                        currentContexts.setLineDash(phase: 0, lengths: dashPattern)
+                        
+                        currentContexts.addPath(boxPath.cgPath)
+                        currentContexts.strokePath()
+                    }
+                    // DashLine end
+                    
+                    let skc = "SKC"
+                    let skcRect = CGRect(x: 170, y: yOffset+10, width: 512, height: 50)
+                    skc.draw(in:skcRect,withAttributes: orderNoAttributes_small)
+                    
+                    let Free = "Free"
+                    let FreeRect = CGRect(x: 450, y: yOffset+10, width: 512, height: 50)
+                    Free.draw(in:FreeRect,withAttributes: orderNoAttributes_small)
+                    
+                    
+                    let offPro = SelectDet[orderIndex].Offer_Product
+                    let offProRect = CGRect(x: 135, y: yOffset+20, width: 512, height: 50)
+                    offPro.draw(in:offProRect,withAttributes: orderNoAttributes_small)
+                    
+                    let offProunit = SelectDet[orderIndex].off_pro_unit
+                    let offProunitRect = CGRect(x: 453, y: yOffset+20, width: 512, height: 50)
+                    offProunit.draw(in:offProunitRect,withAttributes: orderNoAttributes_small)
+                }else{
+                    print("No Free")
+                }
                    }
             print(TotaCountOfQty)
  
@@ -1224,23 +1271,28 @@ struct OrderDetView:View{
             TotalQty.draw(in:TotalQtyRe,withAttributes: ItemAt)
             let TotalCotQty = CGRect(x: 400, y: yOffset+130, width: 512, height: 50)
             TotaCountOfQty.draw(in:TotalCotQty,withAttributes: ItemAt)
+            let TotalTaxRe = CGRect(x: 50, y: yOffset+150, width: 512, height: 50)
+            TotalTaxs.draw(in:TotalTaxRe,withAttributes: ItemAt)
+            let TatalTaxAmtRe = CGRect(x: 400, y: yOffset+150, width: 512, height: 50)
+            TatalTaxAmt.draw(in:TatalTaxAmtRe,withAttributes: ItemAt)
+   
             
             let SubTotalUpLine = UIGraphicsGetCurrentContext()
             SubTotalUpLine?.setLineWidth(1.0)
-            SubTotalUpLine?.move(to: CGPoint(x: 0, y: yOffset+150))
-            SubTotalUpLine?.addLine(to: CGPoint(x: 700, y: yOffset+150))
+            SubTotalUpLine?.move(to: CGPoint(x: 0, y: yOffset+180))
+            SubTotalUpLine?.addLine(to: CGPoint(x: 700, y: yOffset+180))
             SubTotalUpLine?.strokePath()
             
-            let NetAmtRe = CGRect(x: 50, y: yOffset+160, width: 512, height: 50)
+            let NetAmtRe = CGRect(x: 50, y: yOffset+190, width: 512, height: 50)
             NetAmt.draw(in:NetAmtRe,withAttributes: ItemAt)
             
-            let TotNetAmtRe = CGRect(x: 400, y: yOffset+160, width: 512, height: 50)
+            let TotNetAmtRe = CGRect(x: 400, y: yOffset+190, width: 512, height: 50)
             TotalNetAmt.draw(in:TotNetAmtRe,withAttributes: ItemAt)
             
             let SubTotalDwnLine = UIGraphicsGetCurrentContext()
             SubTotalDwnLine?.setLineWidth(1.0)
-            SubTotalDwnLine?.move(to: CGPoint(x: 0, y: yOffset+190))
-            SubTotalDwnLine?.addLine(to: CGPoint(x: 700, y: yOffset+190))
+            SubTotalDwnLine?.move(to: CGPoint(x: 0, y: yOffset+220))
+            SubTotalDwnLine?.addLine(to: CGPoint(x: 700, y: yOffset+220))
             SubTotalDwnLine?.strokePath()
         }
         return pdfData
