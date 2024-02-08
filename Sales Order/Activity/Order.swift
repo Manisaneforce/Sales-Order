@@ -3076,6 +3076,7 @@ struct SelPrvOrder: View {
             
             for PrvOrderData in VisitData.shared.lstPrvOrder{
                 print(PrvOrderData)
+                print(VisitData.shared.lstPrvOrder)
                 let RelID = PrvOrderData["Pcode"] as? String
                 let Uomnm = PrvOrderData["UOMNm"] as? String
                 let Qty = PrvOrderData["Qty"] as? String
@@ -3147,7 +3148,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         }
         return false
     })
-
     let TotQty2: Double = Double((sQty as NSString).intValue * (sUomConv as NSString).intValue)
     let TotQty: Double = Double((sQty as NSString).intValue)
     var source: Double = Double()
@@ -3167,6 +3167,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     var OffQty: Int = 0
     var OffProd: String = ""
     var OffProdNm: String = ""
+    var OffProdCode: String = ""
     var Schmval: String = ""
     var Disc: String = ""
     var PCODE: String = ""
@@ -3201,9 +3202,11 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         } else {
             SchmQty = (TotQty / Scheme)
         }
+        print(Schemes)
         OffQty = Int(SchmQty * Double(FQ))
         OffProd = Schemes[0]["OffProd"] as! String
         OffProdNm = Schemes[0]["OffProdNm"] as! String
+        OffProdCode = (Schemes[0]["PCode"] as? String)!
         
         var dis: Double = 0;
         Disc = Schemes[0]["Disc"] as! String
@@ -3250,14 +3253,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
+            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
+        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
@@ -3270,7 +3273,9 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         }
         return false
     })
+    print(lstPrv)
     VisitData.shared.lstPrvOrder = lstPrv
+    
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
@@ -3485,9 +3490,9 @@ func OrderSubmit(lat:String,log:String) {
                sPItems = sPItems + " \"free\": \(Free),"
                sPItems = sPItems + " \"dis\": \"" + disc + "\","
                sPItems = sPItems + " \"dis_value\":\"" + disVal + "\","
-               sPItems = sPItems + " \"Off_Pro_code\":\"" + ((item["OffProd"] as? String)!) + "\","
+               sPItems = sPItems + " \"Off_Pro_code\":\"" + ((item["OffProdCode"] as? String)!) + "\","
                sPItems = sPItems + " \"Off_Pro_name\":\"" + ((item["OffProdNm"] as? String)!) + "\","
-               sPItems = sPItems + " \"Off_Pro_Unit\":\"\","
+               sPItems = sPItems + " \"Off_Pro_Unit\":\"" + (String((item["OffQty"] as? Int)!)) + "\","
                sPItems = sPItems + " \"discount_type\":\"" + ((item["Tax_Type"] as? String)!) + "\","
                sPItems = sPItems + " \"ConversionFactor\":" + (item["UOMConv"] as! String) + ","
                sPItems = sPItems + " \"UOM_Id\": \"2\","

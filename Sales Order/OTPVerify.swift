@@ -246,9 +246,7 @@ struct OTPVerify: View {
                                     }else{
                                        
                                         Toast(mes: "Pls Enter Correct OTP")
-                                      
                                     }
-                                   
                                         OtpLoader.toggle()
                                     }
                                 }){
@@ -326,7 +324,6 @@ struct OTPVerify: View {
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding(20)
-                        
                     }
                 }
             }
@@ -334,10 +331,6 @@ struct OTPVerify: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
-            
-                
-            
-        
     }
       
         if NotReg{

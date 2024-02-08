@@ -348,7 +348,7 @@ struct MyOrdersDetails: View {
                                         print(itemsdata)
                                         let Status = itemsdata["invoiceStatus"] as? String
                                         let OrderID = itemsdata["OrderID"] as? String
-                                        let Order_Value = String(format: "Rs. %.02f", (itemsdata["Order_Value"] as? Double)!)
+                                        let Order_Value = String(format: "%.2f", (itemsdata["Order_Value"] as? Double)!)
                                         let Date = itemsdata["Date"] as? String
                                         var OrderDetails = [String]()
                                         var ProQty = [String]()
