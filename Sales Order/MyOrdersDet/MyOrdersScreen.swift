@@ -731,23 +731,38 @@ struct OrderDetView:View{
                                                     Text("Item")
                                                         .font(.system(size: 13))
                                                         .fontWeight(.bold)
-                                                    HStack(spacing:40){
+                                                        .padding(.leading,10)
+                                                        .frame(width: 70)
+                                                        
+                                                    Spacer()
+                                                    HStack{
                                                         Text("UOM")
                                                             .font(.system(size: 13))
                                                             .fontWeight(.bold)
+                                                            .frame(width: 60)
+                                                        Spacer()
                                                         Text("Qty")
                                                             .font(.system(size: 13))
                                                             .fontWeight(.bold)
+                                                            .frame(width: 35)
+                                                        Spacer()
                                                         Text("Price")
                                                             .font(.system(size: 13))
                                                             .fontWeight(.bold)
+                                                            .frame(width: 70)
+                                                        Spacer()
                                                         Text("Tax")
                                                             .font(.system(size: 13))
                                                             .fontWeight(.bold)
+                                                            .frame(width: 60)
+                                                        Spacer()
                                                         Text("Total")
                                                             .font(.system(size: 13))
                                                             .fontWeight(.bold)
+                                                            .frame(width: 70)
+                                                            
                                                     }
+                                                    .padding(.horizontal,10)
                                                 }
                                                
                                             //.padding(.leading,10)
@@ -876,6 +891,7 @@ struct OrderDetView:View{
                                                     Spacer()
                                                 }
                                                 .padding(.bottom,2)
+                                                Spacer()
                                                 HStack(){
                                                     Text("(\(SelectDet[index].Unit_Name))")
                                                         .font(.system(size: 12))
@@ -883,21 +899,21 @@ struct OrderDetView:View{
                                                         .frame(width: 60,alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
                                                         .padding(.leading,-2)
                                                         
-                                                    
+                                                    Spacer()
                                                     Text(SelectDet[index].New_Qty)
                                                         .font(.system(size: 12))
                                                         .frame(width: 35)
-                                                    
+                                                    Spacer()
                                                     Text(SelectDet[index].BillRate)
                                                         .font(.system(size: 12))
                                                         .frame(width: 70)
                                                         .multilineTextAlignment(.center)
-                                        
+                                                    Spacer()
                                                     Text(SelectDet[index].Tax)
                                                         .font(.system(size: 12))
                                                         .frame(width: 60)
                                                         .multilineTextAlignment(.center)
-                                                    
+                                                    Spacer()
                                                     Text(SelectDet[index].value)
                                                         .font(.system(size: 12))
                                                         .frame(width: 70,alignment: SelectDet[index].Product_Name.count > 10 ? .trailing : .trailing)
