@@ -1731,7 +1731,9 @@ struct Address:View{
                         HStack(spacing:180){
                             //TextField("Enter full address with pincode",text: $AddressTextInpute)
                             TextEditor(text: $AddressTextInpute)
+                            
                                 .frame(width: 310,height: 100)
+
                                 .overlay(
                                     Text("Enter full address with pincode")
                                         .foregroundColor(Color.gray)
