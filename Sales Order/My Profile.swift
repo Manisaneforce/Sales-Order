@@ -43,6 +43,8 @@ struct My_Profile: View {
     @State private var ShowTost = ""
     @State private var ontap_Educational_Details:Bool = false
     @State private var Ontap_Registration_certificate:Bool = false
+    @State private var locationManager = CLLocationManager()
+    @State private var ShowLocationAlert = false
     var body: some View {
         NavigationView{
             ZStack{
@@ -470,15 +472,42 @@ struct My_Profile: View {
                             Spacer()
                         }
                         .onTapGesture {
-                            AddressTextInpute.removeAll()
-                            GetCurrentLoction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                GetLoction.toggle()
-                                print(AddressTextInpute)
+                            
+                            if CLLocationManager.locationServicesEnabled() {
+                                switch locationManager.authorizationStatus {
+                                    case .notDetermined, .restricted, .denied:
+                                        print("No access")
+                                    ShowLocationAlert.toggle()
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        print("Access")
+                                    AddressTextInpute.removeAll()
+                                    GetCurrentLoction()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                        GetLoction.toggle()
+                                        print(AddressTextInpute)
+                                    }
+                                    GetLoction.toggle()
+                                    @unknown default:
+                                        break
+                                }
+                            } else {
+                                print("Location services are not enabled")
+                                ShowLocationAlert.toggle()
                             }
-                            GetLoction.toggle()
                         }
                         .frame(height: 40)
+                        .alert(isPresented: $ShowLocationAlert) {
+                            Alert(
+                                title: Text("Location Services"),
+                                message: Text("Please enable location services in Settings."),
+                                primaryButton: .default(Text("Settings"), action: {
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }),
+                                secondaryButton: .cancel()
+                            )
+                        }
                         ZStack{
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
@@ -719,8 +748,6 @@ struct My_Profile: View {
                     }
                 }
                 AddressTextInpute = sAddress
-                print(sAddress)
-                print(List_State)
             }
         }, error:{ errMsg in
             print (errMsg)
@@ -872,5 +899,3 @@ struct My_Profile_Previews: PreviewProvider {
         My_Profile()
     }
 }
-
-

@@ -1478,6 +1478,8 @@ struct Address:View{
     @State private var showToast:Bool = false
     @State private var showAlert_Address = false
     @State private var showAlert_Address_Del = false
+    @State private var locationManager = CLLocationManager()
+    @State private var ShowLocationAlert = false
     @Binding var isChecked:Bool
  
     var body: some View{
@@ -1735,14 +1737,40 @@ struct Address:View{
                         }
                         .frame(height: 40)
                         .onTapGesture {
-                            AddressTextInpute.removeAll()
-                            GetCurrentLoction()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                GetLoction.toggle()
-                                print(AddressTextInpute)
+                            if CLLocationManager.locationServicesEnabled() {
+                                switch locationManager.authorizationStatus {
+                                    case .notDetermined, .restricted, .denied:
+                                        print("No access")
+                                    ShowLocationAlert.toggle()
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        print("Access")
+                                    
+                                    AddressTextInpute.removeAll()
+                                    GetCurrentLoction()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                        GetLoction.toggle()
+                                        print(AddressTextInpute)
+                                    }
+                                    GetLoction.toggle()
+                                    @unknown default:
+                                        break
+                                }
+                            } else {
+                                print("Location services are not enabled")
+                                ShowLocationAlert.toggle()
                             }
-                            GetLoction.toggle()
                             
+                        }    .alert(isPresented: $ShowLocationAlert) {
+                            Alert(
+                                title: Text("Location Services"),
+                                message: Text("Please enable location services in Settings."),
+                                primaryButton: .default(Text("Settings"), action: {
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }),
+                                secondaryButton: .cancel()
+                            )
                         }
                         
                         ZStack{
