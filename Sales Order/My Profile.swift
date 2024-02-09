@@ -45,6 +45,7 @@ struct My_Profile: View {
     @State private var Ontap_Registration_certificate:Bool = false
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     var body: some View {
         NavigationView{
             ZStack{
@@ -53,6 +54,7 @@ struct My_Profile: View {
                     Rectangle()
                         .foregroundColor(ColorData.shared.HeaderColor)
                         .frame(height: 80)
+                    if networkMonitor.isConnected {
                     HStack {
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
@@ -71,12 +73,21 @@ struct My_Profile: View {
                             .padding(.top,50)
                         Spacer()
                     }
+                    }else{
+                        Internet_Connection()
+                    }
                 }
                 .edgesIgnoringSafeArea(.top)
                 .edgesIgnoringSafeArea(.leading)
                 .edgesIgnoringSafeArea(.trailing)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                .onAppear {
+                    networkMonitor.startMonitoring()
+                }
+                .onDisappear {
+                    networkMonitor.stopMonitoring()
+                }
                 ScrollView{
                     HStack{
                         Image("Group 6")

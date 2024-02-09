@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WebKit
+import Network
 //import Amplify
 //import AWSS3
 struct FedQust: Any {
@@ -35,7 +36,8 @@ struct Feedback: View {
     @State private var selectedAnswers: [String?] = []
     @State private var selectedAnswer: String? = nil
     @State private var isSelected = false
-
+    @StateObject private var networkMonitor = NetworkMonitor.shared
+    
     var body: some View {
         NavigationView{
             VStack{
@@ -43,6 +45,7 @@ struct Feedback: View {
                     Rectangle()
                         .foregroundColor(ColorData.shared.HeaderColor)
                         .frame(height: 80)
+                    if networkMonitor.isConnected {
                     HStack {
                         Button(action: {
                             FeedbackSc.toggle()
@@ -61,10 +64,19 @@ struct Feedback: View {
                             .padding(.top,50)
                         Spacer()
                     }
+                    }else{
+                        Internet_Connection()
+                    }
                 }
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                .onAppear {
+                    networkMonitor.startMonitoring()
+                }
+                .onDisappear {
+                    networkMonitor.stopMonitoring()
+                }
                 .onAppear {
                             self.selectedAnswers = Array(repeating: nil, count: FEDqust.count)
                         }
@@ -262,6 +274,7 @@ struct ReachOut:View{
     @State private var ReachOutView:Bool = false
     @State private var AppBarTit:String = ""
     @State private var Url:String = ""
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     var body: some View{
         if CurrentSc{
         NavigationView{
@@ -271,6 +284,7 @@ struct ReachOut:View{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 80)
+                        if networkMonitor.isConnected {
                         HStack {
                             Button(action: {
                                 self.presentationMode.wrappedValue.dismiss()
@@ -288,10 +302,19 @@ struct ReachOut:View{
                                 .padding(.top,50)
                             Spacer()
                         }
+                        }else{
+                            Internet_Connection()
+                        }
                     }
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                    .onAppear {
+                        networkMonitor.startMonitoring()
+                    }
+                    .onDisappear {
+                        networkMonitor.stopMonitoring()
+                    }
                     VStack {
                         //                    Rectangle()
                         //                        .foregroundColor(.clear)
@@ -452,6 +475,7 @@ struct ReachOutView:View{
     @Binding var CurrentSc:Bool
     @Binding var AppBarTit:String
     @Binding var Url:String
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     var body: some View{
         NavigationView{
         VStack{
@@ -459,6 +483,7 @@ struct ReachOutView:View{
                 Rectangle()
                     .foregroundColor(ColorData.shared.HeaderColor)
                     .frame(height: 80)
+                if networkMonitor.isConnected {
                 HStack {
                     Button(action: {
                         ReachOutView.toggle()
@@ -479,11 +504,20 @@ struct ReachOutView:View{
                         .padding(.top,50)
                     Spacer()
                 }
+                }else{
+                    Internet_Connection()
+                }
                 
             }
             .edgesIgnoringSafeArea(.top)
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+            .onAppear {
+                networkMonitor.startMonitoring()
+            }
+            .onDisappear {
+                networkMonitor.stopMonitoring()
+            }
             
             WebViews(urlString: Url)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)

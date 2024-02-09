@@ -16,6 +16,7 @@
 		3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3838004B2AB9AE320058F546 /* GoogleService-Info.plist */; };
 		3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3838004E2AB9AFB30058F546 /* FirebaseAnalytics */; };
 		383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */; };
+		3844996E2B76281F00FAF676 /* loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3844996D2B76281F00FAF676 /* loader.swift */; };
 		38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
 		384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6FE2A98B20A009439E5 /* LocationService.swift */; };
@@ -109,6 +110,7 @@
 		380540342B6E13BB00F9AAE3 /* Internet_Not_Connected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Internet_Not_Connected.json; sourceTree = "<group>"; };
 		383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firebase Cloud Messaging.swift"; sourceTree = "<group>"; };
 		3838004B2AB9AE320058F546 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3844996D2B76281F00FAF676 /* loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loader.swift; sourceTree = "<group>"; };
 		38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrinterFile.swift; sourceTree = "<group>"; };
 		384CB6F42A9608D4009439E5 /* VisitData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitData.swift; sourceTree = "<group>"; };
 		384CB6FE2A98B20A009439E5 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */,
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
 				38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */,
+				3844996D2B76281F00FAF676 /* loader.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -701,6 +704,7 @@
 				38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */,
 				384CB6FF2A98B20A009439E5 /* LocationService.swift in Sources */,
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
+				3844996E2B76281F00FAF676 /* loader.swift in Sources */,
 				3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */,
 				38AAC4D92AEFC49700D469DF /* S3.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,

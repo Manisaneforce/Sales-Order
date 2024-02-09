@@ -37,6 +37,8 @@ struct ContentView: View {
     @State private var userEmail:String = UserDefaults.standard.string(forKey: "savedPhoneNumber") ?? ""
     @State private var PrivacySc = UserDefaults.standard.string(forKey: "Privacydata") ?? ""
     @State private var HomePageNvigater:Bool = false
+    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @State private var Loader = false
    // @State private var jsondata = JSONData()
 
     @State private var Value = ""
@@ -69,8 +71,6 @@ struct ContentView: View {
                                     .foregroundColor(Color.gray)
                             }
                             .padding(.top,30)
-                            
-                            
                             LottieUIView(filename: "mobile_number").frame(width: 150,height: 150)
                                 .onAppear {
                                     print(PrivacySc)
@@ -79,16 +79,12 @@ struct ContentView: View {
                                     }
                                     print("Saved Value  \(userEmail)")
                                     if userEmail.isEmpty{
-                                        //HomePageNvigater = false
                                     }else{
                                         if let window = UIApplication.shared.windows.first {
                                             window.rootViewController = UIHostingController(rootView: HomePage())
                                         }
                                     }
-                                    
-                                    
                                 }
-                            
                             Text("Enter your registered mobile number")
                                 .font(.system(size: 17))
                                 .font(.title)
@@ -171,19 +167,30 @@ struct ContentView: View {
                             
 
                             if #available(iOS 15.0, *) {
- 
+                                
                                     Button(action: {
+                                        if networkMonitor.isConnected{
+                                          print("Internet connection available")
+                                        }else{
+                                            ShowTost="Internet connection not available"
+                                            showToast .toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                showToast.toggle()
+                                            }
+                                            return
+                                        }
                                         
                                         let axn = "send/sms"
                                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
                                         phoneNumber2 = phoneNumber
                                         print(phoneNumber2)
-                                        
+                                        Loader.toggle()
                                         AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
                                             .validate(statusCode: 200 ..< 299)
                                             .responseJSON { response in
                                                 switch response.result {
                                                 case .success(let value):
+                                                    Loader.toggle()
                                                     if let json = value as? [String: AnyObject] {
                                                         guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
                                                             print("Error: Cannot convert JSON object to Pretty JSON data")
@@ -269,6 +276,7 @@ struct ContentView: View {
                                     .padding(.top,150)
                                     .font(.system(size: 12))
                             }
+                           
                         }
                        
                   Spacer()
@@ -280,9 +288,13 @@ struct ContentView: View {
                 .onAppear {
                     UIScrollView.appearance().bounces = false
                 }
+                if Loader{
+                    loader()
+                }
             }
             .toast(isPresented: $showToast, message: "\(ShowTost)")
             .frame(width: geometry.size.width, height: geometry.size.height)
+                
         }
            
     }
@@ -310,6 +322,7 @@ struct ContentView: View {
 
 struct PrivacyPolicy:View{
     @State private var isChecked = false
+    @StateObject private var networkMonitor = NetworkMonitor.shared
    
     var body: some View{
         VStack{
@@ -317,22 +330,33 @@ struct PrivacyPolicy:View{
                 Rectangle()
                     .foregroundColor(ColorData.shared.HeaderColor)
                     .frame(height: 80)
-                HStack {
-                    Text("PRIVACY POLICY")
-                        .font(.system(size: 18))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.top,50)
-                        .padding(.leading,10)
-                    
-                    Spacer()
-                    
+                if networkMonitor.isConnected {
+                    HStack {
+                        Text("PRIVACY POLICY")
+                            .font(.system(size: 18))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top,50)
+                            .padding(.leading,10)
+                        
+                        Spacer()
+                        
+                    }
+                }else{
+                    Internet_Connection()
                 }
                 
             }
             .edgesIgnoringSafeArea(.top)
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+            .onAppear {
+                networkMonitor.startMonitoring()
+            }
+            .onDisappear {
+                networkMonitor.stopMonitoring()
+            }
+            
             WebViews(urlString: "https://rad.salesjump.in/privacyrad.html")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             

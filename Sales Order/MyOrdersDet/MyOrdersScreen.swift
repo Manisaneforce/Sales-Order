@@ -40,6 +40,7 @@ struct MyOrdersScreen: View {
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
     @State private var Loader:Bool = true
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
     
@@ -55,7 +56,7 @@ struct MyOrdersScreen: View {
                     Rectangle()
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 80)
-                    
+                     if networkMonitor.isConnected {
                     HStack {
                         
                         Button(action: {
@@ -76,6 +77,9 @@ struct MyOrdersScreen: View {
                             .padding(.top,50)
                         Spacer()
                     }
+                     }else{
+                         Internet_Connection()
+                     }
                     NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
                         EmptyView()
                     }
@@ -84,6 +88,13 @@ struct MyOrdersScreen: View {
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                .onAppear {
+                    networkMonitor.startMonitoring()
+                }
+                .onDisappear {
+                    networkMonitor.stopMonitoring()
+                }
+        
                 .onAppear{
                     let fromDate = String(dateFormatter.string(from:selectedDate))
                     print(fromDate)

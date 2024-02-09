@@ -35,6 +35,7 @@ struct MyOrdersDetails: View {
     @State var OrderId = ""
     @State var Totalval = value
     @State private var isHiden:Bool = false
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let currentDate = Date()
@@ -49,6 +50,7 @@ struct MyOrdersDetails: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 80)
+                        if networkMonitor.isConnected {
                         HStack {
                             
                             Button(action: {
@@ -69,6 +71,9 @@ struct MyOrdersDetails: View {
                                 .padding(.top,50)
                             Spacer()
                         }
+                        }else{
+                            Internet_Connection()
+                        }
                         NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
                             EmptyView()
                         }
@@ -76,6 +81,12 @@ struct MyOrdersDetails: View {
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                    .onAppear {
+                        networkMonitor.startMonitoring()
+                    }
+                    .onDisappear {
+                        networkMonitor.stopMonitoring()
+                    }
                     
                     .onAppear{
                         let fromDate = String(dateFormatter.string(from:selectedDate))

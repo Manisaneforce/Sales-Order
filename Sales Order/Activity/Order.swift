@@ -1336,7 +1336,28 @@ struct Order: View {
                 print(RateNewConv)
                 Dis = (items[0]["Disc"] as? String)!
                 DisVal = (items[0]["DisVal"] as? String)!
-                FreeQty = String((items[0]["FQ"] as? Int)!)
+                let FreeQty = ""
+                let TotQty:Double = Double((items[0]["Qty"] as? String)!)!
+                
+                var Scheme: Double = 0
+                var OffQty: Int = 0
+                var FQ : Int32 = 0
+                if let Schemes = items[0]["Schemes_Det"] as? [AnyObject]{
+                    print(Schemes)
+                    if(Schemes.count>0){
+                    Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
+                    FQ = (Schemes[0]["FQ"] as! NSString).intValue
+                    let SchmQty: Double
+                    if(Schemes[0]["pkg"] as! String == "Y"){
+                        SchmQty=Double(Int(TotQty / Scheme))
+                    } else {
+                        SchmQty = (TotQty / Scheme)
+                    }
+                    print(Schemes)
+                    OffQty = Int(SchmQty * Double(FQ))
+                }
+                }
+                
                 FreePrd = (items[0]["OffProdNm"] as? String)!
                 var TaxAmt = (items[0]["Tax_Amt"] as? String)!
                 print(Dis)
@@ -1353,7 +1374,7 @@ struct Order: View {
                 }else{
                     ShemMod = "2"
                 }
-                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: FreeQty, OffProdNm: FreePrd, Tax_Amt: TaxAmt,shomMod: ShemMod))
+                SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: String(OffQty), OffProdNm: FreePrd, Tax_Amt: TaxAmt,shomMod: ShemMod))
                 print(items)
                 print(Amount as Any)
                 TotalAmt.append(Amount)
@@ -1710,9 +1731,7 @@ struct Address:View{
                         HStack(spacing:180){
                             //TextField("Enter full address with pincode",text: $AddressTextInpute)
                             TextEditor(text: $AddressTextInpute)
-                            
                                 .frame(width: 310,height: 100)
-                            // .padding()
                                 .overlay(
                                     Text("Enter full address with pincode")
                                         .foregroundColor(Color.gray)
@@ -2395,6 +2414,9 @@ struct SelPrvOrder: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
+    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @State private var locationManager = CLLocationManager()
+    @State private var ShowLocationAlert = false
     @State private var items: [FilterItem] = []
     
     init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>) {
@@ -2848,16 +2870,45 @@ struct SelPrvOrder: View {
                             .frame(height: 100)
                         Button(action:{
                             //getLocation()
-                            if VisitData.shared.lstPrvOrder.count == 0{
-                                ShowTost="Cart is Empty"
-                                showToast = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    showToast = false
-                                }
+                            
+                            
+                            if networkMonitor.isConnected{
+                              print("Internet connection available")
                             }else{
-                                showAlert = true
+                                ShowTost="Internet connection not available"
+                                showToast .toggle()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast.toggle()
+                                }
+                                return
                             }
-                         
+                            
+                            
+                            if CLLocationManager.locationServicesEnabled() {
+                                switch locationManager.authorizationStatus {
+                                    case .notDetermined, .restricted, .denied:
+                                        print("No access")
+                                    ShowLocationAlert.toggle()
+                                    return
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        print("Access")
+                                    if VisitData.shared.lstPrvOrder.count == 0{
+                                        ShowTost="Cart is Empty"
+                                        showToast = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            showToast = false
+                                        }
+                                    }else{
+                                        showAlert = true
+                                    }
+                                 
+                                    @unknown default:
+                                        break
+                                }
+                            } else {
+                                print("Location services are not enabled")
+                                ShowLocationAlert.toggle()
+                            }
                         }) {
                             VStack{
                                 HStack{
@@ -2904,6 +2955,18 @@ struct SelPrvOrder: View {
                                 .padding(.trailing,20)
                             }.padding(.bottom,45)
                         }
+                        .alert(isPresented: $ShowLocationAlert) {
+                            Alert(
+                                title: Text("Location Services"),
+                                message: Text("Please enable location services in Settings."),
+                                primaryButton: .default(Text("Settings"), action: {
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                    }
+                                }),
+                                secondaryButton: .cancel()
+                            )
+                        }
                     
                         
                     }
@@ -2937,8 +3000,6 @@ struct SelPrvOrder: View {
                             secondaryButton: .cancel()
                         )
                     }
-                    
-                    
                 }
                 if GetLoction{
                     ZStack{
@@ -3103,8 +3164,6 @@ struct SelPrvOrder: View {
             var OffProname = ""
             
             for PrvOrderData in VisitData.shared.lstPrvOrder{
-                print(PrvOrderData)
-                print(VisitData.shared.lstPrvOrder)
                 let RelID = PrvOrderData["Pcode"] as? String
                 let Uomnm = PrvOrderData["UOMNm"] as? String
                 let Qty = PrvOrderData["Qty"] as? String
@@ -3112,18 +3171,28 @@ struct SelPrvOrder: View {
                 let TaxAmt = PrvOrderData["Tax_Amt"] as? String
                 let Net_Val = String(format: "%.02f",(PrvOrderData["NetVal"] as? Double)!)
                 let Disc = PrvOrderData["Disc"] as? String
-                let FreeQty = String((PrvOrderData["FQ"] as? Int)!)
+                let FreeQty = ""
+                let TotQty:Double = Double((PrvOrderData["Qty"] as? String)!)!
+                var Scheme: Double = 0
+                var OffQty: Int = 0
+                var FQ : Int32 = 0
+                if let Schemes = PrvOrderData["Schemes_Det"] as? [AnyObject]{
+                    if(Schemes.count>0){
+                    Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
+                    FQ = (Schemes[0]["FQ"] as! NSString).intValue
+                    let SchmQty: Double
+                    if(Schemes[0]["pkg"] as! String == "Y"){
+                        SchmQty=Double(Int(TotQty / Scheme))
+                    } else {
+                        SchmQty = (TotQty / Scheme)
+                    }
+                    OffQty = Int(SchmQty * Double(FQ))
+                }
+                }
                 OffProname = (PrvOrderData["OffProdNm"] as? String)!
-                print(FreeQty)
-                print(totAmt as Any)
-                
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                        print(jsonArray)
                         if let selectedPro = jsonArray.first(where: { ($0["id"] as! String) == RelID }) {
-                            print(selectedPro)
-                            
-                            
                             let url = selectedPro["PImage"] as? String
                             let name  = selectedPro["name"] as? String
                             let Proid = selectedPro["id"] as? String
@@ -3135,12 +3204,11 @@ struct SelPrvOrder: View {
                             var result:Double = 0.0
                             if let rateValue = Double(rate ?? "0"), let uomValue = Double(Uom ?? "0") {
                                 result = rateValue * uomValue
-                                print(result) // This will be a Double value
                             } else {
                                 print("Invalid input values")
                             }
                             
-                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!, Offerpro: OffProname, FreeQty: FreeQty))
+                            AllPrvprod.append(PrvProddata(ImgURL: url!, ProName: name!, ProID: Proid!, ProMRP: String(result),Uomnm:Uomnm!,Qty:Qty!,totAmt:totAmt!, Tax_Val: TaxAmt!, Tax_Dis_Amt: Net_Val, Disc: Disc!, Offerpro: OffProname, FreeQty: String(OffQty)))
                         }
                     }
                 } catch {
@@ -3188,8 +3256,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     let Source1 = String(format: "%.02f", source)
     let Rate: Double = Double(Source1)!
     var ItmValue: Double = (TotQty*Rate)
-    
-    
     var Scheme: Double = 0
     var FQ : Int32 = 0
     var OffQty: Int = 0
@@ -3281,14 +3347,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
             return false
         })
         {
-            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
+            let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode,"Rate": OrgRate,"Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val,"Schemes_Det" : Schemes];
             print(itm)
             let jitm: AnyObject = itm as AnyObject
             VisitData.shared.ProductCart[i] = jitm
             print("\(VisitData.shared.ProductCart[i]) starts with 'A'!")
         }
     }else{
-        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val];
+        let itm: [String: Any]=["id": id,"Pcode": PCODE,"Qty": sQty,"UOM": sUom, "UOMNm": sUomNm, "UOMConv": sUomConv, "SalQty": TotQty,"NetWt": sNetUnt,"Scheme": Scheme,"FQ": FQ,"OffQty": OffQty,"OffProd":OffProd,"OffProdNm":OffProdNm,"OffProdCode":OffProdCode, "Rate": OrgRate, "Value": (TotQty*Rate), "Disc": Disc, "DisVal": Schmval, "NetVal": Disc_With_NetVal, "Tax_Amt": Tax_Amt_Conv, "Tax_Type": Tax_Type, "Tax_Id": Tax_Id, "Tax_Val" : Tax_Val,"Schemes_Det" : Schemes];
         let jitm: AnyObject = itm as AnyObject
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
