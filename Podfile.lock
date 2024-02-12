@@ -2,23 +2,27 @@ PODS:
   - AWSCore (2.33.4)
   - AWSS3 (2.33.4):
     - AWSCore (= 2.33.4)
+  - FSCalendar (2.8.4)
   - Jiopay-pg-uat (0.0.20)
 
 DEPENDENCIES:
   - AWSS3
+  - FSCalendar
   - Jiopay-pg-uat (~> 0.0.19)
 
 SPEC REPOS:
   trunk:
     - AWSCore
     - AWSS3
+    - FSCalendar
     - Jiopay-pg-uat
 
 SPEC CHECKSUMS:
   AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
   AWSS3: a0d31bc565dc8a6c5eaa756610ac15704c100674
+  FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   Jiopay-pg-uat: 7e0adaab83c6579c43515c825f36e0940fbe0164
 
-PODFILE CHECKSUM: 96f2d7e6c42e350a7bb5a38ba2862cfa480f8d79
+PODFILE CHECKSUM: fe8a030a3dc2ae4d8d3a8de037dc97a224719666
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3

@@ -67,6 +67,7 @@
 		38AA42E02AA6EC8C00B8AA10 /* MyOrdersScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */; };
 		38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */; };
 		38AAC4D92AEFC49700D469DF /* S3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AAC4D82AEFC49700D469DF /* S3.swift */; };
+		38BBF9CD2B79F4DC0064F937 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BBF9CC2B79F4DC0064F937 /* CalendarView.swift */; };
 		38CADF362A810D9700842DC9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CADF352A810D9700842DC9 /* Order.swift */; };
 		38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */; };
 		38CFA27F2A7CFA4F00FE5F51 /* OTPVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */; };
@@ -158,6 +159,7 @@
 		38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersScreen.swift; sourceTree = "<group>"; };
 		38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersDetails.swift; sourceTree = "<group>"; };
 		38AAC4D82AEFC49700D469DF /* S3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = S3.swift; sourceTree = "<group>"; };
+		38BBF9CC2B79F4DC0064F937 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		38CADF352A810D9700842DC9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		38CFA27A2A7CDEFB00FE5F51 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		38CFA27E2A7CFA4F00FE5F51 /* OTPVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerify.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 				38AAC4D82AEFC49700D469DF /* S3.swift */,
 				38595AE62A8A3DFB005EB704 /* LottieUIView.swift */,
 				3801AE1A2A8A52070069B136 /* LottieUIURL.swift */,
+				38BBF9CC2B79F4DC0064F937 /* CalendarView.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -709,6 +712,7 @@
 				38AAC4D92AEFC49700D469DF /* S3.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
+				38BBF9CD2B79F4DC0064F937 /* CalendarView.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
 				38DC8F562AD7D23200EFD572 /* GlobalFunc.swift in Sources */,
 				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
@@ -884,7 +888,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -926,7 +930,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

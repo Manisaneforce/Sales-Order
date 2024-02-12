@@ -9,6 +9,7 @@ import SwiftUI
 import Alamofire
 import UIKit
 import PDFKit
+import FSCalendar
 struct OrderDetails: Any{
     let OrderNo : String
     let No_Of_items : String
@@ -318,12 +319,11 @@ struct MyOrdersScreen: View {
                     }
                     VStack {
                         
-                        DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
-                            .datePickerStyle(GraphicalDatePickerStyle())
-                            .labelsHidden()
-                            .datePickerStyle(GraphicalDatePickerStyle())
-                            .padding()
+                        CalendarView(selectedDate:$selectedDate, maximumDate: Date())
+                        .frame(height: 300)
+                        .padding()
                         
+                    
                         Button(action:{
                             Selectdate()
                             Loader.toggle()
@@ -416,6 +416,7 @@ struct MyOrdersScreen: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
+    
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
           formatter.dateFormat = "yyyy-MM-dd"
@@ -1400,5 +1401,38 @@ struct NoOrderdate:View{
     var body: some View{
         Spacer()
         Text("No Record Found")
+    }
+}
+
+struct CalendarView: UIViewRepresentable {
+    @Binding var selectedDate: Date
+    var maximumDate: Date
+    var minimumDate = Date()
+
+    func makeUIView(context: Context) -> FSCalendar {
+        let calendar = FSCalendar()
+        calendar.delegate = context.coordinator
+//        self.calendar.minimumDate = Date() // Set minimumDate to the current date
+//        self.calendar.maximumDate = maximumDate
+        return calendar
+    }
+
+    func updateUIView(_ uiView: FSCalendar, context: Context) {
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    class Coordinator: NSObject, FSCalendarDelegate {
+        var parent: CalendarView
+
+        init(parent: CalendarView) {
+            self.parent = parent
+        }
+
+        func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+            parent.selectedDate = date
+        }
     }
 }

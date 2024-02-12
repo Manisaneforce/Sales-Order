@@ -76,8 +76,6 @@ var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
-var ShpingAddress = ""
-var BillingAddress = CustDet.shared.Addr
 var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
@@ -147,6 +145,8 @@ struct Order: View {
     @State private var alertMessage = ""
     @State private var lObjSel: [Uomtyp] = []
     @State private var text:String = ""
+    @State private var ShpingAddress = ""
+    @State private var BillingAddress = CustDet.shared.Addr
     @StateObject private var networkMonitor = NetworkMonitor.shared
 
     var body: some View {
@@ -245,8 +245,6 @@ struct Order: View {
                                         
                                         
                                     }
-                                
-                                
                             }
                             
                             HStack {
@@ -282,7 +280,6 @@ struct Order: View {
                                             if isChecked == true{
                                             }else{
                                                 ShpingAddress = BillingAddress
-                                                
                                             }
                                         }
                                 }
@@ -327,7 +324,6 @@ struct Order: View {
                             
                             .padding(.horizontal, 10)
                         }
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(prodTypes2.indices, id: \.self) { index in
@@ -340,14 +336,12 @@ struct Order: View {
                                         if selectedIndex == index {
                                             selectedIndex = index
                                             SubselectedIndex = 0
-                                            
                                         } else {
                                             selectedIndex = index
                                             SubselectedIndex = 0
                                         }
                                         print("Clicked button at index: \(index)")
                                         self.OrderprodCate(at: index)
-                                        
                                     }) {
                                         
                                         Text(prodTypes2[index])
@@ -594,8 +588,13 @@ struct Order: View {
                                                             if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {
                                                                 filterItems[index].Amt = newQuantity
                                                             } else if newValue.isEmpty {
-                                                                // If the TextField is empty, set the value to zero
                                                                 filterItems[index].Amt = 0
+                                                            }else{
+                                                                ShowTost="Text count be more than 4 characters."
+                                                                showToast = true
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                                    showToast = false
+                                                                }
                                                             }
                                                         }
                                                     ))
@@ -767,8 +766,16 @@ struct Order: View {
                         
                 }
                     Button(action: {
+                        var lstPrv:[AnyObject] = []
+                        lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
+                            if (Cart["SalQty"] as! Double) > 0 {
+                                return true
+                            }
+                            return false
+                        })
+                        print(lstPrv)
+                        VisitData.shared.lstPrvOrder = lstPrv
                         if NetworkMonitor.shared.isConnected != true {
-                                        // Show internet connection alert
                                         ShowAlert(title: "Information", message: "Check the Internet Connection")
                                         return
                                     }
@@ -782,7 +789,6 @@ struct Order: View {
                             OredSc.toggle()
                             SelPrvSc.toggle()
                         }
-                        
                     }) {
                         ZStack(alignment: .top) {
                             Rectangle()
@@ -800,7 +806,7 @@ struct Order: View {
                                     .padding(.top,5)
                                 
                                 
-                                Text("Item: \(VisitData.shared.lstPrvOrder.count)")
+                                Text("Item: \(VisitData.shared.LstItemCount.count)")
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -845,7 +851,7 @@ struct Order: View {
                         Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .destructive(Text("Ok")))
                     }
                     
-                    NavigationLink(destination: SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc), isActive: $SelPrvOrderNavigte) {
+                    NavigationLink(destination: SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress), isActive: $SelPrvOrderNavigte) {
                         EmptyView()
                     }
                     
@@ -1009,12 +1015,12 @@ struct Order: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .sheet(isPresented: $ADDaddress, content: {
-            Address(ADDaddress: $ADDaddress, SelMod: $SelMod, isChecked: $isChecked)
+            Address(ADDaddress: $ADDaddress, SelMod: $SelMod, isChecked: $isChecked, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress)
             
         })
     }
         if SelPrvSc{
-            SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc)
+            SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress)
         }
     }
  
@@ -1394,22 +1400,14 @@ struct Order: View {
                 }else{
                     ShemMod = "2"
                 }
-                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "0.0", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00",shomMod: ShemMod))
+                SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "Rs. 0.00", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00",shomMod: ShemMod))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
                 TotalAmt.append(ZeroAmt)
                 TotalQty.append(ZerQty)
             }
         }
-
-        print(TotalQty)
-        print(FilterProduct)
-        print(SelectUOMN)
-        print(TotalAmt)
-        print(ShemMod)
         items.removeAll()
-        print(FilterProduct.count)
-        print(Tax_value.count)
         var Count = 0
         for index in 0..<FilterProduct.count {
             print(index)
@@ -1419,19 +1417,11 @@ struct Order: View {
             items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt,ShowShem : SelectUOMN[index].shomMod ))
             print(items)
         }
-        print(FilterProduct.count)
-        print(Count)
         if (Count == FilterProduct.count){
-            print("fIX")
         }
-        print(items)
-        print(Allprods)
-        
         filterItems = items
-     
         print(filterItems)
     }
- 
 }
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -1499,6 +1489,8 @@ struct Address:View{
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
     @Binding var isChecked:Bool
+    @Binding var ShpingAddress:String
+    @Binding var BillingAddress:String
  
     var body: some View{
         ZStack{
@@ -2389,10 +2381,14 @@ struct SelPrvOrder: View {
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
     @State private var items: [FilterItem] = []
+    @Binding var ShpingAddress:String
+    @Binding var BillingAddress:String
     
-    init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>) {
+    init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>,ShpingAddress: Binding<String>,BillingAddress: Binding<String>) {
         self._OredSc = OredSc
         self._SelPrvSc = SelPrvSc
+        self._ShpingAddress = ShpingAddress
+        self._BillingAddress = BillingAddress
     }
     var body: some View {
         NavigationView{
@@ -2405,9 +2401,7 @@ struct SelPrvOrder: View {
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 100)
-                            
                             HStack {
-                                
                                 Text("   Order")
                                     .font(.system(size: 18))
                                     .fontWeight(.bold)
@@ -2465,7 +2459,6 @@ struct SelPrvOrder: View {
                                 }){
                                     Text("+ Add Product")
                                         .foregroundColor(Color.orange)
-                                    
                                 }
                             }
                             .padding(10)
@@ -2891,7 +2884,7 @@ struct SelPrvOrder: View {
                                         .padding(.horizontal,5)
                                         .padding(.top,5)
                                     
-                                    Text("Item: \(VisitData.shared.lstPrvOrder.count)")
+                                    Text("Item: \(VisitData.shared.LstItemCount.count)")
                                         .font(.system(size: 14))
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
@@ -2960,7 +2953,7 @@ struct SelPrvOrder: View {
                                     OrderSubStatus = "Data Submitting..."
                                     
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        OrderSubmit(lat: sLocationlat, log: sLocationlong)
+                                        OrderSubmit(lat: sLocationlat, log: sLocationlong,BillingAddress: BillingAddress, ShpingAddress: ShpingAddress)
                                         GetLoction.toggle()
                                         if (paymentenb.shared.isPaymentenbl == 1){
                                             showPaymentAlert.toggle()
@@ -3339,7 +3332,8 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         return false
     })
     print(lstPrv)
-    VisitData.shared.lstPrvOrder = lstPrv
+    VisitData.shared.LstItemCount = lstPrv
+    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
     
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
@@ -3387,7 +3381,6 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
  func minusQty(sQty:String,SelectProd:[String:Any]) {
  
      let Ids = SelectProd["id"] as? String
-     print(Ids as Any)
      
      let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
          
@@ -3457,13 +3450,6 @@ func changeQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
-    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
-        if (Cart["SalQty"] as! Double) > 0 {
-            return true
-        }
-        return false
-    })
-    print(VisitData.shared.lstPrvOrder)
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
@@ -3498,7 +3484,14 @@ func deleteItem(at index: Int) {
     updateOrderValues(refresh: 1)
 }
 
-func OrderSubmit(lat:String,log:String) {
+func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:String) {
+    VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
+        if (Cart["SalQty"] as! Double) > 0 {
+            return true
+        }
+        return false
+    })
+    print(VisitData.shared.lstPrvOrder)
     var totalTaxAmt: Double = 0.0
     var sPItems:String = ""
     for i in 0..<VisitData.shared.lstPrvOrder.count {

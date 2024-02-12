@@ -32,6 +32,7 @@ class VisitData{
     
     var ProductCart: [AnyObject] = []
     var lstPrvOrder:[AnyObject] = []
+    var LstItemCount:[AnyObject] = []
     
     func clear(){
         WorkType = ""
