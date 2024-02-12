@@ -319,7 +319,6 @@
 			isa = PBXGroup;
 			children = (
 				38AA42DF2AA6EC8C00B8AA10 /* MyOrdersScreen.swift */,
-				38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */,
 				3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */,
 			);
 			path = MyOrdersDet;
@@ -408,6 +407,7 @@
 		38FF06E52B7240510030D82F /* Reports */ = {
 			isa = PBXGroup;
 			children = (
+				38AA42E22AA706AF00B8AA10 /* MyOrdersDetails.swift */,
 			);
 			path = Reports;
 			sourceTree = "<group>";
@@ -887,10 +887,10 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet  App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "ReliVet  would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -929,10 +929,10 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "SAN SALES App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "SAN SALES would like to use this for get a tagged customers near by you. It is secure and private.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet  App Need Use Your Location For Find your near by tagged Retailers";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "ReliVet  would like to use this for get a tagged customers near by you. It is secure and private.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

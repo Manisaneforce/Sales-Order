@@ -36,8 +36,9 @@ struct MyOrdersScreen: View {
     @State private var Jiomoneypage = false
     @State private var navigateToHomepage = false
     @State private var isPopoverVisible = false
-    @State private var SelMode: String = ""
+    @State private var SelMode: String = "DOF"
     @State private var FromDate = ""
+    @State private var SelectFromDate = Date()
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
     @State private var Loader:Bool = true
@@ -319,11 +320,10 @@ struct MyOrdersScreen: View {
                     }
                     VStack {
                         
-                        CalendarView(selectedDate:$selectedDate, maximumDate: Date())
+                        CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
                         .frame(height: 300)
                         .padding()
                         
-                    
                         Button(action:{
                             Selectdate()
                             Loader.toggle()
@@ -429,6 +429,7 @@ struct MyOrdersScreen: View {
     }
     private  func Selectdate(){
           if SelMode == "DOF"{
+              SelectFromDate = selectedDate
               FromDate=dateFormatter.string(from: selectedDate)
               OrderDetailsTriger()
               
@@ -1406,14 +1407,15 @@ struct NoOrderdate:View{
 
 struct CalendarView: UIViewRepresentable {
     @Binding var selectedDate: Date
-    var maximumDate: Date
-    var minimumDate = Date()
+    @State private var didSelectDate: Date?
+    @Binding var SelMode: String
+    @Binding var SelectFromDate: Date
+    
 
     func makeUIView(context: Context) -> FSCalendar {
         let calendar = FSCalendar()
         calendar.delegate = context.coordinator
-//        self.calendar.minimumDate = Date() // Set minimumDate to the current date
-//        self.calendar.maximumDate = maximumDate
+        calendar.dataSource = context.coordinator
         return calendar
     }
 
@@ -1424,7 +1426,7 @@ struct CalendarView: UIViewRepresentable {
         Coordinator(parent: self)
     }
 
-    class Coordinator: NSObject, FSCalendarDelegate {
+    class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
         var parent: CalendarView
 
         init(parent: CalendarView) {
@@ -1433,6 +1435,23 @@ struct CalendarView: UIViewRepresentable {
 
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             parent.selectedDate = date
+            print(date)
+            parent.didSelectDate = parent.SelectFromDate
+            
         }
+
+//        func minimumDate(for calendar: FSCalendar) -> Date {
+//            if (parent.SelMode == "DOT"){
+//                return parent.didSelectDate ?? Date()
+//            }
+//            return Date()
+//        }
+        
+        func maximumDate(for calendar: FSCalendar) -> Date {
+//            if (parent.SelMode == "DOT"){
+//                return parent.didSelectDate ?? Date()
+//            }
+            return Date()
+         }
     }
 }
