@@ -43,7 +43,6 @@ struct MyOrdersScreen: View {
     @StateObject private var networkMonitor = NetworkMonitor.shared
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
-    
     let currentDate = Date()
     let calendar = Calendar.current
     var body: some View {
@@ -644,11 +643,11 @@ struct OrderDetView:View{
                             VStack{
                                 HStack{
                                     Text(CustDet.shared.StkNm)
-                                        .font(.system(size: 14))
+                                        .font(.system(size: 12))
                                         .fontWeight(.bold)
                                     Spacer()
                                     Text("ORDER")
-                                        .font(.system(size: 14))
+                                        .font(.system(size: 12))
                                         .fontWeight(.bold)
                                 }
                                 .padding(.horizontal,20)
@@ -665,18 +664,18 @@ struct OrderDetView:View{
                                     Rectangle()
                                         .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
                                         .foregroundColor(Color.gray)
-                                    VStack(spacing:10){
+                                    VStack(spacing:5){
                                         HStack{
                                             Text("BILL TO")
                                                 .fontWeight(.bold)
-                                                .font(.system(size: 13))
+                                                .font(.system(size: 12))
                                             Spacer()
                                         }
                                         .padding(.top,10)
                                         .padding(.horizontal,10)
                                         HStack{
                                             Text(CustDet.shared.CusName)
-                                                .font(.system(size: 13))
+                                                .font(.system(size: 12))
                                                 .fontWeight(.bold)
                                             Spacer()
                                         }
@@ -685,32 +684,32 @@ struct OrderDetView:View{
                                             Image(systemName: "phone.circle.fill")
                                                 .foregroundColor(Color.blue)
                                             Text(CustDet.shared.Mob)
-                                                .font(.system(size: 13))
+                                                .font(.system(size: 12))
                                                 .foregroundColor(.gray)
                                             Spacer()
                                         }
                                         .padding(.horizontal,10)
                                         HStack{
+                                            
                                             Text(CustDet.shared.Addr)
-                                                .font(.system(size: 13))
+                                                .font(.system(size: 11))
                                                 .foregroundColor(.gray)
                                             
                                             Spacer()
                                         }
                                         .padding(.horizontal,10)
-                                        .padding(.bottom,10)
-                                        
+                                        .padding(.bottom,3)
+                                        Spacer()
                                     }
-                                    
-                                    
                                 }
                                 .padding(.horizontal,20)
                                 .padding(.vertical,10)
                             }
                         }
-                        .frame(height: 200)
+                        .frame(height: 230)
                     }.padding(.horizontal,10)
                         .padding(.vertical,10)
+                    Spacer()
                     
                     VStack{
                         ZStack{

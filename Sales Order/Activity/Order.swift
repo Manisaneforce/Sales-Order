@@ -522,9 +522,6 @@ struct Order: View {
                                                             
                                                         }
                                                 }
-                                                
-                                                
-                                                
                                                 Spacer()
                                                 HStack {
                                                     Button(action: {
@@ -1511,36 +1508,7 @@ struct Address:View{
                 Text("Select Address")
                 .font(.custom("Poppins-Bold", size: 16))
                 Divider()
-                ZStack{
-                    Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
-                    Text(CustDet.shared.Addr)
-                        .font(.system(size: 14))
-                        .fontWeight(.semibold)
-                        .padding(.horizontal,10)
-                        .padding(.vertical,5)
-                    
-                    //.frame(width: 50, height: 50)
-                }
-                .frame(width: 350,height: 60)
-                .cornerRadius(10)
-                .onTapGesture {
-                    if SelMod == "SA"{
-                        ShpingAddress = CustDet.shared.Addr
-                        print(ShpingAddress)
-                        if isChecked == true{
-                            
-                        }else{
-                            ShpingAddress = BillingAddress
-                            
-                        }
-                    }
-                    if SelMod == "BA"{
-                        BillingAddress = CustDet.shared.Addr
-                    }
-                    ADDaddress = false
-                }
                 .onAppear{
-                    
                     print(GetingAddress)
                 }
                 .onAppear{
@@ -1561,25 +1529,26 @@ struct Address:View{
                                     Spacer()
                                 }
                                 .background(Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00))
-                                    .onTapGesture {
-                                        if SelMod == "SA"{
-                                            ShpingAddress = GetingAddress[index].address
-                                            print(ShpingAddress)
-                                            if isChecked == true{
-                                                
-                                            }else{
-                                                ShpingAddress = BillingAddress
-                                                
-                                            }
-                                        }
-                                        if SelMod == "BA"{
-                                            BillingAddress = GetingAddress[index].address
+                                .onTapGesture {
+                                    if SelMod == "SA"{
+                                        ShpingAddress = GetingAddress[index].address
+                                        print(ShpingAddress)
+                                        if isChecked == true{
+                                            
+                                        }else{
+                                            ShpingAddress = BillingAddress
                                             
                                         }
-                                        ADDaddress = false
+                                    }
+                                    if SelMod == "BA"{
+                                        BillingAddress = GetingAddress[index].address
                                         
                                     }
+                                    ADDaddress = false
+                                    
+                                }
                                 Spacer()
+                                if (GetingAddress[index].listedDrCode != "Ret"){
                                 Image(systemName: "pencil" )
                                     .foregroundColor(Color(.blue))
                                     .frame(width: 30)
@@ -1597,7 +1566,7 @@ struct Address:View{
                                     .frame(width: 50, height: 30)
                                     .onTapGesture {
                                         showAlert_Address_Del.toggle()
-                                    
+                                        
                                     }
                                     .alert(isPresented: $showAlert_Address_Del) {
                                         Alert(
@@ -1638,6 +1607,7 @@ struct Address:View{
                                             secondaryButton: .cancel()
                                         )
                                     }
+                            }
                             }
                             
                         }
@@ -2058,10 +2028,9 @@ struct Address:View{
             }
     }
     func GetingListAddress(){
+        GetingAddress.removeAll()
         let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"
         let apiKey = "\(axn)"
-
-       
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
@@ -2078,7 +2047,7 @@ struct Address:View{
                         }
                         
                         print(prettyPrintedJson)
-                        GetingAddress.removeAll()
+                        GetingAddress.append(EdditeAddres(listedDrCode: "Ret", address: CustDet.shared.Addr, id: 0, stateCode: 0))
                         if let jsonData = prettyPrintedJson.data(using: .utf8),
                            let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
                            let responseArray = json["response"] as? [[String: Any]] {

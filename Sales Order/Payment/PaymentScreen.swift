@@ -70,12 +70,14 @@ struct PaymentScreen: View {
                             
                             HStack {
                                 Text(FromDate)
-                                
+                                Text(ToDate)
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                Spacer()
                                 
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
-                            }
-                            
+                            }.padding(.horizontal,5)
                         }
                         .onTapGesture {
                             SelMode = "DOF"
@@ -93,9 +95,12 @@ struct PaymentScreen: View {
                                 .shadow(radius: 5)
                             HStack {
                                 Text(ToDate)
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                Spacer()
                                 Image(systemName: "calendar")
                                     .foregroundColor(Color.blue)
-                            }
+                            }.padding(.horizontal,5)
                         }
                         .onTapGesture {
                             SelMode = "DOT"
