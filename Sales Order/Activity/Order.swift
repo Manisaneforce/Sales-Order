@@ -3456,15 +3456,12 @@ func updateOrderValues(refresh:Int){
             totAmt = totAmt + (item["NetVal"] as! Double)
             TotamtlistShow = String(totAmt)
             //(item["SalQty"] as! NSString).doubleValue
-
         }
     }
     lblTotAmt = String(format: "Rs. %.02f", totAmt)
     lblTotAmt2 = String(totAmt)
     if(refresh == 1){
-     
     }
-
 }
 func deleteItem(at index: Int) {
     var ids = [String]()
@@ -3483,7 +3480,6 @@ func deleteItem(at index: Int) {
     })
     updateOrderValues(refresh: 1)
 }
-
 func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:String) {
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
@@ -3575,7 +3571,6 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
     print(totalTaxAmt)
     let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(Netamount)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"\(CustDet.shared.CusName)\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"\",\"Tax_Amt\":\"\(totalTaxAmt)\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
-    
     
     let params: Parameters = [
         "data": jsonString
