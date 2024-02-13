@@ -313,17 +313,23 @@ struct MyOrdersScreen: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 60)
-                            .padding(20)
+                            //.padding(20)
                         Text("Select Date")
                             .fontWeight(.bold)
                             .foregroundColor(.white)
+                            .padding(.top,10)
                     }
+                    .edgesIgnoringSafeArea(.top)
+                    .padding(.top,-18)
+                    //.padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
+                    Spacer()
                     VStack {
                         
                         CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
-                        .frame(height: 300)
+                        .frame(height: 500)
                         .padding()
                         
+                        Spacer()
                         Button(action:{
                             Selectdate()
                             Loader.toggle()
@@ -332,12 +338,14 @@ struct MyOrdersScreen: View {
                             ZStack{
                                 Rectangle()
                                     .foregroundColor(ColorData.shared.HeaderColor)
-                                    .frame(height: 40)
-                                    .padding(20)
+                                    .frame(height: 60)
                                 Text("Submit Date")
                                     .foregroundColor(.white)
                             }
                         }
+                        .edgesIgnoringSafeArea(.bottom)
+                        .padding(.bottom,-37)
+                       
                     }
                 }
             }
@@ -352,10 +360,10 @@ struct MyOrdersScreen: View {
                     ZStack{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 50)
+                            .frame(height: 30)
                         VStack{
                             Text("Select Quick Dates")
-                                .font(.system(size: 20))
+                                .font(.system(size: 15))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.white)
                                 .multilineTextAlignment(.center)
@@ -364,43 +372,55 @@ struct MyOrdersScreen: View {
                     VStack{
                         VStack{
                             Text("Last 7 days")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
                         }
-                        .frame(width: 320)
                         .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
                                 OrderDetailsTriger()
                             }
                             
                         Divider()
                         VStack{
                             Text("Last 30 days")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
                         }
-                        .frame(width: 320)
                         .background(Color.white)
                             .onTapGesture{
                                 OrderPaymentDetails.removeAll()
                                 Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
                                 OrderDetailsTriger()
                             }
                         
                     }
-                    Spacer()
+                    
                     ZStack{
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 50)
+                            .frame(height: 30)
+                            .padding(.top,30)
+                            .padding(.bottom,10)
+                            .padding(.horizontal,15)
+                            .cornerRadius(10)
                         VStack{
                             Text("Close")
-                                .font(.system(size: 18))
+                                .font(.system(size: 15))
+                                .fontWeight(.bold)
                                 .foregroundColor(Color.white)
+                                .padding(.top,15)
                         }
-                    }
+                    }.cornerRadius(10)
                     .onTapGesture {
                         Filterdate.toggle()
                     }
@@ -426,6 +446,13 @@ struct MyOrdersScreen: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter.string(from: date)
+    }
+    func formattedDates(date: Date) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let formattedDateString = dateFormatter.string(from: date)
+        return dateFormatter.date(from: formattedDateString)
     }
     private  func Selectdate(){
           if SelMode == "DOF"{
@@ -1405,53 +1432,3 @@ struct NoOrderdate:View{
     }
 }
 
-struct CalendarView: UIViewRepresentable {
-    @Binding var selectedDate: Date
-    @State private var didSelectDate: Date?
-    @Binding var SelMode: String
-    @Binding var SelectFromDate: Date
-    
-
-    func makeUIView(context: Context) -> FSCalendar {
-        let calendar = FSCalendar()
-        calendar.delegate = context.coordinator
-        calendar.dataSource = context.coordinator
-        return calendar
-    }
-
-    func updateUIView(_ uiView: FSCalendar, context: Context) {
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
-    }
-
-    class Coordinator: NSObject, FSCalendarDelegate, FSCalendarDataSource {
-        var parent: CalendarView
-
-        init(parent: CalendarView) {
-            self.parent = parent
-        }
-
-        func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-            parent.selectedDate = date
-            print(date)
-            parent.didSelectDate = parent.SelectFromDate
-            
-        }
-
-//        func minimumDate(for calendar: FSCalendar) -> Date {
-//            if (parent.SelMode == "DOT"){
-//                return parent.didSelectDate ?? Date()
-//            }
-//            return Date()
-//        }
-        
-        func maximumDate(for calendar: FSCalendar) -> Date {
-//            if (parent.SelMode == "DOT"){
-//                return parent.didSelectDate ?? Date()
-//            }
-            return Date()
-         }
-    }
-}

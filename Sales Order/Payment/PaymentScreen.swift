@@ -17,6 +17,7 @@ struct PaymentScreen: View {
     @State private var CalenderTit = ""
     @State private var navigateToHomepage = false
     @State private var Filterdate = false
+    @State private var SelectFromDate = Date()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let currentDate = Date()
     let calendar = Calendar.current
@@ -183,33 +184,38 @@ struct PaymentScreen: View {
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 60)
-                                .padding(20)
+                                //.padding(20)
                             Text("Select Date")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
+                                .padding(.top,10)
                         }
+                        .edgesIgnoringSafeArea(.top)
+                        .padding(.top,-18)
+                        //.padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
+                        Spacer()
                         VStack {
                             
-                            DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
-                                .datePickerStyle(GraphicalDatePickerStyle())
-                                .labelsHidden()
-                                .datePickerStyle(GraphicalDatePickerStyle())
-                                .padding()
+                            CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
+                            .frame(height: 500)
+                            .padding()
                             
+                            Spacer()
                             Button(action:{
-                                
                                 Selectdate()
                                 isPopoverVisible.toggle()
                             }){
                                 ZStack{
                                     Rectangle()
                                         .foregroundColor(ColorData.shared.HeaderColor)
-                                        .frame(height: 40)
-                                        .padding(20)
+                                        .frame(height: 60)
                                     Text("Submit Date")
                                         .foregroundColor(.white)
                                 }
                             }
+                            .edgesIgnoringSafeArea(.bottom)
+                            .padding(.bottom,-37)
+                           
                         }
                     }
                     
@@ -224,10 +230,10 @@ struct PaymentScreen: View {
                         ZStack{
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
-                                .frame(height: 50)
+                                .frame(height: 30)
                             VStack{
                                 Text("Select Quick Dates")
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 15))
                                     .fontWeight(.bold)
                                     .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
@@ -237,39 +243,49 @@ struct PaymentScreen: View {
                             VStack{
                                 
                                 Text("Last 7 days")
-                                
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .padding(5)
                             }
-                            .frame(width: 320)
                             .background(Color.white)
                             .onTapGesture{
                                 
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
                                 
                             }
                             
                             Divider()
                             VStack{
                                 Text("Last 30 days")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .padding(5)
                             }
-                            .frame(width: 320)
                             .background(Color.white)
                             .onTapGesture{
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
                             }
                         }
-                        Spacer()
                         ZStack{
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
-                                .frame(height: 50)
+                                .frame(height: 30)
+                                .padding(.top,30)
+                                .padding(.bottom,10)
+                                .padding(.horizontal,15)
+                                .cornerRadius(10)
                             VStack{
                                 Text("Close")
-                                    .font(.system(size: 18))
+                                    .font(.system(size: 15))
+                                    .fontWeight(.bold)
                                     .foregroundColor(Color.white)
+                                    .padding(.top,15)
                             }
-                        }
+                        }.cornerRadius(10)
                         .onTapGesture {
                             Filterdate.toggle()
                         }
@@ -286,13 +302,13 @@ struct PaymentScreen: View {
     
     }
     
-
     private func calculateStartDate(for days: Int) -> Date {
          let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
          return startDate ?? currentDate
      }
     private  func Selectdate(){
           if SelMode == "DOF"{
+              SelectFromDate = selectedDate
               FromDate=dateFormatter.string(from: selectedDate)
           }
           if SelMode == "DOT"{
@@ -308,6 +324,13 @@ struct PaymentScreen: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter.string(from: date)
+    }
+    func formattedDates(date: Date) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let formattedDateString = dateFormatter.string(from: date)
+        return dateFormatter.date(from: formattedDateString)
     }
 }
 struct PaymentScreen_Previews: PreviewProvider {
