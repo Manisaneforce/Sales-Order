@@ -2951,7 +2951,7 @@ struct SelPrvOrder: View {
                                 OrderSubStatus = "Getting Current Loction..."
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     OrderSubStatus = "Data Submitting..."
-                                    
+    
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                         OrderSubmit(lat: sLocationlat, log: sLocationlong,BillingAddress: BillingAddress, ShpingAddress: ShpingAddress)
                                         GetLoction.toggle()
