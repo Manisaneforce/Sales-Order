@@ -148,7 +148,7 @@ struct Order: View {
     @State private var ShpingAddress = ""
     @State private var BillingAddress = CustDet.shared.Addr
     @StateObject private var networkMonitor = NetworkMonitor.shared
-
+    
     var body: some View {
         if OredSc{
         NavigationView {

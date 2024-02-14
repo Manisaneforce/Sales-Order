@@ -178,7 +178,7 @@ struct ContentView: View {
 //                                                showToast.toggle()
 //                                            }
 //                                            return
-//                                        }
+//                                        }                                        
                                         
                                         let axn = "send/sms"
                                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
@@ -225,9 +225,7 @@ struct ContentView: View {
                                                                 showToast = false
                                                             }
                                                             
-                                                        }
-                                                        
-                                                        
+                                                        }   
                                                         
                                                     }
                                                 case .failure(let error):

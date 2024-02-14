@@ -515,9 +515,7 @@ struct MyOrdersScreen: View {
     }
     func OrderDetailsTriger(){
         let axn = "get/orderlst&sfCode=\(CustDet.shared.CusId)&fromdate=\(FromDate)&todate=\(ToDate)"
-      
         let apiKey = "\(axn)"
-    
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
@@ -553,7 +551,6 @@ struct MyOrdersScreen: View {
                                         let OrderDate = Items["Order_Date"] as? String
                                         let Ispaid = Items["isPaid"] as? String
                                         print(Items)
-                                        
                                         OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo!, No_Of_items: NoofItems!, Quantity: Qty, Order_Value: OrderValue, Status: Status!, Order_Date: OrderDate!, isPaid: Ispaid!))
                                     }
                                 }
@@ -1215,11 +1212,11 @@ struct OrderDetView:View{
             BillMob.draw(in:StkMob,withAttributes: stkMonat)
             
             let StkAddAt = [NSAttributedString.Key.font:ComFont]
-            let StkAddrs = CGRect(x: 50, y: 200, width: 512, height: 50)
+            let StkAddrs = CGRect(x: 50, y: 195, width: 512, height: 50)
             BillAddres.draw(in:StkAddrs,withAttributes: StkAddAt)
             
             let OrdIdAt = [NSAttributedString.Key.font:ComFont]
-            let OrdsID = CGRect(x: 50, y: 220, width: 512, height: 50)
+            let OrdsID = CGRect(x: 50, y: 225, width: 512, height: 50)
             OredId.draw(in:OrdsID,withAttributes: OrdIdAt)
             
             let OrdDateAt = [NSAttributedString.Key.font:ComFont]
