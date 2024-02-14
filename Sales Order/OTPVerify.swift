@@ -224,6 +224,7 @@ struct OTPVerify: View {
                                                                             print(CustDet.shared.Det)
                                                                             NavigteBoll = true
                                                                         }
+                                                                        UserSetup.shared.SetUserSetup()
                                                                     }else{
                                                                         OtpView.toggle()
                                                                         NotReg.toggle()
@@ -441,3 +442,5 @@ func OtpReSend(){
             }
         }
 }
+
+

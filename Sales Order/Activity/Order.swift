@@ -1498,139 +1498,141 @@ struct Address:View{
                 Text("")
                     .font(.system(size: 20))
                 Text("Select Address")
-                .font(.custom("Poppins-Bold", size: 16))
+                    .font(.custom("Poppins-Bold", size: 16))
                 Divider()
-                .onAppear{
-                    print(GetingAddress)
-                }
-                .onAppear{
-                    GetingListAddress()
-                    Get_State()
-                }
+                    .onAppear{
+                        print(GetingAddress)
+                    }
+                    .onAppear{
+                        GetingListAddress()
+                        Get_State()
+                    }
                 ScrollView{
-                ForEach(0..<GetingAddress.count, id: \.self) { index in
-                    if #available(iOS 15.0, *) {
-                        ZStack{
-                            Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
-                            HStack(){
-                                HStack{
-                                    Text(GetingAddress[index].address)
-                                        .font(.custom("Poppins-SemiBold", size: 15))
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical,5)
-                                    Spacer()
-                                }
-                                .background(Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00))
-                                .onTapGesture {
-                                    if SelMod == "SA"{
-                                        ShpingAddress = GetingAddress[index].address
-                                        print(ShpingAddress)
-                                        if isChecked == true{
-                                            
-                                        }else{
-                                            ShpingAddress = BillingAddress
+                    ForEach(0..<GetingAddress.count, id: \.self) { index in
+                        if #available(iOS 15.0, *) {
+                            ZStack{
+                                Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00)
+                                HStack(){
+                                    HStack{
+                                        Text(GetingAddress[index].address)
+                                            .font(.custom("Poppins-SemiBold", size: 15))
+                                            .padding(.horizontal,10)
+                                            .padding(.vertical,5)
+                                        Spacer()
+                                    }
+                                    .background(Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00))
+                                    .onTapGesture {
+                                        if SelMod == "SA"{
+                                            ShpingAddress = GetingAddress[index].address
+                                            print(ShpingAddress)
+                                            if isChecked == true{
+                                                
+                                            }else{
+                                                ShpingAddress = BillingAddress
+                                                
+                                            }
+                                        }
+                                        if SelMod == "BA"{
+                                            BillingAddress = GetingAddress[index].address
                                             
                                         }
-                                    }
-                                    if SelMod == "BA"{
-                                        BillingAddress = GetingAddress[index].address
+                                        ADDaddress = false
                                         
                                     }
-                                    ADDaddress = false
-                                    
-                                }
-                                Spacer()
-                                if (GetingAddress[index].listedDrCode != "Ret"){
-                                Image(systemName: "pencil" )
-                                    .foregroundColor(Color(.blue))
-                                    .frame(width: 30)
-                                    .onTapGesture {
-                                        Editid = GetingAddress[index].id
-                                        clickPlusButton.toggle()
-                                        OpenMod = "Edit"
-                                        EditeAddressHed = "Edit Address"
-                                        //EditState = GetingAddress[index].address
-                                        EditeAddres = GetingAddress[index].address
-                                        AddressTextInpute = EditeAddres
-                                    }
-                                Image(systemName: "trash.fill")
-                                    .foregroundColor(Color.red)
-                                    .frame(width: 50, height: 30)
-                                    .onTapGesture {
-                                        showAlert_Address_Del.toggle()
-                                        
-                                    }
-                                    .alert(isPresented: $showAlert_Address_Del) {
-                                        Alert(
-                                            title: Text("Delete"), message: Text("Are you sure you want to delete this Address?"),
-                                            primaryButton: .default(Text(" Ok ").foregroundColor(.red)) {
-                                                let getid = GetingAddress[index].id
-                                                let listedDrCode = GetingAddress[index].listedDrCode
+                                    Spacer()
+                                    if (GetingAddress[index].listedDrCode != "Ret"){
+                                        Image(systemName: "pencil" )
+                                            .foregroundColor(Color(.blue))
+                                            .frame(width: 30)
+                                            .onTapGesture {
+                                                Editid = GetingAddress[index].id
+                                                clickPlusButton.toggle()
+                                                OpenMod = "Edit"
+                                                EditeAddressHed = "Edit Address"
+                                                //EditState = GetingAddress[index].address
+                                                EditeAddres = GetingAddress[index].address
+                                                AddressTextInpute = EditeAddres
+                                            }
+                                        Image(systemName: "trash.fill")
+                                            .foregroundColor(Color.red)
+                                            .frame(width: 50, height: 30)
+                                            .onTapGesture {
+                                                showAlert_Address_Del.toggle()
                                                 
-                                                let axn = "delete_ret_address&id=\(getid)&listedDrCode=\(listedDrCode)"
-                                                //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
-                                                let apiKey = "\(axn)"
-                                                
-                                                AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
-                                                    .validate(statusCode: 200 ..< 299)
-                                                    .responseJSON { response in
-                                                        switch response.result {
-                                                        case .success(let value):
-                                                            print(value)
-                                                            
-                                                            if let json = value as? [String:AnyObject] {
-                                                                guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                                                                    print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                                    return
+                                            }
+                                            .alert(isPresented: $showAlert_Address_Del) {
+                                                Alert(
+                                                    title: Text("Delete"), message: Text("Are you sure you want to delete this Address?"),
+                                                    primaryButton: .default(Text(" Ok ").foregroundColor(.red)) {
+                                                        let getid = GetingAddress[index].id
+                                                        let listedDrCode = GetingAddress[index].listedDrCode
+                                                        
+                                                        let axn = "delete_ret_address&id=\(getid)&listedDrCode=\(listedDrCode)"
+                                                        //http://rad.salesjump.in/server/Db_Retail_v100.php?axn=delete_ret_address&id=58&listedDrCode=96
+                                                        let apiKey = "\(axn)"
+                                                        
+                                                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .get, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                                            .validate(statusCode: 200 ..< 299)
+                                                            .responseJSON { response in
+                                                                switch response.result {
+                                                                case .success(let value):
+                                                                    print(value)
+                                                                    
+                                                                    if let json = value as? [String:AnyObject] {
+                                                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                                                                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                                                                            return
+                                                                        }
+                                                                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                                                                            print("Error: Could print JSON in String")
+                                                                            return
+                                                                        }
+                                                                        GetingAddress.remove(at: index)
+                                                                        print(prettyPrintedJson)
+                                                                        
+                                                                    }
+                                                                case .failure(let error):
+                                                                    print(error)
                                                                 }
-                                                                guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                                                                    print("Error: Could print JSON in String")
-                                                                    return
-                                                                }
-                                                                GetingAddress.remove(at: index)
-                                                                print(prettyPrintedJson)
-                                                                
                                                             }
-                                                        case .failure(let error):
-                                                            print(error)
-                                                        }
-                                                    }
-                                            },
-                                            secondaryButton: .cancel()
-                                        )
+                                                    },
+                                                    secondaryButton: .cancel()
+                                                )
+                                            }
                                     }
+                                }
+                                
                             }
-                            }
+                            .padding(.vertical,1)
+                            .cornerRadius(10)
+                            
+                            
+                            
+                            .listRowSeparator(.hidden)
+                        } else {
                             
                         }
-                        .padding(.vertical,1)
-                        .cornerRadius(10)
-                        
-                        
-                        
-                        .listRowSeparator(.hidden)
-                    } else {
-                        
                     }
-                }
-                .padding(.horizontal,10)
-                .listStyle(PlainListStyle())
-                .padding(.vertical, 5)
-                //.background(Color.white)
-                .background(Color.white)
+                    .padding(.horizontal,10)
+                    .listStyle(PlainListStyle())
+                    .padding(.vertical, 5)
+                    //.background(Color.white)
+                    .background(Color.white)
+                } 
+                Spacer()
+                if(UserSetup.shared.Add_Address == 1){
+                Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .onTapGesture {
+                        AddressTextInpute = ""
+                        selectedstate = "Select State"
+                        OpenMod = "Add"
+                        clickPlusButton.toggle()
+                        EditeAddressHed = "Add New Address"
+                    }
             }
-            Spacer()
-            Image(systemName: "plus.circle.fill")
-                .resizable()
-                .frame(width: 50, height: 50)
-                .foregroundColor(ColorData.shared.HeaderColor)
-                .onTapGesture {
-                    AddressTextInpute = ""
-                    selectedstate = "Select State"
-                    OpenMod = "Add"
-                    clickPlusButton.toggle()
-                    EditeAddressHed = "Add New Address"
-                }
             
             
         }

@@ -138,6 +138,7 @@ struct My_Profile: View {
                             .font(.system(size: 14))
                             .fontWeight(.bold)
                         Spacer()
+                        if(UserSetup.shared.Add_Address == 1){
                         Text("Add")
                             .font(.system(size: 14))
                             .fontWeight(.bold)
@@ -148,6 +149,7 @@ struct My_Profile: View {
                                 AddressTextInpute=""
                                 AddNewAddres.toggle()
                             }
+                    }
                     }
                     .padding(.leading,10)
                     .padding(.trailing,25)

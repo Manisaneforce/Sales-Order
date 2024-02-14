@@ -9,7 +9,7 @@
 
 import SwiftUI
 import Combine
-import CoreLocation
+//import CoreLocation
 import Alamofire
 
 struct HomePage: View {
@@ -159,7 +159,7 @@ struct HomePage: View {
                                 print("Error Data")
                             }
                         }
-                        GetCurrentLoction()
+                        //GetCurrentLoction()
                         updateDate()
                         DashBoradImg()
                         Prod_Sch_Det()
@@ -245,7 +245,7 @@ struct HomePage: View {
     }
     
     func startTimer() {
-            Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
                 withAnimation {
                     currentImageIndex = (currentImageIndex + 1) % imageUrls.count
                 }
@@ -269,6 +269,7 @@ struct HomePage: View {
             currentDate = formatter.string(from: Date())
         }
     }
+    /*
     func GetCurrentLoction(){
         LocationService.sharedInstance.getNewLocation(location: { location in
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
@@ -294,7 +295,7 @@ struct HomePage: View {
             print (errMsg)
             //self.LoadingDismiss()
         })
-    }
+    }*/
     
     func isPaymentEnabled(){
         let axn = "enable_payments"

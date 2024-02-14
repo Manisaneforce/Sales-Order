@@ -32,6 +32,7 @@
 		3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */; };
 		3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */; };
 		3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */; };
+		389AA9072B7CB86000060DA9 /* UserSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389AA9062B7CB86000060DA9 /* UserSetup.swift */; };
 		389B99B82B12032D00A53B42 /* NoOreder.json in Resources */ = {isa = PBXBuildFile; fileRef = 389B99B72B12032D00A53B42 /* NoOreder.json */; };
 		38A266002B6D12EF00336994 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38A265FF2B6D12EF00336994 /* Poppins-Black.ttf */; };
 		38A266022B6D12FD00336994 /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38A266012B6D12FD00336994 /* Poppins-BlackItalic.ttf */; };
@@ -125,6 +126,7 @@
 		3894EFB32AA9D3ED0037EA45 /* ColorFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFile.swift; sourceTree = "<group>"; };
 		3894EFB52AA9D4D40037EA45 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		3894EFB72AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complaint_and_Feedback_Screen.swift; sourceTree = "<group>"; };
+		389AA9062B7CB86000060DA9 /* UserSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetup.swift; sourceTree = "<group>"; };
 		389B99B72B12032D00A53B42 /* NoOreder.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = NoOreder.json; sourceTree = "<group>"; };
 		38A265FF2B6D12EF00336994 /* Poppins-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Black.ttf"; sourceTree = "<group>"; };
 		38A266012B6D12FD00336994 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 				38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */,
 				38DC8F552AD7D23200EFD572 /* GlobalFunc.swift */,
 				3844996D2B76281F00FAF676 /* loader.swift */,
+				389AA9062B7CB86000060DA9 /* UserSetup.swift */,
 			);
 			path = "common file";
 			sourceTree = "<group>";
@@ -709,6 +712,7 @@
 				38EEBC5B2A7A255F00AEF032 /* Sales_OrderApp.swift in Sources */,
 				3844996E2B76281F00FAF676 /* loader.swift in Sources */,
 				3894EFB42AA9D3ED0037EA45 /* ColorFile.swift in Sources */,
+				389AA9072B7CB86000060DA9 /* UserSetup.swift in Sources */,
 				38AAC4D92AEFC49700D469DF /* S3.swift in Sources */,
 				38595AE72A8A3DFB005EB704 /* LottieUIView.swift in Sources */,
 				387E0E852A85F7A600FEACBA /* Showtoast.swift in Sources */,
@@ -887,10 +891,7 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet  App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "ReliVet  would like to use this for get a tagged customers near by you. It is secure and private.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -929,10 +930,7 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "ReliVet App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet  App Need Use Your Location For Find your near by tagged Retailers";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "ReliVet  would like to use this for get a tagged customers near by you. It is secure and private.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

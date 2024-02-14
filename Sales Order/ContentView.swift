@@ -169,16 +169,16 @@ struct ContentView: View {
                             if #available(iOS 15.0, *) {
                                 
                                     Button(action: {
-                                        if networkMonitor.isConnected{
-                                          print("Internet connection available")
-                                        }else{
-                                            ShowTost="Internet connection not available"
-                                            showToast .toggle()
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                showToast.toggle()
-                                            }
-                                            return
-                                        }
+//                                        if networkMonitor.isConnected{
+//                                          print("Internet connection available")
+//                                        }else{
+//                                            ShowTost="Internet connection not available"
+//                                            showToast .toggle()
+//                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                                                showToast.toggle()
+//                                            }
+//                                            return
+//                                        }
                                         
                                         let axn = "send/sms"
                                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
@@ -392,7 +392,7 @@ struct PrivacyPolicy:View{
                         print(isChecked)
                         UserDefaults.standard.set(isChecked, forKey: "Privacydata")
                         if let window = UIApplication.shared.windows.first {
-                            window.rootViewController = UIHostingController(rootView: CheckPermissions())
+                            window.rootViewController = UIHostingController(rootView: ContentView())
                         }
                     }else{
                     }
