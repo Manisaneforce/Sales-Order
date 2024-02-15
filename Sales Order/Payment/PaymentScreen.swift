@@ -71,7 +71,6 @@ struct PaymentScreen: View {
                             
                             HStack {
                                 Text(FromDate)
-                                Text(ToDate)
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                 Spacer()
