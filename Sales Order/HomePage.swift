@@ -108,6 +108,7 @@ struct HomePage: View {
                     
                     .onAppear() {
                         isPaymentEnabled()
+                        UserSetup.shared.SetUserSetup()
                         if (ShowToastMes.shared.tost != "" ){
                             showToast = true
                           
