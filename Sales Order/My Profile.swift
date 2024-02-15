@@ -45,6 +45,7 @@ struct My_Profile: View {
     @State private var Ontap_Registration_certificate:Bool = false
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
+    @State private var showAlert_Address = false
     @StateObject private var networkMonitor = NetworkMonitor.shared
     var body: some View {
         NavigationView{
@@ -144,6 +145,7 @@ struct My_Profile: View {
                             .fontWeight(.bold)
                             .foregroundColor(Color(red: 0.1, green: 0.59, blue: 0.81))
                             .onTapGesture {
+                                AllowLoction()
                                 OpenMod = "Add"
                                 AddresHed = "Add New Address"
                                 AddressTextInpute=""
@@ -461,19 +463,30 @@ struct My_Profile: View {
                                 .padding(.leading,25)
                             Spacer()
                         }
-                        HStack(spacing:180){
-                            TextEditor(text: $AddressTextInpute)
-                                .frame(width: 310,height: 100)
-                                .overlay(
+                        ZStack(alignment: .leading) {
+                            if AddressTextInpute.isEmpty {
+                                VStack {
                                     Text("Enter full address with pincode")
-                                        .foregroundColor(Color.gray)
-                                        .padding(.horizontal, 4)
-                                        .opacity(AddressTextInpute.isEmpty ? 1 : 0)
-                                )
-                        }
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                        .padding(.top, 10)
+                                        .padding(.leading, 6)
+                                        .opacity(1.1)
+                                    Spacer()
+                                }
+                            }
+                            
+                            VStack {
+                                TextEditor(text: $AddressTextInpute)
+                                    .font(.system(size: 15))
+                                    .opacity(AddressTextInpute.isEmpty ? 0.85 : 1)
+                                Spacer()
+                            }
+                        }.frame(width: 310,height: 100)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(ColorData.shared.HeaderColor,lineWidth: 2)
+                            
                         )
                         HStack{
                             Spacer()
@@ -485,7 +498,6 @@ struct My_Profile: View {
                             Spacer()
                         }
                         .onTapGesture {
-                            
                             if CLLocationManager.locationServicesEnabled() {
                                 switch locationManager.authorizationStatus {
                                     case .notDetermined, .restricted, .denied:
@@ -546,10 +558,19 @@ struct My_Profile: View {
                                     showToast.toggle()
                             }
                             }else{
-                                Addres_Add_And_Edite()
+                                showAlert_Address.toggle()
                             }
                          
                             
+                        }
+                        .alert(isPresented: $showAlert_Address) {
+                            Alert(
+                                title: Text("Submit"), message: Text("Do you want to submit?"),
+                                primaryButton: .default(Text(" OK ").foregroundColor(.red)) {
+                                    Addres_Add_And_Edite()
+                                },
+                                secondaryButton: .cancel()
+                            )
                         }
                     }
                     .background(Color.white)
@@ -570,6 +591,8 @@ struct My_Profile: View {
                             Text("")
                             Text("Select State")
                                 .foregroundColor(Color.white)
+                                .foregroundColor(Color.white)
+                                .font(.custom("Poppins-Bold", size: 15))
                         }
                         
                         Divider()
@@ -580,6 +603,7 @@ struct My_Profile: View {
                             })
                             {
                                 Text(List_State[index].title)
+                                    .font(.custom("Poppins-SemiBold", size: 13))
                             }
                         }
                         .listStyle(PlainListStyle())
@@ -700,6 +724,14 @@ struct My_Profile: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowTost)
+    }
+    private func AllowLoction(){
+        LocationService.sharedInstance.getNewLocation(location: { location in
+            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+            lazy var geocoder = CLGeocoder()
+        }, error:{ errMsg in
+            print (errMsg)
+        })
     }
     private func RetAddress(){
         let axn = "get_ret_addresses&listedDrCode=\(CustDet.shared.CusId)"

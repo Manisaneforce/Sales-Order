@@ -159,7 +159,7 @@ struct HomePage: View {
                                 print("Error Data")
                             }
                         }
-                        //GetCurrentLoction()
+                       // GetCurrentLoction()
                         updateDate()
                         DashBoradImg()
                         Prod_Sch_Det()
@@ -228,7 +228,6 @@ struct HomePage: View {
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
                 }
-                    
                     Spacer()
                     VStack{
                         Image("logo_new")
@@ -269,33 +268,17 @@ struct HomePage: View {
             currentDate = formatter.string(from: Date())
         }
     }
-    /*
-    func GetCurrentLoction(){
-        LocationService.sharedInstance.getNewLocation(location: { location in
-            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
-            print(sLocation)
-            lazy var geocoder = CLGeocoder()
-//            geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-//                if(placemarks != nil){
-//                    if(placemarks!.count>0){
-//                        let jAddress:[String] = placemarks![0].addressDictionary!["FormattedAddressLines"] as! [String]
-//                        for i in 0...jAddress.count-1 {
-//                            print(jAddress[i])
-//                            if i==0{
-//                                sAddress = String(format: "%@", jAddress[i])
-//                            }else{
-//                                sAddress = String(format: "%@, %@", sAddress,jAddress[i])
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-        }, error:{ errMsg in
-            print (errMsg)
-            //self.LoadingDismiss()
-        })
-    }*/
+    
+//    func GetCurrentLoction(){
+//        LocationService.sharedInstance.getNewLocation(location: { location in
+//            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+//            print(sLocation)
+//            lazy var geocoder = CLGeocoder()
+//        }, error:{ errMsg in
+//            print (errMsg)
+//            //self.LoadingDismiss()
+//        })
+//    }
     
     func isPaymentEnabled(){
         let axn = "enable_payments"
@@ -429,4 +412,42 @@ func DashBoradImg(){
 // SwipGestore
 //https://chat.openai.com/c/4ca48131-f3e9-4e77-b1c0-27c233b20df6
 
+
+
+
+
+
+struct ScrollViewsAdjust: View {
+    @State private var scrollOffset: CGFloat = 0.0
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 20) {
+                // First View
+                Text("First View")
+                    .frame(maxWidth: .infinity, maxHeight: 100)
+                    .opacity(1 - min(scrollOffset / 50, 1.0)) // Adjust the offset and opacity as needed
+                
+                // Other content in the ScrollView
+                ForEach(1..<50) { index in
+                    Text("Item \(index)")
+                        .frame(maxWidth: .infinity, maxHeight: 100)
+                }
+            }
+            .padding()
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.onAppear {
+                        // Do something when the view appears if needed
+                    }
+                    .onChange(of: proxy.frame(in: .named("scroll")).origin.y) { value in
+                        // Update the scroll offset
+                        scrollOffset = value
+                    }
+                }
+            )
+        }
+        .coordinateSpace(name: "scroll")
+    }
+}
 

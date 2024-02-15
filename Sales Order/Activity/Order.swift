@@ -877,6 +877,7 @@ struct Order: View {
                             
                             Button(action: {
                                 isShowingPopUp.toggle()
+                                text = ""
                             }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.blue)
@@ -917,6 +918,7 @@ struct Order: View {
                             }
                             .onTapGesture{
                                 isShowingPopUp.toggle()
+                                text = ""
                                 SelectItem = allUomlist[index].UomName
                                 let UOMNAME = allUomlist[index].UomName
                                 let FilterUnite =  FilterProduct[index]
@@ -1626,6 +1628,7 @@ struct Address:View{
                     .frame(width: 50, height: 50)
                     .foregroundColor(ColorData.shared.HeaderColor)
                     .onTapGesture {
+                        AllowLoction()
                         AddressTextInpute = ""
                         selectedstate = "Select State"
                         OpenMod = "Add"
@@ -1633,8 +1636,6 @@ struct Address:View{
                         EditeAddressHed = "Add New Address"
                     }
             }
-            
-            
         }
             if clickPlusButton{
                 Color.black.opacity(0.5)
@@ -1692,25 +1693,31 @@ struct Address:View{
                                 .padding(.leading,25)
                             Spacer()
                         }
-                        HStack(spacing:180){
-                            //TextField("Enter full address with pincode",text: $AddressTextInpute)
-                            TextEditor(text: $AddressTextInpute)
-                            
-                                .frame(width: 310,height: 100)
-
-                                .overlay(
+                        ZStack(alignment: .leading) {
+                            if AddressTextInpute.isEmpty {
+                                VStack {
                                     Text("Enter full address with pincode")
-                                        .foregroundColor(Color.gray)
-                                        .padding(.horizontal, 4)
-                                        .opacity(AddressTextInpute.isEmpty ? 1 : 0)
-                                )
-                        }
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                        .padding(.top, 10)
+                                        .padding(.leading, 6)
+                                        .opacity(1.1)
+                                    Spacer()
+                                }
+                            }
+                            
+                            VStack {
+                                TextEditor(text: $AddressTextInpute)
+                                    .font(.system(size: 15))
+                                    .opacity(AddressTextInpute.isEmpty ? 0.85 : 1)
+                                Spacer()
+                            }
+                        }.frame(width: 310,height: 100)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.blue,lineWidth: 2)
+                                .stroke(ColorData.shared.HeaderColor,lineWidth: 2)
+                            
                         )
-                        
-                        
                         HStack{
                             Spacer()
                             Image(systemName: "location.circle.fill")
@@ -1938,8 +1945,16 @@ struct Address:View{
         .toast(isPresented: $showToast, message: "\(ShowToastMes)")
     }
     
+   private func AllowLoction(){
+        LocationService.sharedInstance.getNewLocation(location: { location in
+            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
+            lazy var geocoder = CLGeocoder()
+        }, error:{ errMsg in
+            print (errMsg)
+        })
+    }
+    
     private func GetCurrentLoction(){
-       
         LocationService.sharedInstance.getNewLocation(location: { location in
             let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
             lazy var geocoder = CLGeocoder()
@@ -2740,7 +2755,6 @@ struct SelPrvOrder: View {
                                             )
                                             .padding(.horizontal,20)
                                         }
-                                        
                                     }
                                     Divider()
                                         .padding(.horizontal,10)
@@ -2849,31 +2863,14 @@ struct SelPrvOrder: View {
                                 return
                             }
                             
-                            
-                            if CLLocationManager.locationServicesEnabled() {
-                                switch locationManager.authorizationStatus {
-                                    case .notDetermined, .restricted, .denied:
-                                        print("No access")
-                                    ShowLocationAlert.toggle()
-                                    return
-                                    case .authorizedAlways, .authorizedWhenInUse:
-                                        print("Access")
-                                    if VisitData.shared.lstPrvOrder.count == 0{
-                                        ShowTost="Cart is Empty"
-                                        showToast = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                            showToast = false
-                                        }
-                                    }else{
-                                        showAlert = true
-                                    }
-                                 
-                                    @unknown default:
-                                        break
+                            if VisitData.shared.LstItemCount.count == 0{
+                                ShowTost="Cart is Empty"
+                                showToast.toggle()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showToast.toggle()
                                 }
-                            } else {
-                                print("Location services are not enabled")
-                                ShowLocationAlert.toggle()
+                            }else{
+                                showAlert = true
                             }
                         }) {
                             VStack{
@@ -2900,41 +2897,21 @@ struct SelPrvOrder: View {
                                 }
                                 .padding(.horizontal,10)
                                 HStack{
-                                    
                                     Text("\(Image(systemName: "indianrupeesign"))\(String(lblTotAmt))")
                                         .font(.system(size: 13))
                                         .fontWeight(.heavy)
                                         .foregroundColor(.white)
                                     Spacer()
-                                    
-                                    
                                     Text("Submit")
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
                                         .font(.system(size: 15))
                                         .multilineTextAlignment(.center)
-                                    
-                                    
-                                    
                                 }
                                 .padding(.leading,15)
                                 .padding(.trailing,20)
                             }.padding(.bottom,45)
                         }
-                        .alert(isPresented: $ShowLocationAlert) {
-                            Alert(
-                                title: Text("Location Services"),
-                                message: Text("Please enable location services in Settings."),
-                                primaryButton: .default(Text("Settings"), action: {
-                                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                                    }
-                                }),
-                                secondaryButton: .cancel()
-                            )
-                        }
-                    
-                        
                     }
                     .frame(maxWidth: .infinity,maxHeight: 40 )
                     .edgesIgnoringSafeArea(.bottom)
@@ -2950,17 +2927,13 @@ struct SelPrvOrder: View {
                             primaryButton: .default(Text("OK")) {
                                 GetCurrentLoction()
                                 GetLoction.toggle()
-                                OrderSubStatus = "Getting Current Loction..."
+                                OrderSubStatus = "Data Submitting..."
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    OrderSubStatus = "Data Submitting..."
-    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        OrderSubmit(lat: sLocationlat, log: sLocationlong,BillingAddress: BillingAddress, ShpingAddress: ShpingAddress)
+                                        OrderSubmit(lat: "0", log: "0",BillingAddress: BillingAddress, ShpingAddress: ShpingAddress)
                                         GetLoction.toggle()
                                         if (paymentenb.shared.isPaymentenbl == 1){
                                             showPaymentAlert.toggle()
                                         }
-                                    }
                                 }
                             },
                             secondaryButton: .cancel()

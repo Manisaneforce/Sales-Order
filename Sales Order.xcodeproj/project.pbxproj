@@ -891,6 +891,9 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
+				INFOPLIST_KEY_NSLocationUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -930,6 +933,9 @@
 				INFOPLIST_FILE = "Sales-Order-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ReliVet;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
+				INFOPLIST_KEY_NSLocationUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ReliVet App Need Use Your Location For Adding Your Shipping Address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
