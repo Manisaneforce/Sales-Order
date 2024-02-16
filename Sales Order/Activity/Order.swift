@@ -2480,12 +2480,7 @@ struct SelPrvOrder: View {
                             }
                             .padding(10)
                             .onAppear{
-                                if (Invoiceid.shared.Order_place_Mood == 0){
-                                    Invoiceid.shared.Order_place_Mood = 1
-                                    if let window = UIApplication.shared.windows.first {
-                                        window.rootViewController = UIHostingController(rootView: HomePage())
-                                    }
-                                }
+
                                 prvDet()
                             }
                                 Rectangle()
@@ -2925,7 +2920,6 @@ struct SelPrvOrder: View {
                             title: Text("Confirmation"),
                             message: Text("Do you want submit order?"),
                             primaryButton: .default(Text("OK")) {
-                                GetCurrentLoction()
                                 GetLoction.toggle()
                                 OrderSubStatus = "Data Submitting..."
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -3562,22 +3556,25 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
             print(json)
             if let invoice = json["invoice"] as? String{
                 Invoiceid.shared.id = invoice
-                Invoiceid.shared.Order_place_Mood = 0
-                ShowToastMes.shared.tost = "Order Submitted"
+               // Invoiceid.shared.Order_place_Mood = 0
+                ShowToastMes.shared.tost = (json["Msg"] as? String)!
                 UIApplication.shared.windows.first?.makeKeyAndVisible()
                 if (paymentenb.shared.isPaymentenbl == 0){
-                                if let window = UIApplication.shared.windows.first {
-                                    window.rootViewController = UIHostingController(rootView: HomePage())
-                                }
+                    let msg = json["Msg"] as? String
+                    ShowToastMes.shared.tost = msg!
+                    if let window = UIApplication.shared.windows.first {
+                        window.rootViewController = UIHostingController(rootView: HomePage())
+                    }
                 }
                 VisitData.shared.clear()
             }
-            if let msg = json["Msg"] as? String {
-                ShowToastMes.shared.tost = msg
-                if let window = UIApplication.shared.windows.first {
-                    window.rootViewController = UIHostingController(rootView: HomePage())
-                }
-            }
+//            if let msg = json["Msg"] as? String {
+//                ShowToastMes.shared.tost = msg
+//                if let window = UIApplication.shared.windows.first {
+//                    window.rootViewController = UIHostingController(rootView: HomePage())
+//                }
+//            }
+        
         }
     case .failure(let error):
         
