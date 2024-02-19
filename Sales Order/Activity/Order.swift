@@ -571,18 +571,11 @@ struct Order: View {
                                                             .fontWeight(.bold)
                                                     }
                                                     .buttonStyle(PlainButtonStyle())
-                                                   
-                                                    
-//                                                    Text("\(filterItems[index].Amt)")
-//                                                        .fontWeight(.bold)
-//                                                        .font(.system(size: 15))
-//                                                        .foregroundColor(Color.black)
-//                                                        .frame(width: 40)
-                                                        
                                                     
                                                     TextField("0", text: Binding(
                                                         get: {
                                                             String(filterItems[index].Amt)
+                                                            
                                                         },
                                                         set: { newValue in
                                                             if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {

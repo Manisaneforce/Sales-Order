@@ -504,10 +504,10 @@ struct My_Profile: View {
                                         print("Access")
                                     AddressTextInpute.removeAll()
                                     GetCurrentLoction()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                   // DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                         GetLoction.toggle()
                                         print(AddressTextInpute)
-                                    }
+                                   // }
                                     GetLoction.toggle()
                                     @unknown default:
                                         break
