@@ -37,13 +37,15 @@ struct ContentView: View {
     @State private var userEmail:String = UserDefaults.standard.string(forKey: "savedPhoneNumber") ?? ""
     @State private var PrivacySc = UserDefaults.standard.string(forKey: "Privacydata") ?? ""
     @State private var HomePageNvigater:Bool = false
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
     @State private var Loader = false
+    @State private var showAlert_Int = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
    // @State private var jsondata = JSONData()
 
     @State private var Value = ""
     @State var isTapped = false
-
     var body: some View {
        
         NavigationView {
@@ -169,16 +171,10 @@ struct ContentView: View {
                             if #available(iOS 15.0, *) {
                                 
                                     Button(action: {
-//                                        if networkMonitor.isConnected{
-//                                          print("Internet connection available")
-//                                        }else{
-//                                            ShowTost="Internet connection not available"
-//                                            showToast .toggle()
-//                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                                                showToast.toggle()
-//                                            }
-//                                            return
-//                                        }                                        
+                                        if monitor.status == .disconnected {
+                                                        ShowAlert(title: "Information", message: "Check the Internet Connection")
+                                                        return
+                                                    }
                                         
                                         let axn = "send/sms"
                                         let apiKey = "\(axn)&mobile=\(phoneNumber)"
@@ -246,10 +242,9 @@ struct ContentView: View {
                                             .cornerRadius(10)
                                         }
                                         .padding(15)
+                                    }.alert(isPresented: $showAlert_Int) {
+                                        Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .destructive(Text("Ok")))
                                     }
-
-                                
-                                
                             }
                             if NavigteBoll {
                                 if #available(iOS 15.0, *) {
@@ -300,6 +295,11 @@ struct ContentView: View {
         .navigationBarHidden(true)
         
             }
+    private func ShowAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert_Int = true
+    }
     func PriPolicy(){
         if let window = UIApplication.shared.windows.first {
             window.rootViewController = UIHostingController(rootView: PrivacyPolicy())
@@ -320,7 +320,7 @@ struct ContentView: View {
 
 struct PrivacyPolicy:View{
     @State private var isChecked = false
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
    
     var body: some View{
         VStack{
@@ -328,7 +328,7 @@ struct PrivacyPolicy:View{
                 Rectangle()
                     .foregroundColor(ColorData.shared.HeaderColor)
                     .frame(height: 80)
-                if networkMonitor.isConnected {
+                if monitor.status == .connected {
                     HStack {
                         Text("PRIVACY POLICY")
                             .font(.system(size: 18))
@@ -344,16 +344,13 @@ struct PrivacyPolicy:View{
                     Internet_Connection()
                 }
                 
-            }
+            }  .onReceive(monitor.$status) { newStatus in
+                if newStatus == .connected {
+                 }
+              }
             .edgesIgnoringSafeArea(.top)
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-            .onAppear {
-                networkMonitor.startMonitoring()
-            }
-            .onDisappear {
-                networkMonitor.stopMonitoring()
-            }
             
             WebViews(urlString: "https://rad.salesjump.in/privacyrad.html")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)

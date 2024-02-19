@@ -19,7 +19,7 @@ struct HomePage: View {
     @State private var currentPage = 0
     @State private var showToast = false
     @State private var isPaymentenbl = 0
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
     let imageUrls = [
          "https://rad.salesjump.in/server/rad/Banner%201.jpg",
          "https://rad.salesjump.in/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
@@ -47,7 +47,7 @@ struct HomePage: View {
                                     .foregroundColor(ColorData.shared.HeaderColor)
                                     .frame(height: 80)
 
-                                if networkMonitor.isConnected {
+                             if monitor.status == .connected {
                                     HStack {
                                         Text("Dashboard")
                                             .font(.custom("Poppins-Bold", size: 20))
@@ -55,6 +55,7 @@ struct HomePage: View {
                                             .foregroundColor(.white)
                                             .padding(.leading,10)
                                             .padding(.top, 50)
+                                        
                                         Spacer()
                                         HStack(spacing: 30) {
                                             Text(currentDate)
@@ -95,15 +96,13 @@ struct HomePage: View {
                                     Internet_Connection()
                                 }
                             }
+                            .onReceive(monitor.$status) { newStatus in
+                           if newStatus == .connected {
+                            }
+                         }
                             .edgesIgnoringSafeArea(.top)
                             .frame(maxWidth: .infinity)
                             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
-                            .onAppear {
-                                networkMonitor.startMonitoring()
-                            }
-                            .onDisappear {
-                                networkMonitor.stopMonitoring()
-                            }
                     
                     
                     .onAppear() {

@@ -46,7 +46,7 @@ struct My_Profile: View {
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
     @State private var showAlert_Address = false
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
     var body: some View {
         NavigationView{
             ZStack{
@@ -55,7 +55,7 @@ struct My_Profile: View {
                     Rectangle()
                         .foregroundColor(ColorData.shared.HeaderColor)
                         .frame(height: 80)
-                    if networkMonitor.isConnected {
+                    if monitor.status == .connected{
                     HStack {
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
@@ -77,18 +77,15 @@ struct My_Profile: View {
                     }else{
                         Internet_Connection()
                     }
-                }
+                } .onReceive(monitor.$status) { newStatus in
+                    if newStatus == .connected {
+                     }
+                  }
                 .edgesIgnoringSafeArea(.top)
                 .edgesIgnoringSafeArea(.leading)
                 .edgesIgnoringSafeArea(.trailing)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                .onAppear {
-                    networkMonitor.startMonitoring()
-                }
-                .onDisappear {
-                    networkMonitor.stopMonitoring()
-                }
                 ScrollView{
                     HStack{
                         Image("Group 6")
@@ -632,7 +629,7 @@ struct My_Profile: View {
                         }
                     VStack{
                         LottieUIView(filename: "Gettingloction").frame(width: 220,height: 150)
-                        Text("Getting Current Loction...")
+                        Text("Getting Current location...")
                             .font(.headline)
                             .fontWeight(.bold)
                             .multilineTextAlignment(.center)

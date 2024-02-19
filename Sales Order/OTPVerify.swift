@@ -161,7 +161,7 @@ struct OTPVerify: View {
                                         let apiKey: String = "\(axn)"
                                         let aFormData: [[String: Any]] = [[
                                             "mobile":"\(phoneNumber2)",
-                                            "deviceid":"deviceToken"
+                                            "deviceid":"1234567890"
                                         ]]
                                         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
                                         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -187,11 +187,7 @@ struct OTPVerify: View {
                                                     if let jsonData = prettyPrintedJson.data(using: .utf8){
                                                         do{
                                                             if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
-                                                                
-                                                                
                                                                 if let results = jsonObject["msg"] as? String  {
-                                                                    
-                                                                    
                                                                     if results == "" {
                                                                         if let result = jsonObject["result"] as? [[String:Any]], let firstResult = result.first {
                                                                             print(firstResult)
@@ -237,13 +233,11 @@ struct OTPVerify: View {
                                                             print("Error Data")
                                                         }
                                                     }
-                                                    
                                                 }
                                             case .failure(let error):
                                                 print(error)
                                             }
                                         }
-                                        
                                     }else{
                                        
                                         Toast(mes: "Pls Enter Correct OTP")
@@ -251,7 +245,6 @@ struct OTPVerify: View {
                                         OtpLoader.toggle()
                                     }
                                 }){
-                                    
                                     ZStack{
                                         Rectangle()
                                             .foregroundColor(ColorData.shared.HeaderColor)
@@ -265,8 +258,6 @@ struct OTPVerify: View {
                                 }
                                 .padding(15)
                                 }
-                           
-                            
                             if showResendButton {
                                 Button(action: {
                                     startTimer()

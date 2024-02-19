@@ -42,7 +42,7 @@ struct MyOrdersScreen: View {
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
     @State private var Loader:Bool = true
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
    // @State private var html:String = ""
     let currentDate = Date()
@@ -57,7 +57,7 @@ struct MyOrdersScreen: View {
                     Rectangle()
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 80)
-                     if networkMonitor.isConnected {
+                    if monitor.status == .connected {
                     HStack {
                         
                         Button(action: {
@@ -84,15 +84,14 @@ struct MyOrdersScreen: View {
                         EmptyView()
                     }
                 }
+                .onReceive(monitor.$status) { newStatus in
+               if newStatus == .connected {
+                }
+             }
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                .onAppear {
-                    networkMonitor.startMonitoring()
-                }
-                .onDisappear {
-                    networkMonitor.stopMonitoring()
-                }
+              
         
                 .onAppear{
                     let fromDate = String(dateFormatter.string(from:selectedDate))
@@ -601,6 +600,7 @@ struct OrderDetView:View{
     @State private var NewQty:Int = 0
     @State private var umounit:Int = 0
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
+    @ObservedObject var monitor = Monitor()
     var body: some View{
         NavigationView{
         ZStack{
@@ -611,7 +611,7 @@ struct OrderDetView:View{
                     Rectangle()
                         .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity: 1.00))
                         .frame(height: 80)
-                    
+                    if monitor.status == .connected {
                     HStack {
                         Button(action: {
                             self.presentationMode.wrappedValue.dismiss()
@@ -646,17 +646,23 @@ struct OrderDetView:View{
                                 .frame(width: 20,height: 20)
                                 .foregroundColor(Color.white)
                                 .onTapGesture {
-                                   // isShowingSheet.toggle()
+                                    // isShowingSheet.toggle()
                                     let pdfData = generatePDF()
-                                                    saveAndSharePDF(pdfData)
+                                    saveAndSharePDF(pdfData)
                                 }
-                             
+                            
                             
                             Text("")
                         }
                         .padding(.top,50)
                     }
+                } else {
+                    Internet_Connection()
                 }
+                }  .onReceive(monitor.$status) { newStatus in
+                    if newStatus == .connected {
+                     }
+                  }
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
                 .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))

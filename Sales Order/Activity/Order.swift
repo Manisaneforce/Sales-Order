@@ -147,8 +147,9 @@ struct Order: View {
     @State private var text:String = ""
     @State private var ShpingAddress = ""
     @State private var BillingAddress = CustDet.shared.Addr
-    @StateObject private var networkMonitor = NetworkMonitor.shared
     
+    @ObservedObject var monitor = Monitor()
+  
     var body: some View {
         if OredSc{
         NavigationView {
@@ -161,7 +162,7 @@ struct Order: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 80)
-                        if networkMonitor.isConnected {
+                        if monitor.status == .connected {
                         HStack {
                             Button(action: {
                                 showAlert = true
@@ -178,7 +179,7 @@ struct Order: View {
                             .alert(isPresented: $showAlert) {
                                 Alert(
                                     title: Text("Confirmation"),
-                                    message: Text("Do you want cancel this order draft"),
+                                    message: Text("Do you want to cancel this order Draft?"),
                                     primaryButton: .default(Text("OK")) {
                                         VisitData.shared.ProductCart = []
                                         VisitData.shared.lstPrvOrder = []
@@ -191,7 +192,7 @@ struct Order: View {
                             }
                             
                             Text("Order")
-                                .font(.custom("Poppins-Bold", size: 18))
+                                .font(.custom("Poppins-Bold", size: 20))
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                             Spacer()
@@ -201,16 +202,15 @@ struct Order: View {
                         }
                         
                     }
+                    .onReceive(monitor.$status) { newStatus in
+                        if newStatus == .connected {
+                        }
+                    }
                     //.cornerRadius(5)
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                    .onAppear {
-                        networkMonitor.startMonitoring()
-                    }
-                    .onDisappear {
-                        networkMonitor.stopMonitoring()
-                    }
+                  
                     
                     VStack(alignment: .leading, spacing: 6) {
                         VStack(spacing:5){
@@ -412,8 +412,6 @@ struct Order: View {
                                 json in
                                 print(json)
                             }
-                            
-                            
                             TexQty()
                             ShpingAddress = BillingAddress
                         }
@@ -588,10 +586,12 @@ struct Order: View {
                                                         },
                                                         set: { newValue in
                                                             if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {
+                                                                print(newQuantity)
                                                                 filterItems[index].Amt = newQuantity
                                                             } else if newValue.isEmpty {
                                                                 filterItems[index].Amt = 0
                                                             }else{
+                                                                print(newValue)
                                                                 ShowTost="Text count be more than 4 characters."
                                                                 showToast = true
                                                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -777,7 +777,7 @@ struct Order: View {
                         })
                         print(lstPrv)
                         VisitData.shared.lstPrvOrder = lstPrv
-                        if NetworkMonitor.shared.isConnected != true {
+                        if monitor.status == .disconnected {
                                         ShowAlert(title: "Information", message: "Check the Internet Connection")
                                         return
                                     }
@@ -1639,7 +1639,7 @@ struct Address:View{
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
-                        clickPlusButton.toggle()
+                       // clickPlusButton.toggle()
                     }
                 VStack{
                     HStack {
@@ -1734,13 +1734,12 @@ struct Address:View{
                                     ShowLocationAlert.toggle()
                                     case .authorizedAlways, .authorizedWhenInUse:
                                         print("Access")
-                                    
                                     AddressTextInpute.removeAll()
                                     GetCurrentLoction()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                   // DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                         GetLoction.toggle()
                                         print(AddressTextInpute)
-                                    }
+                                   //}
                                     GetLoction.toggle()
                                     @unknown default:
                                         break
@@ -1775,6 +1774,13 @@ struct Address:View{
                             }
                         }
                         .onTapGesture {
+                            if validateForm() == false {
+                                showToast.toggle()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    showToast.toggle()
+                                }
+                                return
+                            }
                             showAlert_Address.toggle()
                     }
                         .alert(isPresented: $showAlert_Address) {
@@ -2392,7 +2398,7 @@ struct SelPrvOrder: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var OredSc:Bool
     @Binding var SelPrvSc:Bool
-    @StateObject private var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var monitor = Monitor()
     @State private var locationManager = CLLocationManager()
     @State private var ShowLocationAlert = false
     @State private var items: [FilterItem] = []
@@ -2416,10 +2422,10 @@ struct SelPrvOrder: View {
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
                                 .frame(height: 100)
+                            if monitor.status == .connected {
                             HStack {
                                 Text("   Order")
-                                    .font(.system(size: 18))
-                                    .fontWeight(.bold)
+                                    .font(.custom("Poppins-Bold", size: 20))
                                     .foregroundColor(.white)
                                     .padding(.top, 50)
                                     .offset(x: -20)
@@ -2435,7 +2441,7 @@ struct SelPrvOrder: View {
                                     .alert(isPresented: $Home_Button_Alt) {
                                         Alert(
                                             title: Text("Confirmation"),
-                                            message: Text("Do you want cancel this order draft"),
+                                            message: Text("Do you want to cancel this order Draft?"),
                                             primaryButton: .default(Text("OK")) {
                                                 VisitData.shared.ProductCart = []
                                                 VisitData.shared.lstPrvOrder = []
@@ -2448,8 +2454,15 @@ struct SelPrvOrder: View {
                                     }
                             }
                             .padding(.horizontal,10)
+                            }else{
+                                Internet_Connection()
+                            }
                         }
                         .frame(maxWidth: .infinity)
+                        .onReceive(monitor.$status) { newStatus in
+                       if newStatus == .connected {
+                        }
+                     }
                         
                         
                      
@@ -2845,9 +2858,7 @@ struct SelPrvOrder: View {
                             //getLocation()
                             
                             
-                            if networkMonitor.isConnected{
-                              print("Internet connection available")
-                            }else{
+                            if monitor.status == .disconnected{
                                 ShowTost="Internet connection not available"
                                 showToast .toggle()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
