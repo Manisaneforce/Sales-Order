@@ -240,10 +240,13 @@ struct MyOrdersDetails: View {
                             }
                             .background(Color.white)
                                 .onTapGesture{
+                                    var CurentDate = Date()
                                     Loader.toggle()
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                     SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                    let ToDates = String(dateFormatter.string(from:CurentDate))
+                                    ToDate = ToDates
                                     orderandinvoice()
                                     
                                     
@@ -258,10 +261,13 @@ struct MyOrdersDetails: View {
                             }
                             .background(Color.white)
                                 .onTapGesture{
+                                    var CurentDate = Date()
                                     Loader.toggle()
                                     Filterdate.toggle()
                                     FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                     SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
+                                    let ToDates = String(dateFormatter.string(from:CurentDate))
+                                    ToDate = ToDates
                                     orderandinvoice()
                                 }
                         }

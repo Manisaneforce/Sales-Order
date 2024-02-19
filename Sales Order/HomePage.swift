@@ -225,7 +225,7 @@ struct HomePage: View {
                         }
                         .padding(10)
                         .onAppear {
-                                startTimer()
+                                //startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
                 }

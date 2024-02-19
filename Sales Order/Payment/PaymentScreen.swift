@@ -248,10 +248,12 @@ struct PaymentScreen: View {
                             }
                             .background(Color.white)
                             .onTapGesture{
-                                
+                                var CurentDate = Date()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                FromDate = ToDates
                                 
                             }
                             
@@ -264,9 +266,12 @@ struct PaymentScreen: View {
                             }
                             .background(Color.white)
                             .onTapGesture{
+                                var CurentDate = Date()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                FromDate = ToDates
                             }
                         }
                         ZStack{

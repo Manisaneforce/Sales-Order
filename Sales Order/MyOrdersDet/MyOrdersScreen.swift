@@ -69,7 +69,6 @@ struct MyOrdersScreen: View {
                                 .foregroundColor(.white)
                                 .padding(.top,50)
                                 .frame(width: 50)
-                            
                         }
                         Text("MY ORDERS")
                             .font(.system(size: 18))
@@ -84,7 +83,6 @@ struct MyOrdersScreen: View {
                     NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
                         EmptyView()
                     }
-                    
                 }
                 .edgesIgnoringSafeArea(.top)
                 .frame(maxWidth: .infinity)
@@ -105,8 +103,6 @@ struct MyOrdersScreen: View {
                     Loader.toggle()
                     
                 }
-                
-                
                 HStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -172,7 +168,7 @@ struct MyOrdersScreen: View {
                             .font(.system(size: 14))
                         Spacer()
                         HStack(spacing:40){
-                            Text("items")
+                            Text("Items")
                                 .foregroundColor(Color.white)
                                 .font(.system(size: 14))
                             Text("Qty")
@@ -378,11 +374,14 @@ struct MyOrdersScreen: View {
                         }
                         .background(Color.white)
                             .onTapGesture{
+                                var CurentDate = Date()
                                 OrderPaymentDetails.removeAll()
                                 Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
                                 OrderDetailsTriger()
                             }
                             
@@ -395,11 +394,14 @@ struct MyOrdersScreen: View {
                         }
                         .background(Color.white)
                             .onTapGesture{
+                                var CurentDate = Date()
                                 OrderPaymentDetails.removeAll()
                                 Loader.toggle()
                                 Filterdate.toggle()
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
                                 OrderDetailsTriger()
                             }
                         
@@ -669,7 +671,7 @@ struct OrderDetView:View{
                             VStack{
                                 HStack{
                                     Text(CustDet.shared.StkNm)
-                                        .font(.system(size: 12))
+                                        .font(.system(size: 15))
                                         .fontWeight(.bold)
                                     Spacer()
                                     Text("ORDER")
@@ -848,7 +850,10 @@ struct OrderDetView:View{
                                                                             if let firstTaxDetail = TAX_details.first {
                                                                                 if let taxName = firstTaxDetail["Tax_Name"] as? String {
                                                                                     if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
-                                                                                        TaxTyp = (firstTaxDetail["Tax_Name"] as? String)!
+                                                                                        if let taxName = firstTaxDetail["Tax_Name"] as? String {
+                                                                                            let correctedTaxName = taxName.replacingOccurrences(of: ",", with: "")
+                                                                                            TaxTyp = correctedTaxName
+                                                                                        }
                                                                                         TotalTax += taxamt
                                                                                     }
                                                                                 }

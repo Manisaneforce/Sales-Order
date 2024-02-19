@@ -293,20 +293,20 @@ struct Order: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack{
                                 ForEach(prettyPrintedJson.indices, id: \.self) { index in
-                                    Button(action:{
-                                        print(prettyPrintedJson[index].id)
-                                        isLoading = true
-                                        prodTypes1.removeAll()
-                                        Typofid.removeAll()
-                                        if selectedGorup == index {
-                                            selectedGorup = index
-                                            
-                                        } else {
-                                            selectedGorup = index
+                                    Button(action: {
+                                        if !isLoading {
+                                            print(prettyPrintedJson[index].id)
+                                            isLoading = true
+                                            prodTypes1.removeAll()
+                                            Typofid.removeAll()
+                                            if selectedGorup == index {
+                                                selectedGorup = index
+                                            } else {
+                                                selectedGorup = index
+                                            }
+                                            OrderProdTyp()
                                         }
-                                        OrderProdTyp()
-                                    })
-                                    {
+                                    })                                    {
                                         Text(prettyPrintedJson[index].name)
                                             .fontWeight(.semibold)
                                             .foregroundColor(selectedGorup == index ? ColorData.shared.HeaderColor : Color.gray)
@@ -328,6 +328,7 @@ struct Order: View {
                             HStack {
                                 ForEach(prodTypes2.indices, id: \.self) { index in
                                     Button(action: {
+                                        if !isLoading {
                                         prodofcat.removeAll()
                                         proDetsID.removeAll()
                                         Allprods.removeAll()
@@ -342,6 +343,7 @@ struct Order: View {
                                         }
                                         print("Clicked button at index: \(index)")
                                         self.OrderprodCate(at: index)
+                                    }
                                     }) {
                                         
                                         Text(prodTypes2[index])
@@ -1140,11 +1142,15 @@ struct Order: View {
     }
     private func OrderProdTyp(){
         prodTypes1.removeAll()
+        prodTypes2.removeAll()
+        prodTypes3.removeAll()
+        Typofid.removeAll()
         Sales_Order.prodTypes { json in
             if let jsonData = json.data(using: .utf8) {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                         let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup!) }
+                        print(jsonArrays)
                         for item in jsonArrays {
                             if let textName = item["name"] as? String , let typid = item["id"] as? Int {
                                 prodTypes1.append(textName)
@@ -1162,9 +1168,7 @@ struct Order: View {
         }
     }
     private func OrderprodCate(at index: Int){
-        print(prodTypes3)
         SelectId = prodTypes3[index]
-        print(SelectId)
         prodofcat.removeAll()
         proDetsID.removeAll()
         Sales_Order.prodCate { json in
@@ -1188,9 +1192,6 @@ struct Order: View {
                                     
                                     prodofcat.append(procat)
                                     proDetsID.append(proDetID)
-                                    print(prodofcat)
-                                    print(proDetsID)
-                                    
                                     
                                 }
                             }
@@ -1235,9 +1236,6 @@ struct Order: View {
                     } else {
                         print("No data with TypID \(SelectId)")
                     }
-                    print(imgdataURL)
-                    print(Arry)
-                    print(Allprods)
                     TexQty()
                     //GetingListAddress()
                 }
@@ -3427,7 +3425,7 @@ func updateOrderValues(refresh:Int){
             //(item["SalQty"] as! NSString).doubleValue
         }
     }
-    lblTotAmt = String(format: "Rs. %.02f", totAmt)
+    lblTotAmt = String(format: "%.2f", totAmt)
     lblTotAmt2 = String(totAmt)
     if(refresh == 1){
     }
@@ -3447,6 +3445,7 @@ func deleteItem(at index: Int) {
         }
         return false
     })
+    VisitData.shared.LstItemCount = VisitData.shared.lstPrvOrder
     updateOrderValues(refresh: 1)
 }
 func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:String) {
