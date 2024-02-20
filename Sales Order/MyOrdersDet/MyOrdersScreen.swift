@@ -584,6 +584,7 @@ struct listProdDet: Any{
     let value :String
     let Offer_Product:String
     let off_pro_unit:String
+    let Dic:String
     
 }
 struct OrderDetView:View{
@@ -600,6 +601,8 @@ struct OrderDetView:View{
     @State private var NewQty:Int = 0
     @State private var umounit:Int = 0
     @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
+    @State private var Billing = ""
+    @State private var Shiping = ""
     @ObservedObject var monitor = Monitor()
     var body: some View{
         NavigationView{
@@ -824,6 +827,7 @@ struct OrderDetView:View{
                                     }
                                     .onAppear{
                                         print(OrderId)
+                                        Get_Order_Addres(OrderID:OrderId)
                                         let axn = "get/orderDet&orderID=\(OrderId)"
                                         let apiKey = "\(axn)"
                                         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
@@ -841,6 +845,9 @@ struct OrderDetView:View{
                                                             return
                                                         }
                                                         print(prettyPrintedJson)
+                                                        
+                                                        
+                                                        
                                                         if let jsonData = prettyPrintedJson.data(using: .utf8){
                                                             do{
                                                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
@@ -901,8 +908,14 @@ struct OrderDetView:View{
                                                                         let Offer_ProductCd = Items["Offer_ProductCd"] as? String
                                                                         let off_pro_unit = Items["off_pro_unit"] as? String
                                                                         print(Items)
-                                                                        var Offer_Product = ""
+                                                                        var Dicpric = "0.00"
+                                                                        if let dic_Pric = Items["discount_price"] as? Double{
+                                                                            Dicpric =  String(format: "%.2f",dic_Pric)
+                                                                        }
                                                                         
+                                                                        print(Dicpric)
+                                                                        
+                                                                        var Offer_Product = ""
                                                                         if let jsonData = Allproddata.data(using: .utf8){
                                                                             do{
                                                                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
@@ -917,7 +930,7 @@ struct OrderDetView:View{
                                                                                 print("Data is error\(error)")
                                                                             }
                                                                         }
-                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit!))
+                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit!, Dic: Dicpric))
                                                                     }
                                                                 }
                                                             } catch{
@@ -943,6 +956,11 @@ struct OrderDetView:View{
                                                         .multilineTextAlignment(.leading)
                                                         
                                                     Spacer()
+                                                    if (SelectDet[index].Dic != "0.00"){
+                                                        Text("OFF :" + SelectDet[index].Dic)
+                                                            .font(.system(size: 12))
+                                                            .foregroundColor(.green)
+                                                    }
                                                 }
                                                 .padding(.bottom,2)
                                                 Spacer()
@@ -971,10 +989,7 @@ struct OrderDetView:View{
                                                     Text(SelectDet[index].value)
                                                         .font(.system(size: 12))
                                                         .frame(width: 70,alignment: SelectDet[index].Product_Name.count > 10 ? .trailing : .trailing)
-                                                    //.padding(-10)
-                                                    
                                                 }
-                                          
                                                 HStack {
                                                     Rectangle()
                                                         .frame(height: 1)
@@ -983,15 +998,11 @@ struct OrderDetView:View{
                                                         .padding(.trailing,-20)
                                                     Spacer()
                                                 }
-
                                             }
                                         }
                                         .onAppear{
                                             PagHeight += 50
                                         }
-                                        
-                                        
-                                        
                                     }
                                     .listStyle(PlainListStyle())
                                     .padding(.horizontal,13)
@@ -1150,6 +1161,42 @@ struct OrderDetView:View{
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
+    func Get_Order_Addres(OrderID:String){
+        let axn = "get_order_address"
+        let apiKey = "\(axn)&orderID=\(OrderID)"
+        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = try? JSONSerialization.jsonObject(with: prettyJsonData, options: []) as? [String: Any] else {
+                            print("Error: Could not convert Pretty JSON data to dictionary")
+                            return
+                        }
+                        print(prettyPrintedJson)
+                        if let Respons = prettyPrintedJson["response"] as? [String:AnyObject]{
+                            print(Respons)
+                            if let billingAddress = Respons["billingAddress"] as? String, let shippingAddress = Respons["shippingAddress"] as? String {
+                            Billing = billingAddress
+                            Shiping = shippingAddress
+                        }
+                    }else {
+                        Billing = ""
+                        Shiping = ""
+                        print("Error: Unable to retrieve 'isAdd_Address_Enabled' from JSON")
+                    }
+                    }
+                case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
     func generatePDF() -> Data {
         // Define a page size (8.5x11 inches in points)
         

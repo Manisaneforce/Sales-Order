@@ -2598,13 +2598,7 @@ struct SelPrvOrder: View {
                                                         .fontWeight(.bold)
                                                 }
                                                 .buttonStyle(PlainButtonStyle())
-                                                
-//                                                Text(String(filterItems[index].quantity))
-//                                                    .fontWeight(.bold)
-//                                                    .foregroundColor(Color.black)
-//                                                    .frame(width: 40)
-//                                                    .font(.system(size: 13))
-                                                
+
                                                 TextField("0", text: Binding(
                                                     get: {
                                                         String(filterItems[index].quantity)

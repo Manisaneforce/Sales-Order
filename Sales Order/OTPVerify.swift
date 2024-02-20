@@ -161,7 +161,7 @@ struct OTPVerify: View {
                                         let apiKey: String = "\(axn)"
                                         let aFormData: [[String: Any]] = [[
                                             "mobile":"\(phoneNumber2)",
-                                            "deviceid":"1234567890"
+                                            "deviceid":""
                                         ]]
                                         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
                                         let jsonString = String(data: jsonData!, encoding: .utf8)!
