@@ -147,9 +147,7 @@ struct Order: View {
     @State private var text:String = ""
     @State private var ShpingAddress = ""
     @State private var BillingAddress = CustDet.shared.Addr
-    
     @ObservedObject var monitor = Monitor()
-  
     var body: some View {
         if OredSc{
         NavigationView {
@@ -518,6 +516,9 @@ struct Order: View {
                                                 }
                                                 Spacer()
                                                 HStack {
+                                                    
+                                                    //Min Button
+                                                    
                                                     Button(action: {
                                                         if filterItems[index].Amt > 0 {
                                                             filterItems[index].Amt -= 1
@@ -572,10 +573,11 @@ struct Order: View {
                                                     }
                                                     .buttonStyle(PlainButtonStyle())
                                                     
+                                                    //TextField
+                                                    
                                                     TextField("0", text: Binding(
                                                         get: {
                                                             String(filterItems[index].Amt)
-                                                            
                                                         },
                                                         set: { newValue in
                                                             if let newQuantity = Int(newValue), newQuantity >= 0 && newQuantity <= 9999 {
@@ -584,8 +586,9 @@ struct Order: View {
                                                             } else if newValue.isEmpty {
                                                                 filterItems[index].Amt = 0
                                                             }else{
-                                                                print(newValue)
-                                                                ShowTost="Text count be more than 4 characters."
+                                                                let filteredValue = String(newValue.prefix(4))
+                                                                filterItems[index].Amt = Int(filteredValue)!
+                                                                ShowTost="Please enter only 4 characters."
                                                                 showToast = true
                                                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                                     showToast = false
@@ -629,6 +632,8 @@ struct Order: View {
                                                         Qtycount()
                                                         TexQty()
                                                     }
+                                                    
+                                                    // Plus Button
                                                     Button(action: {
                                                         filterItems[index].Amt += 1
                                                         let proditem = Allprods[index]
@@ -2610,6 +2615,14 @@ struct SelPrvOrder: View {
                                                         } else if newValue.isEmpty {
                                                             // If the TextField is empty, set the value to zero
                                                             filterItems[index].quantity = 0
+                                                        }else{
+                                                            let filteredValue = String(newValue.prefix(4))
+                                                            filterItems[index].quantity = Int(filteredValue)!
+                                                            ShowTost="Please enter only 4 characters."
+                                                            showToast = true
+                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                                showToast = false
+                                                            }
                                                         }
                                                     }
                                                 ))
