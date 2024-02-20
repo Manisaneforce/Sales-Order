@@ -688,7 +688,7 @@ struct OrderDetView:View{
                                         .fontWeight(.bold)
                                 }
                                 .padding(.horizontal,20)
-                                .padding(.vertical,5)
+                                .padding(.vertical,2)
                                 HStack{
                                     Image(systemName: "phone.circle.fill")
                                         .foregroundColor(Color.blue)
@@ -701,6 +701,7 @@ struct OrderDetView:View{
                                     Rectangle()
                                         .strokeBorder(style: StrokeStyle(lineWidth: 2,dash: [5]))
                                         .foregroundColor(Color.gray)
+                                        
                                     VStack(spacing:5){
                                         HStack{
                                             Text("BILL TO")
@@ -726,13 +727,25 @@ struct OrderDetView:View{
                                             Spacer()
                                         }
                                         .padding(.horizontal,10)
-                                        HStack{
-                                            
-                                            Text(CustDet.shared.Addr)
-                                                .font(.system(size: 11))
-                                                .foregroundColor(.gray)
-                                            
-                                            Spacer()
+                                        VStack{
+                                            if (Billing == Shiping){
+                                                HStack{
+                                                    Text("Billing & Shipping Address: \(Billing)")
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(.gray)
+                                                }
+                                                
+                                            }else{
+                                                VStack(alignment:.leading){
+                                                        Text("Billing Address: \(Billing)")
+                                                            .font(.system(size: 12))
+                                                            .foregroundColor(.gray)
+                                                        Text("Shipping Address: \(Shiping)")
+                                                            .font(.system(size: 12))
+                                                            .foregroundColor(.gray)
+                                                }
+
+                                            }
                                         }
                                         .padding(.horizontal,10)
                                         .padding(.bottom,3)
@@ -740,10 +753,12 @@ struct OrderDetView:View{
                                     }
                                 }
                                 .padding(.horizontal,20)
-                                .padding(.vertical,10)
+                                .padding(.top,3)
+                                .padding(.bottom,10)
+                                
                             }
                         }
-                        .frame(height: 230)
+                        .frame(height: Billing == Shiping ? 230 : 275)
                     }.padding(.horizontal,10)
                         .padding(.vertical,10)
                     Spacer()
@@ -769,13 +784,14 @@ struct OrderDetView:View{
                                                     .fontWeight(.bold)
                                             }
                                         }
-                                        .padding(.vertical,5)
+                                        .padding(.top,5)
+                                        .padding(.bottom,2.5)
                                         .padding(.horizontal,10)
                                         HStack{
                                             Text(Orderdate)
                                             Spacer()
                                         }
-                                        .padding(.vertical,5)
+                                        .padding(.vertical,2)
                                         .padding(.horizontal,10)
                                         VStack{
                                             Rectangle()
@@ -904,10 +920,14 @@ struct OrderDetView:View{
                                                                         }else if (Items["Tax_value"] as? String == ""){
                                                                             Tax_Amt = "0.00"
                                                                         }
-                                                                        
-                                                                        let Offer_ProductCd = Items["Offer_ProductCd"] as? String
-                                                                        let off_pro_unit = Items["off_pro_unit"] as? String
-                                                                        print(Items)
+                                                                        var Offer_ProductCd = ""
+                                                                        if  let Offer_ProductCd2 = Items["Offer_ProductCd"] as? String{
+                                                                            Offer_ProductCd = Offer_ProductCd2
+                                                                        }
+                                                                        var off_pro_unit = "0"
+                                                                        if let off_pro_unit2 = Items["off_pro_unit"] as? String{
+                                                                            off_pro_unit = off_pro_unit2
+                                                                        }
                                                                         var Dicpric = "0.00"
                                                                         if let dic_Pric = Items["discount_price"] as? Double{
                                                                             Dicpric =  String(format: "%.2f",dic_Pric)
@@ -930,7 +950,7 @@ struct OrderDetView:View{
                                                                                 print("Data is error\(error)")
                                                                             }
                                                                         }
-                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit!, Dic: Dicpric))
+                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric))
                                                                     }
                                                                 }
                                                             } catch{
