@@ -1545,12 +1545,11 @@ struct Address:View{
                                     .background(Color(red: 0.93, green: 0.94, blue: 0.95, opacity: 1.00))
                                     .onTapGesture {
                                         if SelMod == "SA"{
-                                            ShpingAddress = GetingAddress[index].address
-                                            print(ShpingAddress)
-                                            if isChecked == true{
-                                                BillingAddress = ShpingAddress
+                                            if isChecked == false{
+                                                BillingAddress = GetingAddress[index].address
+                                                ShpingAddress = GetingAddress[index].address
                                             }else{
-                                                ShpingAddress = BillingAddress
+                                                ShpingAddress = GetingAddress[index].address
                                             }
                                         }
                                         if SelMod == "BA"{
@@ -1558,7 +1557,7 @@ struct Address:View{
                                                 BillingAddress = GetingAddress[index].address
                                                 ShpingAddress = GetingAddress[index].address
                                             }else{
-                                                
+                                                BillingAddress = GetingAddress[index].address
                                             }
                                             
                                         }
