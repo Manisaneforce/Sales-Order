@@ -659,7 +659,8 @@ struct OrderDetView:View{
                         }
                         .padding(.top,50)
                     }
-                } else {
+                }else {
+                    
                     Internet_Connection()
                 }
                 }  .onReceive(monitor.$status) { newStatus in
@@ -684,7 +685,7 @@ struct OrderDetView:View{
                                         .fontWeight(.bold)
                                     Spacer()
                                     Text("ORDER")
-                                        .font(.system(size: 12))
+                                        .font(.system(size: 15))
                                         .fontWeight(.bold)
                                 }
                                 .padding(.horizontal,20)
@@ -730,17 +731,17 @@ struct OrderDetView:View{
                                         VStack{
                                             if (Billing == Shiping){
                                                 HStack{
-                                                    Text("Billing & Shipping Address: \(Billing)")
+                                                    Text("BILLING & SHIPPING ADDRESS: \(Billing)")
                                                         .font(.system(size: 12))
                                                         .foregroundColor(.gray)
                                                 }
                                                 
                                             }else{
                                                 VStack(alignment:.leading){
-                                                        Text("Billing Address: \(Billing)")
+                                                        Text("BILLING ADDRESS: \(Billing)")
                                                             .font(.system(size: 12))
                                                             .foregroundColor(.gray)
-                                                        Text("Shipping Address: \(Shiping)")
+                                                        Text("SHIPPING ADDRESS: \(Shiping)")
                                                             .font(.system(size: 12))
                                                             .foregroundColor(.gray)
                                                 }
@@ -1239,10 +1240,12 @@ struct OrderDetView:View{
             let title = "ORDER SUMMARY"
             let text = CustDet.shared.StkNm
             let Mob = "MOB: \(CustDet.shared.StkMob)"
-            let BillTo = "BILL TO :"
+            let BillTo = "BILL TO :-"
+            let ShipTO = "SHIPPING ADDRESS :-"
             let BillName = CustDet.shared.CusName
             let BillMob = CustDet.shared.Mob
-            let BillAddres = CustDet.shared.Addr
+            let BillAddres = Billing
+            let ShipAddress = Shiping
             let OredId = "Order No: \(OrderNo)"
             let BillDate = "Date :\(OrdDate)"
             let Item = "Item"
@@ -1289,6 +1292,8 @@ struct OrderDetView:View{
             let StkMob = CGRect(x: 50, y: 180, width: 512, height: 50)
             BillMob.draw(in:StkMob,withAttributes: stkMonat)
             
+            
+            
             let StkAddAt = [NSAttributedString.Key.font:ComFont]
             let StkAddrs = CGRect(x: 50, y: 195, width: 512, height: 50)
             BillAddres.draw(in:StkAddrs,withAttributes: StkAddAt)
@@ -1300,36 +1305,48 @@ struct OrderDetView:View{
             let OrdDateAt = [NSAttributedString.Key.font:ComFont]
             let Date = CGRect(x: 50, y: 240, width: 512, height: 50)
             BillDate.draw(in:Date,withAttributes: OrdDateAt)
+            
+            let Shiping = [NSAttributedString.Key.font:ComFont]
+            let ShipingAdd = CGRect(x: 50, y: 260, width: 512, height: 50)
+            ShipTO.draw(in:ShipingAdd,withAttributes: Shiping)
+            
+            let ShipingDet = [NSAttributedString.Key.font:ComFont]
+            let ShipingAddss = CGRect(x: 50, y: 274, width: 512, height: 50)
+            ShipAddress.draw(in:ShipingAddss,withAttributes: ShipingDet)
+            
+            
+            
+            
         
             let UperLine = UIGraphicsGetCurrentContext()
             UperLine?.setLineWidth(1.0)
-            UperLine?.move(to: CGPoint(x: 0, y: 260))
-            UperLine?.addLine(to: CGPoint(x: 700, y: 260))
+            UperLine?.move(to: CGPoint(x: 0, y: 310))
+            UperLine?.addLine(to: CGPoint(x: 700, y: 310))
             //LowLine?.addLine(to: CGPoint(x: 562, y: 280))
             UperLine?.strokePath()
            
             let ItemAt = [NSAttributedString.Key.font:ComFont]
-            let ItemRe = CGRect(x: 50, y: 268, width: 512, height: 50)
+            let ItemRe = CGRect(x: 50, y: 318, width: 512, height: 50)
             Item.draw(in:ItemRe,withAttributes: ItemAt)
-            let UomRe = CGRect(x: 220, y: 268, width: 512, height: 50)
+            let UomRe = CGRect(x: 220, y: 318, width: 512, height: 50)
             Uom.draw(in:UomRe,withAttributes: ItemAt)
-            let QtyRe = CGRect(x: 305, y: 268, width: 512, height: 50)
+            let QtyRe = CGRect(x: 305, y: 318, width: 512, height: 50)
             Qty.draw(in:QtyRe,withAttributes: ItemAt)
-            let PricRe = CGRect(x: 375, y: 268, width: 512, height: 50)
+            let PricRe = CGRect(x: 375, y: 318, width: 512, height: 50)
             Price.draw(in:PricRe,withAttributes: ItemAt)
-            let TaxRe = CGRect(x: 450, y: 268, width: 512, height: 50)
+            let TaxRe = CGRect(x: 450, y: 318, width: 512, height: 50)
             Tax.draw(in:TaxRe,withAttributes: ItemAt)
-            let TotalRe = CGRect(x: 540, y: 268, width: 512, height: 50)
+            let TotalRe = CGRect(x: 540, y: 318, width: 512, height: 50)
             Total.draw(in:TotalRe,withAttributes: ItemAt)
             
         
             let LowLine = UIGraphicsGetCurrentContext()
             LowLine?.setLineWidth(1.0)
-            LowLine?.move(to: CGPoint(x: 0, y: 290))
-            LowLine?.addLine(to: CGPoint(x: 700, y: 290))
+            LowLine?.move(to: CGPoint(x: 0, y: 335))
+            LowLine?.addLine(to: CGPoint(x: 700, y: 335))
             LowLine?.strokePath()
    
-            var yOffset = 270 // Starting y-coordinate
+            var yOffset = 325
       
             for orderIndex in 0..<SelectDet.count {
                 yOffset += 20

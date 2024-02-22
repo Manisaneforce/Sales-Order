@@ -76,7 +76,7 @@ var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
-var TotalQtyData: Int = 0
+//var TotalQtyData: Int = 0
 var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
 var lstTax:String = UserDefaults.standard.string(forKey: "Tax_Master") ?? ""
@@ -147,6 +147,7 @@ struct Order: View {
     @State private var text:String = ""
     @State private var ShpingAddress = ""
     @State private var BillingAddress = CustDet.shared.Addr
+    @State private var TotalQtyData: Int = 0
     @ObservedObject var monitor = Monitor()
     var body: some View {
         if OredSc{
@@ -181,6 +182,7 @@ struct Order: View {
                                     primaryButton: .default(Text("OK")) {
                                         VisitData.shared.ProductCart = []
                                         VisitData.shared.lstPrvOrder = []
+                                        VisitData.shared.LstItemCount = []
                                         TotalQtyData = 0
                                         lblTotAmt = "0.0"
                                         self.presentationMode.wrappedValue.dismiss()
@@ -253,8 +255,12 @@ struct Order: View {
                                         isChecked.toggle()
                                         if isChecked == true{
                                             SameAddrssmark = false
+                                            print(ShpingAddress)
+                                            print(BillingAddress)
                                         }else{
                                             ShpingAddress = BillingAddress
+                                            print(ShpingAddress)
+                                            print(BillingAddress)
                                             SameAddrssmark = true
                                         }
                                     }
@@ -405,6 +411,7 @@ struct Order: View {
                         }
                         //.padding(.top,0)
                         .onAppear {
+                            lblTotAmt = "0.0"
                             OrderprodGroup()
                             Sales_Order.prodDets{
                                 json in
@@ -851,7 +858,7 @@ struct Order: View {
                         Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .destructive(Text("Ok")))
                     }
                     
-                    NavigationLink(destination: SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress), isActive: $SelPrvOrderNavigte) {
+                    NavigationLink(destination: SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress, TotalQtyData: $TotalQtyData), isActive: $SelPrvOrderNavigte) {
                         EmptyView()
                     }
                     
@@ -1022,7 +1029,7 @@ struct Order: View {
         })
     }
         if SelPrvSc{
-            SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress)
+            SelPrvOrder(OredSc: $OredSc, SelPrvSc: $SelPrvSc, ShpingAddress: $ShpingAddress, BillingAddress: $BillingAddress, TotalQtyData: $TotalQtyData)
         }
     }
  
@@ -1420,6 +1427,23 @@ struct Order: View {
         filterItems = items
         print(filterItems)
     }
+    func Qtycount() {
+        var qtysdata = [Int]()
+        qtysdata.removeAll()
+        for items in VisitData.shared.lstPrvOrder {
+            if let qtyString = items["Qty"] as? String, let qty = Int(qtyString) {
+                print(qty)
+                qtysdata.append(qty)
+                //TotalQtyData += qty
+            }
+            
+        }
+        print(qtysdata)
+        let sum = qtysdata.reduce(0, +)
+        print(sum) // Output: 3
+        TotalQtyData = sum
+        print(TotalQtyData)
+    }
 }
 extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -1524,14 +1548,18 @@ struct Address:View{
                                             ShpingAddress = GetingAddress[index].address
                                             print(ShpingAddress)
                                             if isChecked == true{
-                                                
+                                                BillingAddress = ShpingAddress
                                             }else{
                                                 ShpingAddress = BillingAddress
-                                                
                                             }
                                         }
                                         if SelMod == "BA"{
-                                            BillingAddress = GetingAddress[index].address
+                                            if isChecked == false{
+                                                BillingAddress = GetingAddress[index].address
+                                                ShpingAddress = GetingAddress[index].address
+                                            }else{
+                                                
+                                            }
                                             
                                         }
                                         ADDaddress = false
@@ -1734,10 +1762,10 @@ struct Address:View{
                                         print("Access")
                                     AddressTextInpute.removeAll()
                                     GetCurrentLoction()
-                                   // DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                         GetLoction.toggle()
                                         print(AddressTextInpute)
-                                   //}
+                                   }
                                     GetLoction.toggle()
                                     @unknown default:
                                         break
@@ -2402,12 +2430,14 @@ struct SelPrvOrder: View {
     @State private var items: [FilterItem] = []
     @Binding var ShpingAddress:String
     @Binding var BillingAddress:String
+    @Binding var TotalQtyData: Int
     
-    init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>,ShpingAddress: Binding<String>,BillingAddress: Binding<String>) {
+    init(OredSc: Binding<Bool>,SelPrvSc: Binding<Bool>,ShpingAddress: Binding<String>,BillingAddress: Binding<String>,TotalQtyData: Binding<Int>) {
         self._OredSc = OredSc
         self._SelPrvSc = SelPrvSc
         self._ShpingAddress = ShpingAddress
         self._BillingAddress = BillingAddress
+        self._TotalQtyData = TotalQtyData
     }
     var body: some View {
         NavigationView{
@@ -2443,6 +2473,7 @@ struct SelPrvOrder: View {
                                             primaryButton: .default(Text("OK")) {
                                                 VisitData.shared.ProductCart = []
                                                 VisitData.shared.lstPrvOrder = []
+                                                VisitData.shared.LstItemCount = []
                                                 TotalQtyData = 0
                                                 lblTotAmt = "0.0"
                                                 self.presentationMode.wrappedValue.dismiss()
@@ -2489,7 +2520,7 @@ struct SelPrvOrder: View {
                             }
                             .padding(10)
                             .onAppear{
-
+                                
                                 prvDet()
                             }
                                 Rectangle()
@@ -2705,6 +2736,7 @@ struct SelPrvOrder: View {
                                                 AllPrvprod.remove(at: index)
                                                 prvDet()
                                                 print(AllPrvprod)
+                                                Qtycount()
                                             }) {
                                                 Image(systemName: "trash.fill")
                                                     .foregroundColor(Color.red)
@@ -2998,10 +3030,23 @@ struct SelPrvOrder: View {
       
        
     }
-    func ShowAlert(){
-        
+    func Qtycount() {
+        var qtysdata = [Int]()
+        qtysdata.removeAll()
+        for items in VisitData.shared.lstPrvOrder {
+            if let qtyString = items["Qty"] as? String, let qty = Int(qtyString) {
+                print(qty)
+                qtysdata.append(qty)
+                //TotalQtyData += qty
+            }
+            
+        }
+        print(qtysdata)
+        let sum = qtysdata.reduce(0, +)
+        print(sum) // Output: 3
+        TotalQtyData = sum
+        print(TotalQtyData)
     }
-    
     func PaymentHTML(){
     
         AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(Invoiceid.shared.id)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
@@ -3058,7 +3103,12 @@ struct SelPrvOrder: View {
         })
     }
     func prvDet(){
-        
+        VisitData.shared.ProductCart = VisitData.shared.lstPrvOrder.filter ({ (Cart) in
+            if (Cart["SalQty"] as! Double) > 0 {
+                return true
+            }
+            return false
+        })
         print(VisitData.shared.lstPrvOrder)
         var ProSelectID = [String]()
         print(VisitData.shared.lstPrvOrder.count)
@@ -3320,6 +3370,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
 
 func addQty(sQty:String,SelectProd:[String:Any]) {
     let Ids = SelectProd["id"] as? String
+    print(VisitData.shared.ProductCart)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
         
         if (Cart["Pcode"] as! String) == Ids {
@@ -3577,6 +3628,7 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
                     }
                 }
                 VisitData.shared.clear()
+                VisitData.shared.LstItemCount.removeAll()
             }
 //            if let msg = json["Msg"] as? String {
 //                ShowToastMes.shared.tost = msg
@@ -3604,23 +3656,5 @@ func updateDateAndTime() {
     Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
         currentDateTime = formatter.string(from: Date())
     }
-}
-
-func Qtycount() {
-    var qtysdata = [Int]()
-    qtysdata.removeAll()
-    for items in VisitData.shared.lstPrvOrder {
-        if let qtyString = items["Qty"] as? String, let qty = Int(qtyString) {
-            print(qty)
-            qtysdata.append(qty)
-            //TotalQtyData += qty
-        }
-        
-    }
-    print(qtysdata)
-    let sum = qtysdata.reduce(0, +)
-    print(sum) // Output: 3
-    TotalQtyData = sum
-    print(TotalQtyData)
 }
 

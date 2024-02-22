@@ -106,6 +106,10 @@ struct HomePage: View {
                     
                     
                     .onAppear() {
+//                        let deviceID = UIDevice.current.identifierForVendor!.uuidString
+//                       // let UUIDValue = UIDevice.currentDevice.identifierForVendor!.UUIDString
+//                                print("UUID: \(deviceID)")
+//
                         isPaymentEnabled()
                         UserSetup.shared.SetUserSetup()
                         if (ShowToastMes.shared.tost != "" ){
@@ -224,7 +228,7 @@ struct HomePage: View {
                         }
                         .padding(10)
                         .onAppear {
-                                startTimer()
+                               // startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
                 }

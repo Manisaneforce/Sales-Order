@@ -29,6 +29,10 @@ struct OTPVerify: View {
     @State private var OtpView:Bool = true
     @State private var NotReg:Bool = false
     @State private var OtpLoader = false
+    @ObservedObject var monitor = Monitor()
+    @State private var showAlert_Int = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
     @Binding var jsondata: Outputdata
     //@Binding var phoneNumber:String
     let numberOffFields: Int
@@ -133,6 +137,10 @@ struct OTPVerify: View {
                             
                            
                                 Button(action: {
+                                    if monitor.status == .disconnected {
+                                                    ShowAlert(title: "Information", message: "Check the Internet Connection")
+                                                    return
+                                                }
                                     OtpLoader.toggle()
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     print("JSON Data: \(jsondata.data)")
@@ -159,9 +167,10 @@ struct OTPVerify: View {
                                         // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
                                         let axn = "get/login"
                                         let apiKey: String = "\(axn)"
+                                        let deviceID = UIDevice.current.identifierForVendor!.uuidString
                                         let aFormData: [[String: Any]] = [[
                                             "mobile":"\(phoneNumber2)",
-                                            "deviceid":""
+                                            "deviceid":"\(deviceID)"
                                         ]]
                                         let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
                                         let jsonString = String(data: jsonData!, encoding: .utf8)!
@@ -257,9 +266,16 @@ struct OTPVerify: View {
                                         .cornerRadius(10)
                                 }
                                 .padding(15)
+                                .alert(isPresented: $showAlert_Int) {
+                                    Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .destructive(Text("Ok")))
+                                }
                                 }
                             if showResendButton {
                                 Button(action: {
+                                    if monitor.status == .disconnected {
+                                                    ShowAlert(title: "Information", message: "Check the Internet Connection")
+                                                    return
+                                                }
                                     startTimer()
                                     OtpReSend()
                                     showResendButton = false
@@ -328,6 +344,11 @@ struct OTPVerify: View {
         if NotReg{
             NotRegister(Msg: $Msg,OtpView: $OtpView,NotReg: $NotReg)
         }
+    }
+    private func ShowAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert_Int = true
     }
     private func startTimer() {
         remainingTime = 60

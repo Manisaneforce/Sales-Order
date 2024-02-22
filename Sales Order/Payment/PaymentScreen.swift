@@ -21,6 +21,7 @@ struct PaymentScreen: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let currentDate = Date()
     let calendar = Calendar.current
+    @ObservedObject var monitor = Monitor()
     var body: some View {
         NavigationView{
             VStack{
@@ -32,6 +33,7 @@ struct PaymentScreen: View {
                         Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
                             .frame(height: 80)
+                        if monitor.status == .connected {
                         HStack {
                             Button(action: {
                                 self.presentationMode.wrappedValue.dismiss()
@@ -49,11 +51,17 @@ struct PaymentScreen: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(.top,50)
-        
+                            
                             Spacer()
                         }
+                        }else{
+                            Internet_Connection()
+                        }
                         
-                    }
+                    }.onReceive(monitor.$status) { newStatus in
+                        if newStatus == .connected {
+                         }
+                      }
                     .edgesIgnoringSafeArea(.top)
                     .frame(maxWidth: .infinity)
                     .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
@@ -253,7 +261,7 @@ struct PaymentScreen: View {
                                 FromDate = (formattedDate(date: calculateStartDate(for: 7)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
                                 let ToDates = String(dateFormatter.string(from:CurentDate))
-                                FromDate = ToDates
+                                ToDate = ToDates
                                 
                             }
                             
@@ -271,7 +279,7 @@ struct PaymentScreen: View {
                                 FromDate = (formattedDate(date: calculateStartDate(for: 30)))
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
                                 let ToDates = String(dateFormatter.string(from:CurentDate))
-                                FromDate = ToDates
+                                ToDate = ToDates
                             }
                         }
                         ZStack{

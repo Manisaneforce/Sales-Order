@@ -220,9 +220,7 @@ struct ContentView: View {
                                                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                                                 showToast = false
                                                             }
-                                                            
-                                                        }   
-                                                        
+                                                        }
                                                     }
                                                 case .failure(let error):
                                                     print(error)
