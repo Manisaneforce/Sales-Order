@@ -625,7 +625,7 @@ struct My_Profile: View {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
-                            GetLoction.toggle()
+                            //GetLoction.toggle()
                         }
                     VStack{
                         LottieUIView(filename: "Gettingloction").frame(width: 220,height: 150)

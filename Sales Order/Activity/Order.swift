@@ -114,6 +114,7 @@ struct Order: View {
     @State private var numbers: [Int] = []
     @State private var SelPrvOrderNavigte:Bool = false
     @State private var isShowingPopUp = false
+    @State private var LoaderView = false
     @State private var ViewSchemeSc = false
     @State private var ADDaddress = false
     @State private var showAlert = false
@@ -173,7 +174,6 @@ struct Order: View {
                                     .padding(.top,50)
                                     .frame(width: 50)
                             }
-                            
                             
                             .alert(isPresented: $showAlert) {
                                 Alert(
@@ -298,6 +298,7 @@ struct Order: View {
                             HStack{
                                 ForEach(prettyPrintedJson.indices, id: \.self) { index in
                                     Button(action: {
+                                        LoaderView.toggle()
                                         if !isLoading {
                                             print(prettyPrintedJson[index].id)
                                             isLoading = true
@@ -332,6 +333,7 @@ struct Order: View {
                             HStack {
                                 ForEach(prodTypes2.indices, id: \.self) { index in
                                     Button(action: {
+                                        LoaderView.toggle()
                                         if !isLoading {
                                         prodofcat.removeAll()
                                         proDetsID.removeAll()
@@ -375,6 +377,7 @@ struct Order: View {
                                 HStack{
                                     ForEach(prodofcat.indices, id: \.self) { index in
                                         Button(action:{
+                                            LoaderView.toggle()
                                             imgdataURL.removeAll()
                                             Arry.removeAll()
                                             Allprods.removeAll()
@@ -401,6 +404,7 @@ struct Order: View {
                                                 )
                                         }
                                         .cornerRadius(10)
+                                        
                                     }
                                     
                                 }
@@ -411,6 +415,7 @@ struct Order: View {
                         }
                         //.padding(.top,0)
                         .onAppear {
+                            LoaderView.toggle()
                             lblTotAmt = "0.0"
                             OrderprodGroup()
                             Sales_Order.prodDets{
@@ -866,6 +871,10 @@ struct Order: View {
                 .padding(.top, 10)
                 
                 
+                if LoaderView{
+                    loader()
+                }
+                
                 if isShowingPopUp {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
@@ -1242,6 +1251,7 @@ struct Order: View {
                         print("No data with TypID \(SelectId)")
                     }
                     TexQty()
+                    LoaderView.toggle()
                     //GetingListAddress()
                 }
             } catch{
@@ -1954,7 +1964,7 @@ struct Address:View{
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
-                        GetLoction.toggle()
+                       // GetLoction.toggle()
                     }
                 VStack{
                     LottieUIView(filename: "Gettingloction").frame(width: 220,height: 150)
