@@ -1246,7 +1246,7 @@ struct Order: View {
                         print("No data with TypID \(SelectId)")
                     }
                     TexQty()
-                    LoaderView.toggle()
+                    //LoaderView.toggle()
                     //GetingListAddress()
                 }
             } catch{
