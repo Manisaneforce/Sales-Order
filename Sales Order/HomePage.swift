@@ -43,18 +43,17 @@ struct HomePage: View {
                 VStack(spacing:22){
                 
                     ZStack {
-                               Rectangle()
-                                    .foregroundColor(ColorData.shared.HeaderColor)
-                                    .frame(height: 80)
-
+                            Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
                              if monitor.status == .connected {
                                     HStack {
-                                        Text("Dashboard")
-                                            .font(.custom("Poppins-Bold", size: 20))
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.white)
-                                            .padding(.leading,10)
-                                            .padding(.top, 50)
+                                    Text("Dashboard")
+                                        .font(.custom("Poppins-Bold", size: 20))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                        .padding(.leading,10)
+                                        .padding(.top, 50)
                                         
                                         Spacer()
                                         HStack(spacing: 30) {
@@ -80,7 +79,13 @@ struct HomePage: View {
                                                         // Handle logout action
                                                         UserDefaults.standard.removeObject(forKey: "savedPhoneNumber")
                                                         UserDefaults.standard.removeObject(forKey: "CustDet")
-
+                                                        UserDefaults.standard.removeObject(forKey: "UserSetup")
+                                                        UserDefaults.standard.removeObject(forKey: "prodGroupdata")
+                                                        UserDefaults.standard.removeObject(forKey: "prodTypesdata")
+                                                        UserDefaults.standard.removeObject(forKey: "prodCatedata")
+                                                        UserDefaults.standard.removeObject(forKey: "prodDetsdata")
+                                                        UserDefaults.standard.removeObject(forKey: "Schemes_Master")
+                                                        UserDefaults.standard.removeObject(forKey: "Tax_Master")
                                                         if let window = UIApplication.shared.windows.first {
                                                             window.rootViewController = UIHostingController(rootView: ContentView())
                                                         }
@@ -110,8 +115,8 @@ struct HomePage: View {
 //                       // let UUIDValue = UIDevice.currentDevice.identifierForVendor!.UUIDString
 //                                print("UUID: \(deviceID)")
 //
+                        UserSetup.shared.int()
                         isPaymentEnabled()
-                        UserSetup.shared.SetUserSetup()
                         if (ShowToastMes.shared.tost != "" ){
                             showToast = true
                           
@@ -166,8 +171,6 @@ struct HomePage: View {
                        // GetCurrentLoction()
                         updateDate()
                         DashBoradImg()
-                        Prod_Sch_Det()
-                        prod_Tax_Det()
                     }
                     VStack{
                     ZStack{
@@ -228,7 +231,7 @@ struct HomePage: View {
                         }
                         .padding(10)
                         .onAppear {
-                               // startTimer()
+                                startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
                 }

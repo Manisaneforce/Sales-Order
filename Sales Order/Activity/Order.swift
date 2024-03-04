@@ -76,8 +76,6 @@ var TotamtlistShow:String = ""
 var selUOM: String = ""
 var selUOMNm: String = ""
 var currentDateTime = ""
-//var TotalQtyData: Int = 0
-var Lstproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var lstSchemList:String = UserDefaults.standard.string(forKey: "Schemes_Master") ?? ""
 var lstTax:String = UserDefaults.standard.string(forKey: "Tax_Master") ?? ""
 
@@ -298,7 +296,7 @@ struct Order: View {
                             HStack{
                                 ForEach(prettyPrintedJson.indices, id: \.self) { index in
                                     Button(action: {
-                                        LoaderView.toggle()
+                                        //LoaderView.toggle()
                                         if !isLoading {
                                             print(prettyPrintedJson[index].id)
                                             isLoading = true
@@ -333,7 +331,7 @@ struct Order: View {
                             HStack {
                                 ForEach(prodTypes2.indices, id: \.self) { index in
                                     Button(action: {
-                                        LoaderView.toggle()
+                                       // LoaderView.toggle()
                                         if !isLoading {
                                         prodofcat.removeAll()
                                         proDetsID.removeAll()
@@ -377,7 +375,7 @@ struct Order: View {
                                 HStack{
                                     ForEach(prodofcat.indices, id: \.self) { index in
                                         Button(action:{
-                                            LoaderView.toggle()
+                                           // LoaderView.toggle()
                                             imgdataURL.removeAll()
                                             Arry.removeAll()
                                             Allprods.removeAll()
@@ -415,13 +413,9 @@ struct Order: View {
                         }
                         //.padding(.top,0)
                         .onAppear {
-                            LoaderView.toggle()
+                           // LoaderView.toggle()
                             lblTotAmt = "0.0"
                             OrderprodGroup()
-                            Sales_Order.prodDets{
-                                json in
-                                print(json)
-                            }
                             TexQty()
                             ShpingAddress = BillingAddress
                         }
@@ -1131,8 +1125,9 @@ struct Order: View {
         }
     }
     private func OrderprodGroup(){
-        Sales_Order.prodGroup { jsonString in
-            if let jsonData = jsonString.data(using: .utf8) {
+        let ProGropData:String = UserDefaults.standard.string(forKey: "prodGroupdata") ?? ""
+        print(ProGropData)
+            if let jsonData = ProGropData.data(using: .utf8) {
                 prettyPrintedJson.removeAll()
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
@@ -1152,15 +1147,16 @@ struct Order: View {
                 print(prettyPrintedJson)
             }
             OrderProdTyp()
-        }
+        
     }
     private func OrderProdTyp(){
         prodTypes1.removeAll()
         prodTypes2.removeAll()
         prodTypes3.removeAll()
         Typofid.removeAll()
-        Sales_Order.prodTypes { json in
-            if let jsonData = json.data(using: .utf8) {
+        let prodTypesdata:String = UserDefaults.standard.string(forKey: "prodTypesdata") ?? ""
+        print(prodTypesdata)
+            if let jsonData = prodTypesdata.data(using: .utf8) {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                         let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup!) }
@@ -1179,15 +1175,15 @@ struct Order: View {
                 }
             }
             self.OrderprodCate(at: 0)
-        }
+        
     }
     private func OrderprodCate(at index: Int){
         SelectId = prodTypes3[index]
         prodofcat.removeAll()
         proDetsID.removeAll()
-        Sales_Order.prodCate { json in
-            print(json)
-            if let jsonData = json.data(using: .utf8) {
+        let prodCatedata:String = UserDefaults.standard.string(forKey: "prodCatedata") ?? ""
+        print(prodCatedata)
+            if let jsonData = prodCatedata.data(using: .utf8) {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                         print(jsonArray)
@@ -1219,16 +1215,15 @@ struct Order: View {
                 }
                 self.OrderprodDets(at: 0)
             }
-        }
+        
     }
     
     private func OrderprodDets(at index: Int){
         ProSelectID = proDetsID[index]
         print(ProSelectID)
         print(Allproddata)
-        Sales_Order.prodDets() { json in
-            print(json)
-        if let jsonData = json.data(using: .utf8){
+        let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+        if let jsonData = prodDetsdata.data(using: .utf8){
             do{
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
@@ -1258,7 +1253,7 @@ struct Order: View {
                 print("Data is error\(error)")
             }
         }
-    }
+    
         
     }
     private func ViewScheme(ProdCode:String){
@@ -2129,266 +2124,6 @@ struct YourDataStructure: Codable {
     let name: String
     let ProdGrp_Sl_No: Int
 }
-
-
-func prodGroup(completion: @escaping (String) -> Void) {
-    
-    let axn = "get/prodGroup"
-    let apiKey = "\(axn)"
-    
-    let aFormData: [String: Any] = [
-        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
-    ]
-    print(aFormData)
-    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    let params: Parameters = [
-        "data": jsonString
-    ]
-    
-    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                    completion(prettyPrintedJson)
-                    
-                    print("______________________prodGroup_______________")
-                   
-                    
-             
-                    
-
-             
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-}
-
-func prodTypes(completi: @escaping (String) -> Void) {
-    let axn = "get/prodTypes"
-  
-    let apiKey = "\(axn)"
-    
-    let aFormData: [String: Any] = [
-        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
-    ]
-    print(aFormData)
-    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    let params: Parameters = [
-        "data": jsonString
-    ]
-    
-    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                    completi(prettyPrintedJson)
-                    print("______________________prodTypes_______________")
-                    
-             
-                    
-
-             
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    
-}
-
-
-func prodCate(prodcatedata: @escaping (String) -> Void) {
-    let axn = "get/prodCate"
-    //url = http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/prodGroup
-  
-    let apiKey = "\(axn)"
-    
-    let aFormData: [String: Any] = [
-        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
-    ]
-    print(aFormData)
-    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    let params: Parameters = [
-        "data": jsonString
-    ]
-    
-    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                    prodcatedata(prettyPrintedJson)
-                   
-                    print("______________________prodCate_______________")
-             
-                    
-
-             
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    
-}
-
-
-func prodDets(proddetsdata: @escaping (String) -> Void) {
-    let axn = "get/prodDets"
-  
-    let apiKey = "\(axn)"
-    
-    let aFormData: [String: Any] = [
-        "CusID":"\(CustDet.shared.CusId)","Stk":"\(CustDet.shared.StkID)"
-    ]
-    print(aFormData)
-    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    let params: Parameters = [
-        "data": jsonString
-    ]
-    
-    AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                   let Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
-                    if !Allproddata.isEmpty {
-                       
-                        UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
-                    } else {
-                        UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
-                    }
-                   // UserDefaults.standard.set(prettyPrintedJson, forKey: "Allproddata")
-                    proddetsdata(prettyPrintedJson)
-                    print("______________________prodDets_______________")
-             
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    
-}
-func Prod_Sch_Det(){
-    let axn = "get/Scheme"
-    let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&rSF=\(CustDet.shared.CusId)&sfCode=\(CustDet.shared.CusId)&State_Code=15&desig=MGR"
-   
-    
-    AF.request(APIClient.shared.BaseURL+APIClient.shared.DB_native_Scheme + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    
-                    print(prettyPrintedJson)
-                    UserDefaults.standard.set(prettyPrintedJson, forKey: "Schemes_Master")
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-}
-func prod_Tax_Det(){
-    let axn = "get/producttaxdetails"
-    let apiKey = "\(axn)"
-    let aFormData: [String: Any] = [
-        "distributorid" : "\(CustDet.shared.StkID)",
-        "retailorId" : "\(CustDet.shared.CusId)",
-        "divisionCode" : "\(CustDet.shared.Div)"
-    ]
-    print(aFormData)
-    let jsonData = try? JSONSerialization.data(withJSONObject: aFormData, options: [])
-    let jsonString = String(data: jsonData!, encoding: .utf8)!
-    let params: Parameters = [
-        "data": jsonString
-    ]
-    print(params)
-    AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params, encoding: URLEncoding(), headers: nil)
-        .validate(statusCode: 200 ..< 299)
-        .responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [String:AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    UserDefaults.standard.set(prettyPrintedJson, forKey: "Tax_Master")
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-}
-
-
 struct PrvProddata: Any {
     let ImgURL:String
     let ProName :String

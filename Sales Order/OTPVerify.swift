@@ -229,7 +229,7 @@ struct OTPVerify: View {
                                                                             print(CustDet.shared.Det)
                                                                             NavigteBoll = true
                                                                         }
-                                                                        UserSetup.shared.SetUserSetup()
+                                                                        SyncData.shared.SyncAllData()
                                                                     }else{
                                                                         OtpView.toggle()
                                                                         NotReg.toggle()
