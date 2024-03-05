@@ -71,7 +71,6 @@ struct Showtoast_Previews: PreviewProvider {
         Toast()
     }
 }
-
 class ShowToastMes{
     static var shared = ShowToastMes()
     var tost:String = ""

@@ -20,6 +20,7 @@ class SyncData{
         prodDetsdata()
         Prod_Sch_Det()
         prod_Tax_Det()
+        isPaymentEnabled()
     }
 
     func setUserSetup() {
@@ -267,6 +268,38 @@ class SyncData{
                         }
                         print(prettyPrintedJson)
                         UserDefaults.standard.set(prettyPrintedJson, forKey: "Tax_Master")
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    func isPaymentEnabled(){
+        let axn = "enable_payments"
+        let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&id=\(CustDet.shared.CusId)"
+        
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String:AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        
+                        print(prettyPrintedJson)
+                        var lstisPaymentEnabled:[String:AnyObject] = [:]
+                        if let list = GlobalFunc.convertToDictionary(text: prettyPrintedJson) as? [String:AnyObject] {
+                            lstisPaymentEnabled = list;
+                        }
+                        print(lstisPaymentEnabled)
+                        UserDefaults.standard.set(prettyPrintedJson, forKey: "isPaymentEnabled")
                     }
                 case .failure(let error):
                     print(error)

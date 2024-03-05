@@ -86,6 +86,7 @@ struct HomePage: View {
                                                         UserDefaults.standard.removeObject(forKey: "prodDetsdata")
                                                         UserDefaults.standard.removeObject(forKey: "Schemes_Master")
                                                         UserDefaults.standard.removeObject(forKey: "Tax_Master")
+                                                        UserDefaults.standard.removeObject(forKey: "isPaymentEnabled")
                                                         if let window = UIApplication.shared.windows.first {
                                                             window.rootViewController = UIHostingController(rootView: ContentView())
                                                         }
@@ -116,6 +117,7 @@ struct HomePage: View {
 //                                print("UUID: \(deviceID)")
 //
                         UserSetup.shared.int()
+                        UserSetup.shared.pay_Nd()
                         isPaymentEnabled()
                         if (ShowToastMes.shared.tost != "" ){
                             showToast = true

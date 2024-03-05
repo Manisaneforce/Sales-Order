@@ -299,7 +299,7 @@ struct Order: View {
                                         //LoaderView.toggle()
                                         if !isLoading {
                                             print(prettyPrintedJson[index].id)
-                                            isLoading = true
+                                            isLoading.toggle()
                                             prodTypes1.removeAll()
                                             Typofid.removeAll()
                                             if selectedGorup == index {
@@ -337,7 +337,7 @@ struct Order: View {
                                         proDetsID.removeAll()
                                         Allprods.removeAll()
                                         TotalQty.removeAll()
-                                        isLoading = true
+                                            isLoading.toggle()
                                         if selectedIndex == index {
                                             selectedIndex = index
                                             SubselectedIndex = 0
@@ -379,7 +379,7 @@ struct Order: View {
                                             imgdataURL.removeAll()
                                             Arry.removeAll()
                                             Allprods.removeAll()
-                                            isLoading = true
+                                            isLoading.toggle()
                                             print("If Select data")
                                             print("Clicked button at index: \(index)")
                                             self.OrderprodDets(at: index)
@@ -431,7 +431,7 @@ struct Order: View {
                                             
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
                                     withAnimation {
-                                        isLoading = false
+                                        isLoading.toggle()
                                     }
                                 }}
                                  
@@ -1479,8 +1479,6 @@ struct RemoteImageView: View {
 struct Order_Previews: PreviewProvider {
     static var previews: some View {
         Order()
-       // SelPrvOrder()
-        //Address()
     }
 }
 struct get_states: Any{
