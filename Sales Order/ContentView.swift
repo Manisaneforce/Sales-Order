@@ -493,3 +493,49 @@ struct CheckPermissions:View{
         }
     }
 }
+
+
+
+struct NewMobileNoScrean:View{
+    @State private var MobNo: String = ""
+    var body: some View{
+        ZStack{
+            Rectangle()
+                .foregroundColor(.white)
+            VStack(alignment: .center){
+                VStack(spacing:0){
+                    Image("NumberPad")
+                        .fixedSize()
+                    Text("Enter Registered 10 digit Mobile number")
+                        .font(.system(size: 10))
+                }
+                VStack(alignment: .center){
+                HStack(){
+                    VStack(alignment: .leading){
+                        Text("+91")
+                            .font(.system(size: 12))
+                        Divider()
+                    }.padding(.horizontal,10)
+                    VStack(alignment: .trailing){
+                        TextField("Mobile number", text: $MobNo)
+                            
+                            .font(.system(size: 12))
+                        Divider()
+                    }
+                    .padding(.horizontal,10)
+                }
+                .padding()
+                 
+            }
+                 
+            }
+        }
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.00), lineWidth: 1)
+                .padding(10)
+        )
+        .padding(.horizontal,10)
+    }
+}
+
