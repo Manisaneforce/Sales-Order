@@ -88,7 +88,7 @@ struct HomePage: View {
                                                         UserDefaults.standard.removeObject(forKey: "Tax_Master")
                                                         UserDefaults.standard.removeObject(forKey: "isPaymentEnabled")
                                                         if let window = UIApplication.shared.windows.first {
-                                                            window.rootViewController = UIHostingController(rootView: ContentView())
+                                                            window.rootViewController = UIHostingController(rootView: NewMobileNoScrean())
                                                         }
                                                     },
                                                     secondaryButton: .cancel()
