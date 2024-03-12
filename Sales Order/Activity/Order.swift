@@ -768,6 +768,7 @@ struct Order: View {
                             }
                             .padding(.horizontal,10)
                         }
+                        .padding(.bottom,10)
                     }
                         
                 }
@@ -1220,8 +1221,6 @@ struct Order: View {
     
     private func OrderprodDets(at index: Int){
         ProSelectID = proDetsID[index]
-        print(ProSelectID)
-        print(Allproddata)
         let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
         if let jsonData = prodDetsdata.data(using: .utf8){
             do{
@@ -2142,11 +2141,9 @@ struct FilterItem: Identifiable {
     var quantity: Int
 }
 
-var LstAllproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
 var selectitemCount:Int = 0
 struct SelPrvOrder: View {
     @State private var OrderNavigte:Bool = false
-    @State private var Allproddata:String = UserDefaults.standard.string(forKey: "Allproddata") ?? ""
     @State private var FilterItem = [[String: Any]]()
     @State private var AllPrvprod:[PrvProddata]=[]
     @State var filterItems: [FilterItem] = []
@@ -2234,10 +2231,6 @@ struct SelPrvOrder: View {
                        if newStatus == .connected {
                         }
                      }
-                        
-                        
-                     
-                        
                         Divider()
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
@@ -2254,6 +2247,7 @@ struct SelPrvOrder: View {
                                     //OrderNavigte = true
                                     OredSc.toggle()
                                     SelPrvSc.toggle()
+                                    updateOrderValues(refresh: 1)
                                     
                                 }){
                                     Text("+ Add Product")
@@ -2341,7 +2335,8 @@ struct SelPrvOrder: View {
                                                         filterItems[index].quantity -= 1
                                                     }
                                                     let ProId = AllPrvprod[index].ProID
-                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                    let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+                                                    if let jsonData = prodDetsdata.data(using: .utf8){
                                                         do{
                                                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                                 print(jsonArray)
@@ -2402,7 +2397,8 @@ struct SelPrvOrder: View {
                                                     
                                                     
                                                     let ProId = AllPrvprod[index].ProID
-                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                    let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+                                                    if let jsonData = prodDetsdata.data(using: .utf8){
                                                         do{
                                                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                                 print(jsonArray)
@@ -2430,7 +2426,8 @@ struct SelPrvOrder: View {
                                                     filterItems[index].quantity += 1
                                                     print(AllPrvprod[index].ProID)
                                                     let ProId = AllPrvprod[index].ProID
-                                                    if let jsonData = Allproddata.data(using: .utf8){
+                                                    let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+                                                    if let jsonData = prodDetsdata.data(using: .utf8){
                                                         do{
                                                             if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                                                                 print(jsonArray)
@@ -2858,11 +2855,10 @@ struct SelPrvOrder: View {
             let id =  itemID["id"] as! String
             ProSelectID.append(id)
         }
-        print(ProSelectID)
-        print(Allproddata)
         AllPrvprod.removeAll()
         items.removeAll()
-        if let jsonData = Allproddata.data(using: .utf8) {
+        let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+        if let jsonData = prodDetsdata.data(using: .utf8) {
             do {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     print(jsonArray)
@@ -3221,6 +3217,7 @@ func changeQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
+    print(VisitData.shared.lstPrvOrder)
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
@@ -3269,8 +3266,8 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
         }
         
         var prodItems: [[String: Any]] = []
-        
-        if let jsonData = LstAllproddata.data(using: .utf8) {
+        let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+        if let jsonData = prodDetsdata.data(using: .utf8) {
             do {
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                     prodItems = jsonArray.filter { product in

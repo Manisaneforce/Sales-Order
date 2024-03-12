@@ -189,8 +189,6 @@ struct MyOrdersScreen: View {
                             ShimmeringSkeletonRow_For_Order()
                                 .transition(.opacity)
                                 .onAppear{
-                                    
-                                    
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
                             withAnimation {
                                 Loader = false

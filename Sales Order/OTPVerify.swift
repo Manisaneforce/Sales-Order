@@ -418,14 +418,13 @@ struct NotRegister: View {
             
             .onTapGesture {
                 if let window = UIApplication.shared.windows.first {
-                    window.rootViewController = UIHostingController(rootView: ContentView())
+                    window.rootViewController = UIHostingController(rootView: NewMobileNoScrean())
                 }
                 
             }
         }
     }
         .navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarHidden(true)
        
         
     }
@@ -484,138 +483,169 @@ struct NewOTPScrean:View{
     @State var pinSix: String = ""
     @State private var showAlert = false
     @State private var alertMessages = ""
+    @State private var remainingTime = 60
+    @State private var showResendButton = false
+    @State private var timer: Timer?
+    @State private var EndMob:String = ""
     init(numberOffFields: Int, jsondata: Binding<Outputdata>) {
         self.numberOffFields = numberOffFields
         self._jsondata = jsondata
     }
     var body: some View{
+        if OtpView{
         NavigationView {
-        ZStack{
-            VStack{
-                VStack(alignment:.center){
-                    Image("logo_new")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 250,height: 150)
-                    
-                    Image("Welcome to ReliVet!")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200,height: 50)
-                    Text("Sign in to continue")
-                        .font(.custom("Poppins-SemiBold", size: 12))
-                }
-                Spacer()
-                    .onAppear {
-                        Toast(mes: ShowToastMes.shared.tost)
+            ZStack{
+                VStack{
+                    VStack(alignment:.center){
+                        Image("logo_new")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 250,height: 150)
+                        
+                        Image("Welcome to ReliVet!")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200,height: 50)
+                        Text("Sign in to continue")
+                            .font(.custom("Poppins-SemiBold", size: 12))
                     }
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(.white)
-                        .frame(height: 350)
-                    VStack(alignment: .center){
-                        VStack(spacing:0){
-                            Image("OTPLogo")
-                            //.fixedSize()
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 180,height: 130)
-                            
-                            Text("Enter recevied 6 digit OTP on your")
-                                .font(.system(size: 12))
-                            Text("Mobile number ending with ***8749")
-                                .font(.system(size: 12))
+                    Spacer()
+                        .onAppear {
+                            Toast(mes: ShowToastMes.shared.tost)
+                            EndMob = String(String(phoneNumber2).suffix(4))
+                            startTimer()
                         }
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(.white)
+                            .frame(height: 350)
                         VStack(alignment: .center){
-                            OtpFormFieldView(pinOne: $pinOne, pinTwo: $pinTwo, pinThree: $pinThree, pinFour: $pinFour, pinFive: $pinFive, pinSix: $pinSix)
-                            Button(action: {
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                VerrifyOTP()
-                            }) {
-                                ZStack{
-                                    Rectangle()
-                                        .foregroundColor(ColorData.shared.HeaderColor)
-                                        .frame(height: 40)
-                                        .cornerRadius(10)
-                                    Text("Verify OTP")
-                                        .fontWeight(.heavy)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 14))
-                                        .multilineTextAlignment(.center)
-                                        .cornerRadius(10)
-                                }
-                                .padding(.horizontal,20)
-                            } .alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("Error"),
-                                    message: Text(alertMessages),
-                                    dismissButton: .default(Text("OK"))
-                                )
-                            }
-                            HStack{
-                                Spacer()
-                                Text("Version \(Bundle.main.appVersionLong)")
+                            VStack(spacing:0){
+                                Image("OTPLogo")
+                                //.fixedSize()
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 180,height: 130)
+                                
+                                Text("Enter recevied 6 digit OTP on your")
                                     .font(.system(size: 12))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.gray)
-                            }.padding(.horizontal,20)
-                            
-                        }
-                        if NavigteBoll {
-                            NavigationLink(
-                                destination: HomePage(),isActive: $NavigteBoll
-                            ) {
-                                EmptyView()
+                                Text("Mobile number ending with ***\(EndMob)")
+                                    .font(.system(size: 12))
+                            }
+                            VStack(alignment: .center){
+                                OtpFormFieldView(pinOne: $pinOne, pinTwo: $pinTwo, pinThree: $pinThree, pinFour: $pinFour, pinFive: $pinFive, pinSix: $pinSix)
+                                Button(action: {
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    VerrifyOTP()
+                                }){
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .frame(height: 40)
+                                            .cornerRadius(10)
+                                        Text("Verify OTP")
+                                            .fontWeight(.heavy)
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 14))
+                                            .multilineTextAlignment(.center)
+                                            .cornerRadius(10)
+                                    }
+                                    .padding(.horizontal,20)
+                                } .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Error"),
+                                        message: Text(alertMessages),
+                                        dismissButton: .default(Text("OK"))
+                                    )
+                                }
+                                HStack(spacing: 0){
+                                    Text("Dont receive the OTP?")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.semibold)
+                                    Text("RESEND OTP")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(showResendButton ? Color.blue : Color.gray)
+                                        .onTapGesture {
+                                            if monitor.status == .disconnected {
+                                                ShowAlert(title: "Information", message: "Check the Internet Connection")
+                                                return
+                                            }
+                                            startTimer()
+                                            OtpReSend()
+                                            showResendButton.toggle()
+                                            Toast(mes:"OTP resend successfully")
+                                        }
+                                }
+                                
+                                HStack{
+                                    Spacer()
+                                    Text("Version \(Bundle.main.appVersionLong)")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.gray)
+                                }.padding(.horizontal,20)
+                                
+                            }
+                            if NavigteBoll {
+                                NavigationLink(
+                                    destination: HomePage(),isActive: $NavigteBoll
+                                ) {
+                                    EmptyView()
+                                }
                             }
                         }
                     }
-                }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.00), lineWidth: 1)
-                        .padding(10)
-                )
-                .padding(.horizontal,10)
-                .padding(.top,-10)
-                Spacer()
-                VStack(alignment: .center){
-                    Text("Powered by")
-                        .font(.custom("Poppins-SemiBold", size: 10))
-                    Image("SalesJumpLog")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100,height: 50)
-                }
-            }
-            if OtpLoader{
-                ZStack{
-                    Color.black.opacity(0.5)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            //                                GetLoction.toggle()
-                        }
-                    HStack{
-                        LottieUIView(filename: "loader").frame(width: 50,height: 50)
-                            .padding(.horizontal,20)
-                        Text("Verifying...")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
-                            .padding(.vertical,20)
-                            .padding(.trailing,20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.00), lineWidth: 1)
+                            .padding(10)
+                    )
+                    .padding(.horizontal,10)
+                    .padding(.top,-10)
+                    Spacer()
+                    VStack(alignment: .center){
+                        Text("Powered by")
+                            .font(.custom("Poppins-SemiBold", size: 10))
+                        Image("SalesJumpLog")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100,height: 50)
                     }
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .padding(20)
                 }
+                if OtpLoader{
+                    ZStack{
+                        Color.black.opacity(0.5)
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+                                //                                GetLoction.toggle()
+                            }
+                        HStack{
+                            LottieUIView(filename: "loader").frame(width: 50,height: 50)
+                                .padding(.horizontal,20)
+                            Text("Verifying...")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .padding(.vertical,20)
+                                .padding(.trailing,20)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(20)
+                    }
+                }
+            }  .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
-        }  .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-    }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
+    }
+        if NotReg{
+            NotRegister(Msg: $Msg,OtpView: $OtpView,NotReg: $NotReg)
+        }
 }
     private func ShowAlert(title: String, message: String) {
         alertTitle = title
@@ -636,7 +666,6 @@ struct NewOTPScrean:View{
         var item = 0
         if let unwrappedValue = value {
             item=unwrappedValue
-            
         } else {
             //Text("No value")
         }
@@ -751,6 +780,43 @@ struct NewOTPScrean:View{
             showToast = false
         }
     }
+    }
+    private func startTimer() {
+        remainingTime = 5
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            if remainingTime > 0 {
+                remainingTime -= 1
+            } else {
+                showResendButton.toggle()
+                timer?.invalidate()
+                timer = nil
+            }
+        }
+    }
+    func OtpReSend(){
+        let axn = "send/sms"
+        let apiKey = "\(axn)&mobile=\(phoneNumber2)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    if let json = value as? [String: AnyObject] {
+                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                            print("Error: Cannot convert JSON object to Pretty JSON data")
+                            return
+                        }
+                        guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                            print("Error: Could print JSON in String")
+                            return
+                        }
+                        jsondata.data = json
+                        print(prettyPrintedJson)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
     }
 }
 

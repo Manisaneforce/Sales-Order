@@ -255,20 +255,41 @@ struct HomePage: View {
     func startTimer() {
             Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
                 withAnimation {
-                    currentImageIndex = (currentImageIndex + 1) % imageUrls.count
+                    if monitor.status == .connected {
+                        currentImageIndex = (currentImageIndex + 1) % imageUrls.count
+                    }
                 }
             }
         }
         
-        func loadImage() -> UIImage {
-            guard let url = URL(string: imageUrls[currentImageIndex]),
-                  let data = try? Data(contentsOf: url),
-                  let uiImage = UIImage(data: data) else {
-                return UIImage(systemName: "photo") ?? UIImage()
-            }
-            return uiImage
-        }
-    
+    func loadImage() -> UIImage {
+           guard let url = URL(string: imageUrls[currentImageIndex]) else {
+               return UIImage(systemName: "photo") ?? UIImage()
+           }
+
+           var downloadedImage: UIImage?
+
+           let semaphore = DispatchSemaphore(value: 0)
+
+           URLSession.shared.dataTask(with: url) { data, response, error in
+               defer {
+                   semaphore.signal()
+               }
+
+               if let error = error {
+                   print("Error loading image: \(error)")
+               }
+
+               if let data = data, let uiImage = UIImage(data: data) {
+                   downloadedImage = uiImage
+               }
+           }.resume()
+
+           _ = semaphore.wait(timeout: .distantFuture)
+
+           return downloadedImage ?? UIImage(systemName: "photo") ?? UIImage()
+       }
+
     private func updateDate() {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
