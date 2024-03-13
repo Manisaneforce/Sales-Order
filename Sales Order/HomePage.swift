@@ -28,6 +28,7 @@ struct HomePage: View {
          "https://rad.salesjump.in/server/rad/FiproRel-S%204.02%20mL%20Carton.png"
      ]
     @State private var currentImageIndex = 0
+    @ObservedObject private var imageLoader = ImageLoader()
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     @Environment(\.horizontalSizeClass) var sizeClass
     var body: some View {
@@ -227,12 +228,17 @@ struct HomePage: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.white)
                                 .shadow(radius: 5)
-                            Image(uiImage: loadImage())
-                                            .resizable()
-                                            .cornerRadius(10)
+                            if imageLoader.downloadedImages.isEmpty {
+                                Text("Loading images...")
+                            } else {
+                                Image(uiImage: imageLoader.downloadedImages[currentImageIndex % imageLoader.downloadedImages.count])
+                                    .resizable()
+                                    .cornerRadius(10)
+                            }
                         }
                         .padding(10)
                         .onAppear {
+                                imageLoader.preloadImages(from: imageUrls.map { URL(string: $0)! })
                                 startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
@@ -255,41 +261,10 @@ struct HomePage: View {
     func startTimer() {
             Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
                 withAnimation {
-                    if monitor.status == .connected {
-                        currentImageIndex = (currentImageIndex + 1) % imageUrls.count
-                    }
+                    currentImageIndex = (currentImageIndex + 1) % imageLoader.downloadedImages.count
                 }
             }
         }
-        
-    func loadImage() -> UIImage {
-           guard let url = URL(string: imageUrls[currentImageIndex]) else {
-               return UIImage(systemName: "photo") ?? UIImage()
-           }
-
-           var downloadedImage: UIImage?
-
-           let semaphore = DispatchSemaphore(value: 0)
-
-           URLSession.shared.dataTask(with: url) { data, response, error in
-               defer {
-                   semaphore.signal()
-               }
-
-               if let error = error {
-                   print("Error loading image: \(error)")
-               }
-
-               if let data = data, let uiImage = UIImage(data: data) {
-                   downloadedImage = uiImage
-               }
-           }.resume()
-
-           _ = semaphore.wait(timeout: .distantFuture)
-
-           return downloadedImage ?? UIImage(systemName: "photo") ?? UIImage()
-       }
-
     private func updateDate() {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"
@@ -481,3 +456,32 @@ struct ScrollViewsAdjust: View {
     }
 }
 
+class ImageLoader: ObservableObject {
+    @Published var downloadedImages: [UIImage] = []
+    
+    func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error loading image: \(error)")
+                completion(nil)
+                return
+            }
+            
+            if let data = data, let uiImage = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completion(uiImage)
+                }
+            }
+        }.resume()
+    }
+    
+    func preloadImages(from urls: [URL]) {
+        for url in urls {
+            loadImage(from: url) { image in
+                if let image = image {
+                    self.downloadedImages.append(image)
+                }
+            }
+        }
+    }
+}

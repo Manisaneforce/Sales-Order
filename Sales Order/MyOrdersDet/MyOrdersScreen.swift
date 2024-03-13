@@ -726,23 +726,33 @@ struct OrderDetView:View{
                                             Spacer()
                                         }
                                         .padding(.horizontal,10)
-                                        VStack{
+                                        VStack(alignment: .leading){
                                             if (Billing == Shiping){
-                                                HStack{
-                                                    Text("BILLING & SHIPPING ADDRESS: \(Billing)")
-                                                        .font(.system(size: 12))
-                                                        .foregroundColor(.gray)
-                                                }
+                                              
+                                                VStack(alignment: .leading){
+                                                        Text("BILLING & SHIPPING ADDRESS:-")
+                                                            .font(.system(size: 12))
+                                                            //.foregroundColor(.gray)
+                                                        Text(Billing)
+                                                            .font(.system(size: 12))
+                                                            .foregroundColor(.gray)
+                                                    }
                                                 
                                             }else{
                                                 VStack(alignment:.leading){
-                                                        Text("BILLING ADDRESS: \(Billing)")
+                                                    
+                                                        Text("BILLING ADDRESS:-")
                                                             .font(.system(size: 12))
-                                                            .foregroundColor(.gray)
-                                                        Text("SHIPPING ADDRESS: \(Shiping)")
+                                                        Text(Billing)
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(.gray)
+                                                        Text("SHIPPING ADDRESS:-")
                                                             .font(.system(size: 12))
-                                                            .foregroundColor(.gray)
+                                                    Text(Shiping)
+                                                        .font(.system(size: 12))
+                                                        .foregroundColor(.gray)
                                                 }
+                                                .padding(.leading,12)
 
                                             }
                                         }
