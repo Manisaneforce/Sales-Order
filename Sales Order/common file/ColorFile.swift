@@ -33,3 +33,10 @@ class DashboardBaner{
     
     var ImgUrl = [String]()
 }
+
+class From_To_Date{
+    static var shared = From_To_Date()
+    var SetDate = 0
+    var From = ""
+    var To = ""
+}

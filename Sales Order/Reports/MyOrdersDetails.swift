@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Alamofire
+import WebKit
 struct getInvoice: Any{
     let Status:String
     let OrderID:String
@@ -14,6 +15,7 @@ struct getInvoice: Any{
     let Order_Value:String
     let Product_Name:String
     let Quantity:String
+    let Saledoc_No:String
 }
 //var invoice:[getInvoice]=[]
 var value:String = ""
@@ -36,206 +38,210 @@ struct MyOrdersDetails: View {
     @State var Totalval = value
     @State private var SelectFromDate = Date()
     @State private var isHiden:Bool = false
+    @State private var Pdf_String:String = ""
+    @State private var Navi_pdf_View:Bool = false
+    @State private var Main_View:Bool = true
     @ObservedObject var monitor = Monitor()
+    @State private var showToast = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
     let currentDate = Date()
     let calendar = Calendar.current
     var body: some View {
         NavigationView{
-            ZStack{
-                Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
-                    .edgesIgnoringSafeArea(.all)
-                VStack{
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 80)
-                        if monitor.status == .connected {
-                        HStack {
-                            
-                            Button(action: {
-                                self.presentationMode.wrappedValue.dismiss()
-                            })
-                            {
-                                Image("backsmall")
-                                
-                                    .renderingMode(.template)
-                                    .foregroundColor(.white)
-                                    .padding(.top,50)
-                                    .frame(width: 50)
-                            }
-                            Text("History Info")
-                                .font(.system(size: 18))
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.top,50)
-                            Spacer()
-                        }
-                        }else{
-                            Internet_Connection()
-                        }
-                        NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
-                            EmptyView()
-                        }
-                    } .onReceive(monitor.$status) { newStatus in
-                        if newStatus == .connected {
-                         }
-                      }
-                    .edgesIgnoringSafeArea(.top)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
-                    
-                    .onAppear{
-                        let fromDate = String(dateFormatter.string(from:selectedDate))
-                        print(fromDate)
-                        FromDate = fromDate
-                        ToDate = fromDate
-                        orderandinvoice()
-                        Loader.toggle()
-                    }
-                    HStack {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .shadow(radius: 5)
-                            
-                            HStack {
-                                Text(FromDate)
-                                    .font(.system(size: 15))
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                
-                                Image(systemName: "calendar")
-                                    .foregroundColor(Color.blue)
-                            }.padding(.horizontal,5)
-                        }
-                        .onTapGesture {
-                            SelMode = "DOF"
-                            CalenderTit = "Select Date"
-                            isPopoverVisible.toggle()
-                            
-                        }
-                        .padding(10)
-                        
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .shadow(radius: 5)
-                            HStack {
-                                Text(ToDate)
-                                    .font(.system(size: 15))
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Image(systemName: "calendar")
-                                    .foregroundColor(Color.blue)
-                            }.padding(.horizontal,5)
-                        }
-                        .onTapGesture {
-                            SelMode = "DOT"
-                            CalenderTit = "Select From Date"
-                            isPopoverVisible.toggle()
-                            
-                        }
-                        .padding(10)
-                        VStack{
-                            Image(systemName: "chevron.down.circle.fill")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(Color.blue)
-                        }
-                        .onTapGesture {
-                            Filterdate.toggle()
-                        }
-                        
-                        .padding(10)
-                    }
-                    .frame(height: 60)
-              
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                        TabBarView(currentTab: $currentTab)
-                    }
-                    .frame(height:40)
-                    .padding(.leading,2)
-                    .padding(.trailing,2)
-                    TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader)
-                    Spacer()
-                }
-                .popover(isPresented: $isPopoverVisible) {
+           if Main_View{
+                ZStack{
+                    Color(red: 0.93, green: 0.94, blue: 0.95,opacity: 1.00)
+                        .edgesIgnoringSafeArea(.all)
                     VStack{
                         ZStack{
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
-                                .frame(height: 60)
-                                //.padding(20)
-                            Text("Select Date")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.top,10)
+                                .frame(height: 80)
+                            if monitor.status == .connected {
+                                HStack {
+                                    
+                                    Button(action: {
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    })
+                                    {
+                                        Image("backsmall")
+                                        
+                                            .renderingMode(.template)
+                                            .foregroundColor(.white)
+                                            .padding(.top,50)
+                                            .frame(width: 50)
+                                    }
+                                    Text("History Info")
+                                        .font(.system(size: 18))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                        .padding(.top,50)
+                                    Spacer()
+                                }
+                            }else{
+                                Internet_Connection()
+                            }
+                            NavigationLink(destination: HomePage(), isActive: $navigateToHomepage) {
+                                EmptyView()
+                            }
+                        } .onReceive(monitor.$status) { newStatus in
+                            if newStatus == .connected {
+                            }
                         }
                         .edgesIgnoringSafeArea(.top)
-                        .padding(.top,-18)
-                        //.padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
-                        Spacer()
-                        VStack {
-                            
-                            CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
-                            .frame(height: 500)
-                            .padding()
-                            
-                            Spacer()
-                            Button(action:{
-                                Selectdate()
-                                Loader.toggle()
-                                isPopoverVisible.toggle()
-                            }){
-                                ZStack{
-                                    Rectangle()
-                                        .foregroundColor(ColorData.shared.HeaderColor)
-                                        .frame(height: 60)
-                                    Text("Submit Date")
-                                        .foregroundColor(.white)
-                                }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+                        
+                        .onAppear{
+                            let fromDate = String(dateFormatter.string(from:selectedDate))
+                            print(fromDate)
+                            FromDate = fromDate
+                            ToDate = fromDate
+                            orderandinvoice()
+                            Loader.toggle()
+                        }
+                        HStack {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.white)
+                                    .shadow(radius: 5)
+                                
+                                HStack {
+                                    Text(FromDate)
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(Color.blue)
+                                }.padding(.horizontal,5)
                             }
-                            .edgesIgnoringSafeArea(.bottom)
-                            .padding(.bottom,-37)
-                           
+                            .onTapGesture {
+                                SelMode = "DOF"
+                                CalenderTit = "Select Date"
+                                isPopoverVisible.toggle()
+                                
+                            }
+                            .padding(10)
+                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.white)
+                                    .shadow(radius: 5)
+                                HStack {
+                                    Text(ToDate)
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    Image(systemName: "calendar")
+                                        .foregroundColor(Color.blue)
+                                }.padding(.horizontal,5)
+                            }
+                            .onTapGesture {
+                                SelMode = "DOT"
+                                CalenderTit = "Select From Date"
+                                isPopoverVisible.toggle()
+                                
+                            }
+                            .padding(10)
+                            VStack{
+                                Image(systemName: "chevron.down.circle.fill")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(Color.blue)
+                            }
+                            .onTapGesture {
+                                Filterdate.toggle()
+                            }
+                            
+                            .padding(10)
                         }
-                    }
-                    
-                }
-                
-                if Filterdate{
-                    Color.black.opacity(0.5)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                           // Filterdate.toggle()
-                        }
-                    VStack{
+                        .frame(height: 60)
+                        
                         ZStack{
                             Rectangle()
                                 .foregroundColor(ColorData.shared.HeaderColor)
-                                .frame(height: 30)
-                            VStack{
-                                Text("Select Quick Dates")
-                                    .font(.system(size: 15))
+                            TabBarView(currentTab: $currentTab)
+                        }
+                        .frame(height:40)
+                        .padding(.leading,2)
+                        .padding(.trailing,2)
+                        TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View:$Main_View, showToast: $showToast)
+                        Spacer()
+                    }
+                    .popover(isPresented: $isPopoverVisible) {
+                        VStack{
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                    .frame(height: 60)
+                                //.padding(20)
+                                Text("Select Date")
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.white)
+                                    .padding(.top,10)
+                            }
+                            .edgesIgnoringSafeArea(.top)
+                            .padding(.top,-18)
+                            //.padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0))
+                            Spacer()
+                            VStack {
+                                
+                                CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
+                                    .frame(height: 500)
+                                    .padding()
+                                
+                                Spacer()
+                                Button(action:{
+                                    Selectdate()
+                                    Loader.toggle()
+                                    isPopoverVisible.toggle()
+                                }){
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .frame(height: 60)
+                                        Text("Submit Date")
+                                            .foregroundColor(.white)
+                                    }
+                                }
+                                .edgesIgnoringSafeArea(.bottom)
+                                .padding(.bottom,-37)
+                                
                             }
                         }
-                        VStack{
-                            VStack{
-                                
-                                Text("Last 7 days")
-                                    .font(.system(size: 15))
-                                    .fontWeight(.semibold)
-                                    .padding(5)
-                                 
+                        
+                    }
+                    
+                    if Filterdate{
+                        Color.black.opacity(0.5)
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+                                // Filterdate.toggle()
                             }
-                            .background(Color.white)
+                        VStack{
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                    .frame(height: 30)
+                                VStack{
+                                    Text("Select Quick Dates")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                }
+                            }
+                            VStack{
+                                VStack{
+                                    
+                                    Text("Last 7 days")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                        .padding(5)
+                                    
+                                }
+                                .background(Color.white)
                                 .onTapGesture{
                                     var CurentDate = Date()
                                     Loader.toggle()
@@ -248,15 +254,15 @@ struct MyOrdersDetails: View {
                                     
                                     
                                 }
-                            
-                            Divider()
-                            VStack{
-                                Text("Last 30 days")
-                                    .font(.system(size: 15))
-                                    .fontWeight(.semibold)
-                                    .padding(5)
-                            }
-                            .background(Color.white)
+                                
+                                Divider()
+                                VStack{
+                                    Text("Last 30 days")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                        .padding(5)
+                                }
+                                .background(Color.white)
                                 .onTapGesture{
                                     var CurentDate = Date()
                                     Loader.toggle()
@@ -267,54 +273,59 @@ struct MyOrdersDetails: View {
                                     ToDate = ToDates
                                     orderandinvoice()
                                 }
-                        }
-                        ZStack{
-                            Rectangle()
-                                .foregroundColor(ColorData.shared.HeaderColor)
-                                .frame(height: 30)
-                                .padding(.top,30)
-                                .padding(.bottom,10)
-                                .padding(.horizontal,15)
-                                .cornerRadius(10)
-                            VStack{
-                                Text("Close")
-                                    .font(.system(size: 15))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color.white)
-                                    .padding(.top,15)
                             }
-                        }.cornerRadius(10)
-                        .onTapGesture {
-                            Filterdate.toggle()
+                            ZStack{
+                                Rectangle()
+                                    .foregroundColor(ColorData.shared.HeaderColor)
+                                    .frame(height: 30)
+                                    .padding(.top,30)
+                                    .padding(.bottom,10)
+                                    .padding(.horizontal,15)
+                                    .cornerRadius(10)
+                                VStack{
+                                    Text("Close")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color.white)
+                                        .padding(.top,15)
+                                }
+                            }.cornerRadius(10)
+                                .onTapGesture {
+                                    Filterdate.toggle()
+                                }
                         }
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding(20)
                     }
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .padding(20)
+                    //                if Loader{
+                    //                    ZStack{
+                    //                    Color.black.opacity(0.5)
+                    //                        .edgesIgnoringSafeArea(.all)
+                    //                        .onTapGesture {
+                    //                               // GetLoction.toggle()
+                    //                        }
+                    //                    HStack{
+                    //                        LottieUIView(filename: "loader").frame(width: 50,height: 50)
+                    //                            .padding(.horizontal,20)
+                    //                        Text("Verifying...")
+                    //                            .font(.headline)
+                    //                            .fontWeight(.bold)
+                    //                            .multilineTextAlignment(.center)
+                    //                            .padding(.vertical,20)
+                    //                            .padding(.trailing,20)
+                    //                    }
+                    //                    .background(Color.white)
+                    //                    .cornerRadius(10)
+                    //                    .padding(20)
+                    //
+                    //                }
+                    //            }
                 }
-//                if Loader{
-//                    ZStack{
-//                    Color.black.opacity(0.5)
-//                        .edgesIgnoringSafeArea(.all)
-//                        .onTapGesture {
-//                               // GetLoction.toggle()
-//                        }
-//                    HStack{
-//                        LottieUIView(filename: "loader").frame(width: 50,height: 50)
-//                            .padding(.horizontal,20)
-//                        Text("Verifying...")
-//                            .font(.headline)
-//                            .fontWeight(.bold)
-//                            .multilineTextAlignment(.center)
-//                            .padding(.vertical,20)
-//                            .padding(.trailing,20)
-//                    }
-//                    .background(Color.white)
-//                    .cornerRadius(10)
-//                    .padding(20)
-//
-//                }
-//            }
+                .toast(isPresented: $showToast, message: "Not inviced")
+            }
+            if Navi_pdf_View {
+                PDFWebView(pdfData: Data(base64Encoded: Pdf_String) ?? Data(),Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View)
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -354,8 +365,16 @@ struct MyOrdersDetails: View {
           }
       }
     private func orderandinvoice(){
+        if (From_To_Date.shared.SetDate == 1){
+            FromDate = From_To_Date.shared.From
+            ToDate = From_To_Date.shared.To
+            From_To_Date.shared.SetDate = 0
+        }
+        
         let axn = "get/orderandinvoice"
         let apiKey: String = "\(axn)"
+        From_To_Date.shared.From = FromDate
+        From_To_Date.shared.To = ToDate
         let aFormData: [String: Any] = [
             "RetailId": "\(CustDet.shared.CusId)",
               "fdt": "\(FromDate)",
@@ -394,6 +413,7 @@ struct MyOrdersDetails: View {
                                         let OrderID = itemsdata["OrderID"] as? String
                                         let Order_Value = String(format: "%.2f", (itemsdata["Order_Value"] as? Double)!)
                                         let Date = itemsdata["Date"] as? String
+                                        let Saledoc = itemsdata["Saledoc_No"] as? String
                                         var OrderDetails = [String]()
                                         var ProQty = [String]()
                                         if let Details = itemsdata["Details"] as? [[String: Any]]{
@@ -412,7 +432,7 @@ struct MyOrdersDetails: View {
                                         let productNames = OrderDetails.joined(separator: ", ")
                                         let qty =  ProQty.joined(separator: ",")
                                         print(qty)
-                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty))
+                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty, Saledoc_No : Saledoc!))
                                     }
                                     print(invoice)
 
@@ -450,6 +470,10 @@ struct TapBar: View {
     @Binding var OrderId: String
     @Binding var isHiden:Bool
     @Binding var Loader:Bool
+    @Binding var Pdf_String:String
+    @Binding var Navi_pdf_View:Bool
+    @Binding var Main_View:Bool
+    @Binding var showToast:Bool
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
@@ -457,7 +481,7 @@ struct TapBar: View {
                 .tag(0)
 //            INVOICE()
 //                .tag(1)
-            ORDERVSINVOICE(invoice: $invoice, Loader: $Loader)
+            ORDERVSINVOICE(invoice: $invoice, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View, showToast: $showToast)
                 .tag(1)
         }
         .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
@@ -689,168 +713,293 @@ struct ORDER:View{
         }
     }
 }
-
- 
-
 struct ORDERVSINVOICE:View{
     @Binding var invoice: [getInvoice]
     @Binding var Loader : Bool
+    @Binding var Pdf_String:String
+    @Binding var Navi_pdf_View:Bool
+    @Binding var Main_View:Bool
+    @Binding var showToast:Bool
     var body: some View{
-       
-        VStack{
-            HStack(spacing:160){
-                Text("ORDER")
-                    .font(.system(size: 16))
-                    .fontWeight(.bold)
-                Text("INVOICE")
-                    .font(.system(size: 16))
-                    .fontWeight(.bold)
-                
-            }
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(ColorData.shared.HeaderColor)
-                .padding(.leading,10)
-                .padding(.trailing,10)
-            if Loader{
-                ScrollView(showsIndicators: false){
-                    ForEach(0 ..< invoice.count, id: \.self) { index in
-                        ShimmeringSkeletonRow()
-                            .transition(.opacity)
-                            .onAppear{
-                                
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
-                        withAnimation {
-                            Loader = false
-                        }
-                    }}
-                     
-                    }
-                }
-            }
-           else{
-            if (invoice.count != 0){
-                ScrollView{
+            VStack{
+                HStack(spacing:160){
+                    Text("ORDER")
+                        .font(.system(size: 16))
+                        .fontWeight(.bold)
+                    Text("INVOICE")
+                        .font(.system(size: 16))
+                        .fontWeight(.bold)
                     
-                    ForEach(0..<invoice.count, id: \.self) { index in
-                        HStack{
-                            VStack{
-                                HStack{
-                                    Text("Relivet Animal Health")
-                                        .font(.system(size: 14))
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                HStack{
-                                    Text(invoice[index].OrderID)
-                                        .font(.system(size: 14))
-                                    Spacer()
-                                }
-                                VStack(spacing:0){
-                                    HStack{
-                                        Image(systemName: "calendar")
-                                            .resizable()
-                                            .frame(width: 10,height: 10)
-                                            .foregroundColor(.green)
-                                        Text(invoice[index].Date)
-                                            .font(.system(size: 13))
-                                        Spacer()
-                                    }
-                                    HStack{
-                                        
-                                        Image(systemName:"ellipsis.circle.fill")
-                                            .resizable()
-                                            .frame(width: 12,height: 12)
-                                            .foregroundColor(.red)
-                                        Text("Pending")
-                                            .font(.system(size: 14))
-                                        Spacer()
-                                        
-                                    }
-                                }
-                                .padding(.top,-10)
-                                HStack{
-                                    Text("₹ \(invoice[index].Order_Value)")
-                                        .font(.system(size: 14))
-                                    Spacer()
-                                }
-                                
-                            }
-                            .padding(.leading,10)
-                            Rectangle()
-                                .frame(width: 0.7)
-                                .foregroundColor(.gray)
-                                .padding(.bottom,10)
-                                .padding(.top,10)
-                            VStack{
-                                HStack{
+                }
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .padding(.leading,10)
+                    .padding(.trailing,10)
+                if Loader{
+                    ScrollView(showsIndicators: false){
+                        ForEach(0 ..< invoice.count, id: \.self) { index in
+                            ShimmeringSkeletonRow()
+                                .transition(.opacity)
+                                .onAppear{
                                     
-                                    Image(systemName:"ellipsis.circle.fill")
-                                        .resizable()
-                                        .frame(width: 12,height: 12)
-                                        .foregroundColor(.red)
-                                    Text("Pending")
-                                        .font(.system(size: 14))
-                                    Spacer()
                                     
-                                }
-                            }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                                        withAnimation {
+                                            Loader = false
+                                        }
+                                    }}
                             
                         }
-                        Rectangle()
-                            .frame(height: 1)
-                            .foregroundColor(.black)
-                            .padding(.leading,10)
-                            .padding(.trailing,10)
                     }
                 }
-            }else{
-                NoOrderdate()
-                Spacer()
-            }
-        }
-        }
-        }
-        }
-
-struct AddSomeViewe:View{
-    @Binding var HistoryInf:Bool
-    @Binding var OrderDetialsView:Bool
-    var body: some View{
-        NavigationView{
-        VStack{
-            ZStack{
-                Rectangle()
-                    .foregroundColor(ColorData.shared.HeaderColor)
-                    .frame(height: 80)
-                HStack {
-                    
-                    Text("Order Details")
-                        .font(.system(size: 18))
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.top,50)
-                        .padding(.leading,50)
-                    Spacer()
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.red)
-                        .padding(.top,50)
-                        .padding(.trailing,15)
-                        .onTapGesture {
-                            HistoryInf.toggle()
-                            OrderDetialsView.toggle()
+                else{
+                    if (invoice.count != 0){
+                        ScrollView{
+                            
+                            ForEach(0..<invoice.count, id: \.self) { index in
+                                VStack(spacing:0){
+                                    HStack{
+                                        Text("Relivet Animal Health")
+                                            .font(.system(size: 15))
+                                            .fontWeight(.bold)
+                                            .padding(.leading,10)
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        VStack{
+                                            HStack{
+                                                Text(invoice[index].OrderID)
+                                                    .font(.system(size: 12))
+                                                    .fontWeight(.semibold)
+                                                Spacer()
+                                            }
+                                            VStack(spacing:0){
+                                                HStack{
+                                                    Image(systemName: "calendar")
+                                                        .resizable()
+                                                        .frame(width: 10,height: 10)
+                                                        .foregroundColor(.green)
+                                                    Text(invoice[index].Date)
+                                                        .font(.system(size: 13))
+                                                    Spacer()
+                                                }
+                                            }
+                                            .padding(.top,-10)
+                                            HStack{
+                                                Text("₹ \(invoice[index].Order_Value)")
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                            }
+                                            
+                                        }
+                                        .padding(.leading,10)
+                                        Rectangle()
+                                            .frame(width: 0.7)
+                                            .foregroundColor(.gray)
+                                            .padding(.bottom,10)
+                                            .padding(.top,10)
+                                        VStack(spacing:0){
+                                            HStack{
+                                                Text(invoice[index].Saledoc_No)
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                            }
+                                            HStack{
+                                                
+                                                Image(systemName:"ellipsis.circle.fill")
+                                                    .resizable()
+                                                    .frame(width: 12,height: 12)
+                                                    .foregroundColor(.red)
+                                                Text(invoice[index].Status)
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                                
+                                            }
+                                            HStack{
+                                                Text("₹ \(invoice[index].Order_Value)")
+                                                    .font(.system(size: 14))
+                                                Spacer()
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                                .onTapGesture{
+                                    print(index)
+                                    get_invoice_details(index: index)
+                                }
+                                Rectangle()
+                                    .frame(height: 1)
+                                    .foregroundColor(.black)
+                                    .padding(.leading,10)
+                                    .padding(.trailing,10)
+                                
+                            }
+                            
+                            .listStyle(PlainListStyle())
                         }
+                    }else{
+                        NoOrderdate()
+                        Spacer()
+                    }
                 }
                 
             }
-            .edgesIgnoringSafeArea(.all)
-         
-            Spacer()
+    }
+    func get_invoice_details(index:Int){
+        
+        if invoice[index].Status == "Fully invoiced" || invoice[index].Status == "Partially invoiced"{
+        let axn = "get_invoice_details"
+        let Item = invoice[index].Saledoc_No
+        print(Item)
+        let apikey = "\(axn)&orderNo=\(Item)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apikey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String:AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if let jsonData = prettyPrintedJson.data(using: .utf8){
+                        do{
+                            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                if let response = jsonObject["response"] as? [[String: Any]] {
+                                    print(response)
+                                    if let xstring = response[0]["xstring"] as? String {
+                                        Pdf_String = xstring
+                                        Navi_pdf_View.toggle()
+                                        Main_View.toggle()
+                                    }
+                                    
+                                } else {
+                                    print("Error: Couldn't extract HTML")
+                                }
+                            }
+                        } catch{
+                            print("Error Data")
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+        }else{
+            //ShowToastMes.shared.tost = "Not inviced"
+            showToast.toggle()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation {
+                            self.showToast.toggle()
+                                }
+                //ShowToastMes.shared.tost = ""
+            }
         }
     }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .navigationBarHidden(true)
-        
+    
+    struct AddSomeViewe:View{
+        @Binding var HistoryInf:Bool
+        @Binding var OrderDetialsView:Bool
+        var body: some View{
+            NavigationView{
+                VStack{
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(ColorData.shared.HeaderColor)
+                            .frame(height: 80)
+                        HStack {
+                            
+                            Text("Order Details")
+                                .font(.system(size: 18))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.top,50)
+                                .padding(.leading,50)
+                            Spacer()
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
+                                .padding(.top,50)
+                                .padding(.trailing,15)
+                                .onTapGesture {
+                                    HistoryInf.toggle()
+                                    OrderDetialsView.toggle()
+                                }
+                        }
+                        
+                    }
+                    .edgesIgnoringSafeArea(.all)
+                    
+                    Spacer()
+                }
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarHidden(true)
+            
+        }
+    }
+}
+
+struct PDFWebView: View {
+    let pdfData: Data
+    @Binding var Navi_pdf_View:Bool
+    @Binding var Main_View:Bool
+    var body: some View {
+        VStack{
+        ZStack{
+            Rectangle()
+                .foregroundColor(ColorData.shared.HeaderColor)
+                .frame(height: 80)
+            HStack {
+                Image("backsmall")
+                    .renderingMode(.template)
+                    .foregroundColor(.white)
+                    .padding(.top,50)
+                    .frame(width: 50)
+                    .onTapGesture {
+                        From_To_Date.shared.SetDate = 1
+                        Navi_pdf_View.toggle()
+                        Main_View.toggle()
+                    }
+                Text("Invoice")
+                    .font(.system(size: 18))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.top,50)
+                Spacer()
+            }
+            
+        }
+        .edgesIgnoringSafeArea(.top)
+        .frame(maxWidth: .infinity)
+        .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+        WebView_pdf(data: pdfData)
+    }
+    }
+}
+
+struct WebView_pdf: UIViewRepresentable {
+    let data: Data
+
+    func makeUIView(context: Context) -> WKWebView {
+        return WKWebView()
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("temp.pdf") {
+            do {
+                try data.write(to: url)
+                let request = URLRequest(url: url)
+                uiView.load(request)
+            } catch {
+                print("Error writing PDF to disk: \(error)")
+            }
+        }
     }
 }

@@ -2695,6 +2695,7 @@ struct SelPrvOrder: View {
                     NavigationLink(destination: Order(), isActive: $OrderNavigte) {
                         EmptyView()
                     }
+                    
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Confirmation"),
