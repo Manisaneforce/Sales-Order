@@ -1227,7 +1227,6 @@ struct OrderDetView:View{
     }
     
     func generatePDF() -> Data {
-        // Define a page size (8.5x11 inches in points)
         
         let pageSize = CGSize(width: 612, height: PagHeight)
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
