@@ -322,7 +322,7 @@ struct MyOrdersDetails: View {
                     //                }
                     //            }
                 }
-                .toast(isPresented: $showToast, message: "Not inviced")
+                .toast(isPresented: $showToast, message: "Not invoiced")
             }
             if Navi_pdf_View {
                 PDFWebView(pdfData: Data(base64Encoded: Pdf_String) ?? Data(),Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View)
