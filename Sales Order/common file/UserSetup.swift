@@ -23,10 +23,9 @@ class UserSetup{
             print("No data found or failed to unarchive")
         }
     }
-    func pay_Nd() {
+    func pay_Nd(){
         if let jsonString = UserDefaults.standard.string(forKey: "isPaymentEnabled"),
            let jsonData = jsonString.data(using: .utf8) {
-            
             do {
                 let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
                 

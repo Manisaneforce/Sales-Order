@@ -414,6 +414,7 @@ struct Order: View {
                         //.padding(.top,0)
                         .onAppear {
                            // LoaderView.toggle()
+                            UserSetup.shared.int()
                             lblTotAmt = "0.0"
                             OrderprodGroup()
                             TexQty()
@@ -2781,7 +2782,7 @@ struct SelPrvOrder: View {
         if Double(lblTotAmt)! <= Double(UserSetup.shared.order_max_val_need){
             ShowTost="order value should be mininum ₹ \(UserSetup.shared.order_max_val_need)"
             showToast.toggle()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2){
                 showToast.toggle()
             }
             return false
@@ -2976,7 +2977,6 @@ struct SelPrvOrder: View {
             filterItems = items
             print(filterItems)
         }
-        
     }
 }
 
