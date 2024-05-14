@@ -11,14 +11,17 @@ import Alamofire
 class UserSetup{
     static let shared = UserSetup()
     var Add_Address: Int = 0
+    var order_max_val_need:Int = 0
     
     func int() {
-        if let storedData = UserDefaults.standard.object(forKey: "UserSetup") as? [String: Any] {
-               print("Stored Data: \(storedData)")
-            Add_Address = storedData["isAdd_Address_Enabled"] as? Int ?? 0
-           } else {
-               print("No data found in UserDefaults for key 'UserSetup'")
-           }
+        if let unarchivedData = UserDefaults.standard.data(forKey: "UserSetup"),
+            let res_Data = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(unarchivedData) as? [String: Any] {
+            print(res_Data)
+            Add_Address = res_Data["isAdd_Address_Enabled"] as? Int ?? 0
+            order_max_val_need = res_Data["order_max_val_need"] as? Int ?? 0
+        } else {
+            print("No data found or failed to unarchive")
+        }
     }
     func pay_Nd() {
         if let jsonString = UserDefaults.standard.string(forKey: "isPaymentEnabled"),

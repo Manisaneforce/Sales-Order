@@ -129,10 +129,6 @@ struct WebView: UIViewRepresentable {
                 print(parent)
                 Hostname = myHostVariable
                     hostname(data: myHostVariable)
-//                if myHostVariable == "rad.salesjump.in"{
-//                    self.parent.ShowButton.toggle()
-//                    self.parent.backBT.toggle()
-//                               }
             }
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {

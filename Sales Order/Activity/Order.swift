@@ -1179,6 +1179,9 @@ struct Order: View {
         
     }
     private func OrderprodCate(at index: Int){
+        print(index)
+        print(prodTypes3)
+        print(prodTypes3[index])
         SelectId = prodTypes3[index]
         prodofcat.removeAll()
         proDetsID.removeAll()
@@ -2627,8 +2630,9 @@ struct SelPrvOrder: View {
                             .frame(height: 100)
                         Button(action:{
                             //getLocation()
-                            
-                            
+                            if validateForm() == false {
+                                return
+                            }
                             if monitor.status == .disconnected{
                                 ShowTost="Internet connection not available"
                                 showToast .toggle()
@@ -2647,6 +2651,8 @@ struct SelPrvOrder: View {
                             }else{
                                 showAlert = true
                             }
+                            
+                            
                         }) {
                             VStack{
                                 HStack{
@@ -2770,25 +2776,33 @@ struct SelPrvOrder: View {
       
        
     }
-    func Qtycount() {
+    
+    func validateForm() -> Bool{
+        if Double(lblTotAmt)! <= Double(UserSetup.shared.order_max_val_need){
+            ShowTost="order value should be mininum ₹ \(UserSetup.shared.order_max_val_need)"
+            showToast.toggle()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                showToast.toggle()
+            }
+            return false
+        }else{
+            showAlert = true
+            }
+        return true
+    }
+    func Qtycount(){
         var qtysdata = [Int]()
         qtysdata.removeAll()
         for items in VisitData.shared.lstPrvOrder {
             if let qtyString = items["Qty"] as? String, let qty = Int(qtyString) {
-                print(qty)
                 qtysdata.append(qty)
                 //TotalQtyData += qty
             }
-            
         }
-        print(qtysdata)
         let sum = qtysdata.reduce(0, +)
-        print(sum) // Output: 3
         TotalQtyData = sum
-        print(TotalQtyData)
     }
     func PaymentHTML(){
-    
         AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(Invoiceid.shared.id)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
@@ -2966,7 +2980,6 @@ struct SelPrvOrder: View {
     }
 }
 
-
 func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String:Any],refresh: Int){
     
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
@@ -3105,7 +3118,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
-
 
 func addQty(sQty:String,SelectProd:[String:Any]) {
     let Ids = SelectProd["id"] as? String

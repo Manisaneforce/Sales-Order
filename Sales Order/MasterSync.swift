@@ -37,13 +37,16 @@ class SyncData{
                             let prettyJsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
                             if let prettyPrintedJson = try JSONSerialization.jsonObject(with: prettyJsonData) as? [String: Any] {
                                 print(prettyPrintedJson)
-                                UserDefaults.standard.set(prettyPrintedJson, forKey: "UserSetup")
-                                if let storedData = UserDefaults.standard.object(forKey: "UserSetup") as? [String: Any] {
-                                       print("Stored Data: \(storedData)")
-                                   } else {
-                                       print("No data found in UserDefaults for key 'UserSetup'")
-                                   }
-                            } else {
+                                if let res_Data = prettyPrintedJson["response"] as? [String: Any] {
+                                    print(res_Data)
+                                    if let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: res_Data, requiringSecureCoding: false) {
+                                        let LocalStoreage = UserDefaults.standard
+                                        LocalStoreage.set(archivedData, forKey: "UserSetup")
+                                    } else {
+                                        print("Failed to archive data")
+                                    }
+                                }
+                            }else {
                                 print("Error: Could not convert Pretty JSON data to dictionary")
                             }
                         } catch {

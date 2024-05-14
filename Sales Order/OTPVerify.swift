@@ -226,15 +226,12 @@ struct OTPVerify: View {
                                                                             CustDet.shared .Mob = Mob!
                                                                             CustDet.shared.Div = Div!
                                                                             CustDet.shared.Det = Det
-                                                                            print(CustDet.shared.CusName)
-                                                                            print(CustDet.shared.Det)
                                                                             NavigteBoll = true
                                                                         }
-                                                                        SyncData.shared.SyncAllData()
+                                                                        //SyncData.shared.SyncAllData()
                                                                     }else{
                                                                         OtpView.toggle()
                                                                         NotReg.toggle()
-                                                                        print(results)
                                                                         Msg = results
                                                                     }
                                                                 }
