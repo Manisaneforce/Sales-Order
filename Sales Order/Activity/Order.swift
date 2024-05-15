@@ -700,7 +700,9 @@ struct Order: View {
                                             .padding(.vertical,5)
                                             .onTapGesture{
                                                 ViewScheme(ProdCode:Allprods[index].ProID)
-                                                ViewSchemeSc.toggle()
+                                                withAnimation{
+                                                    ViewSchemeSc.toggle()
+                                                }
                                             }
                                         }
                                             if filterItems[index].Free != "0" {
@@ -959,7 +961,9 @@ struct Order: View {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
-                            ViewSchemeSc.toggle()
+                            withAnimation {
+                                ViewSchemeSc.toggle()
+                            }
                         }
                     VStack{
                         ZStack{
@@ -2711,7 +2715,35 @@ struct SelPrvOrder: View {
                                 GetLoction.toggle()
                                 OrderSubStatus = "Data Submitting..."
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        OrderSubmit(lat: "0", log: "0",BillingAddress: BillingAddress, ShpingAddress: ShpingAddress)
+                                    OrderSubmit(lat: "0", log: "0",BillingAddress: BillingAddress, ShpingAddress: ShpingAddress){ result in
+                                        switch result {
+                                        case .success(let response):
+                                            if let invoice = response["invoice"] as? String{
+                                                Invoiceid.shared.id = invoice
+                                               // Invoiceid.shared.Order_place_Mood = 0
+                                                ShowToastMes.shared.tost = (response["Msg"] as? String)!
+                                                UIApplication.shared.windows.first?.makeKeyAndVisible()
+                                                if (paymentenb.shared.isPaymentenbl == 0){
+                                                    let msg = response["Msg"] as? String
+                                                    ShowToastMes.shared.tost = msg!
+                                                    if let window = UIApplication.shared.windows.first {
+                                                        window.rootViewController = UIHostingController(rootView: HomePage())
+                                                    }
+                                                }
+                                                VisitData.shared.clear()
+                                                VisitData.shared.LstItemCount.removeAll()
+                                            }else{
+                                                let message = response["Msg"] as? String
+                                                ShowTost=message!
+                                                showToast.toggle()
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+                                                    showToast.toggle()
+                                                }
+                                            }
+                                        case .failure(let error):
+                                            print("Order submission failed with error: \(error.localizedDescription)")
+                                        }
+                                    }
                                         GetLoction.toggle()
                                         if (paymentenb.shared.isPaymentenbl == 1){
                                             showPaymentAlert.toggle()
@@ -3262,14 +3294,13 @@ func deleteItem(at index: Int) {
     VisitData.shared.LstItemCount = VisitData.shared.lstPrvOrder
     updateOrderValues(refresh: 1)
 }
-func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:String) {
+func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:String,completion: @escaping (Result<[String: Any], Error>) -> Void) {
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
             return true
         }
         return false
     })
-    print(VisitData.shared.lstPrvOrder)
     var totalTaxAmt: Double = 0.0
     var sPItems:String = ""
     for i in 0..<VisitData.shared.lstPrvOrder.count {
@@ -3294,8 +3325,6 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
                 print("Error is \(error)")
             }
         }
-        print(item)
-        print(VisitData.shared.lstPrvOrder)
         var taxAmt:Double = 0
         if let taxAmt2 = Double((item["Tax_Amt"] as? String)!){
             taxAmt = taxAmt2
@@ -3347,10 +3376,7 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
     }
     updateDateAndTime()
     let ChangeDob = Double(lblTotAmt2)
-    print(ChangeDob)
     let Netamount = String(format: "%.02f", ChangeDob!)
-    print(Netamount)
-    print(totalTaxAmt)
     let jsonString = "[{\"Activity_Report_Head\":{\"SF\":\"\(CustDet.shared.CusId)\",\"Worktype_code\":\"0\",\"Town_code\":\"\",\"dcr_activity_date\":\"\(currentDateTime)\",\"Daywise_Remarks\":\"\",\"UKey\":\"EKSf_Code654147271\",\"orderValue\":\"\(lblTotAmt2)\",\"billingAddress\":\"\(BillingAddress)\",\"shippingAddress\":\"\(ShpingAddress)\",\"DataSF\":\"\(CustDet.shared.CusId)\",\"AppVer\":\"1.2\"},\"Activity_Doctor_Report\":{\"Doc_Meet_Time\":\"\(currentDateTime)\",\"modified_time\":\"\(currentDateTime)\",\"stockist_code\":\"\(CustDet.shared.StkID)\",\"stockist_name\":\"Relivet Animal Health\",\"orderValue\":\"\(lblTotAmt2)\",\"CashDiscount\":0,\"NetAmount\":\"\(Netamount)\",\"No_Of_items\":\"\(VisitData.shared.lstPrvOrder.count)\",\"Invoice_Flag\":\"\",\"TransSlNo\":\"\",\"doctor_code\":\"\(CustDet.shared.CusId)\",\"doctor_name\":\"\(CustDet.shared.CusName)\",\"ordertype\":\"order\",\"deliveryDate\":\"\",\"category_type\":\"\",\"Lat\":\"\(lat)\",\"Long\":\"\(log)\",\"TOT_TAX_details\":[{\"Tax_Type\":\"\",\"Tax_Amt\":\"\(totalTaxAmt)\"}]},\"Order_Details\":[" + sPItems +  "]}]"
 
     
@@ -3363,32 +3389,25 @@ func OrderSubmit(lat:String,log:String,BillingAddress:String,ShpingAddress:Strin
     switch AFdata.result
     {
     case .success(let value):
-        print(value)
         if let json = value as? [String: Any] {
-            
             print(json)
-            if let invoice = json["invoice"] as? String{
-                Invoiceid.shared.id = invoice
-               // Invoiceid.shared.Order_place_Mood = 0
-                ShowToastMes.shared.tost = (json["Msg"] as? String)!
-                UIApplication.shared.windows.first?.makeKeyAndVisible()
-                if (paymentenb.shared.isPaymentenbl == 0){
-                    let msg = json["Msg"] as? String
-                    ShowToastMes.shared.tost = msg!
-                    if let window = UIApplication.shared.windows.first {
-                        window.rootViewController = UIHostingController(rootView: HomePage())
-                    }
-                }
-                VisitData.shared.clear()
-                VisitData.shared.LstItemCount.removeAll()
-            }
-//            if let msg = json["Msg"] as? String {
-//                ShowToastMes.shared.tost = msg
-//                if let window = UIApplication.shared.windows.first {
-//                    window.rootViewController = UIHostingController(rootView: HomePage())
+//            if let invoice = json["invoice"] as? String{
+//                Invoiceid.shared.id = invoice
+//               // Invoiceid.shared.Order_place_Mood = 0
+//                ShowToastMes.shared.tost = (json["Msg"] as? String)!
+//                UIApplication.shared.windows.first?.makeKeyAndVisible()
+//                if (paymentenb.shared.isPaymentenbl == 0){
+//                    let msg = json["Msg"] as? String
+//                    ShowToastMes.shared.tost = msg!
+//                    if let window = UIApplication.shared.windows.first {
+//                        window.rootViewController = UIHostingController(rootView: HomePage())
+//                    }
 //                }
+//                print(ShowToastMes.shared.tost)
+//                VisitData.shared.clear()
+//                VisitData.shared.LstItemCount.removeAll()
 //            }
-        
+            completion(.success(json))
         }
     case .failure(let error):
         
