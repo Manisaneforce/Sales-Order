@@ -195,9 +195,7 @@ struct HomePage: View {
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 12) {
                                 NavigationLink(destination: Order()){
                                     DashboardItem(imageName: "package", title: "New Order")
-                                    
                                 }
-                                
                                 // NavigationLink(destination: UpdateLocation()) {
                                 NavigationLink(destination:MyOrdersScreen()){
                                     DashboardItem(imageName: "features", title: "My Orders")
@@ -218,7 +216,6 @@ struct HomePage: View {
                                     DashboardItem(imageName: "feedback", title: "Reach Out")
                                 }
                             }
-                        
                         }
                     }
                     .padding(10)

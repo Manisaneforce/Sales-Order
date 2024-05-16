@@ -415,7 +415,7 @@ struct Order: View {
                         .onAppear {
                            // LoaderView.toggle()
                             UserSetup.shared.int()
-                            lblTotAmt = "0.0"
+                            //lblTotAmt = "0.0"
                             OrderprodGroup()
                             TexQty()
                             ShpingAddress = BillingAddress
@@ -493,6 +493,7 @@ struct Order: View {
                                                 }
                                             }
                                             .padding(.trailing,10)
+                                            // select UOM
                                             HStack {
                                                 VStack{
                                                     Text(filterItems[index].SelectUom)
@@ -935,15 +936,17 @@ struct Order: View {
                                 text = ""
                                 SelectItem = allUomlist[index].UomName
                                 let UOMNAME = allUomlist[index].UomName
-                                let FilterUnite =  FilterProduct[index]
+                                let FilterUnite =  FilterProduct[clickeindex]
+                                print(FilterUnite)
+                                print(FilterProduct)
                                 let uomList = FilterUnite["UOMList"] as? [[String: Any]]
                                 if let uomLists = FilterUnite["UOMList"] as? [[String: Any]] {
-                                    if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any] {
+                                    if index < uomLists.count, let uomLists2 = uomLists[index] as? [String: Any]{
                                         self.didselectRow(at: clickeindex, UOMNAME: uomLists2)
-                                    } else {
+                                    }else{
                                         print("Invalid index or data")
                                     }
-                                } else {
+                                }else{
                                     print("UOMList not found or not in the expected format.")
                                 }
                                 TexQty()
@@ -1301,17 +1304,13 @@ struct Order: View {
         var loopCounter = 0
         for item in FilterProduct{
             loopCounter += 1
-           print(item)
-            print(VisitData.shared.ProductCart)
             let id=String(format: "%@", item["id"] as! CVarArg)
             var lstSchemListdata:[AnyObject] = []
             if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
                 lstSchemListdata = list;
                 
             }
-            print(id)
             let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
-                print(Cart)
                 if Cart["Pcode"] as! String == id {
                     return true
                 }
@@ -1326,10 +1325,8 @@ struct Order: View {
             if let TaxData = lstTaxDetails["Data"] as? [Dictionary<String, Any>]{
                 var NewData: [Dictionary<String, Any>] = TaxData
                 let itemsWithTypID3 = NewData.filter { ($0["Product_Detail_Code"] as? String) == id }
-                print(itemsWithTypID3)
                 if let firstDict = itemsWithTypID3.first,
                    let taxName = firstDict["Tax_name"] as? String {
-                    print(taxName) // This will print: "12 %"
                     Tax_value.append(taxName)
                 }else{
                     Tax_value.append("0 %")
@@ -1342,28 +1339,23 @@ struct Order: View {
             var Dis = ""
             var DisVal = ""
             if items.count>0 {
-                 Qty = (items[0]["Qty"] as? String)!
-                print(items[0]["Qty"] as? String as Any)
                 print(items)
+                Qty = (items[0]["Qty"] as? String)!
                 Amount = String((items[0]["Value"] as? Double)!)
                 let Uom = items[0]["UOMNm"] as? String
                 let NetValue = String((items[0]["NetVal"] as? Double)!)
                 let NetValue2 = String(format: "Rs. %.02f", (items[0]["NetVal"] as? Double)!)
                 let UonConvRate = Double((items[0]["UOMConv"] as?String)!)! * (items[0]["Rate"] as? Double)!
-                print(UonConvRate)
                 let rate = String(format: "₹ %.02f", UonConvRate)
                 let RateNewConv = (items[0]["Rate"] as? Double)!
-                print(RateNewConv)
                 Dis = (items[0]["Disc"] as? String)!
                 DisVal = (items[0]["DisVal"] as? String)!
                 let FreeQty = ""
                 let TotQty:Double = Double((items[0]["Qty"] as? String)!)!
-                
                 var Scheme: Double = 0
                 var OffQty: Int = 0
                 var FQ : Int32 = 0
                 if let Schemes = items[0]["Schemes_Det"] as? [AnyObject]{
-                    print(Schemes)
                     if(Schemes.count>0){
                     Scheme = (Schemes[0]["Scheme"] as! NSString).doubleValue
                     FQ = (Schemes[0]["FQ"] as! NSString).intValue
@@ -1373,45 +1365,31 @@ struct Order: View {
                     } else {
                         SchmQty = (TotQty / Scheme)
                     }
-                    print(Schemes)
                     OffQty = Int(SchmQty * Double(FQ))
                 }
                 }
-                
                 FreePrd = (items[0]["OffProdNm"] as? String)!
                 var TaxAmt = (items[0]["Tax_Amt"] as? String)!
-                print(Dis)
-                print(DisVal)
-                print(FreeQty)
-                print(TaxAmt)
                 if TaxAmt == ""{
                     TaxAmt = "0.00"
                 }
                 let ScehemVal = lstSchemListdata.filter { ($0["PCode"] as? String) == id }
-                print(ScehemVal)
                 if (ScehemVal.isEmpty){
                     ShemMod = "1"
                 }else{
                     ShemMod = "2"
                 }
                 SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: String(OffQty), OffProdNm: FreePrd, Tax_Amt: TaxAmt,shomMod: ShemMod))
-                print(items)
-                print(Amount as Any)
+                print(SelectUOMN)
                 TotalAmt.append(Amount)
-                print(TotalAmt)
-                
                 TotalQty.append(Qty)
             }else{
-                print(loopCounter - 1)
                 let Cout:Int = loopCounter - 1
-                print(FilterProduct)
-                let UomQty = FilterProduct[0]["Default_UOM_Name"] as? String
+                let UomQty = FilterProduct[Cout]["Default_UOM_Name"] as? String
                 let Rate = FilterProduct[Cout]["Rate"] as? String
                 let rateDouble = Double(Rate!)
                 let formattedRate = String(format: "₹ %.2f", rateDouble!)
-                print(formattedRate)
                 let ScehemVal = lstSchemListdata.filter { ($0["PCode"] as? String) == id }
-                print(ScehemVal)
                 if (ScehemVal.isEmpty){
                     ShemMod = "1"
                 }else{
@@ -1420,6 +1398,7 @@ struct Order: View {
                 SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "Rs. 0.00", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00",shomMod: ShemMod))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
+                print(SelectUOMN)
                 TotalAmt.append(ZeroAmt)
                 TotalQty.append(ZerQty)
             }
@@ -1427,17 +1406,12 @@ struct Order: View {
         items.removeAll()
         var Count = 0
         for index in 0..<FilterProduct.count {
-            print(index)
             Count = index + 1
-            print(FilterProduct.count)
-            print(Tax_value.count)
             items.append(Sales_Order.TotAmt(id: index, Amt: Int(TotalQty[index])!, TotAmt:TotalAmt[index], SelectUom:SelectUOMN[index].Uon,ConvRate: SelectUOMN[index].UomConv,NetValu: SelectUOMN[index].NetValu, Free: SelectUOMN[index].freeQty , Freeprdname: SelectUOMN[index].OffProdNm , Dis: SelectUOMN[index].Disc, DisVal: SelectUOMN[index].Disvalue, Tax_Val: Tax_value[index], TaxAmt: SelectUOMN[index].Tax_Amt,ShowShem : SelectUOMN[index].shomMod ))
-            print(items)
         }
         if (Count == FilterProduct.count){
         }
         filterItems = items
-        print(filterItems)
     }
     func Qtycount() {
         var qtysdata = [Int]()
@@ -2148,7 +2122,6 @@ struct FilterItem: Identifiable {
     let id: Int
     var quantity: Int
 }
-
 var selectitemCount:Int = 0
 struct SelPrvOrder: View {
     @State private var OrderNavigte:Bool = false
@@ -2886,10 +2859,10 @@ struct SelPrvOrder: View {
 
         }, error:{ errMsg in
             print (errMsg)
-            //self.LoadingDismiss()
         })
     }
     func prvDet(){
+        print(VisitData.shared.lstPrvOrder.count)
         VisitData.shared.ProductCart = VisitData.shared.lstPrvOrder.filter ({ (Cart) in
             if (Cart["SalQty"] as! Double) > 0 {
                 return true
@@ -3013,7 +2986,7 @@ struct SelPrvOrder: View {
 }
 
 func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String:Any],refresh: Int){
-    
+    print(sUomNm)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
         if item["id"] as! String == id {
             return true
@@ -3135,7 +3108,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
     }
-    print(VisitData.shared.ProductCart)
+    print(VisitData.shared.ProductCart.count)
     var lstPrv:[AnyObject] = []
     lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
@@ -3146,7 +3119,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     print(lstPrv)
     VisitData.shared.LstItemCount = lstPrv
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
-    
+    print(VisitData.shared.lstPrvOrder.count)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
