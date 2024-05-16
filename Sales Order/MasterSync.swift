@@ -11,7 +11,7 @@ import Alamofire
 class SyncData {
     static let shared = SyncData()
     
-    func SyncAllData() {
+    func SyncAllData(completion: @escaping (Bool) -> Void) {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -56,6 +56,7 @@ class SyncData {
         
         dispatchGroup.notify(queue: .main) {
             print("All data synchronized")
+            completion(true)
         }
     }
 

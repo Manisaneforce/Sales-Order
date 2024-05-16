@@ -734,9 +734,11 @@ struct NewOTPScrean:View{
                                                 CustDet.shared.Det = Det
                                                 print(CustDet.shared.CusName)
                                                 print(CustDet.shared.Det)
+                                                
+                                            }
+                                            SyncData.shared.SyncAllData{result in
                                                 NavigteBoll = true
                                             }
-                                            SyncData.shared.SyncAllData()
                                         }else{
                                             OtpView.toggle()
                                             NotReg.toggle()
