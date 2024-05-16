@@ -777,6 +777,7 @@ struct Order: View {
                         
                 }
                     Button(action: {
+                        print(VisitData.shared.ProductCart.count)
                         var lstPrv:[AnyObject] = []
                         lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
                             if (Cart["SalQty"] as! Double) > 0 {
@@ -784,6 +785,7 @@ struct Order: View {
                             }
                             return false
                         })
+                        print(VisitData.shared.ProductCart.count)
                         print(lstPrv)
                         VisitData.shared.lstPrvOrder = lstPrv
                         if monitor.status == .disconnected {
@@ -1200,8 +1202,6 @@ struct Order: View {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                         print(jsonArray)
                         print(SelectId)
-                        
-                        
                         let itemsWithTypID3 = jsonArray.filter { ($0["TypID"] as? Int) == SelectId }
                         print(itemsWithTypID3)
                         if !itemsWithTypID3.isEmpty {
@@ -1211,10 +1211,8 @@ struct Order: View {
                                 if let procat = item["name"] as? String, let proDetID = item["id"] as? Int {
                                     print(procat)
                                     print(proDetID)
-                                    
                                     prodofcat.append(procat)
                                     proDetsID.append(proDetID)
-                                    
                                 }
                             }
                         } else {
@@ -1294,8 +1292,6 @@ struct Order: View {
         var Qty = "0"
         var Amount="0"
         var ShemMod = ""
-        print(lstSchemList)
-        print(VisitData.shared.ProductCart)
         TotalAmt.removeAll()
         SelectUOMN.removeAll()
         TotalQty.removeAll()
@@ -1331,7 +1327,7 @@ struct Order: View {
                 }else{
                     Tax_value.append("0 %")
                 }
-            } else {
+            }else{
                 print("Error: 'Data' is not a valid array of dictionaries")
             }
             var FreeQty = ""
@@ -2863,12 +2859,12 @@ struct SelPrvOrder: View {
     }
     func prvDet(){
         print(VisitData.shared.lstPrvOrder.count)
-        VisitData.shared.ProductCart = VisitData.shared.lstPrvOrder.filter ({ (Cart) in
-            if (Cart["SalQty"] as! Double) > 0 {
-                return true
-            }
-            return false
-        })
+//        VisitData.shared.ProductCart = VisitData.shared.lstPrvOrder.filter ({ (Cart) in
+//            if (Cart["SalQty"] as! Double) > 0 {
+//                return true
+//            }
+//            return false
+//        })
         print(VisitData.shared.lstPrvOrder)
         var ProSelectID = [String]()
         print(VisitData.shared.lstPrvOrder.count)
@@ -2986,7 +2982,6 @@ struct SelPrvOrder: View {
 }
 
 func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: String,sQty: String,ProdItem:[String:Any],refresh: Int){
-    print(sUomNm)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({(item) in
         if item["id"] as! String == id {
             return true
@@ -3028,7 +3023,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     if let list = GlobalFunc.convertToDictionary(text: lstSchemList) as? [AnyObject] {
         lstSchemListdata = list;
     }
-    print(lstSchemListdata)
     var Schemes: [AnyObject] = lstSchemListdata.filter ({ (item) in
         if item["PCode"] as! String == PCODE && (item["Scheme"] as! NSString).doubleValue <= TotQty2 {
             return true
@@ -3045,7 +3039,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         } else {
             SchmQty = (TotQty / Scheme)
         }
-        print(Schemes)
         OffQty = Int(SchmQty * Double(FQ))
         OffProd = Schemes[0]["OffProd"] as! String
         OffProdNm = Schemes[0]["OffProdNm"] as! String
@@ -3088,7 +3081,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         print("Error: 'Data' is not a valid array of dictionaries")
     }
     if items.count>0 {
-        print(VisitData.shared.ProductCart)
         if let i = VisitData.shared.ProductCart.firstIndex(where: { (item) in
             if item["Pcode"] as! String == PCODE {
                 return true
@@ -3108,7 +3100,6 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         print(itm)
         VisitData.shared.ProductCart.append(jitm)
     }
-    print(VisitData.shared.ProductCart.count)
     var lstPrv:[AnyObject] = []
     lstPrv = VisitData.shared.ProductCart.filter ({ (Cart) in
         if (Cart["SalQty"] as! Double) > 0 {
@@ -3116,17 +3107,14 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
         }
         return false
     })
-    print(lstPrv)
     VisitData.shared.LstItemCount = lstPrv
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
-    print(VisitData.shared.lstPrvOrder.count)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }
 
 func addQty(sQty:String,SelectProd:[String:Any]) {
     let Ids = SelectProd["id"] as? String
-    print(VisitData.shared.ProductCart)
     let items: [AnyObject] = VisitData.shared.ProductCart.filter ({ (Cart) in
         
         if (Cart["Pcode"] as! String) == Ids {
@@ -3160,9 +3148,7 @@ func addQty(sQty:String,SelectProd:[String:Any]) {
     }
   
     updateQty(id: Ids!, sUom: selUOM, sUomNm: selUOMNm, sUomConv: selUOMConv,sNetUnt: selNetWt, sQty: String(sQty),ProdItem: SelectProd,refresh: 1)
-
 }
-
  func minusQty(sQty:String,SelectProd:[String:Any]) {
  
      let Ids = SelectProd["id"] as? String
