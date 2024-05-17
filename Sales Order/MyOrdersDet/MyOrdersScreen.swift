@@ -942,9 +942,8 @@ struct OrderDetView:View{
                                                                             Dicpric =  String(format: "%.2f",dic_Pric)
                                                                         }
                                                                         
-                                                                        print(Dicpric)
-                                                                        
                                                                         var Offer_Product = ""
+                                                                        print(Allproddata)
                                                                         if let jsonData = Allproddata.data(using: .utf8){
                                                                             do{
                                                                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
@@ -1092,7 +1091,8 @@ struct OrderDetView:View{
                                             .padding(.horizontal,10)
                                             if TotalTax != 0.0{
                                                 HStack{
-                                                    Text(TaxTyp)
+                                                    //Text(TaxTyp)
+                                                    Text("Tax")
                                                         .font(.system(size: 12))
                                                         .fontWeight(.semibold)
                                                     Spacer()

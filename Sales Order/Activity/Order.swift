@@ -2233,7 +2233,12 @@ struct SelPrvOrder: View {
                             }
                             .padding(10)
                             .onAppear{
-                                
+                                    VisitData.shared.ProductCart = VisitData.shared.ProductCart.filter ({ (Cart) in
+                                    if (Cart["SalQty"] as! Double) > 0 {
+                                        return true
+                                        }
+                                        return false
+                                        })
                                 prvDet()
                             }
                                 Rectangle()
