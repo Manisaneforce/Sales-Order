@@ -535,8 +535,8 @@ struct MyOrdersScreen: View {
                             do{
                                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]]{
                                     for Items in jsonArray{
-                                        let OrderNo = Items["OrderNo"] as? String
-                                        let NoofItems = Items["No_Of_items"] as? String
+                                        let OrderNo = Items["OrderNo"] as? String ?? ""
+                                        let NoofItems = Items["No_Of_items"] as? String ?? ""
                                         let Qty = String((Items["Quantity"] as? Int)!)
                                         var OrderValue = ""
                                         if let orderValue = Items["Order_Value"] as? Double {
@@ -546,11 +546,11 @@ struct MyOrdersScreen: View {
                                             print("Order Value is not a valid Double.")
                                         }
 
-                                        let Status = Items["Status"] as? String
-                                        let OrderDate = Items["Order_Date"] as? String
-                                        let Ispaid = Items["isPaid"] as? String
+                                        let Status = Items["Status"] as? String ?? ""
+                                        let OrderDate = Items["Order_Date"] as? String ?? ""
+                                        let Ispaid = Items["isPaid"] as? String ?? ""
                                         print(Items)
-                                        OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo!, No_Of_items: NoofItems!, Quantity: Qty, Order_Value: OrderValue, Status: Status!, Order_Date: OrderDate!, isPaid: Ispaid!))
+                                        OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo, No_Of_items: NoofItems, Quantity: Qty, Order_Value: OrderValue, Status: Status, Order_Date: OrderDate, isPaid: Ispaid))
                                     }
                                 }
                             } catch{
