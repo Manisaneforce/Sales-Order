@@ -413,6 +413,7 @@ struct Order: View {
                         }
                         //.padding(.top,0)
                         .onAppear {
+                            lblTotAmt = "0.0"
                            // LoaderView.toggle()
                             UserSetup.shared.int()
                             //lblTotAmt = "0.0"
