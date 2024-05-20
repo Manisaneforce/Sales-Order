@@ -2733,7 +2733,7 @@ struct SelPrvOrder: View {
                     Color.black.opacity(0.5)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
-                            GetLoction.toggle()
+                            //GetLoction.toggle()
                         }
                     VStack{
                         LottieUIView(filename: "loader").frame(width: 100,height: 100)
