@@ -202,6 +202,7 @@ struct Order: View {
                     }
                     .onReceive(monitor.$status) { newStatus in
                         if newStatus == .connected {
+                            
                         }
                     }
                     //.cornerRadius(5)
@@ -408,15 +409,10 @@ struct Order: View {
                                 }
                             }
                             .padding(.horizontal, 10)
-                            
-                            
                         }
-                        //.padding(.top,0)
                         .onAppear {
                             lblTotAmt = "0.0"
-                           // LoaderView.toggle()
                             UserSetup.shared.int()
-                            //lblTotAmt = "0.0"
                             OrderprodGroup()
                             TexQty()
                             ShpingAddress = BillingAddress
@@ -1437,7 +1433,6 @@ extension Collection {
 struct RemoteImageView: View {
     let url: String
     @Binding var isLoading:Bool
-    
     var body: some View {
         let modifiedUrlString = url.replacingOccurrences(of: " ", with: "%20")
         print(modifiedUrlString)
