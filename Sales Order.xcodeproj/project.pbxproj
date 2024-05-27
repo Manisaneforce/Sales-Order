@@ -14,8 +14,6 @@
 		380540352B6E13BB00F9AAE3 /* Internet_Not_Connected.json in Resources */ = {isa = PBXBuildFile; fileRef = 380540342B6E13BB00F9AAE3 /* Internet_Not_Connected.json */; };
 		383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383800462AB9A50F0058F546 /* Firebase Cloud Messaging.swift */; };
 		3838004C2AB9AE320058F546 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3838004B2AB9AE320058F546 /* GoogleService-Info.plist */; };
-		3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3838004E2AB9AFB30058F546 /* FirebaseAnalytics */; };
-		383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */; };
 		3844996E2B76281F00FAF676 /* loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3844996D2B76281F00FAF676 /* loader.swift */; };
 		38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38465CA12AAF2A9D009BD4F1 /* PrinterFile.swift */; };
 		384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384CB6F42A9608D4009439E5 /* VisitData.swift */; };
@@ -194,10 +192,8 @@
 			files = (
 				387E0E7E2A85F5CF00FEACBA /* SimpleToast in Frameworks */,
 				387E0E7B2A84F7C000FEACBA /* Alamofire in Frameworks */,
-				3838004F2AB9AFB30058F546 /* FirebaseAnalytics in Frameworks */,
 				38A3AECA2A8A1EFF00A4C826 /* Lottie in Frameworks */,
 				3860A79D2B0334E20067B583 /* URLImage in Frameworks */,
-				383800512AB9AFB30058F546 /* FirebaseAnalyticsSwift in Frameworks */,
 				7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,8 +446,6 @@
 				387E0E7A2A84F7C000FEACBA /* Alamofire */,
 				387E0E7D2A85F5CF00FEACBA /* SimpleToast */,
 				38A3AEC92A8A1EFF00A4C826 /* Lottie */,
-				3838004E2AB9AFB30058F546 /* FirebaseAnalytics */,
-				383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */,
 				3860A79C2B0334E20067B583 /* URLImage */,
 			);
 			productName = "Sales Order";
@@ -532,7 +526,6 @@
 				387E0E792A84F7C000FEACBA /* XCRemoteSwiftPackageReference "Alamofire" */,
 				387E0E7C2A85F5CF00FEACBA /* XCRemoteSwiftPackageReference "SimpleToast" */,
 				38A3AEC82A8A1EFF00A4C826 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = 38EEBC582A7A255F00AEF032 /* Products */;
@@ -1096,14 +1089,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
-			};
-		};
 		3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dmytro-anokhin/url-image";
@@ -1139,16 +1124,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3838004E2AB9AFB30058F546 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		383800502AB9AFB30058F546 /* FirebaseAnalyticsSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3838004D2AB9AFB30058F546 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsSwift;
-		};
 		3860A79C2B0334E20067B583 /* URLImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3860A79B2B0334E20067B583 /* XCRemoteSwiftPackageReference "url-image" */;
