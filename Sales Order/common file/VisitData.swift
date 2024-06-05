@@ -67,3 +67,8 @@ class Invoiceid{
     var id = ""
     var Order_place_Mood = 1
 }
+
+class Paymentnav{
+    static var shared = Paymentnav()
+    var NavId = 1
+}

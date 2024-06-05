@@ -94,6 +94,7 @@ struct MyOrdersScreen: View {
               
         
                 .onAppear{
+                    Paymentnav.shared.NavId = 1
                     let fromDate = String(dateFormatter.string(from:selectedDate))
                     print(fromDate)
                     FromDate = fromDate

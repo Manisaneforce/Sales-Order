@@ -41,8 +41,14 @@ struct Jiomoney: View {
                                     message: Text("Do you want to Back?"),
                                     primaryButton: .cancel(Text("No")),
                                     secondaryButton: .destructive(Text("Yes")) {
-                                        if let window = UIApplication.shared.windows.first {
-                                            window.rootViewController = UIHostingController(rootView: HomePage())
+                                        
+                                        if Paymentnav.shared.NavId == 0 {
+                                            
+                                            if let window = UIApplication.shared.windows.first {
+                                                window.rootViewController = UIHostingController(rootView: HomePage())
+                                            }
+                                        }else{
+                                            self.presentationMode.wrappedValue.dismiss()
                                         }
                                     }
                                 )

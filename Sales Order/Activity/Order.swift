@@ -411,6 +411,7 @@ struct Order: View {
                             .padding(.horizontal, 10)
                         }
                         .onAppear {
+                            Paymentnav.shared.NavId = 0
                             lblTotAmt = "0.0"
                             UserSetup.shared.int()
                             OrderprodGroup()
