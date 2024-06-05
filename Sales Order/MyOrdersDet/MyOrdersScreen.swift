@@ -466,8 +466,8 @@ struct MyOrdersScreen: View {
           }
       }
     func PaymentHTML(){
-    
-        AF.request("https://rad.salesjump.in/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=123456789&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+        let deviceID = UIDevice.current.identifierForVendor!.uuidString
+        AF.request(APIClient.shared.BaseURL+"/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=\(deviceID)&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {
