@@ -245,7 +245,8 @@ struct HomePage: View {
                         }
                         .padding(10)
                         .onAppear {
-                                imageLoader.preloadImages(from: imageUrls.map { URL(string: $0)! })
+                            let validURLs = imageUrls.compactMap { URL(string: $0) }
+                            imageLoader.preloadImages(from: validURLs)
                                 startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
