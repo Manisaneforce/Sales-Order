@@ -317,7 +317,7 @@ struct ReachOut:View{
                         //                        .padding(8)
                         Button(action: {
                             AppBarTit = "About Us"
-                            Url = "https://rad.salesjump.in/server/rad/about.pdf"
+                            Url = APIClient.shared.BaseURL+"/server/rad/about.pdf"
                             CurrentSc.toggle()
                             ReachOutView.toggle()
                         })
@@ -369,7 +369,7 @@ struct ReachOut:View{
                             .padding(8)
                         Button(action:{
                             AppBarTit = "Privacy Policy"
-                            Url = "https://rad.salesjump.in/server/rad/privacy.pdf"
+                            Url = APIClient.shared.BaseURL+"/server/rad/privacy.pdf"
                             CurrentSc.toggle()
                             ReachOutView.toggle()
                         }) {
@@ -394,7 +394,7 @@ struct ReachOut:View{
                             .padding(8)
                         Button(action: {
                             AppBarTit = "Refund Policy"
-                            Url = "https://rad.salesjump.in/server/rad/refund.pdf"
+                            Url = APIClient.shared.BaseURL+"/server/rad/refund.pdf"
                             CurrentSc.toggle()
                             ReachOutView.toggle()
                         })
@@ -421,7 +421,7 @@ struct ReachOut:View{
                             .padding(8)
                         Button(action: {
                             AppBarTit = "Contact Us"
-                            Url = "https://rad.salesjump.in/server/rad/Contact%20Us.pdf"
+                            Url = APIClient.shared.BaseURL+"/server/rad/Contact%20Us.pdf"
                             CurrentSc.toggle()
                             ReachOutView.toggle()
                         })

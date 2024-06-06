@@ -97,9 +97,9 @@ struct Order: View {
     @State private var prodofcat = [String]()
     @State private var prodCate: String = ""
     @State private var selectedIndices: Set<Int> = []
-    @State private var selectedGorup:Int? = 0
-    @State private var selectedIndex: Int? = 0
-    @State private var SubselectedIndex:Int? = 0
+    @State private var selectedGorup:Int = 0
+    @State private var selectedIndex: Int = 0
+    @State private var SubselectedIndex:Int = 0
     @State private var SelectId:Int = 0
     @State private var ProSelectID:Int = 0
     @State private var proDetsID = [Int]()
@@ -303,10 +303,10 @@ struct Order: View {
                                             isLoading=false
                                             prodTypes1.removeAll()
                                             Typofid.removeAll()
-                                            if selectedGorup == index {
-                                                selectedGorup = index
+                                            if selectedGorup == Int(prettyPrintedJson[index].id) {
+                                                selectedGorup = Int(prettyPrintedJson[index].id)!
                                             } else {
-                                                selectedGorup = index
+                                                selectedGorup = Int(prettyPrintedJson[index].id)!
                                             }
                                             OrderProdTyp()
                                         }
@@ -1145,7 +1145,7 @@ struct Order: View {
                             let textname = firstItem["name"] as? String ?? ""
                             let ProGroID = String((firstItem["id"] as? Int)!)
                             let ProdGrp_Sl_No = String((firstItem["ProdGrp_Sl_No"] as? Int)!)
-                            
+                            selectedGorup = (firstItem["id"] as? Int)!
                             print("Name: \(textname)")
                             prettyPrintedJson.append(GroupId(name: textname, id: ProGroID, ProdGrp_Sl_No: ProdGrp_Sl_No))
                         }
@@ -1165,10 +1165,11 @@ struct Order: View {
         Typofid.removeAll()
         let prodTypesdata:String = UserDefaults.standard.string(forKey: "prodTypesdata") ?? ""
         print(prodTypesdata)
+        print(selectedGorup)
             if let jsonData = prodTypesdata.data(using: .utf8) {
                 do {
                     if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                        let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup!) }
+                        let jsonArrays = jsonArray.filter { ($0["GroupId"] as? Int) == Int(selectedGorup) }
                         print(jsonArrays)
                         for item in jsonArrays {
                             if let textName = item["name"] as? String , let typid = item["id"] as? Int {
@@ -1187,9 +1188,6 @@ struct Order: View {
         
     }
     private func OrderprodCate(at index: Int){
-        print(index)
-        print(prodTypes3)
-        print(prodTypes3[index])
         SelectId = prodTypes3[index]
         prodofcat.removeAll()
         proDetsID.removeAll()
@@ -1229,6 +1227,7 @@ struct Order: View {
     private func OrderprodDets(at index: Int){
         ProSelectID = proDetsID[index]
         let prodDetsdata:String = UserDefaults.standard.string(forKey: "prodDetsdata") ?? ""
+        print(prodDetsdata)
         if let jsonData = prodDetsdata.data(using: .utf8){
             do{
                 if let jsonArray = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
@@ -1373,6 +1372,7 @@ struct Order: View {
                 }else{
                     ShemMod = "2"
                 }
+                print(rate)
                 SelectUOMN.append(editUom(Uon: Uom!, UomConv: String(rate), NetValu: NetValue2, Disc: Dis , Disvalue: DisVal , freeQty: String(OffQty), OffProdNm: FreePrd, Tax_Amt: TaxAmt,shomMod: ShemMod))
                 print(SelectUOMN)
                 TotalAmt.append(Amount)
@@ -1389,6 +1389,7 @@ struct Order: View {
                 }else{
                     ShemMod = "2"
                 }
+                print(formattedRate)
                 SelectUOMN.append(editUom(Uon: UomQty!, UomConv: formattedRate  , NetValu: "Rs. 0.00", Disc: "", Disvalue: "", freeQty: "0", OffProdNm: "", Tax_Amt: "0.00",shomMod: ShemMod))
                 let ZeroAmt = "0.0"
                 let ZerQty = "0"
@@ -1620,7 +1621,7 @@ struct Address:View{
                     .padding(.vertical, 5)
                     //.background(Color.white)
                     .background(Color.white)
-                } 
+                }
                 Spacer()
                 if(UserSetup.shared.Add_Address == 1){
                 Image(systemName: "plus.circle.fill")
@@ -3112,6 +3113,7 @@ func updateQty(id: String,sUom: String,sUomNm: String,sUomConv: String,sNetUnt: 
     })
     VisitData.shared.LstItemCount = lstPrv
     VisitData.shared.lstPrvOrder = VisitData.shared.ProductCart
+    print(VisitData.shared.ProductCart)
     selectitemCount = VisitData.shared.lstPrvOrder.count
     updateOrderValues(refresh: 1)
 }

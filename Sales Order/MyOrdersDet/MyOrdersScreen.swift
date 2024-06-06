@@ -42,8 +42,11 @@ struct MyOrdersScreen: View {
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
     @State private var Loader:Bool = true
+    @State private var showToast = false
+    @State private var ShowTost = ""
     @ObservedObject var monitor = Monitor()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State private var payLoader = false
    // @State private var html:String = ""
     let currentDate = Date()
     let calendar = Calendar.current
@@ -430,8 +433,31 @@ struct MyOrdersScreen: View {
                 .cornerRadius(10)
                 .padding(20)
             }
+            if payLoader{
+                ZStack{
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        //GetLoction.toggle()
+                    }
+                VStack{
+                    LottieUIView(filename: "loader").frame(width: 100,height: 100)
+                    Text("Please wait ...")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .padding(10)
+                        .frame(width: 250)
+                }
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(20)
+                
+            }
+        }
             
         }
+        .toast(isPresented: $showToast, message: "\(ShowTost)")
     }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
@@ -467,6 +493,7 @@ struct MyOrdersScreen: View {
           }
       }
     func PaymentHTML(){
+        payLoader.toggle()
         let deviceID = UIDevice.current.identifierForVendor!.uuidString
         AF.request(APIClient.shared.BaseURL+"/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=\(deviceID)&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
@@ -487,10 +514,10 @@ struct MyOrdersScreen: View {
                             do{
                                 if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
                                     if let HTML = jsonObject["html"] as? String {
-                                        print(HTML)
                                         html = HTML
-                                         print(html)
+                                        payLoader.toggle()
                                         Jiomoneypage = true
+                                      
                                     } else {
                                         print("Error: Couldn't extract HTML")
                                     }
@@ -504,6 +531,12 @@ struct MyOrdersScreen: View {
 
                     }
                 case .failure(let error):
+                    payLoader.toggle()
+                    ShowTost = "\(error)"
+                    showToast = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        showToast = false
+                    }
                     print(error)
                 }
             }

@@ -21,11 +21,11 @@ struct HomePage: View {
     @State private var isPaymentenbl = 0
     @ObservedObject var monitor = Monitor()
     let imageUrls = [
-         "https://rad.salesjump.in/server/rad/Banner%201.jpg",
-         "https://rad.salesjump.in/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
-         "https://rad.salesjump.in/server/rad/FiproRel-S%201.34%20mL%20Carton.png",
-         "https://rad.salesjump.in/server/rad/FiproRel-S%202.68%20mL%20Carton.png",
-         "https://rad.salesjump.in/server/rad/FiproRel-S%204.02%20mL%20Carton.png"
+        APIClient.shared.BaseURL+"/server/rad/Banner%201.jpg",
+        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%201.34%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%202.68%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"/server/rad/FiproRel- %204.02%20mL%20Carton.png"
      ]
     @State private var currentImageIndex = 0
     @ObservedObject private var imageLoader = ImageLoader()
@@ -46,15 +46,25 @@ struct HomePage: View {
                     ZStack {
                             Rectangle()
                             .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 80)
+                            .frame(height: 100)
                              if monitor.status == .connected {
                                     HStack {
-                                    Text("Dashboard")
-                                        .font(.custom("Poppins-Bold", size: 20))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                        .padding(.leading,10)
-                                        .padding(.top, 50)
+                                        VStack{
+                                            Text("Dashboard")
+                                                .font(.custom("Poppins-Bold", size: 20))
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.white)
+                                                .padding(.leading,10)
+                                                .padding(.top, 50)
+                                            
+                                            Text("App Version \(Bundle.main.appVersionLong)")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(.white)
+                                                .padding(.leading,-6)
+                                                .padding(.bottom,5)
+                                        }
+                                        
+                                        
                                         
                                         Spacer()
                                         HStack(spacing: 30) {

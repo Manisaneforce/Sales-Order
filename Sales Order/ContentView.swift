@@ -178,7 +178,7 @@ struct ContentView: View {
                                         phoneNumber2 = phoneNumber
                                         print(phoneNumber2)
                                         Loader.toggle()
-                                        AF.request("https://rad.salesjump.in/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
                                             .validate(statusCode: 200 ..< 299)
                                             .responseJSON { response in
                                                 switch response.result {
@@ -347,7 +347,7 @@ struct PrivacyPolicy:View{
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
             
-            WebViews(urlString: "https://rad.salesjump.in/privacyrad.html")
+            WebViews(urlString: APIClient.shared.BaseURL+"/privacyrad.html")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 .padding(.horizontal,10)
             
