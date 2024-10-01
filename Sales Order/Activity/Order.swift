@@ -2020,7 +2020,7 @@ struct Address:View{
                        let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
                        let responseArray = json["response"] as? [[String: Any]] {
                         for stateItem in responseArray {
-                            if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String {
+                            if let id = stateItem["id"] as? String, let title = stateItem["title"] as? String{
                                 
                                 Getstates.append(get_states(id: id, title: title))
                             }
@@ -2069,7 +2069,7 @@ struct Address:View{
                            let responseArray = json["response"] as? [[String: Any]] {
                             print(responseArray)
                             for AddressItem in responseArray {
-                                if let ListedDrCode = AddressItem["ListedDrCode"] as? String, let Address = AddressItem["Address"] as? String, let ID = AddressItem["id"] as? Int, let stateCode = AddressItem["State_Code"] as? Int {
+                                if let ListedDrCode = AddressItem["ListedDrCode"] as? String , let Address = AddressItem["Address"] as? String , let ID = AddressItem["id"] as? Int , let stateCode = AddressItem["State_Code"] as? Int  {
                                      GetingAddress.append(EdditeAddres(listedDrCode: ListedDrCode, address: Address, id: ID, stateCode: stateCode))
                                    
                                 }

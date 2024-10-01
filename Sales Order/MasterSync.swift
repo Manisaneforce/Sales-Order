@@ -104,7 +104,7 @@ class SyncData {
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = ["data": jsonString]
         
-        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params)
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {
@@ -135,7 +135,7 @@ class SyncData {
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = ["data": jsonString]
         
-        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params)
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {
@@ -167,7 +167,7 @@ class SyncData {
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = ["data": jsonString]
         
-        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params)
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {
@@ -199,7 +199,7 @@ class SyncData {
         let jsonString = String(data: jsonData!, encoding: .utf8)!
         let params: Parameters = ["data": jsonString]
         print(params)
-        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: params)
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: params)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {

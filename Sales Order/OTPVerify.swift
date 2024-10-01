@@ -163,9 +163,7 @@ struct OTPVerify: View {
                                     print(otpNumber.count >= 6)
                                     
                                     if item == otpdata as! Int {
-                                        print(item)
                                         
-                                        // http://rad.salesjump.in/server/Db_Retail_v100.php?axn=get/login
                                         let axn = "get/login"
                                         let apiKey: String = "\(axn)"
                                         let deviceID = UIDevice.current.identifierForVendor!.uuidString
@@ -203,28 +201,28 @@ struct OTPVerify: View {
                                                                             print(firstResult)
                                                                             UserDefaults.standard.set(prettyPrintedJson, forKey: "CustDet")
                                                                             UserDefaults.standard.set(prettyPrintedJson, forKey: "savedPhoneNumber")
-                                                                            let CusName = firstResult["CusName"] as? String
-                                                                            let StkID = firstResult["StkID"] as? String
-                                                                            let Addr = firstResult["Addr"] as? String
-                                                                            let StkMob = firstResult["StkMob"] as? String
-                                                                            let StkNm = firstResult["StkNm"] as? String
-                                                                            let StkAddr = firstResult["StkAddr"] as? String
-                                                                            let CusID = firstResult["CusID"] as? String
-                                                                            let ERP_Code = firstResult["ERP_Code"] as? String
-                                                                            let Mob = firstResult["Mob"] as? String
-                                                                            let Div = firstResult["Div"] as? Int
-                                                                            let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
+                                                                            let CusName = firstResult["CusName"] as? String ?? ""
+                                                                            let StkID = firstResult["StkID"] as? String ?? ""
+                                                                            let Addr = firstResult["Addr"] as? String ?? ""
+                                                                            let StkMob = firstResult["StkMob"] as? String ?? ""
+                                                                            let StkNm = firstResult["StkNm"] as? String ?? ""
+                                                                            let StkAddr = firstResult["StkAddr"] as? String ?? ""
+                                                                            let CusID = firstResult["CusID"] as? String ?? ""
+                                                                            let ERP_Code = firstResult["ERP_Code"] as? String ?? ""
+                                                                            let Mob = firstResult["Mob"] as? String ?? ""
+                                                                            let Div = firstResult["Div"] as? Int ?? 0
+                                                                            let Det:[String:Any] = ["CusName":CusName,"StkID":StkID,"Addr":Addr,"StkMob":StkMob,"StkNm":StkNm,"StkAddr":StkAddr,"CusID":CusID,"ERP_Code":ERP_Code,"Mob":Mob,"Div":Div];
                                                                             print(Det)
-                                                                            CustDet.shared.CusId = CusID!
-                                                                            CustDet.shared.CusName = CusName!
-                                                                            CustDet.shared.StkID = StkID!
-                                                                            CustDet.shared.Addr = Addr!
-                                                                            CustDet.shared.StkMob = StkMob!
-                                                                            CustDet.shared.StkNm = StkNm!
-                                                                            CustDet.shared.StkAddr = StkAddr!
-                                                                            CustDet.shared.ERP_Code = ERP_Code!
-                                                                            CustDet.shared .Mob = Mob!
-                                                                            CustDet.shared.Div = Div!
+                                                                            CustDet.shared.CusId = CusID
+                                                                            CustDet.shared.CusName = CusName
+                                                                            CustDet.shared.StkID = StkID
+                                                                            CustDet.shared.Addr = Addr
+                                                                            CustDet.shared.StkMob = StkMob
+                                                                            CustDet.shared.StkNm = StkNm
+                                                                            CustDet.shared.StkAddr = StkAddr
+                                                                            CustDet.shared.ERP_Code = ERP_Code
+                                                                            CustDet.shared .Mob = Mob
+                                                                            CustDet.shared.Div = Div
                                                                             CustDet.shared.Det = Det
                                                                             NavigteBoll = true
                                                                         }
@@ -362,18 +360,15 @@ struct OTPVerify: View {
         }
     }
     private func Toast(mes:String){
-        
         ShowToastMes.shared.tost = mes
         if (ShowToastMes.shared.tost != "" ){
             showToast = true
-          
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 if (showToast == true){
                     ShowToastMes.shared.tost = ""
                 }
             showToast = false
         }
-            
     }
     }
 }
@@ -673,7 +668,7 @@ struct NewOTPScrean:View{
         
         if item == otpdata as! Int {
             let axn = "get/login"
-            let apiKey: String = "\(axn)"
+            let apiKey: String = "\(axn)&device=iOS&version=Vi_\(Bundle.main.appVersionLong).\(Bundle.main.appBuild)"
             let deviceID = UIDevice.current.identifierForVendor!.uuidString
             let aFormData: [[String: Any]] = [[
                 "mobile":"\(phoneNumber2)",
@@ -709,32 +704,29 @@ struct NewOTPScrean:View{
                                                 print(firstResult)
                                                 UserDefaults.standard.set(prettyPrintedJson, forKey: "CustDet")
                                                 UserDefaults.standard.set(prettyPrintedJson, forKey: "savedPhoneNumber")
-                                                let CusName = firstResult["CusName"] as? String
-                                                let StkID = firstResult["StkID"] as? String
-                                                let Addr = firstResult["Addr"] as? String
-                                                let StkMob = firstResult["StkMob"] as? String
-                                                let StkNm = firstResult["StkNm"] as? String
-                                                let StkAddr = firstResult["StkAddr"] as? String
-                                                let CusID = firstResult["CusID"] as? String
-                                                let ERP_Code = firstResult["ERP_Code"] as? String
-                                                let Mob = firstResult["Mob"] as? String
-                                                let Div = firstResult["Div"] as? Int
-                                                let Det:[String:Any] = ["CusName":CusName!,"StkID":StkID!,"Addr":Addr!,"StkMob":StkMob!,"StkNm":StkNm!,"StkAddr":StkAddr!,"CusID":CusID!,"ERP_Code":ERP_Code!,"Mob":Mob!,"Div":Div!];
+                                                let CusName = firstResult["CusName"] as? String ?? ""
+                                                let StkID = firstResult["StkID"] as? String ?? ""
+                                                let Addr = firstResult["Addr"] as? String ?? ""
+                                                let StkMob = firstResult["StkMob"] as? String ?? ""
+                                                let StkNm = firstResult["StkNm"] as? String ?? ""
+                                                let StkAddr = firstResult["StkAddr"] as? String ?? ""
+                                                let CusID = firstResult["CusID"] as? String ?? ""
+                                                let ERP_Code = firstResult["ERP_Code"] as? String ?? ""
+                                                let Mob = firstResult["Mob"] as? String ?? ""
+                                                let Div = firstResult["Div"] as? Int ?? 0
+                                                let Det:[String:Any] = ["CusName":CusName,"StkID":StkID,"Addr":Addr,"StkMob":StkMob,"StkNm":StkNm,"StkAddr":StkAddr,"CusID":CusID,"ERP_Code":ERP_Code,"Mob":Mob,"Div":Div];
                                                 print(Det)
-                                                CustDet.shared.CusId = CusID!
-                                                CustDet.shared.CusName = CusName!
-                                                CustDet.shared.StkID = StkID!
-                                                CustDet.shared.Addr = Addr!
-                                                CustDet.shared.StkMob = StkMob!
-                                                CustDet.shared.StkNm = StkNm!
-                                                CustDet.shared.StkAddr = StkAddr!
-                                                CustDet.shared.ERP_Code = ERP_Code!
-                                                CustDet.shared .Mob = Mob!
-                                                CustDet.shared.Div = Div!
+                                                CustDet.shared.CusId = CusID
+                                                CustDet.shared.CusName = CusName
+                                                CustDet.shared.StkID = StkID
+                                                CustDet.shared.Addr = Addr
+                                                CustDet.shared.StkMob = StkMob
+                                                CustDet.shared.StkNm = StkNm
+                                                CustDet.shared.StkAddr = StkAddr
+                                                CustDet.shared.ERP_Code = ERP_Code
+                                                CustDet.shared .Mob = Mob
+                                                CustDet.shared.Div = Div
                                                 CustDet.shared.Det = Det
-                                                print(CustDet.shared.CusName)
-                                                print(CustDet.shared.Det)
-                                                
                                             }
                                             SyncData.shared.SyncAllData{result in
                                                 NavigteBoll = true

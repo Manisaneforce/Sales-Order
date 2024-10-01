@@ -940,9 +940,9 @@ struct OrderDetView:View{
                                                                             NewQty += totqty
                                                                         }
                                                                         umounit += 1
-                                                                        let Product_Name = Items["Product_Name"] as? String
-                                                                        let UOM = Items["UOM"] as? String
-                                                                        let New_Qty = String((Items["New_Qty"] as? Int)!)
+                                                                        let Product_Name = Items["Product_Name"] as? String ?? ""
+                                                                        let UOM = Items["UOM"] as? String ?? ""
+                                                                        let New_Qty = String((Items["New_Qty"] as? Int ?? 0)!)
                                                                         var BillRate = ""
                                                                         if let BillRates = Items["BillRate"] as? Double {
                                                                             BillRate = String(format: "%.2f", BillRates)
@@ -992,7 +992,7 @@ struct OrderDetView:View{
                                                                                 print("Data is error\(error)")
                                                                             }
                                                                         }
-                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name!, Unit_Name: UOM!, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric))
+                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name, Unit_Name: UOM, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric))
                                                                     }
                                                                 }
                                                             } catch{

@@ -409,18 +409,18 @@ struct MyOrdersDetails: View {
                                   print(orders)
                                     for itemsdata in orders{
                                         print(itemsdata)
-                                        let Status = itemsdata["invoiceStatus"] as? String
-                                        let OrderID = itemsdata["OrderID"] as? String
-                                        let Order_Value = String(format: "%.2f", (itemsdata["Order_Value"] as? Double)!)
-                                        let Date = itemsdata["Date"] as? String
-                                        let Saledoc = itemsdata["Saledoc_No"] as? String
+                                        let Status = itemsdata["invoiceStatus"] as? String ?? ""
+                                        let OrderID = itemsdata["OrderID"] as? String ?? ""
+                                        let Order_Value = String(format: "%.2f", (itemsdata["Order_Value"] as? Double ?? 0)!)
+                                        let Date = itemsdata["Date"] as? String ?? ""
+                                        let Saledoc = itemsdata["Saledoc_No"] as? String ?? ""
                                         var OrderDetails = [String]()
                                         var ProQty = [String]()
                                         if let Details = itemsdata["Details"] as? [[String: Any]]{
                                             for Proname in Details{
-                                                let Product_Name = Proname["Product_Name"] as? String
-                                                let Quantity = String((Proname["Quantity"] as? Int)!)
-                                                OrderDetails.append(Product_Name!)
+                                                let Product_Name = Proname["Product_Name"] as? String ?? ""
+                                                let Quantity = String((Proname["Quantity"] as? Int ?? 0)!)
+                                                OrderDetails.append(Product_Name)
                                                 ProQty.append(Quantity)
                                                 
                                             }
@@ -432,7 +432,7 @@ struct MyOrdersDetails: View {
                                         let productNames = OrderDetails.joined(separator: ", ")
                                         let qty =  ProQty.joined(separator: ",")
                                         print(qty)
-                                        invoice.append(getInvoice(Status: Status!, OrderID: OrderID!, Date: Date!, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty, Saledoc_No : Saledoc!))
+                                        invoice.append(getInvoice(Status: Status, OrderID: OrderID, Date: Date, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty, Saledoc_No : Saledoc))
                                     }
                                     print(invoice)
 

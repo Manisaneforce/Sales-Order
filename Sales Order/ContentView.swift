@@ -178,7 +178,7 @@ struct ContentView: View {
                                         phoneNumber2 = phoneNumber
                                         print(phoneNumber2)
                                         Loader.toggle()
-                                        AF.request(APIClient.shared.BaseURL+"/server/Db_Retail_v100.php?axn=" + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+                                        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
                                             .validate(statusCode: 200 ..< 299)
                                             .responseJSON { response in
                                                 switch response.result {
