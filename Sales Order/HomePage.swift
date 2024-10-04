@@ -20,6 +20,8 @@ struct HomePage: View {
     @State private var showToast = false
     @State private var isPaymentenbl = 0
     @ObservedObject var monitor = Monitor()
+    @StateObject private var updateManager = UpdateManager()
+    @State private var Show_Aleret:Bool = false
     let imageUrls = [
         APIClient.shared.BaseURL+"/server/rad/Banner%201.jpg",
         APIClient.shared.BaseURL+"/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
@@ -186,6 +188,25 @@ struct HomePage: View {
                         DashBoradImg()
                     }
                     VStack{
+                        if updateManager.isUpdateAvailable{
+                            App_Update_Avlable()
+                                .padding(.bottom,10)
+                                .padding(.top,-12)
+                                .padding(.horizontal,10)
+                                .onTapGesture {
+                                    Show_Aleret = true
+                                }
+                                .alert(isPresented: $Show_Aleret) {
+                                    Alert(
+                                        title: Text("Update Available"),
+                                        message: Text("A new version (\(updateManager.appStoreVersion ?? "")) is available. Please update to the latest version."),
+                                        primaryButton: .default(Text("Update Now"), action: {
+                                            updateManager.promptUserToUpdate()
+                                        }),
+                                        secondaryButton: .cancel(Text("Later"))
+                                    )
+                                }
+                        }
                     ZStack{
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color.white)
@@ -261,6 +282,10 @@ struct HomePage: View {
                 }
             }
         }
+        .onAppear {
+                   // Automatically check for an update when the view appears
+                   updateManager.checkForUpdate()
+               }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
         .toast(isPresented: $showToast, message: ShowToastMes.shared.tost)
@@ -329,6 +354,28 @@ struct HomePage: View {
             }
     }
 }
+
+
+struct App_Update_Avlable:View {
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(radius: 4)
+            HStack{
+                Image("Update_avl")
+                    .resizable()
+                    .scaledToFit()
+                Text("App Update Available")
+                    .font(.custom("Poppins-Bold", size: 10))
+                Spacer()
+            }
+            .padding(.horizontal,10)
+        } .frame(height:40)
+       
+    }
+}
+
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {

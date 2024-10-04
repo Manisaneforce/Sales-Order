@@ -12,8 +12,6 @@ class UpdateManager: ObservableObject {
     @Published var isUpdateAvailable: Bool = false
     @Published var appStoreVersion: String?
     @Published var errorMessage: String?
-    
-    // Check for update by querying the iTunes Lookup API
     func checkForUpdate() {
         guard let bundleID = Bundle.main.bundleIdentifier,
               let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleID)") else {
@@ -59,8 +57,6 @@ class UpdateManager: ObservableObject {
         }
         task.resume()
     }
-    
-    // Prompt user to update the app
     func promptUserToUpdate() {
         guard let url = URL(string: "itms-apps://itunes.apple.com/app/6478862577") else {
             self.errorMessage = "Invalid App Store URL."
