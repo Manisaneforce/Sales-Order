@@ -511,6 +511,7 @@ struct NewMobileNoScrean:View{
     @State private var showAlert = false
     @State private var alertMessages = ""
     @State var isTapped = false
+    @StateObject private var updateManager = UpdateManager()
     var body: some View{
         NavigationView {
         ZStack{
@@ -693,6 +694,20 @@ struct NewMobileNoScrean:View{
     }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
+        .onAppear {
+                   // Automatically check for an update when the view appears
+                   updateManager.checkForUpdate()
+               }
+               .alert(isPresented: $updateManager.isUpdateAvailable) {
+                   Alert(
+                       title: Text("Update Available"),
+                       message: Text("A new version (\(updateManager.appStoreVersion ?? "")) is available. Please update to the latest version."),
+                       primaryButton: .default(Text("Update Now"), action: {
+                           updateManager.promptUserToUpdate()
+                       }),
+                       secondaryButton: .cancel(Text("Later"))
+                   )
+               }
 }
     private func ShowAlert(title: String, message: String) {
         alertTitle = title

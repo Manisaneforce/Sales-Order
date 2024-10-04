@@ -40,13 +40,14 @@ struct TotAmt: Identifiable {
     var TaxAmt:String
     var ShowShem:String
 }
+
 struct EdditeAddres : Any{
     let listedDrCode:String
     let address : String
     let id : Int
     let stateCode: Int
-    
 }
+
 struct editUom:Any{
     let Uon:String
     let UomConv:String
@@ -58,6 +59,7 @@ struct editUom:Any{
     let Tax_Amt : String
     let shomMod : String
 }
+
 struct GroupId:Any{
     let name:String
     let id:String
@@ -241,25 +243,18 @@ struct Order: View {
                                     .onTapGesture {
                                         ADDaddress.toggle()
                                         SelMod = "BA"
-                                        
-                                        
                                     }
                             }
                             
                             HStack {
-                                
                                 Image(systemName: isChecked ? "square" : "checkmark.square.fill")
                                     .foregroundColor(isChecked ? .blue : .blue)
                                     .onTapGesture {
                                         isChecked.toggle()
                                         if isChecked == true{
                                             SameAddrssmark = false
-                                            print(ShpingAddress)
-                                            print(BillingAddress)
                                         }else{
                                             ShpingAddress = BillingAddress
-                                            print(ShpingAddress)
-                                            print(BillingAddress)
                                             SameAddrssmark = true
                                         }
                                     }
