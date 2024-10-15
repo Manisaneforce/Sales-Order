@@ -276,7 +276,6 @@ class SyncData {
     private func isPaymentEnabled(completion: @escaping () -> Void) {
         let axn = "enable_payments"
         let apiKey = "\(axn)&divisionCode=\(CustDet.shared.Div)&id=\(CustDet.shared.CusId)"
-        
         AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL + apiKey, method: .post)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in

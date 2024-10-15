@@ -215,7 +215,7 @@ struct HomePage: View {
                         VStack{
                             HStack{
                                 Text("Greetings Dr.\(CustDet.shared.CusName)")
-                                    .font(.custom("Poppins-SemiBold", size: 15))
+                                    .font(.custom("Poppins-SemiBold", size: 13))
                                 Spacer()
                             }
                             .padding(.leading,15)
@@ -375,7 +375,6 @@ struct App_Update_Avlable:View {
        
     }
 }
-
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {

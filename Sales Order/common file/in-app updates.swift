@@ -8,7 +8,6 @@ import Foundation
 import SwiftUI
 
 class UpdateManager: ObservableObject {
-    
     @Published var isUpdateAvailable: Bool = false
     @Published var appStoreVersion: String?
     @Published var errorMessage: String?

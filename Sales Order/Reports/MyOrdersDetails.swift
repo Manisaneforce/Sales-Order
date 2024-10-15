@@ -499,7 +499,6 @@ struct TabBarView: View {
             ForEach(Array(zip(tabBarOptions.indices, tabBarOptions)), id: \.0) { index, name in
                 TabBarItem(currentTab: self.$currentTab, namespace: namespace.self, TabBarItemName: name, tab: index)
             }
-            
         }
         .padding(.trailing,20)
 //        .background(Color.gray)
