@@ -7,7 +7,21 @@
 
 import SwiftUI
 import URLImage
+import Alamofire
 //import Jiopay_pg_uat
+struct Payment_Data: Any {
+    let id = UUID()
+    var orderId : String
+    var initiatedOn:String
+    var updatedOn:String
+    var totalAmt:String
+    var  status:String
+    var message:String
+    var transactionId:String
+    var Color_Code:Color
+}
+var Payment_Detils_Data:[Payment_Data] = []
+
 struct PaymentScreen: View {
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
@@ -18,10 +32,12 @@ struct PaymentScreen: View {
     @State private var navigateToHomepage = false
     @State private var Filterdate = false
     @State private var SelectFromDate = Date()
+    @State private var loader:Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let currentDate = Date()
     let calendar = Calendar.current
     @ObservedObject var monitor = Monitor()
+    @State private var No_Data_Mes = ""
     var body: some View {
         NavigationView{
             VStack{
@@ -70,6 +86,7 @@ struct PaymentScreen: View {
                         print(fromDate)
                         FromDate = fromDate
                         ToDate = fromDate
+                        Payment_Detils()
                     }
                     HStack {
                         ZStack {
@@ -131,59 +148,15 @@ struct PaymentScreen: View {
                     }
                     .frame(height: 60)
                     
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                        HStack{
-                            Text("Date")
-                                .foregroundColor(Color.white)
-                                .font(.system(size: 15))
-                            Spacer()
-                            HStack(spacing:40){
-                                Text("Debit")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 15))
-                                Text("Credit")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 15))
-                                Text("Balance")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 15))
-                            }
-                            
-                        }
-                        .padding(10)
+                    if !Payment_Detils_Data.isEmpty{
+                        Payment_Scroll()
+                    }else{
+                        Spacer()
+                        Text(No_Data_Mes)
+                            .fontWeight(.bold)
+                            .font(.system(size: 15))
+                        Spacer()
                     }
-                    .frame(height:40)
-                     Spacer()
-                    Text("No Data Found !")
-                        .fontWeight(.bold)
-                        .font(.system(size: 15))
-                        
-                    
-                    Spacer()
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.white)
-                            .shadow(radius: 5)
-                        HStack{
-                            Text("Total")
-                                .fontWeight(.bold)
-                            Spacer()
-                            Text("0.00")
-                                .foregroundColor(.red)
-                                .fontWeight(.bold)
-                        }
-                        .padding(10)
-                    }
-                    .frame(height: 50)
-                    .padding(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(ColorData.shared.HeaderColor, lineWidth: 1)
-                            .padding(10)
-                    )
                 }
                 .popover(isPresented: $isPopoverVisible) {
                     VStack{
@@ -210,6 +183,7 @@ struct PaymentScreen: View {
                             Spacer()
                             Button(action:{
                                 Selectdate()
+                                Payment_Detils()
                                 isPopoverVisible.toggle()
                             }){
                                 ZStack{
@@ -262,7 +236,7 @@ struct PaymentScreen: View {
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
                                 let ToDates = String(dateFormatter.string(from:CurentDate))
                                 ToDate = ToDates
-                                
+                                Payment_Detils()
                             }
                             
                             Divider()
@@ -280,6 +254,8 @@ struct PaymentScreen: View {
                                 SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
                                 let ToDates = String(dateFormatter.string(from:CurentDate))
                                 ToDate = ToDates
+                                
+                                Payment_Detils()
                             }
                         }
                         ZStack{
@@ -306,18 +282,53 @@ struct PaymentScreen: View {
                     .cornerRadius(10)
                     .padding(20)
                 }
+                if loader{
+                    Sales_Order.loader()
+                }
             }
         }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
+    }
     
+    func  Payment_Detils(){
+        loader.toggle()
+        
+        Payment_Detils_Data.removeAll()
+        let axn = "get/payment_ledger"
+        let apiKey: String = "\(axn)&sfc=\(CustDet.shared.CusId)&from=\(FromDate)&to=\(ToDate)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON{ response in
+            switch response.result {
+            case .success(let value):
+                print(value)
+                if let json = value as? [String:AnyObject] {
+                    if let response = json["response"] as? [AnyObject]{
+                        for i in response{
+                            print(i)
+                            let Amt = String(i["totalAmt"] as? Double ?? 0)
+                            let color = Color(hex: i["colorCode"] as? String ?? "#000000")
+                            
+                            Payment_Detils_Data.append(Payment_Data(orderId: i["orderId"] as? String ?? "", initiatedOn: i["initiatedOn"] as? String ?? "", updatedOn: i["updatedOn"] as? String ?? "", totalAmt: Amt, status: i["status"] as? String ?? "", message: i["message"] as? String ?? "", transactionId: i["transactionId"] as? String ?? "", Color_Code: color))
+                        }
+                    }else{
+                        No_Data_Mes = json["msg"] as? String ?? ""
+                    }
+                }
+                loader.toggle()
+            case .failure(let error):
+                print(error)
+                No_Data_Mes = error.localizedDescription
+                loader.toggle()
+            }
+        }
     }
     
     private func calculateStartDate(for days: Int) -> Date {
          let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
          return startDate ?? currentDate
      }
+    
     private  func Selectdate(){
           if SelMode == "DOF"{
               SelectFromDate = selectedDate
@@ -351,6 +362,143 @@ struct PaymentScreen_Previews: PreviewProvider {
        
     }
 }
+
+struct Payment_Scroll:View{
+    var body: some View{
+        ScrollView{
+            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
+                ZStack{
+                    RoundedRectangle(cornerRadius: 10)
+                                   .fill(Color.white)
+                                  // .shadow(radius: 5)
+                VStack{
+                    HStack{
+                        Text("OrderId :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].orderId)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                    HStack{
+                        Text("Transaction Id :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].transactionId)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                    HStack{
+                        Text("TotalAmt :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].totalAmt)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                    HStack{
+                        Text("initiatedOn :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].initiatedOn)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                    HStack{
+                        Text("updatedOn :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].updatedOn)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                  
+                    HStack{
+                        Text("Status :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].status)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Payment_Detils_Data[index].Color_Code)
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                    HStack{
+                        Text("Message :")
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Text(Payment_Detils_Data[index].message)
+                            .font(.system(size: 14))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.black)
+                        Spacer()
+                    }
+                    .padding(.vertical,2)
+                }
+                .padding(.horizontal,5)
+                .padding(.vertical,5)
+            }
+                .padding(.horizontal,5)
+                .padding(.vertical,2)
+            }
+        }
+    }
+}
+
+extension Color {
+    
+    
+    init(hex: String) {
+            let hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+            let scanner = Scanner(string: hexString)
+            
+            if hexString.hasPrefix("#") {
+                scanner.scanLocation = 1
+            }
+            
+            var color: UInt32 = 0
+            scanner.scanHexInt32(&color)
+            
+            let mask = 0x000000FF
+            let r = Int(color >> 16) & mask
+            let g = Int(color >> 8) & mask
+            let b = Int(color) & mask
+            
+            let red   = Double(r) / 255.0
+            let green = Double(g) / 255.0
+            let blue  = Double(b) / 255.0
+            
+            self.init(red: red, green: green, blue: blue)
+        }
+}
+
+
+
+
+
 //For Testing Code
 struct SkeletonLoader: View {
     @State private var animation = false

@@ -35,7 +35,6 @@ struct HomePage: View {
     @Environment(\.horizontalSizeClass) var sizeClass
     var body: some View {
         NavigationView {
-            
            // GeometryReader { geometry in
             ZStack{
                 Color(red: 0.18, green: 0.19, blue: 0.2).opacity(0.05)
@@ -306,17 +305,6 @@ struct HomePage: View {
             currentDate = formatter.string(from: Date())
         }
     }
-    
-//    func GetCurrentLoction(){
-//        LocationService.sharedInstance.getNewLocation(location: { location in
-//            let sLocation: String = location.coordinate.latitude.description + ":" + location.coordinate.longitude.description
-//            print(sLocation)
-//            lazy var geocoder = CLGeocoder()
-//        }, error:{ errMsg in
-//            print (errMsg)
-//            //self.LoadingDismiss()
-//        })
-//    }
     
     func isPaymentEnabled(){
         let axn = "enable_payments"
