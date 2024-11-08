@@ -16,6 +16,7 @@ struct getInvoice: Any{
     let Product_Name:String
     let Quantity:String
     let Saledoc_No:String
+    let Paymet_status:String
 }
 //var invoice:[getInvoice]=[]
 var value:String = ""
@@ -414,6 +415,7 @@ struct MyOrdersDetails: View {
                                         let Order_Value = String(format: "%.2f", (itemsdata["Order_Value"] as? Double ?? 0)!)
                                         let Date = itemsdata["Date"] as? String ?? ""
                                         let Saledoc = itemsdata["Saledoc_No"] as? String ?? ""
+                                        let Paymet_status = itemsdata["isPaid"] as? String ?? ""
                                         var OrderDetails = [String]()
                                         var ProQty = [String]()
                                         if let Details = itemsdata["Details"] as? [[String: Any]]{
@@ -432,7 +434,7 @@ struct MyOrdersDetails: View {
                                         let productNames = OrderDetails.joined(separator: ", ")
                                         let qty =  ProQty.joined(separator: ",")
                                         print(qty)
-                                        invoice.append(getInvoice(Status: Status, OrderID: OrderID, Date: Date, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty, Saledoc_No : Saledoc))
+                                        invoice.append(getInvoice(Status: Status, OrderID: OrderID, Date: Date, Order_Value: String(Order_Value), Product_Name: productNames, Quantity: qty, Saledoc_No : Saledoc, Paymet_status: Paymet_status))
                                     }
                                     print(invoice)
 
@@ -606,13 +608,13 @@ struct ORDER:View{
                                 Text(CustDet.shared.StkNm)
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
-                                Spacer()
-                                Text("Pending")
-                                    .font(.system(size: 14))
-                                Image(systemName:"ellipsis.circle.fill")
-                                    .resizable()
-                                    .frame(width: 12,height: 12)
-                                    .foregroundColor(.red)
+                               Spacer()
+//                                Text(invoice[index].Paymet_status)
+//                                    .font(.system(size: 14))
+//                                Image(systemName:"ellipsis.circle.fill")
+//                                    .resizable()
+//                                    .frame(width: 12,height: 12)
+//                                    .foregroundColor(.red)
                                 
                                 
                             }
@@ -637,8 +639,13 @@ struct ORDER:View{
                                 .padding(.leading,10)
                             }
                             HStack{
-                                Text("₹ \(invoice[index].Order_Value)")
-                                    .font(.system(size: 14))
+                                VStack(alignment: .leading){
+                                    Text("₹ \(invoice[index].Order_Value)")
+                                        .font(.system(size: 14))
+                                    
+                                    Text("Payment Status : \(invoice[index].Paymet_status)")
+                                        .font(.system(size: 14))
+                                }
                                 Spacer()
                                 Text("View Order")
                                     .foregroundColor(.blue)
@@ -790,7 +797,6 @@ struct ORDERVSINVOICE:View{
                                                     .font(.system(size: 14))
                                                 Spacer()
                                             }
-                                            
                                         }
                                         .padding(.leading,10)
                                         Rectangle()
@@ -828,6 +834,13 @@ struct ORDERVSINVOICE:View{
                                     print(index)
                                     get_invoice_details(index: index)
                                 }
+                                
+                                HStack{
+                                    Text("Payment Status : \(invoice[index].Paymet_status)")
+                                        .font(.system(size: 14))
+                                    Spacer()
+                                }
+                                .padding(.horizontal,10)
                                 Rectangle()
                                     .frame(height: 1)
                                     .foregroundColor(.black)
