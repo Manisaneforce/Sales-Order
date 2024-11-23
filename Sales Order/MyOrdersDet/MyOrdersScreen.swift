@@ -368,7 +368,52 @@ struct MyOrdersScreen: View {
                     }
                     VStack{
                         VStack{
-                            Text("Last 7 days")
+                            Text("Today")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
+                        }
+                        .background(Color.white)
+                            .onTapGesture{
+                                var CurentDate = Date()
+                                OrderPaymentDetails.removeAll()
+                                Loader.toggle()
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 1)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 1))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
+                                OrderDetailsTriger()
+                            }
+                            
+                        Divider()
+                        VStack{
+                            Text("Yesterday")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
+                        }
+                        .background(Color.white)
+                            .onTapGesture{
+                                let CurentDate = Date()
+                                let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
+                                
+                              let Getdate = dateFormatter.string(from:yesterdayDate)
+                                OrderPaymentDetails.removeAll()
+                                Loader.toggle()
+                                Filterdate.toggle()
+                                FromDate = dateFormatter.string(from:yesterdayDate)
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 1))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
+                                OrderDetailsTriger()
+                            }
+                            
+                        Divider()
+                        
+                        
+                        VStack{
+                            Text("Last week")
                                 .font(.system(size: 15))
                                 .fontWeight(.semibold)
                                 .padding(5)
@@ -388,7 +433,7 @@ struct MyOrdersScreen: View {
                             
                         Divider()
                         VStack{
-                            Text("Last 30 days")
+                            Text("Last month")
                                 .font(.system(size: 15))
                                 .fontWeight(.semibold)
                                 .padding(5)
@@ -406,6 +451,72 @@ struct MyOrdersScreen: View {
                                 OrderDetailsTriger()
                             }
                         
+                        Divider()
+                        
+                        
+                        VStack{
+                            Text("Last 3 months")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
+                        }
+                        .background(Color.white)
+                            .onTapGesture{
+                                var CurentDate = Date()
+                                OrderPaymentDetails.removeAll()
+                                Loader.toggle()
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
+                                OrderDetailsTriger()
+                            }
+                        
+                        
+                        Divider()
+                        
+                        
+                        VStack{
+                            Text("Last 6 months")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
+                        }
+                        .background(Color.white)
+                            .onTapGesture{
+                                var CurentDate = Date()
+                                OrderPaymentDetails.removeAll()
+                                Loader.toggle()
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
+                                OrderDetailsTriger()
+                            }
+                        
+                        Divider()
+                        
+                        
+                        VStack{
+                            Text("Last 1 year")
+                                .font(.system(size: 15))
+                                .fontWeight(.semibold)
+                                .padding(5)
+                        }
+                        .background(Color.white)
+                            .onTapGesture{
+                                var CurentDate = Date()
+                                OrderPaymentDetails.removeAll()
+                                Loader.toggle()
+                                Filterdate.toggle()
+                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
+                                let ToDates = String(dateFormatter.string(from:CurentDate))
+                                ToDate = ToDates
+                                OrderDetailsTriger()
+                            }
                     }
                     
                     ZStack{

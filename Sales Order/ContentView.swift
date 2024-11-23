@@ -510,182 +510,201 @@ struct NewMobileNoScrean:View{
     @State private var userEmail:String = UserDefaults.standard.string(forKey: "savedPhoneNumber") ?? ""
     @State private var showAlert = false
     @State private var alertMessages = ""
+    
+    
+    @State private var BTBack:Bool = false
+    
     @State var isTapped = false
     var body: some View{
         NavigationView {
-        ZStack{
-            VStack{
-                
-                VStack(alignment:.center){
-                    Image("logo_new")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 250,height: 150)
+            ZStack{
+                if BTBack == false{
+                VStack{
                     
-                    Image("Welcome to ReliVet!")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200,height: 50)
-                    Text("Sign in to continue")
-                        .font(.custom("Poppins-SemiBold", size: 12))
-                }
-                Spacer()
-                    .onAppear {
-                        print(PrivacySc)
-                        if (PrivacySc == ""){
-                            PriPolicy()
-                        }
-                        print("Saved Value  \(userEmail)")
-                        if userEmail.isEmpty{
-                        }else{
-                            if let window = UIApplication.shared.windows.first {
-                                window.rootViewController = UIHostingController(rootView: HomePage())
+                    VStack(alignment:.center){
+                        Image("logo_new")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 250,height: 150)
+                        
+                        Image("Welcome to ReliVet!")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200,height: 50)
+                        Text("Sign in to continue")
+                            .font(.custom("Poppins-SemiBold", size: 12))
+                    }
+                    Spacer()
+                        .onAppear {
+                            print(PrivacySc)
+                            if (PrivacySc == ""){
+                                PriPolicy()
+                            }
+                            print("Saved Value  \(userEmail)")
+                            if userEmail.isEmpty{
+                            }else{
+                                if let window = UIApplication.shared.windows.first {
+                                    window.rootViewController = UIHostingController(rootView: HomePage())
+                                }
                             }
                         }
-                    }
-                ZStack{
-                    Rectangle()
-                        .foregroundColor(.white)
-                        .frame(height: 350)
-                    VStack(alignment: .center){
-                        VStack(spacing:0){
-                            Image("NumberPad")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 180,height: 130)
-                            
-                            Text("Enter Registered 10 digit Mobile number")
-                                .font(.system(size: 12))
-                        }
+                    ZStack{
+                        Rectangle()
+                            .foregroundColor(.white)
+                            .frame(height: 350)
                         VStack(alignment: .center){
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack{
-                                    TextField("", text: $phoneNumber) { status in
-                                        if status {
-                                            withAnimation(.easeIn) {
-                                                isTapped = true
-                                            }
-                                        }
-                                    } onCommit: {
-                                        if phoneNumber == "" {
-                                            withAnimation(.easeOut) {
-                                                isTapped = false
-                                            }
-                                        }
-                                    }
-                                    .padding(.leading, 10)
-                                    .padding(.top, isTapped ? 20 : 5)
-                                    .background(
-                                        Text("Mobile Number")
-                                            .font(.custom("Poppins-Bold", size: 13))
-                                            .scaleEffect(isTapped ? 0.8 : 1)
-                                            .offset(x: isTapped ? -7 : 0, y: isTapped ? -15 : 0)
-                                            .padding(.leading,5)
-                                            .foregroundColor(.gray),
-                                        alignment: .leading
-                                    )
-                                    .keyboardType(.numberPad)
-                                    .onChange(of: phoneNumber) { newValue in
-                                        if newValue.count > 10 {
-                                            phoneNumber = String(newValue.prefix(10))
-                                        }
-                                        phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
-                                    }
-                                    Spacer()
-                                    Text("\(phoneNumber.count)/10")
-                                        .padding(.trailing, 10)
-                                        .font(.system(size: 10))
-                                        .foregroundColor(.gray)
-                                    
-                                    
-                                }
-                            }
-                            .padding(.vertical, 12)
-                            .padding(.horizontal)
-                            .background(
-                                Color.gray.opacity(0.09)
-                                    .padding(.horizontal, 15)
-                                    .cornerRadius(5)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
-                                    .padding(.horizontal, 15)
-                            )
-                            .padding()
-                            Button(action: {
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                SendOTP()
+                            VStack(spacing:0){
+                                Image("NumberPad")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 180,height: 130)
                                 
-                            }) {
-                                ZStack{
-                                    Rectangle()
-                                        .foregroundColor(ColorData.shared.HeaderColor)
-                                        .frame(height: 40)
-                                        .cornerRadius(10)
-                                    Text("Send OTP")
-                                        .fontWeight(.heavy)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 14))
-                                        .multilineTextAlignment(.center)
-                                        .cornerRadius(10)
-                                }
-                                .padding(.horizontal,22)
-                            }.alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("Error"),
-                                    message: Text(alertMessages),
-                                    dismissButton: .default(Text("OK"))
-                                )
-                            }
-                            if NavigteBoll {
-                                if #available(iOS 15.0, *) {
-                                    NavigationLink(
-//                                        destination: OTPVerify(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
-//                                        isActive: $NavigteBoll
-                                        destination: NewOTPScrean(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
-                                        isActive: $NavigteBoll
-                                    ) {
-                                        EmptyView()
-                                    }
-                                } else{
-                                    // Handle non-iOS 15 case if needed
-                                }
-                            }
-                            NavigationLink(destination: HomePage(), isActive: $HomePageNvigater) {
-                                EmptyView()
-                            }
-                            HStack{
-                                Spacer()
-                                Text("Version \(Bundle.main.appVersionLong)")
+                                Text("Enter Registered 10 digit Mobile number")
                                     .font(.system(size: 12))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.gray)
-                            }.padding(.horizontal,20)
-                            
+                            }
+                            VStack(alignment: .center){
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack{
+                                        TextField("", text: $phoneNumber) { status in
+                                            if status {
+                                                withAnimation(.easeIn) {
+                                                    isTapped = true
+                                                }
+                                            }
+                                        } onCommit: {
+                                            if phoneNumber == "" {
+                                                withAnimation(.easeOut) {
+                                                    isTapped = false
+                                                }
+                                            }
+                                        }
+                                        .padding(.leading, 10)
+                                        .padding(.top, isTapped ? 20 : 5)
+                                        .background(
+                                            Text("Mobile Number")
+                                                .font(.custom("Poppins-Bold", size: 13))
+                                                .scaleEffect(isTapped ? 0.8 : 1)
+                                                .offset(x: isTapped ? -7 : 0, y: isTapped ? -15 : 0)
+                                                .padding(.leading,5)
+                                                .foregroundColor(.gray),
+                                            alignment: .leading
+                                        )
+                                        .keyboardType(.numberPad)
+                                        .onChange(of: phoneNumber) { newValue in
+                                            if newValue.count > 10 {
+                                                phoneNumber = String(newValue.prefix(10))
+                                            }
+                                            phoneNumber = phoneNumber.filter { "0123456789".contains($0) }
+                                        }
+                                        Spacer()
+                                        Text("\(phoneNumber.count)/10")
+                                            .padding(.trailing, 10)
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.gray)
+                                        
+                                        
+                                    }
+                                }
+                                .padding(.vertical, 12)
+                                .padding(.horizontal)
+                                .background(
+                                    Color.gray.opacity(0.09)
+                                        .padding(.horizontal, 15)
+                                        .cornerRadius(5)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(ColorData.shared.HeaderColor, lineWidth: 1.5)
+                                        .padding(.horizontal, 15)
+                                )
+                                .padding()
+                                Button(action: {
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                    SendOTP()
+                                    
+                                }) {
+                                    ZStack{
+                                        Rectangle()
+                                            .foregroundColor(ColorData.shared.HeaderColor)
+                                            .frame(height: 40)
+                                            .cornerRadius(10)
+                                        Text("Send OTP")
+                                            .fontWeight(.heavy)
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 14))
+                                            .multilineTextAlignment(.center)
+                                            .cornerRadius(10)
+                                    }
+                                    .padding(.horizontal,22)
+                                }.alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Error"),
+                                        message: Text(alertMessages),
+                                        dismissButton: .default(Text("OK"))
+                                    )
+                                }
+                                if NavigteBoll {
+                                    if #available(iOS 15.0, *) {
+                                        NavigationLink(
+                                            //                                        destination: OTPVerify(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
+                                            //                                        isActive: $NavigteBoll
+                                            destination: NewOTPScrean(numberOffFields: 6, jsondata: $jsondata), // Make sure you're using $jsondata here
+                                            isActive: $NavigteBoll
+                                        ) {
+                                            EmptyView()
+                                        }
+                                    } else{
+                                        // Handle non-iOS 15 case if needed
+                                    }
+                                }
+                                NavigationLink(destination: HomePage(), isActive: $HomePageNvigater) {
+                                    EmptyView()
+                                }
+                                HStack{
+                                    Spacer()
+                                    Text("Version \(Bundle.main.appVersionLong)")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.gray)
+                                }.padding(.horizontal,20)
+                                
+                                HStack{
+                                    Text("Terms and Conditions")
+                                        .font(.system(size: 12))
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.red)
+                                }.padding(.horizontal,20).padding(.top,3).padding(.bottom,5) .onTapGesture {
+                                    BTBack.toggle()
+                                }
+                            }
                         }
                     }
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.00), lineWidth: 1)
+                            .padding(10)
+                    )
+                    .padding(.horizontal,10)
+                    .padding(.top,-10)
+                    Spacer()
+                    VStack(alignment: .center){
+                        Text("Powered by")
+                            .font(.custom("Poppins-SemiBold", size: 10))
+                        Image("SalesJumpLog")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100,height: 50)
+                    }
                 }
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 1.00), lineWidth: 1)
-                        .padding(10)
-                )
-                .padding(.horizontal,10)
-                .padding(.top,-10)
-                Spacer()
-                VStack(alignment: .center){
-                    Text("Powered by")
-                        .font(.custom("Poppins-SemiBold", size: 10))
-                    Image("SalesJumpLog")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100,height: 50)
+                if Loader{
+                    loader()
                 }
             }
-            if Loader{
-                loader()
+            
+            if BTBack{
+                Term_and_condition_view(BTBack: $BTBack)
             }
+            
         }  .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
@@ -762,5 +781,43 @@ struct NewMobileNoScrean:View{
                     showAlert = true
                 }
             }
+    }
+}
+
+
+
+struct Term_and_condition_view:View {
+    @Binding var BTBack:Bool
+    @State private var  Url = APIClient.shared.BaseURL+"/server/rad/refund.pdf"
+    var body: some View {
+        ZStack{
+            VStack{
+                ZStack{
+                    Rectangle()
+                        .foregroundColor(ColorData.shared.HeaderColor)
+                        .frame(height: 80)
+                HStack{
+                    Button(action: {
+                        BTBack.toggle()
+                    })
+                    {
+                        Image("backsmall")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+                            .padding(.top,50)
+                            .frame(width: 50)
+                    }
+                    Text("TERMS AND CONDITIONS")
+                        .font(.system(size: 18))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                    Spacer()
+                    
+                }
+            }
+                WebViews(urlString: Url)
+            }
+        } .ignoresSafeArea(edges: .all) 
     }
 }
