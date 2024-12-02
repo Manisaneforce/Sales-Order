@@ -21,7 +21,9 @@ struct getInvoice: Any{
 //var invoice:[getInvoice]=[]
 var value:String = ""
 var Orderdate:String = ""
-struct MyOrdersDetails: View {
+struct MyOrdersDetails: View, DateSelection {
+   
+    
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
     @State private var SelMode: String = ""
@@ -215,89 +217,7 @@ struct MyOrdersDetails: View {
                     }
                     
                     if Filterdate{
-                        Color.black.opacity(0.5)
-                            .edgesIgnoringSafeArea(.all)
-                            .onTapGesture {
-                                // Filterdate.toggle()
-                            }
-                        VStack{
-                            ZStack{
-                                Rectangle()
-                                    .foregroundColor(ColorData.shared.HeaderColor)
-                                    .frame(height: 30)
-                                VStack{
-                                    Text("Select Quick Dates")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color.white)
-                                        .multilineTextAlignment(.center)
-                                }
-                            }
-                            VStack{
-                                VStack{
-                                    
-                                    Text("Last 7 days")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.semibold)
-                                        .padding(5)
-                                    
-                                }
-                                .background(Color.white)
-                                .onTapGesture{
-                                    var CurentDate = Date()
-                                    Loader.toggle()
-                                    Filterdate.toggle()
-                                    FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                    SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
-                                    let ToDates = String(dateFormatter.string(from:CurentDate))
-                                    ToDate = ToDates
-                                    orderandinvoice()
-                                    
-                                    
-                                }
-                                
-                                Divider()
-                                VStack{
-                                    Text("Last 30 days")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.semibold)
-                                        .padding(5)
-                                }
-                                .background(Color.white)
-                                .onTapGesture{
-                                    var CurentDate = Date()
-                                    Loader.toggle()
-                                    Filterdate.toggle()
-                                    FromDate = (formattedDate(date: calculateStartDate(for: 30)))
-                                    SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
-                                    let ToDates = String(dateFormatter.string(from:CurentDate))
-                                    ToDate = ToDates
-                                    orderandinvoice()
-                                }
-                            }
-                            ZStack{
-                                Rectangle()
-                                    .foregroundColor(ColorData.shared.HeaderColor)
-                                    .frame(height: 30)
-                                    .padding(.top,30)
-                                    .padding(.bottom,10)
-                                    .padding(.horizontal,15)
-                                    .cornerRadius(10)
-                                VStack{
-                                    Text("Close")
-                                        .font(.system(size: 15))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(Color.white)
-                                        .padding(.top,15)
-                                }
-                            }.cornerRadius(10)
-                                .onTapGesture {
-                                    Filterdate.toggle()
-                                }
-                        }
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .padding(20)
+                        quick_date_Selection_view(Filterdate: $Filterdate, FromDate: $FromDate, SelectFromDate: $SelectFromDate, ToDate: $ToDate, Loader: $Loader,delegate: self)
                     }
                     //                if Loader{
                     //                    ZStack{
@@ -340,6 +260,11 @@ struct MyOrdersDetails: View {
           formatter.dateFormat = "yyyy-MM-dd"
           return formatter
       }
+    
+    func didTapButton(in selection: quick_date_Selection_view) {
+        orderandinvoice()
+    }
+    
     func formattedDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

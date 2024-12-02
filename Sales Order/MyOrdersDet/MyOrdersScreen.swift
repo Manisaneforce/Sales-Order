@@ -17,14 +17,17 @@ struct OrderDetails: Any{
     let Order_Value : String
     let Status : String
     let Order_Date : String
+    let orderStatus:String
+    let orderStatusColor:Color
     let isPaid : String
 }
 var selecteddate = ""
 var html:String = ""
 var OrderNo:String = ""
 var OrdDate:String = ""
-struct MyOrdersScreen: View {
-    @State private var Filterdate = false
+
+struct MyOrdersScreen: View, DateSelection{
+    @State private var Filterdate:Bool = false
     @State private var isCalendarVisible = false
     @State private var selectedDate = Date()
     @State private var OrderPaymentDetails:[OrderDetails]=[]
@@ -37,7 +40,7 @@ struct MyOrdersScreen: View {
     @State private var navigateToHomepage = false
     @State private var isPopoverVisible = false
     @State private var SelMode: String = "DOF"
-    @State private var FromDate = ""
+    @State private var FromDate:String = ""
     @State private var SelectFromDate = Date()
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
@@ -104,7 +107,6 @@ struct MyOrdersScreen: View {
                     ToDate = fromDate
                     OrderDetailsTriger()
                     Loader.toggle()
-                    
                 }
                 HStack {
                     ZStack {
@@ -241,10 +243,10 @@ struct MyOrdersScreen: View {
                                 Image(systemName: "circle.circle.fill")
                                     .resizable()
                                     .frame(width: 7,height: 7)
-                                    .foregroundColor(Color.red)
-                                Text("Order recevied.Pending for Invoice")
+                                    .foregroundColor(OrderPaymentDetails[index].orderStatusColor)
+                                Text(OrderPaymentDetails[index].orderStatus)
                                     .font(.system(size: 9))
-                                    .foregroundColor(Color.red)
+                                    .foregroundColor(OrderPaymentDetails[index].orderStatusColor)
                                 Spacer()
                                 let orderDetail = OrderPaymentDetails[index]
                                 if (paymentenb.shared.isPaymentenbl == 1){
@@ -276,17 +278,12 @@ struct MyOrdersScreen: View {
                             
                         }
                         .onTapGesture{
-                            print(index)
+                            print(OrderPaymentDetails[index])
                             TotalVal = OrderPaymentDetails[index].Order_Value
                             OrderId = OrderPaymentDetails[index].OrderNo
-                            print(OrderPaymentDetails)
-                            print(OrderPaymentDetails[index].OrderNo)
                             OrderNo = OrderId
-                            print(OrderNo)
                             Orderdate =   OrderPaymentDetails[index].Order_Date
                             OrdDate = Orderdate
-                            
-                            print(OrderId)
                             NaviOrdeDetNiew = true
                         }
                     }
@@ -342,207 +339,12 @@ struct MyOrdersScreen: View {
                         }
                         .edgesIgnoringSafeArea(.bottom)
                         .padding(.bottom,-37)
-                       
                     }
                 }
             }
             
             if Filterdate{
-                Color.black.opacity(0.5)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        Filterdate.toggle()
-                    }
-                VStack{
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 30)
-                        VStack{
-                            Text("Select Quick Dates")
-                                .font(.system(size: 15))
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.white)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
-                    VStack{
-                        VStack{
-                            Text("Today")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 1)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 1))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                            
-                        Divider()
-                        VStack{
-                            Text("Yesterday")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                let CurentDate = Date()
-                                let yesterdayDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate)!
-                                
-                              let Getdate = dateFormatter.string(from:yesterdayDate)
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = dateFormatter.string(from:yesterdayDate)
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 1))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                            
-                        Divider()
-                        
-                        
-                        VStack{
-                            Text("Last week")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                            
-                        Divider()
-                        VStack{
-                            Text("Last month")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 30)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 30))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                        
-                        Divider()
-                        
-                        
-                        VStack{
-                            Text("Last 3 months")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                        
-                        
-                        Divider()
-                        
-                        
-                        VStack{
-                            Text("Last 6 months")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                        
-                        Divider()
-                        
-                        
-                        VStack{
-                            Text("Last 1 year")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
-                                .padding(5)
-                        }
-                        .background(Color.white)
-                            .onTapGesture{
-                                var CurentDate = Date()
-                                OrderPaymentDetails.removeAll()
-                                Loader.toggle()
-                                Filterdate.toggle()
-                                FromDate = (formattedDate(date: calculateStartDate(for: 7)))
-                                SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
-                                let ToDates = String(dateFormatter.string(from:CurentDate))
-                                ToDate = ToDates
-                                OrderDetailsTriger()
-                            }
-                    }
-                    
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(ColorData.shared.HeaderColor)
-                            .frame(height: 30)
-                            .padding(.top,30)
-                            .padding(.bottom,10)
-                            .padding(.horizontal,15)
-                            .cornerRadius(10)
-                        VStack{
-                            Text("Close")
-                                .font(.system(size: 15))
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.white)
-                                .padding(.top,15)
-                        }
-                    }.cornerRadius(10)
-                    .onTapGesture {
-                        Filterdate.toggle()
-                    }
-                    
-                }
-                .background(Color.white)
-                .cornerRadius(10)
-                .padding(20)
+                quick_date_Selection_view(Filterdate: $Filterdate, FromDate: $FromDate, SelectFromDate: $SelectFromDate, ToDate: $ToDate, Loader: $Loader,delegate: self)
             }
             if payLoader{
                 ZStack{
@@ -573,24 +375,15 @@ struct MyOrdersScreen: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
     }
-    
+    func didTapButton(in selection: quick_date_Selection_view) {
+        OrderDetailsTriger()
+    }
     private var dateFormatter: DateFormatter {
           let formatter = DateFormatter()
           formatter.dateFormat = "yyyy-MM-dd"
           return formatter
       }
-    func formattedDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.string(from: date)
-    }
-    func formattedDates(date: Date) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let formattedDateString = dateFormatter.string(from: date)
-        return dateFormatter.date(from: formattedDateString)
-    }
+
     private  func Selectdate(){
           if SelMode == "DOF"{
               SelectFromDate = selectedDate
@@ -658,6 +451,7 @@ struct MyOrdersScreen: View {
         return startDate ?? currentDate
     }
     func OrderDetailsTriger(){
+        OrderPaymentDetails.removeAll()
         let axn = "get/orderlst&sfCode=\(CustDet.shared.CusId)&fromdate=\(FromDate)&todate=\(ToDate)"
         let apiKey = "\(axn)"
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apiKey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
@@ -694,8 +488,11 @@ struct MyOrdersScreen: View {
                                         let Status = Items["Status"] as? String ?? ""
                                         let OrderDate = Items["Order_Date"] as? String ?? ""
                                         let Ispaid = Items["isPaid"] as? String ?? ""
+                                        let orderStatus = Items["orderStatus"] as? String ?? ""
+                                        let orderStatusColor = Color(hex: Items["orderStatusColor"] as? String ?? "#000000")
+                                        
                                         print(Items)
-                                        OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo, No_Of_items: NoofItems, Quantity: Qty, Order_Value: OrderValue, Status: Status, Order_Date: OrderDate, isPaid: Ispaid))
+                                        OrderPaymentDetails.append(OrderDetails(OrderNo: OrderNo, No_Of_items: NoofItems, Quantity: Qty, Order_Value: OrderValue, Status: Status, Order_Date: OrderDate,orderStatus: orderStatus,orderStatusColor: orderStatusColor, isPaid: Ispaid))
                                     }
                                 }
                             } catch{
@@ -717,6 +514,9 @@ struct MyOrdersScreen_Previews: PreviewProvider {
         MyOrdersScreen()
     }
 }
+
+
+
 
 struct listProdDet: Any{
     let Product_Name:String
@@ -747,6 +547,7 @@ struct OrderDetView:View{
     @State private var Billing = ""
     @State private var Shiping = ""
     @ObservedObject var monitor = Monitor()
+    @State private var Zero_Billing_show:Bool = true
     var body: some View{
         NavigationView{
         ZStack{
@@ -951,44 +752,44 @@ struct OrderDetView:View{
                                             Rectangle()
                                                 .frame(height: 1)
                                             
-                                                VStack(alignment: .leading){
-                                                    Text("Item")
+                                            VStack(alignment: .leading){
+                                                Text("Item")
+                                                    .font(.system(size: 13))
+                                                    .fontWeight(.bold)
+                                                    .padding(.leading,10)
+                                                    .frame(width: 70)
+                                                
+                                                Spacer()
+                                                HStack{
+                                                    Text("UOM")
                                                         .font(.system(size: 13))
                                                         .fontWeight(.bold)
-                                                        .padding(.leading,10)
-                                                        .frame(width: 70)
-                                                        
+                                                        .frame(width: 60)
                                                     Spacer()
-                                                    HStack{
-                                                        Text("UOM")
-                                                            .font(.system(size: 13))
-                                                            .fontWeight(.bold)
-                                                            .frame(width: 60)
-                                                        Spacer()
-                                                        Text("Qty")
-                                                            .font(.system(size: 13))
-                                                            .fontWeight(.bold)
-                                                            .frame(width: 35)
-                                                        Spacer()
-                                                        Text("Price")
-                                                            .font(.system(size: 13))
-                                                            .fontWeight(.bold)
-                                                            .frame(width: 70)
-                                                        Spacer()
-                                                        Text("Tax")
-                                                            .font(.system(size: 13))
-                                                            .fontWeight(.bold)
-                                                            .frame(width: 60)
-                                                        Spacer()
-                                                        Text("Total")
-                                                            .font(.system(size: 13))
-                                                            .fontWeight(.bold)
-                                                            .frame(width: 70)
-                                                            
-                                                    }
-                                                    .padding(.horizontal,10)
+                                                    Text("Qty")
+                                                        .font(.system(size: 13))
+                                                        .fontWeight(.bold)
+                                                        .frame(width: 35)
+                                                    Spacer()
+                                                    Text("Price")
+                                                        .font(.system(size: 13))
+                                                        .fontWeight(.bold)
+                                                        .frame(width: 70)
+                                                    Spacer()
+                                                    Text("Tax")
+                                                        .font(.system(size: 13))
+                                                        .fontWeight(.bold)
+                                                        .frame(width: 60)
+                                                    Spacer()
+                                                    Text("Total")
+                                                        .font(.system(size: 13))
+                                                        .fontWeight(.bold)
+                                                        .frame(width: 70)
+                                                    
                                                 }
-                                               
+                                                .padding(.horizontal,10)
+                                            }
+                                            
                                             //.padding(.leading,10)
                                             Rectangle()
                                                 .frame(height: 1)
@@ -1104,13 +905,15 @@ struct OrderDetView:View{
                                                                             }
                                                                         }
                                                                         SelectDet.append(listProdDet(Product_Name: Product_Name, Unit_Name: UOM, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric))
+                                                                        print(SelectDet)
                                                                     }
                                                                 }
                                                             } catch{
                                                                 print("Error Data")
                                                             }
                                                         }
-                                                        print(SelectDet)
+                                                        let allEmpty = SelectDet.allSatisfy { $0.Offer_Product.isEmpty }
+                                                        Zero_Billing_show = allEmpty
                                                         
                                                     }
                                                 case .failure(let error):
@@ -1127,7 +930,7 @@ struct OrderDetView:View{
                                                         .fontWeight(.semibold)
                                                         .frame(width: 100, alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
                                                         .multilineTextAlignment(.leading)
-                                                        
+                                                    
                                                     Spacer()
                                                     if (SelectDet[index].Dic != "0.00"){
                                                         Text("OFF :" + SelectDet[index].Dic)
@@ -1143,7 +946,7 @@ struct OrderDetView:View{
                                                         .multilineTextAlignment(.leading)
                                                         .frame(width: 60,alignment: SelectDet[index].Product_Name.count > 10 ? .leading : .leading)
                                                         .padding(.leading,-2)
-                                                        
+                                                    
                                                     Spacer()
                                                     Text(SelectDet[index].New_Qty)
                                                         .font(.system(size: 12))
@@ -1206,7 +1009,7 @@ struct OrderDetView:View{
                                                     .fontWeight(.semibold)
                                                 
                                                 Spacer()
-                                                Text("₹"+TotalVal)
+                                                Text("₹"+"\(String(format: "%.2f",(Double(TotalVal) ?? 0) - Double(TotalTax)))")
                                                     .font(.system(size: 12))
                                                     .fontWeight(.semibold)
                                             }
@@ -1274,7 +1077,10 @@ struct OrderDetView:View{
                                         .padding(.vertical,5)
                                         .padding(.horizontal,10)
                                     
-                                    VStack(alignment: .leading){
+                                    
+                                    if Zero_Billing_show == false {
+                                        
+                                        VStack(alignment: .leading){
                                         HStack{
                                             Text("Zero Billing Item")
                                                 .foregroundColor(.blue)
@@ -1307,21 +1113,22 @@ struct OrderDetView:View{
                                             .padding(.horizontal,10)
                                         ForEach(0 ..< SelectDet.count, id: \.self) { index in
                                             if (SelectDet[index].Offer_Product != ""){
-                                                    HStack{
-                                                            Text(SelectDet[index].Offer_Product)
-                                                                .font(.system(size: 12))
-                                                                .fontWeight(.semibold)
-                                                                .padding(.vertical,5)
-                                                        Spacer()
-                                                            Text(SelectDet[index].off_pro_unit)
-                                                                .font(.system(size: 12))
-                                                                .fontWeight(.semibold)
-                                                                .padding(.vertical,5)
-                                                    }
-                                                    .padding(.horizontal,20)
+                                                HStack{
+                                                    Text(SelectDet[index].Offer_Product)
+                                                        .font(.system(size: 12))
+                                                        .fontWeight(.semibold)
+                                                        .padding(.vertical,5)
+                                                    Spacer()
+                                                    Text(SelectDet[index].off_pro_unit)
+                                                        .font(.system(size: 12))
+                                                        .fontWeight(.semibold)
+                                                        .padding(.vertical,5)
+                                                }
+                                                .padding(.horizontal,20)
                                             }
                                         }
                                     }
+                                }
                                 }.padding(.horizontal,20)
                             }
                         }

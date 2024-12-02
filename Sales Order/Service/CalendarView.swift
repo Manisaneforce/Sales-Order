@@ -14,8 +14,6 @@ struct CalendarView: UIViewRepresentable {
     @State private var didSelectDate: Date?
     @Binding var SelMode: String
     @Binding var SelectFromDate: Date
-    
-
     func makeUIView(context: Context) -> FSCalendar {
         let calendar = FSCalendar()
         calendar.delegate = context.coordinator
@@ -50,7 +48,15 @@ struct CalendarView: UIViewRepresentable {
             if (parent.SelMode == "DOT"){
                 return parent.SelectFromDate
             }
-            return formatter.date(from: "1900/01/01")!
+            let calendar = Calendar.current
+            let currentDate = Date()
+            var Getdate:String = ""
+            if let threeMonthsAgo = calendar.date(byAdding: .month, value: -12, to: currentDate) {
+                let numberOfDays = calendar.dateComponents([.day], from: threeMonthsAgo, to: currentDate).day
+               let OneyerDate = (formattedDate(date: calculateStartDate(for: numberOfDays ?? 0)))
+                Getdate = OneyerDate
+            }
+            return formatter.date(from: Getdate)!
         }
         
         func maximumDate(for calendar: FSCalendar) -> Date {
@@ -59,5 +65,18 @@ struct CalendarView: UIViewRepresentable {
 //            }
             return Date()
          }
+        
+        func calculateStartDate(for days: Int) -> Date {
+            let calendar = Calendar.current
+            let currentDate = Date()
+            let startDate = calendar.date(byAdding: .day, value: -days, to: currentDate)
+            return startDate ?? currentDate
+        }
+        
+        func formattedDate(date: Date) -> String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            return dateFormatter.string(from: date)
+        }
     }
 }

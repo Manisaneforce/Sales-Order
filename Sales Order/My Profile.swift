@@ -125,6 +125,8 @@ struct My_Profile: View {
                         Spacer()
                     }
                     .padding(.leading,10)
+                    
+                    if RetAddressData.count != 0{
                     Rectangle()
                         .foregroundColor(.clear)
                         .frame(height: 0.5)
@@ -137,18 +139,18 @@ struct My_Profile: View {
                             .fontWeight(.bold)
                         Spacer()
                         if(UserSetup.shared.Add_Address == 1){
-                        Text("Add")
-                            .font(.system(size: 14))
-                            .fontWeight(.bold)
-                            .foregroundColor(Color(red: 0.1, green: 0.59, blue: 0.81))
-                            .onTapGesture {
-                                AllowLoction()
-                                OpenMod = "Add"
-                                AddresHed = "Add New Address"
-                                AddressTextInpute=""
-                                AddNewAddres.toggle()
-                            }
-                    }
+                            Text("Add")
+                                .font(.system(size: 14))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color(red: 0.1, green: 0.59, blue: 0.81))
+                                .onTapGesture {
+                                    AllowLoction()
+                                    OpenMod = "Add"
+                                    AddresHed = "Add New Address"
+                                    AddressTextInpute=""
+                                    AddNewAddres.toggle()
+                                }
+                        }
                     }
                     .padding(.leading,10)
                     .padding(.trailing,25)
@@ -193,6 +195,7 @@ struct My_Profile: View {
                         .frame(height: 1)
                         .foregroundColor(.gray)
                         .padding(10)
+                }
                     
                     /*VStack{
                         HStack{
