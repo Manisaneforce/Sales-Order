@@ -40,6 +40,7 @@ struct MyOrdersDetails: View, DateSelection {
     @State var OrderId = ""
     @State var Totalval = value
     @State private var SelectFromDate = Date()
+    @State private var SelectToDate = Date()
     @State private var isHiden:Bool = false
     @State private var Pdf_String:String = ""
     @State private var Navi_pdf_View:Bool = false
@@ -190,7 +191,7 @@ struct MyOrdersDetails: View, DateSelection {
                             Spacer()
                             VStack {
                                 
-                                CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
+                                CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate,SelectToDate: $SelectToDate)
                                     .frame(height: 500)
                                     .padding()
                                 
@@ -286,6 +287,7 @@ struct MyOrdersDetails: View, DateSelection {
           }
           if SelMode == "DOT"{
               //ToDate = selectedDate
+              SelectToDate = selectedDate
               ToDate = dateFormatter.string(from: selectedDate)
               orderandinvoice()
           }

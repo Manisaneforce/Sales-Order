@@ -42,6 +42,7 @@ struct MyOrdersScreen: View, DateSelection{
     @State private var SelMode: String = "DOF"
     @State private var FromDate:String = ""
     @State private var SelectFromDate = Date()
+    @State private var SelectToDate = Date()
     @State private var ToDate = ""
     @State private var TotalVal:String = ""
     @State private var Loader:Bool = true
@@ -126,7 +127,6 @@ struct MyOrdersScreen: View, DateSelection{
                     .onTapGesture {
                         SelMode = "DOF"
                         isPopoverVisible.toggle()
-                        
                     }
                     .padding(10)
                     
@@ -147,7 +147,6 @@ struct MyOrdersScreen: View, DateSelection{
                     .onTapGesture {
                         SelMode = "DOT"
                         isPopoverVisible.toggle()
-                        
                     }
                     .padding(10)
                     VStack{
@@ -319,7 +318,7 @@ struct MyOrdersScreen: View, DateSelection{
                     Spacer()
                     VStack {
                         
-                        CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
+                        CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate,SelectToDate: $SelectToDate)
                         .frame(height: 500)
                         .padding()
                         
@@ -392,6 +391,7 @@ struct MyOrdersScreen: View, DateSelection{
               
           }
           if SelMode == "DOT"{
+              SelectToDate = selectedDate
               ToDate = dateFormatter.string(from: selectedDate)
               OrderDetailsTriger()
           }

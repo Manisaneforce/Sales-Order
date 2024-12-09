@@ -33,6 +33,7 @@ struct PaymentScreen: View, DateSelection{
     @State private var navigateToHomepage = false
     @State private var Filterdate = false
     @State private var SelectFromDate = Date()
+    @State private var SelectToDate = Date()
     @State private var loader:Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let currentDate = Date()
@@ -177,7 +178,7 @@ struct PaymentScreen: View, DateSelection{
                         Spacer()
                         VStack {
                             
-                            CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate)
+                            CalendarView(selectedDate:$selectedDate, SelMode: $SelMode, SelectFromDate: $SelectFromDate, SelectToDate: $SelectToDate)
                             .frame(height: 500)
                             .padding()
                             
@@ -260,6 +261,7 @@ struct PaymentScreen: View, DateSelection{
               FromDate=dateFormatter.string(from: selectedDate)
           }
           if SelMode == "DOT"{
+              SelectToDate = selectedDate
               ToDate = dateFormatter.string(from: selectedDate)
           }
       }

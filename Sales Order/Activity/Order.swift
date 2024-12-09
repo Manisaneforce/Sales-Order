@@ -458,11 +458,12 @@ struct Order: View {
                                                 .minimumScaleFactor(0.5)
                                             Text(Allprods[index].ProID)
                                                 .font(.system(size: 13))
-                                                .foregroundColor(.secondary)
+                                                //.foregroundColor(.secondary)
+                                                .foregroundColor(.black)
                                             HStack {
                                                 //Text("MRP ₹\(nubers[index])")
                                                 
-                                                Text("MRP:0")
+                                                Text("MRP:\(filterItems[index].ConvRate)")
                                                     .font(.system(size: 13))
                                                 Spacer()
                                                 HStack{
@@ -1235,8 +1236,8 @@ struct Order: View {
                         for item in itemsWithTypID3 {
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
-                                print(procat)
-                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
+                                let Erp_Code = item["ERP_Code"] as? String ?? ""
+                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Erp_Code, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
                                 let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                 imgdataURL.append(inputText)
                                 Arry.append(proname)
