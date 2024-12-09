@@ -649,6 +649,29 @@ struct NewOTPScrean:View{
                         ShowAlert(title: "Information", message: "Check the Internet Connection")
                         return
                     }
+        
+        let axnn = "get/base_url"
+        let apiKeyy: String = "\(axnn)&mobile=\(phoneNumber2)"
+        AF.request("https://rad.salesjump.in/server/"+APIClient.shared.DBURL + apiKeyy, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                print(value)
+                
+                if let json = value as? [String:AnyObject]{
+                    let  baseUrl = json["baseUrl"] as? String ?? ""
+                    print(json)
+                    APIClient.shared.BaseURL = baseUrl
+                    UserDefaults.standard.set(baseUrl, forKey: "BaseURL")
+                }
+   
+            case .failure(let error):
+                OtpLoader.toggle()
+                alertMessages = error.localizedDescription
+                showAlert = true
+            }
+        }
+        
+
         OtpLoader.toggle()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
         print("JSON Data: \(jsondata.data)")

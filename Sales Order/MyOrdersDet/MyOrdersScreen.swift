@@ -26,6 +26,16 @@ var html:String = ""
 var OrderNo:String = ""
 var OrdDate:String = ""
 
+
+class GetaData{
+    static var shared = GetaData()
+    var From: String = ""
+    var TO: String = ""
+    var SelectFromDate = Date()
+    var SelectToDate = Date()
+    var typ:String = "0"
+}
+
 struct MyOrdersScreen: View, DateSelection{
     @State private var Filterdate:Bool = false
     @State private var isCalendarVisible = false
@@ -48,6 +58,7 @@ struct MyOrdersScreen: View, DateSelection{
     @State private var Loader:Bool = true
     @State private var showToast = false
     @State private var ShowTost = ""
+    @State private var Show_No_Order_lbl:Bool = true
     @ObservedObject var monitor = Monitor()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var payLoader = false
@@ -103,9 +114,18 @@ struct MyOrdersScreen: View, DateSelection{
                 .onAppear{
                     Paymentnav.shared.NavId = 1
                     let fromDate = String(dateFormatter.string(from:selectedDate))
-                    print(fromDate)
+                    
                     FromDate = fromDate
                     ToDate = fromDate
+                    if  GetaData.shared.typ == "1"{
+                        FromDate = GetaData.shared.From
+                        ToDate = GetaData.shared.TO
+//                      SelectFromDate = GetaData.shared.SelectFromDate
+//                      SelectToDate = GetaData.shared.SelectToDate
+                        SelectFromDate=dateFormatter.date(from: FromDate) ?? Date()
+                        SelectToDate = dateFormatter.date(from: ToDate) ?? Date()
+                        GetaData.shared.typ = "0"
+                    }
                     OrderDetailsTriger()
                     Loader.toggle()
                 }
@@ -284,6 +304,15 @@ struct MyOrdersScreen: View, DateSelection{
                             Orderdate =   OrderPaymentDetails[index].Order_Date
                             OrdDate = Orderdate
                             NaviOrdeDetNiew = true
+                            
+                            if GetaData.shared.typ == "0"{
+                                
+                                GetaData.shared.From = FromDate
+                                GetaData.shared.TO = ToDate
+                                
+                            }
+                            
+                            GetaData.shared.typ = "1"
                         }
                     }
                     .listStyle(PlainListStyle())
@@ -387,12 +416,16 @@ struct MyOrdersScreen: View, DateSelection{
           if SelMode == "DOF"{
               SelectFromDate = selectedDate
               FromDate=dateFormatter.string(from: selectedDate)
+              GetaData.shared.SelectFromDate = selectedDate
+              GetaData.shared.From = FromDate
               OrderDetailsTriger()
               
           }
           if SelMode == "DOT"{
               SelectToDate = selectedDate
               ToDate = dateFormatter.string(from: selectedDate)
+              GetaData.shared.SelectToDate = selectedDate
+              GetaData.shared.TO = ToDate
               OrderDetailsTriger()
           }
       }

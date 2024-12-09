@@ -101,6 +101,17 @@ struct MyOrdersDetails: View, DateSelection {
                             print(fromDate)
                             FromDate = fromDate
                             ToDate = fromDate
+                            
+                            if  GetaData.shared.typ == "1"{
+                                FromDate = GetaData.shared.From
+                                ToDate = GetaData.shared.TO
+        //                      SelectFromDate = GetaData.shared.SelectFromDate
+        //                      SelectToDate = GetaData.shared.SelectToDate
+                                SelectFromDate=dateFormatter.date(from: FromDate) ?? Date()
+                                SelectToDate = dateFormatter.date(from: ToDate) ?? Date()
+                                GetaData.shared.typ = "0"
+                            }
+                            
                             orderandinvoice()
                             Loader.toggle()
                         }
@@ -170,7 +181,7 @@ struct MyOrdersDetails: View, DateSelection {
                         .frame(height:40)
                         .padding(.leading,2)
                         .padding(.trailing,2)
-                        TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View:$Main_View, showToast: $showToast)
+                        TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View:$Main_View, showToast: $showToast,FromDate: $FromDate,ToDate: $ToDate)
                         Spacer()
                     }
                     .popover(isPresented: $isPopoverVisible) {
@@ -283,12 +294,16 @@ struct MyOrdersDetails: View, DateSelection {
              // FromDate = selectedDate
               SelectFromDate = selectedDate
               FromDate=dateFormatter.string(from: selectedDate)
+              GetaData.shared.SelectFromDate = selectedDate
+              GetaData.shared.From = FromDate
               orderandinvoice()
           }
           if SelMode == "DOT"{
               //ToDate = selectedDate
               SelectToDate = selectedDate
               ToDate = dateFormatter.string(from: selectedDate)
+              GetaData.shared.SelectToDate = selectedDate
+              GetaData.shared.TO = ToDate
               orderandinvoice()
           }
       }
@@ -403,10 +418,12 @@ struct TapBar: View {
     @Binding var Navi_pdf_View:Bool
     @Binding var Main_View:Bool
     @Binding var showToast:Bool
+    @Binding var FromDate:String
+    @Binding var ToDate:String
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
-            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader)
+            ORDER(invoice: $invoice,HistoryInf: $HistoryInf,OrderDetialsView: $OrderDetialsView, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,FromDate: $FromDate,ToDate: $ToDate)
                 .tag(0)
 //            INVOICE()
 //                .tag(1)
@@ -484,6 +501,9 @@ struct ORDER:View{
     @Binding var isHiden:Bool
     @State private var values = 0
     @Binding var Loader : Bool
+    @Binding var FromDate:String
+    @Binding var ToDate:String
+    
     var body: some View{
         VStack{
             if Loader{
@@ -582,11 +602,16 @@ struct ORDER:View{
                                         OrderId = invoice[index].OrderID
                                         OrderNo = OrderId
                                         Orderdate = invoice[index].Date
+                                        if GetaData.shared.typ == "0"{
+                                                GetaData.shared.From = FromDate
+                                                GetaData.shared.TO = ToDate
+
+                                                }
+                                        
+                                        GetaData.shared.typ = "1"
                                         HistoryInf.toggle()
                                         OrderDetialsView.toggle()
                                         OrderDetialsView2.toggle()
-                                        
-                                        
                                         let productNames = invoice[index].Product_Name.split(separator: ",")
                                         let aFormData: [String] = productNames.map { String($0) }
                                         let NoOfQty = invoice[index].Quantity.split(separator: ",")

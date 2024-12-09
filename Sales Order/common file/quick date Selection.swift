@@ -53,9 +53,12 @@ struct quick_date_Selection_view:View {
                         Loader.toggle()
                         Filterdate.toggle()
                         FromDate = (formattedDate(date: calculateStartDate(for: 1)))
+                        GetaData.shared.From = FromDate
                         SelectFromDate = (formattedDates(date: calculateStartDate(for: 1))!)
                         let ToDates = String(dateFormatter.string(from:CurentDate))
+                        FromDate = ToDates
                         ToDate = ToDates
+                        GetaData.shared.TO = ToDate
                         ButtonTapped()
                     }
                     
@@ -74,9 +77,11 @@ struct quick_date_Selection_view:View {
                         Filterdate.toggle()
                         let formatedate = dateFormatter.date(from: Getdate)
                         FromDate = dateFormatter.string(from:yesterdayDate)
+                        GetaData.shared.From = FromDate
                         SelectFromDate = formatedate!
                         let ToDates = Getdate
                         ToDate = ToDates
+                        GetaData.shared.TO = ToDate
                         ButtonTapped()
                     }
                     
@@ -94,9 +99,11 @@ struct quick_date_Selection_view:View {
                         Loader.toggle()
                         Filterdate.toggle()
                         FromDate = (formattedDate(date: calculateStartDate(for: 7)))
+                        GetaData.shared.From = FromDate
                         SelectFromDate = (formattedDates(date: calculateStartDate(for: 7))!)
                         let ToDates = String(dateFormatter.string(from:CurentDate))
                         ToDate = ToDates
+                        GetaData.shared.TO = ToDate
                         ButtonTapped()
                     }
                     
@@ -115,9 +122,11 @@ struct quick_date_Selection_view:View {
                             Loader.toggle()
                             Filterdate.toggle()
                             FromDate = (formattedDate(date: calculateStartDate(for: numberOfDays ?? 0)))
+                            GetaData.shared.From = FromDate
                             SelectFromDate = (formattedDates(date: calculateStartDate(for: numberOfDays ?? 0))!)
                             let ToDates = String(dateFormatter.string(from:CurentDate))
                             ToDate = ToDates
+                            GetaData.shared.TO = ToDate
                             ButtonTapped()
                         }
                     }
@@ -136,9 +145,11 @@ struct quick_date_Selection_view:View {
                             Loader.toggle()
                             Filterdate.toggle()
                             FromDate = (formattedDate(date: calculateStartDate(for: numberOfDays ?? 0)))
+                            GetaData.shared.From = FromDate
                             SelectFromDate = (formattedDates(date: calculateStartDate(for: numberOfDays ?? 0))!)
                             let ToDates = String(dateFormatter.string(from:CurentDate))
                             ToDate = ToDates
+                            GetaData.shared.TO = ToDate
                             ButtonTapped()
                         }
                     }
@@ -159,10 +170,12 @@ struct quick_date_Selection_view:View {
                     Loader.toggle()
                     Filterdate.toggle()
                     FromDate = (formattedDate(date: calculateStartDate(for: numberOfDays ?? 0)))
+                    GetaData.shared.From = FromDate
                     SelectFromDate = (formattedDates(date: calculateStartDate(for: numberOfDays ?? 0))!)
                     let ToDates = String(dateFormatter.string(from:CurentDate))
                     ToDate = ToDates
-                        ButtonTapped()
+                    GetaData.shared.TO = ToDate
+                    ButtonTapped()
                 }
                     }
                 Divider()
@@ -181,10 +194,12 @@ struct quick_date_Selection_view:View {
                     Loader.toggle()
                     Filterdate.toggle()
                     FromDate = (formattedDate(date: calculateStartDate(for: numberOfDays ?? 0)))
+                    GetaData.shared.From = FromDate
                     SelectFromDate = (formattedDates(date: calculateStartDate(for: numberOfDays ?? 0))!)
                     let ToDates = String(dateFormatter.string(from:CurentDate))
                     ToDate = ToDates
-                        ButtonTapped()
+                    GetaData.shared.TO = ToDate
+                    ButtonTapped()
                         
                 }
                     }

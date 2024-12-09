@@ -14,6 +14,7 @@ struct Prodata: Any {
     let ImgURL:String
     let ProName :String
     let ProID : String
+    let Erp_Code: String
     let ProMRP : String
     let sUoms : Int
     let sUomNms : String
@@ -456,7 +457,7 @@ struct Order: View {
                                                 .font(.system(size: 14))
                                                 .lineLimit(2)
                                                 .minimumScaleFactor(0.5)
-                                            Text(Allprods[index].ProID)
+                                            Text(Allprods[index].Erp_Code)
                                                 .font(.system(size: 13))
                                                 //.foregroundColor(.secondary)
                                                 .foregroundColor(.black)
@@ -1237,7 +1238,7 @@ struct Order: View {
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 let Erp_Code = item["ERP_Code"] as? String ?? ""
-                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Erp_Code, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
+                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, Erp_Code: Erp_Code, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
                                 let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                 imgdataURL.append(inputText)
                                 Arry.append(proname)

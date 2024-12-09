@@ -233,6 +233,7 @@ class SyncData {
                               let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
                             return
                         }
+                        print(prettyPrintedJson)
                         UserDefaults.standard.set(prettyPrintedJson, forKey: "Schemes_Master")
                     }
                 case .failure(let error):

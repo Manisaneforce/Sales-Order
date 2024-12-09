@@ -23,11 +23,11 @@ struct HomePage: View {
     @StateObject private var updateManager = UpdateManager()
     @State private var Show_Aleret:Bool = false
     let imageUrls = [
-        APIClient.shared.BaseURL+"/server/rad/Banner%201.jpg",
-        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%200.67%20mL%20Carton.png",
-        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%201.34%20mL%20Carton.png",
-        APIClient.shared.BaseURL+"/server/rad/FiproRel-S%202.68%20mL%20Carton.png",
-        APIClient.shared.BaseURL+"/server/rad/FiproRel- %204.02%20mL%20Carton.png"
+        APIClient.shared.BaseURL+"rad/Banner%201.jpg",
+        APIClient.shared.BaseURL+"rad/FiproRel-S%200.67%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"rad/FiproRel-S%201.34%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"rad/FiproRel-S%202.68%20mL%20Carton.png",
+        APIClient.shared.BaseURL+"rad/FiproRel- %204.02%20mL%20Carton.png"
      ]
     @State private var currentImageIndex = 0
     @ObservedObject private var imageLoader = ImageLoader()
@@ -99,6 +99,7 @@ struct HomePage: View {
                                                         UserDefaults.standard.removeObject(forKey: "Schemes_Master")
                                                         UserDefaults.standard.removeObject(forKey: "Tax_Master")
                                                         UserDefaults.standard.removeObject(forKey: "isPaymentEnabled")
+                                                        UserDefaults.standard.removeObject(forKey: "BaseURL")
                                                         if let window = UIApplication.shared.windows.first {
                                                             window.rootViewController = UIHostingController(rootView: NewMobileNoScrean())
                                                         }
@@ -282,8 +283,12 @@ struct HomePage: View {
             }
         }
         .onAppear {
-                   // Automatically check for an update when the view appears
-                   updateManager.checkForUpdate()
+            // Automatically check for an update when the view appears
+            updateManager.checkForUpdate()
+            GetaData.shared.typ = "0"
+            if let storedBaseURL = UserDefaults.standard.string(forKey: "BaseURL") {
+                APIClient.shared.BaseURL = storedBaseURL
+                       }
                }
         .navigationViewStyle(StackNavigationViewStyle())
         .navigationBarHidden(true)
