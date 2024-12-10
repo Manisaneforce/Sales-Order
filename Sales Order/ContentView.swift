@@ -788,7 +788,7 @@ struct NewMobileNoScrean:View{
 
 struct Term_and_condition_view:View {
     @Binding var BTBack:Bool
-    @State private var  Url = APIClient.shared.BaseURL+"/server/rad/refund.pdf"
+    @State private var  Url = APIClient.shared.BaseURL+"rad/refund.pdf"
     var body: some View {
         ZStack{
             VStack{
