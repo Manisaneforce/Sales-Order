@@ -81,6 +81,7 @@
 		38EEBC782A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */; };
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
 		3F66AB2F2CAEB144003CEF69 /* in-app updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66AB2E2CAEB144003CEF69 /* in-app updates.swift */; };
+		3F6D63022D08374700BF3B63 /* XML TO Image .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6D63012D08374700BF3B63 /* XML TO Image .swift */; };
 		3F87B2AC2CF4519300EA1BE9 /* quick date Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B2AB2CF4519300EA1BE9 /* quick date Selection.swift */; };
 		7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */; };
 		E5F4656E514EFC0040E6C8CD /* libPods-Sales OrderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */; };
@@ -180,6 +181,7 @@
 		38EEBC772A7A256000AEF032 /* Sales_OrderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sales_OrderUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F66AB2E2CAEB144003CEF69 /* in-app updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "in-app updates.swift"; sourceTree = "<group>"; };
+		3F6D63012D08374700BF3B63 /* XML TO Image .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XML TO Image .swift"; sourceTree = "<group>"; };
 		3F87B2AB2CF4519300EA1BE9 /* quick date Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "quick date Selection.swift"; sourceTree = "<group>"; };
 		4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales Order.release.xcconfig"; path = "Target Support Files/Pods-Sales Order/Pods-Sales Order.release.xcconfig"; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				387E0E842A85F7A600FEACBA /* Showtoast.swift */,
+				3F6D63012D08374700BF3B63 /* XML TO Image .swift */,
 				384CB6F42A9608D4009439E5 /* VisitData.swift */,
 				384CB7002A98B5B1009439E5 /* Loctionfile.swift */,
 				3801AE272A8E17C80069B136 /* APIClient.swift */,
@@ -724,6 +727,7 @@
 				38C5A9822B95E70700EF4584 /* MasterSync.swift in Sources */,
 				384CB6F52A9608D4009439E5 /* VisitData.swift in Sources */,
 				38DC8F562AD7D23200EFD572 /* GlobalFunc.swift in Sources */,
+				3F6D63022D08374700BF3B63 /* XML TO Image .swift in Sources */,
 				3894EFB62AA9D4D40037EA45 /* PaymentScreen.swift in Sources */,
 				38465CA22AAF2A9D009BD4F1 /* PrinterFile.swift in Sources */,
 				383800472AB9A50F0058F546 /* Firebase Cloud Messaging.swift in Sources */,
@@ -913,7 +917,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.relbio.relivet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -960,7 +964,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.relbio.relivet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

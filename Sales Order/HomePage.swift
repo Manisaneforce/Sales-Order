@@ -190,7 +190,7 @@ struct HomePage: View {
                     VStack{
                         if updateManager.isUpdateAvailable{
                             App_Update_Avlable()
-                                .padding(.bottom,10)
+                                .padding(.bottom,15)
                                 .padding(.top,-12)
                                 .padding(.horizontal,10)
                                 .onTapGesture {
@@ -264,14 +264,15 @@ struct HomePage: View {
                                     .cornerRadius(10)
                             }
                         }
-                        .padding(10)
+                        //.padding(10)
+                        .padding(.top,18).padding(.bottom,10).padding(.horizontal,10)
                         .onAppear {
                             let validURLs = imageUrls.compactMap { URL(string: $0) }
                             imageLoader.preloadImages(from: validURLs)
                                 startTimer()
                                 }
                         .frame(height: sizeClass == .compact ? 220 : 320)
-                }
+                    }.padding(5)
                     Spacer()
                     VStack{
                         Image("logo_new")

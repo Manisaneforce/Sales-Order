@@ -97,7 +97,7 @@ struct PaymentScreen: View, DateSelection{
                                 .shadow(radius: 5)
                             
                             HStack {
-                                Text(FromDate)
+                                Text(DateUtils.formatDate(FromDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                 Spacer()
@@ -121,7 +121,7 @@ struct PaymentScreen: View, DateSelection{
                                 .fill(Color.white)
                                 .shadow(radius: 5)
                             HStack {
-                                Text(ToDate)
+                                Text(DateUtils.formatDate(ToDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                 Spacer()
@@ -154,7 +154,7 @@ struct PaymentScreen: View, DateSelection{
                         Payment_Scroll()
                     }else{
                         Spacer()
-                        Text(No_Data_Mes)
+                        Text("No Record Found")
                             .fontWeight(.bold)
                             .font(.system(size: 15))
                         Spacer()
@@ -238,7 +238,7 @@ struct PaymentScreen: View, DateSelection{
                             Payment_Detils_Data.append(Payment_Data(orderId: i["orderId"] as? String ?? "", initiatedOn: i["initiatedOn"] as? String ?? "", updatedOn: i["updatedOn"] as? String ?? "", totalAmt: Amt, status: i["status"] as? String ?? "", message: i["message"] as? String ?? "", transactionId: i["transactionId"] as? String ?? "", Color_Code: color))
                         }
                     }else{
-                        No_Data_Mes = json["msg"] as? String ?? ""
+                        No_Data_Mes = "No Record Found"
                     }
                 }
                 loader.toggle()

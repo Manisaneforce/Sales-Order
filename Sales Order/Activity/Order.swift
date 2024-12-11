@@ -19,6 +19,7 @@ struct Prodata: Any {
     let sUoms : Int
     let sUomNms : String
     let Uomname : String
+    let MRP:String
     let Unit_Typ_Product: [String : Any]
 }
 struct Uomtyp: Any{
@@ -150,6 +151,7 @@ struct Order: View {
     @State private var ShpingAddress = ""
     @State private var BillingAddress = CustDet.shared.Addr
     @State private var TotalQtyData: Int = 0
+    @State private var searchText: String = ""
     @ObservedObject var monitor = Monitor()
     var body: some View {
         if OredSc{
@@ -232,57 +234,57 @@ struct Order: View {
                                 Spacer()
                             }
                             HStack{
-                                Text("Billing Address:")
+                                Text("Address:")
                                     .font(.custom("Poppins-Regular", size: 12))
                                 Text(BillingAddress)
                                     .font(.custom("Poppins-Regular", size: 12))
                                 Spacer()
                                 
-                                Image(systemName: "pencil" )
-                                    .foregroundColor(Color(.blue))
-                                    .frame(width: 20)
-                                    .onTapGesture {
-                                        ADDaddress.toggle()
-                                        SelMod = "BA"
-                                    }
+//                                Image(systemName: "pencil" )
+//                                    .foregroundColor(Color(.blue))
+//                                    .frame(width: 20)
+//                                    .onTapGesture {
+//                                        ADDaddress.toggle()
+//                                        SelMod = "BA"
+//                                    }
                             }
                             
-                            HStack {
-                                Image(systemName: isChecked ? "square" : "checkmark.square.fill")
-                                    .foregroundColor(isChecked ? .blue : .blue)
-                                    .onTapGesture {
-                                        isChecked.toggle()
-                                        if isChecked == true{
-                                            SameAddrssmark = false
-                                        }else{
-                                            ShpingAddress = BillingAddress
-                                            SameAddrssmark = true
-                                        }
-                                    }
-                                Text("Shipping Address same As Billing Address")
-                                    .font(.custom("Poppins-Regular", size: 12))
-                                Spacer()
-                            }
-                            if !SameAddrssmark{
-                                HStack{
-                                    Text("Shipping Address:")
-                                        .font(.custom("Poppins-Regular", size: 12))
-                                    Text(ShpingAddress)
-                                        .font(.custom("Poppins-Regular", size: 12))
-                                    Spacer()
-                                    Image(systemName: "pencil")
-                                        .foregroundColor(Color(.blue))
-                                        .frame(width: 20)
-                                        .onTapGesture {
-                                            SelMod = "SA"
-                                            ADDaddress.toggle()
-                                            if isChecked == true{
-                                            }else{
-                                                ShpingAddress = BillingAddress
-                                            }
-                                        }
-                                }
-                            }
+//                            HStack {
+//                                Image(systemName: isChecked ? "square" : "checkmark.square.fill")
+//                                    .foregroundColor(isChecked ? .blue : .blue)
+//                                    .onTapGesture {
+//                                        isChecked.toggle()
+//                                        if isChecked == true{
+//                                            SameAddrssmark = false
+//                                        }else{
+//                                            ShpingAddress = BillingAddress
+//                                            SameAddrssmark = true
+//                                        }
+//                                    }
+//                                Text("Shipping Address same As Billing Address")
+//                                    .font(.custom("Poppins-Regular", size: 12))
+//                                Spacer()
+//                            }
+//                            if !SameAddrssmark{
+//                                HStack{
+//                                    Text("Shipping Address:")
+//                                        .font(.custom("Poppins-Regular", size: 12))
+//                                    Text(ShpingAddress)
+//                                        .font(.custom("Poppins-Regular", size: 12))
+//                                    Spacer()
+//                                    Image(systemName: "pencil")
+//                                        .foregroundColor(Color(.blue))
+//                                        .frame(width: 20)
+//                                        .onTapGesture {
+//                                            SelMod = "SA"
+//                                            ADDaddress.toggle()
+//                                            if isChecked == true{
+//                                            }else{
+//                                                ShpingAddress = BillingAddress
+//                                            }
+//                                        }
+//                                }
+//                            }
                             
                         }
                         .padding(.horizontal, 12)
@@ -409,6 +411,7 @@ struct Order: View {
                         .onAppear {
                             Paymentnav.shared.NavId = 0
                             lblTotAmt = "0.0"
+                            updateOrderValues(refresh:0)
                             UserSetup.shared.int()
                             OrderprodGroup()
                             TexQty()
@@ -416,6 +419,26 @@ struct Order: View {
                         }
                         
                         //NavigationView {
+                        
+
+//                        ZStack {
+//                                    Rectangle()
+//                                        .frame(height: 40)
+//                    
+//                                    HStack {
+//                                        TextField("Search...", text: $searchText) // Search bar
+//                                            .padding()
+//                                            .background(Color.white)
+//                                            .cornerRadius(10)
+//                                            .padding(.horizontal)
+//                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+//                                    }
+//                                    .padding() // Optional: Add padding for overall spacing
+//                                }
+//                                .frame(maxWidth: .infinity)
+//                       
+                        
+                        
                         if isLoading{
                             ScrollView(showsIndicators: false){
                                 ForEach(0 ..< Allprods.count, id: \.self) { index in
@@ -464,11 +487,11 @@ struct Order: View {
                                             HStack {
                                                 //Text("MRP ₹\(nubers[index])")
                                                 
-                                                Text("MRP:\(filterItems[index].ConvRate)")
+                                                Text("MRP:₹\(Allprods[index].MRP)")
                                                     .font(.system(size: 13))
                                                 Spacer()
                                                 HStack{
-                                                    if filterItems[index].Dis != "" {
+                                                    if filterItems[index].Dis != "" && filterItems[index].Dis != "0" {
                                                         Text("OFF:\(filterItems[index].Dis)%")
                                                             .font(.system(size: 12))
                                                             .foregroundColor(.green)
@@ -555,15 +578,13 @@ struct Order: View {
                                                             let uom = Int(selUOMConv)! * (filterItems[index].Amt)
                                                             let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
                                                             filterItems[index].TotAmt=String(TotalAmount)
-                                                        } else{
-                                                            
+                                                        }else{
                                                             selUOMConv=String(filterItems[index].Amt)
                                                             print(selUOMConv)
                                                             let uom = Int(selUOMConv)! * (filterItems[index].Amt)
                                                             let TotalAmount = Double(Allprods[index].ProMRP)! * Double(uom)
                                                             filterItems[index].TotAmt=String(TotalAmount)
                                                         }
-                                                        
                                                         minusQty(sQty: sQty, SelectProd: FilterProduct)
                                                         Qtycount()
                                                         TexQty()
@@ -733,9 +754,10 @@ struct Order: View {
                                             //                                        }
                                             
                                             HStack {
-                                                Text("TAX:\(filterItems[index].Tax_Val)")
+//                                                Text("TAX:\(filterItems[index].Tax_Val)")
+//                                                    .font(.system(size: 14))
+                                                Text("TAX")
                                                     .font(.system(size: 14))
-                                                
                                                 
                                                 Spacer()
                                                 Text("₹\(filterItems[index].TaxAmt)")
@@ -1003,6 +1025,7 @@ struct Order: View {
                                             Spacer()
                                         }
                                     }
+                                    if (Schemedata[item].Dice != "0"){
                                     HStack{
                                         Text("Discount:")
                                             .fontWeight(.bold)
@@ -1012,6 +1035,7 @@ struct Order: View {
                                             .font(.system(size: 14))
                                         Spacer()
                                     }
+                                }
                                 }
                                 Divider()
                                     .padding(.vertical,10)
@@ -1238,7 +1262,9 @@ struct Order: View {
                             FilterProduct = itemsWithTypID3  as [AnyObject]
                             if let procat = item["PImage"] as? String, let proname = item["name"] as? String ,  let MRP = item["Rate"] as? String, let Proid = item["id"] as? String,let sUoms = item["Division_Code"] as? Int, let sUomNms = item["Default_UOMQty"] as? String, let Uomname = item["Default_UOM_Name"] as? String{
                                 let Erp_Code = item["ERP_Code"] as? String ?? ""
-                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, Erp_Code: Erp_Code, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, Unit_Typ_Product: item ))
+                                let mrp = item["MRP"] as? String ?? ""
+                                print(mrp)
+                                Allprods.append(Prodata(ImgURL: procat, ProName: proname, ProID: Proid, Erp_Code: Erp_Code, ProMRP:MRP,sUoms:sUoms,sUomNms:sUomNms, Uomname: Uomname, MRP: mrp, Unit_Typ_Product: item ))
                                 let  inputText = procat.trimmingCharacters(in: .whitespacesAndNewlines)
                                 imgdataURL.append(inputText)
                                 Arry.append(proname)
@@ -2852,8 +2878,6 @@ struct SelPrvOrder: View {
             print(sLocation)
             sLocationlat = location.coordinate.latitude.description
             sLocationlong = location.coordinate.longitude.description
-        
-
         }, error:{ errMsg in
             print (errMsg)
         })
@@ -3223,19 +3247,24 @@ func changeQty(sQty:String,SelectProd:[String:Any]) {
 
 func updateOrderValues(refresh:Int){
     var totAmt: Double = 0
+    var totamt2: Decimal = 0
     print(VisitData.shared.lstPrvOrder)
     if VisitData.shared.lstPrvOrder.count>0 {
         for i in 0...VisitData.shared.lstPrvOrder.count-1 {
             let item: AnyObject = VisitData.shared.lstPrvOrder[i]
-            totAmt = totAmt + (item["NetVal"] as! Double)
+            let netvel = Double(String(format: "%.2f", item["NetVal"] as? Double ?? 0))
+            totAmt = totAmt + (netvel ?? 0)
+           // totamt2 = totamt2 + (item["NetVal"] as! Decimal)
             TotamtlistShow = String(totAmt)
             //(item["SalQty"] as! NSString).doubleValue
         }
     }
+   
     lblTotAmt = String(format: "%.2f", totAmt)
     lblTotAmt2 = String(totAmt)
-    if(refresh == 1){
-    }
+    print(lblTotAmt)
+//    if(refresh == 1){
+//    }
 }
 func deleteItem(at index: Int) {
     var ids = [String]()

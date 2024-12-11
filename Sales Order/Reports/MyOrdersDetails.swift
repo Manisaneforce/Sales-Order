@@ -18,6 +18,14 @@ struct getInvoice: Any{
     let Saledoc_No:String
     let Paymet_status:String
 }
+
+struct getInvoice_Detaials:Any{
+    let DocNo:String
+    let Doc_Typ:String
+    let Xstring:String
+}
+var getinvoice:[getInvoice_Detaials] = []
+
 //var invoice:[getInvoice]=[]
 var value:String = ""
 var Orderdate:String = ""
@@ -48,6 +56,7 @@ struct MyOrdersDetails: View, DateSelection {
     @ObservedObject var monitor = Monitor()
     @State private var showToast = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var InvoiceNo:String = ""
     let currentDate = Date()
     let calendar = Calendar.current
     var body: some View {
@@ -122,7 +131,7 @@ struct MyOrdersDetails: View, DateSelection {
                                     .shadow(radius: 5)
                                 
                                 HStack {
-                                    Text(FromDate)
+                                    Text(DateUtils.formatDate(FromDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                         .font(.system(size: 15))
                                         .fontWeight(.semibold)
                                     Spacer()
@@ -144,7 +153,7 @@ struct MyOrdersDetails: View, DateSelection {
                                     .fill(Color.white)
                                     .shadow(radius: 5)
                                 HStack {
-                                    Text(ToDate)
+                                    Text(DateUtils.formatDate(ToDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                         .font(.system(size: 15))
                                         .fontWeight(.semibold)
                                     Spacer()
@@ -181,7 +190,7 @@ struct MyOrdersDetails: View, DateSelection {
                         .frame(height:40)
                         .padding(.leading,2)
                         .padding(.trailing,2)
-                        TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View:$Main_View, showToast: $showToast,FromDate: $FromDate,ToDate: $ToDate)
+                        TapBar(HistoryInf: $HistoryInf, OrderDetialsView: $OrderDetialsView, currentTab: $currentTab, invoice: $invoice, OrderId: $OrderId, isHiden: $isHiden, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View:$Main_View, showToast: $showToast,FromDate: $FromDate,ToDate: $ToDate, InvoiceNo: $InvoiceNo)
                         Spacer()
                     }
                     .popover(isPresented: $isPopoverVisible) {
@@ -258,7 +267,7 @@ struct MyOrdersDetails: View, DateSelection {
                 .toast(isPresented: $showToast, message: "Not invoiced")
             }
             if Navi_pdf_View {
-                PDFWebView(pdfData: Data(base64Encoded: Pdf_String) ?? Data(),Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View)
+                PDFWebView(pdfData: Data(base64Encoded: Pdf_String) ?? Data(),Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View, InvoiceNo: $InvoiceNo, currentTab: currentTab)
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -420,6 +429,7 @@ struct TapBar: View {
     @Binding var showToast:Bool
     @Binding var FromDate:String
     @Binding var ToDate:String
+    @Binding var InvoiceNo:String
     var body: some View {
         ZStack(alignment:.top){
         TabView(selection: $currentTab) {
@@ -427,7 +437,7 @@ struct TapBar: View {
                 .tag(0)
 //            INVOICE()
 //                .tag(1)
-            ORDERVSINVOICE(invoice: $invoice, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View, showToast: $showToast)
+            ORDERVSINVOICE(invoice: $invoice, Loader: $Loader,Pdf_String: $Pdf_String,Navi_pdf_View: $Navi_pdf_View,Main_View: $Main_View, showToast: $showToast, InvoiceNo: $InvoiceNo, currentTab: $currentTab)
                 .tag(1)
         }
         .tabViewStyle(.page(indexDisplayMode: .never)).edgesIgnoringSafeArea(.all)
@@ -461,6 +471,8 @@ struct TabBarItem: View {
     
     var body: some View {
         Button(action: {
+            print(currentTab)
+            print(tab)
             currentTab = tab
         }) {
             VStack {
@@ -671,6 +683,9 @@ struct ORDER:View{
         }
     }
 }
+
+
+
 struct ORDERVSINVOICE:View{
     @Binding var invoice: [getInvoice]
     @Binding var Loader : Bool
@@ -678,6 +693,9 @@ struct ORDERVSINVOICE:View{
     @Binding var Navi_pdf_View:Bool
     @Binding var Main_View:Bool
     @Binding var showToast:Bool
+    @Binding var InvoiceNo:String
+    @Binding var currentTab: Int
+  
     var body: some View{
             VStack{
                 HStack(spacing:160){
@@ -783,7 +801,7 @@ struct ORDERVSINVOICE:View{
                                     }
                                 }
                                 .onTapGesture{
-                                    print(index)
+                                    InvoiceNo = invoice[index].Saledoc_No
                                     get_invoice_details(index: index)
                                 }
                                 
@@ -811,8 +829,8 @@ struct ORDERVSINVOICE:View{
                 
             }
     }
-    func get_invoice_details(index:Int){
-        
+func get_invoice_details(index:Int){
+       getinvoice.removeAll()
         if invoice[index].Status == "Fully invoiced" || invoice[index].Status == "Partially invoiced"{
         let axn = "get_invoice_details"
         let Item = invoice[index].Saledoc_No
@@ -841,6 +859,14 @@ struct ORDERVSINVOICE:View{
                                         Navi_pdf_View.toggle()
                                         Main_View.toggle()
                                     }
+                                    for item in response{
+                                        print(item)
+                                        let xstring =  item["xstring"] as? String ?? ""
+                                        let type = item["type"] as? String ?? ""
+                                        let docNo = item["docNo"] as? String ?? ""
+                                        getinvoice.append(getInvoice_Detaials(DocNo: docNo, Doc_Typ: type, Xstring: xstring))
+                                    }
+                                    
                                     
                                 } else {
                                     print("Error: Couldn't extract HTML")
@@ -910,10 +936,118 @@ struct ORDERVSINVOICE:View{
     }
 }
 
+
+
+
+
+
 struct PDFWebView: View {
-    let pdfData: Data
+    var pdfData: Data
+    @State var PdfGetdata: Data = Data()
     @Binding var Navi_pdf_View:Bool
     @Binding var Main_View:Bool
+    @State var Show_web_View:Bool = true
+    @Binding var InvoiceNo:String
+    @State var Doc_No:String = ""
+    @State var currentTab:Int
+    
+    var body: some View {
+        if Show_web_View{
+        VStack{
+            ZStack{
+                Rectangle()
+                    .foregroundColor(ColorData.shared.HeaderColor)
+                    .frame(height: 80)
+                HStack {
+                    Image("backsmall")
+                        .renderingMode(.template)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                        .frame(width: 50)
+                        .onTapGesture {
+                            From_To_Date.shared.SetDate = 1
+                            Navi_pdf_View.toggle()
+                            Main_View.toggle()
+                        }
+                    Text("Invoice List:\(InvoiceNo)")
+                        .font(.system(size: 18))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.top,50)
+                    Spacer()
+                }
+                
+            }
+            .edgesIgnoringSafeArea(.top)
+            .frame(maxWidth: .infinity)
+            .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
+            
+            ForEach(0..<getinvoice.count, id: \.self) { index in
+                ZStack{
+                    Rectangle()
+                    // .foregroundColor(ColorData.shared.HeaderColor)
+                        .foregroundColor(Color(red: 0.10, green: 0.59, blue: 0.81, opacity:0.1))
+                        .frame(height: 80)
+                        .cornerRadius(10)
+                    VStack{
+                        HStack{
+                            VStack{
+                                HStack{
+//                                    Image("Myorder")
+//                                        .scaledToFit()
+//                                        .frame(width: 20,height: 20)
+                                    Text("Doc No: \(getinvoice[index].DocNo)")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                        
+                                } .padding(.vertical,5)
+                                    
+                                HStack{
+//                                    Image("Myorder")
+//                                        .scaledToFit()
+//                                        .frame(width: 20,height: 20)
+                                    Text("Doc Type: \(getinvoice[index].Doc_Typ)")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.semibold)
+                                        //.padding(.leading,-2)
+                                    Spacer()
+                                } .padding(.vertical,5)
+                            }.padding(.horizontal,10)
+                               
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .padding(.trailing,8)
+                                .foregroundColor(ColorData.shared.HeaderColor)
+                            
+                        }
+                    }
+                }.onTapGesture {
+                    Doc_No = getinvoice[index].DocNo
+                    PdfGetdata = Data(base64Encoded: getinvoice[index].Xstring) ?? Data()
+                    Show_web_View.toggle()
+                    From_To_Date.shared.SetDate = 1
+                    // Navi_pdf_View.toggle()
+                   // Show_web_View.toggle()
+                  //  Main_View.toggle()
+                }
+                
+            } .padding(10)
+            Spacer()
+        }
+        }else{
+            getWebView(pdfData: PdfGetdata, Show_web_View: $Show_web_View, Doc_No: $Doc_No, currentTab: $currentTab)
+        }
+    }
+    
+}
+
+
+struct getWebView: View {
+    let pdfData: Data
+    @Binding var Show_web_View:Bool
+    @Binding var Doc_No:String
+    @Binding var currentTab:Int
     var body: some View {
         VStack{
         ZStack{
@@ -927,11 +1061,9 @@ struct PDFWebView: View {
                     .padding(.top,50)
                     .frame(width: 50)
                     .onTapGesture {
-                        From_To_Date.shared.SetDate = 1
-                        Navi_pdf_View.toggle()
-                        Main_View.toggle()
+                        Show_web_View.toggle()
                     }
-                Text("Invoice")
+                Text("Invoice - \(Doc_No)")
                     .font(.system(size: 18))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -948,6 +1080,8 @@ struct PDFWebView: View {
     }
     
 }
+
+
 
 struct WebView_pdf: UIViewRepresentable {
     let data: Data

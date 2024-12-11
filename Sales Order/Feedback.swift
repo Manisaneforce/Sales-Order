@@ -8,6 +8,7 @@
 import SwiftUI
 import WebKit
 import Network
+import Alamofire
 //import Amplify
 //import AWSS3
 struct FedQust: Any {
@@ -214,6 +215,38 @@ struct Feedback: View {
                     }
                     else{
                         ShowToastMes.shared.tost = "Feedback Submit"
+                        var selecteditem:[String] = []
+                        for itme in selectedAnswers{
+                            selecteditem.append(itme ?? "")
+                        }
+                        
+                        let axn = "save_feedback_form"
+                        let retailerCode = CustDet.shared.CusId
+                        let retailerName = CustDet.shared.CusName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let divisionCode = CustDet.shared.Div
+                        let appRating = selecteditem[0].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let productRating = selecteditem[1].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let recommendToOthers = selecteditem[2].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let isDamaged = selecteditem[3].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let deliveryRating = selecteditem[4].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        let suggestion = AddressTextInpute.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+                        let apiKey = "\(axn)&retailerCode=\(retailerCode)&retailerName=\(retailerName)&divisionCode=\(divisionCode)&appRating=\(appRating)&productRating=\(productRating)&recommendToOthers=\(recommendToOthers)&isDamaged=\(isDamaged)&deliveryRating=\(deliveryRating)&suggestion=\(suggestion)"
+
+                        print(apiKey)
+
+                        AF.request(APIClient.shared.BaseURL + APIClient.shared.DBURL + apiKey, method: .post)
+                            .validate(statusCode: 200..<300)
+                            .responseJSON { response in
+                                switch response.result {
+                                case .success(let value):
+                                    print(value)
+                                case .failure(let error):
+                                    print("Request failed with error: \(error)")
+                                }
+                            }
+
+                        
                         if let window = UIApplication.shared.windows.first {
                             window.rootViewController = UIHostingController(rootView: HomePage())
                         }

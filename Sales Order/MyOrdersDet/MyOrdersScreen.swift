@@ -135,7 +135,8 @@ struct MyOrdersScreen: View, DateSelection{
                             .fill(Color.white)
                             .shadow(radius: 5)
                         HStack {
-                            Text(FromDate)
+                            
+                            Text(DateUtils.formatDate(FromDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                 .font(.system(size: 15))
                                 .fontWeight(.semibold)
                             Spacer()
@@ -155,7 +156,7 @@ struct MyOrdersScreen: View, DateSelection{
                             .fill(Color.white)
                             .shadow(radius: 5)
                         HStack {
-                            Text(ToDate)
+                            Text(DateUtils.formatDate(ToDate, from: "yyyy-MM-dd", to: "dd/MM/yyyy"))
                                 .font(.system(size: 15))
                                 .fontWeight(.semibold)
                             Spacer()
@@ -224,7 +225,7 @@ struct MyOrdersScreen: View, DateSelection{
                     }
                 }
                else{
-                if (OrderPaymentDetails.count != 0){
+                   if (!OrderPaymentDetails.isEmpty){
                     List(0 ..< OrderPaymentDetails.count, id: \.self) { index in
                         VStack{
                             HStack{

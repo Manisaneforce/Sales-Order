@@ -347,7 +347,7 @@ struct PrivacyPolicy:View{
             .frame(maxWidth: .infinity)
             .padding(.top, -(UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0 ))
             
-            WebViews(urlString: APIClient.shared.BaseURL+"/privacyrad.html")
+            WebViews(urlString: "https://rad.salesjump.in/privacyrad.html")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 .padding(.horizontal,10)
             
