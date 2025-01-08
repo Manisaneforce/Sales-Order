@@ -151,7 +151,9 @@ struct PaymentScreen: View, DateSelection{
                     .frame(height: 60)
                     
                     if !Payment_Detils_Data.isEmpty{
-                        Payment_Scroll()
+                       // Payment_Scroll()
+                        Newpayment()
+                       
                     }else{
                         Spacer()
                         Text("No Record Found")
@@ -241,6 +243,7 @@ struct PaymentScreen: View, DateSelection{
                         No_Data_Mes = "No Record Found"
                     }
                 }
+                print(Payment_Detils_Data)
                 loader.toggle()
             case .failure(let error):
                 print(error)
@@ -703,4 +706,139 @@ struct DataRow: View {
 }
 
 
+// MARK: New Payment Screen
+
+
+struct Newpayment:View {
+    var body: some View {
+        
+        ScrollView([.horizontal,.vertical]){
+            VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0){
+                Text ("Date")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Order Number")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Amount")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Number")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Amount")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Date")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Status")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                
+                
+            }.background(Color.gray.opacity(0.2))
+            
+            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
+                HStack(spacing: 0){
+                    Text (Payment_Detils_Data[index].initiatedOn)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].orderId)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].totalAmt)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].transactionId)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].totalAmt)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].updatedOn)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].status)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                }.background(index % 2 == 0 ? Color.white : Color.gray.opacity(0.1))
+                Divider()
+            }
+        }
+        }
+       
+    }
+}
 
