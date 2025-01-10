@@ -433,7 +433,7 @@ struct MyOrdersScreen: View, DateSelection{
     func PaymentHTML(){
         payLoader.toggle()
         let deviceID = UIDevice.current.identifierForVendor!.uuidString
-        AF.request(APIClient.shared.BaseURL+"/server/Reliance_JioMoney/AuthenticateCredentials.php?uuid=\(deviceID)&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
+        AF.request(APIClient.shared.BaseURL+"/Reliance_JioMoney/AuthenticateCredentials.php?uuid=\(deviceID)&invoice=\(OrderId)", method: .post, parameters: nil, encoding: URLEncoding(), headers: nil)
             .validate(statusCode: 200 ..< 299)
             .responseJSON { response in
                 switch response.result {
@@ -562,6 +562,7 @@ struct listProdDet: Any{
     let Offer_Product:String
     let off_pro_unit:String
     let Dic:String
+    let TaxName:String
     
 }
 struct OrderDetView:View{
@@ -860,6 +861,14 @@ struct OrderDetView:View{
                                                                     
                                                                     for Items in jsonArray{
                                                                         print(Items)
+                                                                        var TaxName:String = ""
+                                                                        var Tax_Amt = ""
+                                                                        if let Tax_Amt2 = Items["Tax_value"] as? Double{
+                                                                            Tax_Amt = String(format: "%.2f", Tax_Amt2)
+                                                                        }else if (Items["Tax_value"] as? String == ""){
+                                                                            Tax_Amt = "0.00"
+                                                                        }
+                                                                        
                                                                         if let TAX_details = Items["TAX_details"] as? [[String: Any]] {
                                                                             // Print the entire TAX_details array
                                                                             print(TAX_details)
@@ -867,7 +876,9 @@ struct OrderDetView:View{
                                                                             
                                                                             if let firstTaxDetail = TAX_details.first {
                                                                                 if let taxName = firstTaxDetail["Tax_Name"] as? String {
+                                                                                    TaxName = taxName
                                                                                     if let taxamt = firstTaxDetail["Tax_Amt"] as? Double {
+                                                                                       // Tax_Amt = String(format: "%.2f", taxamt)
                                                                                         if let taxName = firstTaxDetail["Tax_Name"] as? String {
                                                                                             let correctedTaxName = taxName.replacingOccurrences(of: ",", with: "")
                                                                                             TaxTyp = correctedTaxName
@@ -903,12 +914,7 @@ struct OrderDetView:View{
                                                                         } else {
                                                                             print("Order Value is not a valid Double.")
                                                                         }
-                                                                        var Tax_Amt = ""
-                                                                        if let Tax_Amt2 = Items["Tax_value"] as? Double{
-                                                                            Tax_Amt = String(format: "%.2f", Tax_Amt2)
-                                                                        }else if (Items["Tax_value"] as? String == ""){
-                                                                            Tax_Amt = "0.00"
-                                                                        }
+                                                                      
                                                                         var Offer_ProductCd = ""
                                                                         if  let Offer_ProductCd2 = Items["Offer_ProductCd"] as? String{
                                                                             Offer_ProductCd = Offer_ProductCd2
@@ -938,7 +944,7 @@ struct OrderDetView:View{
                                                                                 print("Data is error\(error)")
                                                                             }
                                                                         }
-                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name, Unit_Name: UOM, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric))
+                                                                        SelectDet.append(listProdDet(Product_Name: Product_Name, Unit_Name: UOM, New_Qty: New_Qty, BillRate: BillRate, Tax: Tax_Amt, value: value,Offer_Product: Offer_Product,off_pro_unit: off_pro_unit, Dic: Dicpric, TaxName: TaxName))
                                                                         print(SelectDet)
                                                                     }
                                                                 }

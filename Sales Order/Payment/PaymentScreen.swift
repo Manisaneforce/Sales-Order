@@ -41,25 +41,26 @@ struct PaymentScreen: View, DateSelection{
     @State private var selectedDate = Date()
     @State private var isPopoverVisible = false
     @State private var SelMode: String = ""
-    @State private var FromDate = ""
-    @State private var ToDate = ""
+    @State private var FromDate:String = ""
+    @State private var ToDate:String = ""
     @State private var CalenderTit = ""
     @State private var navigateToHomepage = false
     @State private var Filterdate = false
     @State private var SelectFromDate = Date()
     @State private var SelectToDate = Date()
     @State private var loader:Bool = false
-    @State private var NavigateOrderDetails = false
+    @State private var NavigateOrderDetails:Bool = false
     @State private var OrderId:String = ""
     @State private var NavigateInvoiceDetailView:Bool = false
     @State private var MainView:Bool = true
-    @State private var showToast = false
+    @State private var showToast:Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let currentDate = Date()
     let calendar = Calendar.current
     @ObservedObject var monitor = Monitor()
     @State private var No_Data_Mes = ""
     @State private var Pdf_String:String = ""
+    @State var saleDocNo:String = ""
     var body: some View {
         NavigationView{
             if MainView{
@@ -183,7 +184,8 @@ struct PaymentScreen: View, DateSelection{
                         if !Payment_Detils_Data.isEmpty{
                             //Payment_Scroll()
                             // Newpayment()
-                            PaymentDetailsView()
+                           // PaymentDetailsView()
+                            NewPaymentScreen(OrderId: $OrderId,FromDate: $FromDate,ToDate: $ToDate, NavigateOrderDetails: $NavigateOrderDetails,NavigateInvoiceDetailView: $NavigateInvoiceDetailView,MainView: $MainView, saleDocNo: $saleDocNo, Pdf_String: $Pdf_String, showToast: $showToast)
                             
                         }else{
                             Spacer()
@@ -247,7 +249,7 @@ struct PaymentScreen: View, DateSelection{
             }
         }
         if  NavigateInvoiceDetailView{
-                
+            PDFWebView(pdfData: Data(base64Encoded: Pdf_String) ?? Data(),Navi_pdf_View: $NavigateInvoiceDetailView,Main_View: $MainView, InvoiceNo: $saleDocNo, currentTab: 1)
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
@@ -330,222 +332,12 @@ struct PaymentScreen: View, DateSelection{
     }
     
     // MARK: New Payment Screen
-    func PaymentDetailsView() -> some View {
-        ScrollView([.horizontal,.vertical]){
-            VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 0){
-                Text ("Date")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 180)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Order Number")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 200)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Amount")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 180)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Invoice Number")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 200)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Invoice Amount")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 200)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Invoice Date")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 180)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                Text ("Status")
-                    .fontWeight(.bold)
-                    .font(.system(size: 16))
-                    .frame(width: 180)
-                    .padding(5)
-                Rectangle()
-                    .frame(width: 1)
-                    .foregroundColor(.gray)
-                
-                
-            }.background(Color.gray.opacity(0.2))
-            
-            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
-                HStack(spacing: 0){
-                    Text (Payment_Detils_Data[index].orderDate)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 180)
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].orderId)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 200)
-                        .padding(5)
-                        .onTapGesture {
-                           // Totalval=Payment_Detils_Data[index].totalAmt
-                            value = String(Payment_Detils_Data[index].orderAmount)
-                            OrderId = Payment_Detils_Data[index].orderId
-                            OrderNo = OrderId
-                            Orderdate = Payment_Detils_Data[index].orderDate
-                            if GetaData.shared.typ == "0"{
-                                    GetaData.shared.From = FromDate
-                                    GetaData.shared.TO = ToDate
-
-                                    }
-                            
-                            GetaData.shared.typ = "1"
-                            NavigateOrderDetails.toggle()
-                            print("On tap \(Payment_Detils_Data[index])")
-                            
-                        }
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text ("\(Payment_Detils_Data[index].orderAmount)")
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 180)
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].invoiceId)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 200)
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].invoiceAmount)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 200)
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].invoiceDate)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 180)
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].invoiceStatus)
-                        .fontWeight(.regular)
-                        .font(.system(size: 15))
-                        .frame(width: 180)
-                        //.foregroundColor(Payment_Detils_Data[index].Color_Code)
-                        .foregroundColor(.black)
-                        .onTapGesture {
-                            get_invoice_details(index:index)
-                        }
-                        .padding(5)
-                    Rectangle()
-                        .frame(width: 1)
-                        .foregroundColor(.gray)
-                }.background(index % 2 == 0 ? Color.white : Color.gray.opacity(0.1))
-                Divider()
-            }
-        }
-        }
-    }
+ 
     
     
-func get_invoice_details(index:Int){
-       getinvoice.removeAll()
-    if Payment_Detils_Data[index].invoiceStatus == "Fully invoiced" || Payment_Detils_Data[index].invoiceStatus == "Partially invoiced"{
-        let axn = "get_invoice_details"
-        let Item = Payment_Detils_Data[index].saleDocNo
-        print(Item)
-        let apikey = "\(axn)&orderNo=\(Item)"
-        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apikey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [String:AnyObject] {
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-                        print("Error: Could print JSON in String")
-                        return
-                    }
-                    print(prettyPrintedJson)
-                    if let jsonData = prettyPrintedJson.data(using: .utf8){
-                        do{
-                            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
-                                if let response = jsonObject["response"] as? [[String: Any]] {
-                                    print(response)
-                                    if let xstring = response[0]["xstring"] as? String {
-                                        Pdf_String = xstring
-                                        NavigateInvoiceDetailView.toggle()
-                                        MainView.toggle()
-                                    }
-                                    for item in response{
-                                        print(item)
-                                        let xstring =  item["xstring"] as? String ?? ""
-                                        let type = item["type"] as? String ?? ""
-                                        let docNo = item["docNo"] as? String ?? ""
-                                        getinvoice.append(getInvoice_Detaials(DocNo: docNo, Doc_Typ: type, Xstring: xstring))
-                                    }
-                                    
-                                    
-                                } else {
-                                    print("Error: Couldn't extract HTML")
-                                }
-                            }
-                        } catch{
-                            print("Error Data")
-                        }
-                    }
-                }
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
-        }else{
-            //ShowToastMes.shared.tost = "Not inviced"
-            showToast.toggle()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                withAnimation {
-                            self.showToast.toggle()
-                                }
-                //ShowToastMes.shared.tost = ""
-            }
-        }
-    }
+    
+    
+    
     
 }
 struct PaymentScreen_Previews: PreviewProvider {
@@ -968,4 +760,241 @@ struct DataRow: View {
 }
 
 
+//
 
+struct NewPaymentScreen:View {
+    @Binding var OrderId:String
+    @Binding var FromDate:String
+    @Binding var ToDate:String
+    @Binding var NavigateOrderDetails:Bool
+    @Binding var NavigateInvoiceDetailView:Bool
+    @Binding var MainView:Bool
+    @Binding var saleDocNo:String
+    @Binding var Pdf_String:String
+    @Binding var showToast:Bool
+    var body: some View {
+        ScrollView([.horizontal,.vertical]){
+            VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 0){
+                Text ("Date")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Order Number")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Amount")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Number")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Amount")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 200)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Invoice Date")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                Text ("Status")
+                    .fontWeight(.bold)
+                    .font(.system(size: 16))
+                    .frame(width: 180)
+                    .padding(5)
+                Rectangle()
+                    .frame(width: 1)
+                    .foregroundColor(.gray)
+                
+                
+            }.background(Color.gray.opacity(0.2))
+            
+            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
+                HStack(spacing: 0){
+                    Text (Payment_Detils_Data[index].orderDate)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].orderId)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                        .onTapGesture {
+                           // Totalval=Payment_Detils_Data[index].totalAmt
+                            value = String(Payment_Detils_Data[index].orderAmount)
+                            OrderId = Payment_Detils_Data[index].orderId
+                            OrderNo = OrderId
+                            Orderdate = Payment_Detils_Data[index].orderDate
+                            if GetaData.shared.typ == "0"{
+                                    GetaData.shared.From = FromDate
+                                    GetaData.shared.TO = ToDate
+
+                                    }
+                            
+                            GetaData.shared.typ = "1"
+                            NavigateOrderDetails.toggle()
+                            print("On tap \(Payment_Detils_Data[index])")
+                            
+                        }
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text ("\(Payment_Detils_Data[index].orderAmount)")
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].invoiceId)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].invoiceAmount)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 200)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].invoiceDate)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                    Text (Payment_Detils_Data[index].invoiceStatus)
+                        .fontWeight(.regular)
+                        .font(.system(size: 15))
+                        .frame(width: 180)
+                        //.foregroundColor(Payment_Detils_Data[index].Color_Code)
+                        .foregroundColor(.black)
+                        .onTapGesture {
+                            saleDocNo = Payment_Detils_Data[index].saleDocNo
+                            if GetaData.shared.typ == "0"{
+                                    GetaData.shared.From = FromDate
+                                    GetaData.shared.TO = ToDate
+
+                                    }
+                            
+                            GetaData.shared.typ = "1"
+                            get_invoice_details(index:index)
+                          
+                            
+                        }
+                        .padding(5)
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(.gray)
+                }.background(index % 2 == 0 ? Color.white : Color.gray.opacity(0.1))
+                Divider()
+            }
+        }
+        }
+    }
+    
+func get_invoice_details(index:Int){
+       getinvoice.removeAll()
+    if Payment_Detils_Data[index].invoiceStatus == "Fully invoiced" || Payment_Detils_Data[index].invoiceStatus == "Partially invoiced"{
+        let axn = "get_invoice_details"
+        let Item = Payment_Detils_Data[index].saleDocNo
+        print(Item)
+        let apikey = "\(axn)&orderNo=\(Item)"
+        AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apikey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                if let json = value as? [String:AnyObject] {
+                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) else {
+                        print("Error: Cannot convert JSON object to Pretty JSON data")
+                        return
+                    }
+                    guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
+                        print("Error: Could print JSON in String")
+                        return
+                    }
+                    print(prettyPrintedJson)
+                    if let jsonData = prettyPrintedJson.data(using: .utf8){
+                        do{
+                            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]{
+                                if let response = jsonObject["response"] as? [[String: Any]] {
+                                    print(response)
+                                    if let xstring = response[0]["xstring"] as? String {
+                                        Pdf_String = xstring
+                                        NavigateInvoiceDetailView.toggle()
+                                        MainView.toggle()
+                                    }
+                                    for item in response{
+                                        print(item)
+                                        let xstring =  item["xstring"] as? String ?? ""
+                                        let type = item["type"] as? String ?? ""
+                                        let docNo = item["docNo"] as? String ?? ""
+                                        getinvoice.append(getInvoice_Detaials(DocNo: docNo, Doc_Typ: type, Xstring: xstring))
+                                    }
+                                    
+                                    
+                                } else {
+                                    print("Error: Couldn't extract HTML")
+                                }
+                            }
+                        } catch{
+                            print("Error Data")
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+        }else{
+            //ShowToastMes.shared.tost = "Not inviced"
+            showToast.toggle()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation {
+                            self.showToast.toggle()
+                                }
+                //ShowToastMes.shared.tost = ""
+            }
+        }
+    }
+}
