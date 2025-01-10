@@ -82,6 +82,7 @@
 		38EEBCC52A7A663200AEF032 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */; };
 		3F66AB2F2CAEB144003CEF69 /* in-app updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F66AB2E2CAEB144003CEF69 /* in-app updates.swift */; };
 		3F6D63022D08374700BF3B63 /* XML TO Image .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F6D63012D08374700BF3B63 /* XML TO Image .swift */; };
+		3F725DE52D30EAB30091698D /* InvoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F725DE42D30EAB30091698D /* InvoiceView.swift */; };
 		3F87B2AC2CF4519300EA1BE9 /* quick date Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87B2AB2CF4519300EA1BE9 /* quick date Selection.swift */; };
 		7BF972B2E2E5A3B3592BA203 /* libPods-Sales Order.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF02444C7CB236A59F80E308 /* libPods-Sales Order.a */; };
 		E5F4656E514EFC0040E6C8CD /* libPods-Sales OrderTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 308A67D43036D5F817DA2881 /* libPods-Sales OrderTests.a */; };
@@ -182,6 +183,7 @@
 		38EEBCC42A7A663200AEF032 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		3F66AB2E2CAEB144003CEF69 /* in-app updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "in-app updates.swift"; sourceTree = "<group>"; };
 		3F6D63012D08374700BF3B63 /* XML TO Image .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XML TO Image .swift"; sourceTree = "<group>"; };
+		3F725DE42D30EAB30091698D /* InvoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceView.swift; sourceTree = "<group>"; };
 		3F87B2AB2CF4519300EA1BE9 /* quick date Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "quick date Selection.swift"; sourceTree = "<group>"; };
 		4ECFA6E08B76CE03375DBEF1 /* libPods-Sales OrderUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Sales OrderUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		508DE0D650109324E0271AE2 /* Pods-Sales Order.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sales Order.release.xcconfig"; path = "Target Support Files/Pods-Sales Order/Pods-Sales Order.release.xcconfig"; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				386AB3152AB1D3EA00FF49D2 /* My Profile.swift */,
 				386AB3172AB1D49B00FF49D2 /* Feedback.swift */,
 				38C5A9812B95E70700EF4584 /* MasterSync.swift */,
+				3F725DE42D30EAB30091698D /* InvoiceView.swift */,
 				38A265FE2B6D129500336994 /* Font */,
 			);
 			path = "Sales Order";
@@ -702,6 +705,7 @@
 				3894EFB82AAAF7A30037EA45 /* Complaint_and_Feedback_Screen.swift in Sources */,
 				38EEBC5D2A7A255F00AEF032 /* ContentView.swift in Sources */,
 				38AA42E32AA706AF00B8AA10 /* MyOrdersDetails.swift in Sources */,
+				3F725DE52D30EAB30091698D /* InvoiceView.swift in Sources */,
 				3801AE1B2A8A52070069B136 /* LottieUIURL.swift in Sources */,
 				38CFA27B2A7CDEFB00FE5F51 /* HomePage.swift in Sources */,
 				384CB7042A99FABA009439E5 /* DeviceLocationService.swift in Sources */,
