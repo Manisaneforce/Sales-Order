@@ -10,17 +10,31 @@ import URLImage
 import Alamofire
 //import Jiopay_pg_uat
 struct Payment_Data: Any {
-    let id = UUID()
-    var orderId : String
-    var initiatedOn:String
-    var updatedOn:String
-    var totalAmt:String
-    var  status:String
-    var message:String
-    var transactionId:String
-    var Color_Code:Color
+//    let id = UUID()
+//    var orderId : String
+//    var initiatedOn:String
+//    var updatedOn:String
+//    var totalAmt:String
+//    var  status:String
+//    var message:String
+//    var transactionId:String
+//    var Color_Code:Color
+    
+    
+let id = UUID()
+var orderDate: String
+var orderId: String
+var orderAmount: Double
+var saleDocNo: String
+var discountAmount: Double
+var invoiceStatus: String
+var invoiceId: String
+var invoiceDate: String
+var invoiceAmount: String
 }
 var Payment_Detils_Data:[Payment_Data] = []
+
+
 
 struct PaymentScreen: View, DateSelection{
    
@@ -229,6 +243,7 @@ struct PaymentScreen: View, DateSelection{
                         Sales_Order.loader()
                     }
                 }
+                .toast(isPresented: $showToast, message: "Not invoiced")
             }
         }
         if  NavigateInvoiceDetailView{
@@ -259,10 +274,13 @@ struct PaymentScreen: View, DateSelection{
                     if let response = json["response"] as? [AnyObject]{
                         for i in response{
                             print(i)
-                            let Amt = String(i["totalAmt"] as? Double ?? 0)
+                            let Amt = i["orderAmount"] as? Double ?? 0
                             let color = Color(hex: i["colorCode"] as? String ?? "#000000")
                             
-                            Payment_Detils_Data.append(Payment_Data(orderId: i["orderId"] as? String ?? "", initiatedOn: i["initiatedOn"] as? String ?? "", updatedOn: i["updatedOn"] as? String ?? "", totalAmt: Amt, status: i["status"] as? String ?? "", message: i["message"] as? String ?? "", transactionId: i["transactionId"] as? String ?? "", Color_Code: color))
+//                            Payment_Detils_Data.append(Payment_Data(orderId: i["orderId"] as? String ?? "", initiatedOn: i["initiatedOn"] as? String ?? "", updatedOn: i["updatedOn"] as? String ?? "", totalAmt: Amt, status: i["status"] as? String ?? "", message: i["message"] as? String ?? "", transactionId: i["transactionId"] as? String ?? "", Color_Code: color))
+                            
+                            Payment_Detils_Data.append(Payment_Data(orderDate: i["orderDate"] as? String ?? "", orderId: i["orderId"] as? String ?? "", orderAmount: Amt, saleDocNo: i["saleDocNo"] as? String ?? "", discountAmount: i["discountAmount"] as? Double ?? 0, invoiceStatus: i["invoiceStatus"] as? String ?? "", invoiceId: i["invoiceId"] as? String ?? "", invoiceDate: i["invoiceDate"] as? String ?? "", invoiceAmount: i["invoiceAmount"] as? String ?? "0"))
+                            
                         }
                     }else{
                         No_Data_Mes = "No Record Found"
@@ -378,7 +396,7 @@ struct PaymentScreen: View, DateSelection{
             
             ForEach(Payment_Detils_Data.indices, id: \.self) { index in
                 HStack(spacing: 0){
-                    Text (Payment_Detils_Data[index].initiatedOn)
+                    Text (Payment_Detils_Data[index].orderDate)
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 180)
@@ -393,10 +411,10 @@ struct PaymentScreen: View, DateSelection{
                         .padding(5)
                         .onTapGesture {
                            // Totalval=Payment_Detils_Data[index].totalAmt
-                            value = Payment_Detils_Data[index].totalAmt
+                            value = String(Payment_Detils_Data[index].orderAmount)
                             OrderId = Payment_Detils_Data[index].orderId
                             OrderNo = OrderId
-                            Orderdate = Payment_Detils_Data[index].initiatedOn
+                            Orderdate = Payment_Detils_Data[index].orderDate
                             if GetaData.shared.typ == "0"{
                                     GetaData.shared.From = FromDate
                                     GetaData.shared.TO = ToDate
@@ -411,7 +429,7 @@ struct PaymentScreen: View, DateSelection{
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].totalAmt)
+                    Text ("\(Payment_Detils_Data[index].orderAmount)")
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 180)
@@ -419,7 +437,7 @@ struct PaymentScreen: View, DateSelection{
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].transactionId)
+                    Text (Payment_Detils_Data[index].invoiceId)
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 200)
@@ -427,7 +445,7 @@ struct PaymentScreen: View, DateSelection{
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].totalAmt)
+                    Text (Payment_Detils_Data[index].invoiceAmount)
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 200)
@@ -435,7 +453,7 @@ struct PaymentScreen: View, DateSelection{
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].updatedOn)
+                    Text (Payment_Detils_Data[index].invoiceDate)
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 180)
@@ -443,11 +461,15 @@ struct PaymentScreen: View, DateSelection{
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
-                    Text (Payment_Detils_Data[index].status)
+                    Text (Payment_Detils_Data[index].invoiceStatus)
                         .fontWeight(.regular)
                         .font(.system(size: 15))
                         .frame(width: 180)
-                        .foregroundColor(Payment_Detils_Data[index].Color_Code)
+                        //.foregroundColor(Payment_Detils_Data[index].Color_Code)
+                        .foregroundColor(.black)
+                        .onTapGesture {
+                            get_invoice_details(index:index)
+                        }
                         .padding(5)
                     Rectangle()
                         .frame(width: 1)
@@ -462,9 +484,9 @@ struct PaymentScreen: View, DateSelection{
     
 func get_invoice_details(index:Int){
        getinvoice.removeAll()
-    if Payment_Detils_Data[index].status == "Fully invoiced" || Payment_Detils_Data[index].status == "Partially invoiced"{
+    if Payment_Detils_Data[index].invoiceStatus == "Fully invoiced" || Payment_Detils_Data[index].invoiceStatus == "Partially invoiced"{
         let axn = "get_invoice_details"
-        let Item = ""//Payment_Detils_Data[index].Saledoc_No
+        let Item = Payment_Detils_Data[index].saleDocNo
         print(Item)
         let apikey = "\(axn)&orderNo=\(Item)"
         AF.request(APIClient.shared.BaseURL+APIClient.shared.DBURL + apikey, method: .post, parameters: nil, encoding: URLEncoding(), headers: nil).validate(statusCode: 200 ..< 299).responseJSON { response in
@@ -533,110 +555,110 @@ struct PaymentScreen_Previews: PreviewProvider {
     }
 }
 
-struct Payment_Scroll:View{
-    var body: some View{
-        ScrollView{
-            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
-                ZStack{
-                    RoundedRectangle(cornerRadius: 10)
-                                   .fill(Color.white)
-                                  // .shadow(radius: 5)
-                VStack{
-                    HStack{
-                        Text("OrderId :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].orderId)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                    HStack{
-                        Text("Transaction Id :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].transactionId)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                    HStack{
-                        Text("TotalAmt :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].totalAmt)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                    HStack{
-                        Text("initiatedOn :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].initiatedOn)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                    HStack{
-                        Text("updatedOn :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].updatedOn)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                  
-                    HStack{
-                        Text("Status :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].status)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Payment_Detils_Data[index].Color_Code)
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                    HStack{
-                        Text("Message :")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Text(Payment_Detils_Data[index].message)
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.black)
-                        Spacer()
-                    }
-                    .padding(.vertical,2)
-                }
-                .padding(.horizontal,5)
-                .padding(.vertical,5)
-            }
-                .padding(.horizontal,5)
-                .padding(.vertical,2)
-            }
-        }
-    }
-}
+//struct Payment_Scroll:View{
+//    var body: some View{
+//        ScrollView{
+//            ForEach(Payment_Detils_Data.indices, id: \.self) { index in
+//                ZStack{
+//                    RoundedRectangle(cornerRadius: 10)
+//                                   .fill(Color.white)
+//                                  // .shadow(radius: 5)
+//                VStack{
+//                    HStack{
+//                        Text("OrderId :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].orderId)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                    HStack{
+//                        Text("Transaction Id :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].transactionId)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                    HStack{
+//                        Text("TotalAmt :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].totalAmt)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                    HStack{
+//                        Text("initiatedOn :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].initiatedOn)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                    HStack{
+//                        Text("updatedOn :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].updatedOn)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color(red: 0.56, green: 0.27, blue: 0.68, opacity: 1.00))
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                  
+//                    HStack{
+//                        Text("Status :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].status)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Payment_Detils_Data[index].Color_Code)
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                    HStack{
+//                        Text("Message :")
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Text(Payment_Detils_Data[index].message)
+//                            .font(.system(size: 14))
+//                            .fontWeight(.semibold)
+//                            .foregroundColor(Color.black)
+//                        Spacer()
+//                    }
+//                    .padding(.vertical,2)
+//                }
+//                .padding(.horizontal,5)
+//                .padding(.vertical,5)
+//            }
+//                .padding(.horizontal,5)
+//                .padding(.vertical,2)
+//            }
+//        }
+//    }
+//}
 
 extension Color {
     
