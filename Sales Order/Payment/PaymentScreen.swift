@@ -884,6 +884,22 @@ struct NewPaymentScreen:View {
                         .font(.system(size: 15))
                         .frame(width: 200)
                         .padding(5)
+                        .onTapGesture {
+                            saleDocNo = Payment_Detils_Data[index].saleDocNo
+                            
+                            print(Payment_Detils_Data[index])
+                            
+                            if GetaData.shared.typ == "0"{
+                                    GetaData.shared.From = FromDate
+                                    GetaData.shared.TO = ToDate
+
+                                    }
+                            
+                            GetaData.shared.typ = "1"
+                            get_invoice_details(index:index)
+                          
+                            
+                        }
                     Rectangle()
                         .frame(width: 1)
                         .foregroundColor(.gray)
@@ -909,19 +925,7 @@ struct NewPaymentScreen:View {
                         .frame(width: 180)
                         //.foregroundColor(Payment_Detils_Data[index].Color_Code)
                         .foregroundColor(.black)
-                        .onTapGesture {
-                            saleDocNo = Payment_Detils_Data[index].saleDocNo
-                            if GetaData.shared.typ == "0"{
-                                    GetaData.shared.From = FromDate
-                                    GetaData.shared.TO = ToDate
-
-                                    }
-                            
-                            GetaData.shared.typ = "1"
-                            get_invoice_details(index:index)
-                          
-                            
-                        }
+                        
                         .padding(5)
                     Rectangle()
                         .frame(width: 1)
